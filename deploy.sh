@@ -155,8 +155,32 @@ EOF
         mirror_cmd+=" --delete --continue"
     fi
     
-    # Add exclude patterns - each on its own line for the script file
-    echo "${mirror_cmd} --exclude '.git/' --exclude '.agent-logs/' --exclude '_backups/' --exclude '.deployments/' --exclude '.env' --exclude '.env.local' --exclude '.env.example' --exclude 'deploy.sh' --exclude '.deployignore' --exclude '\\\\*.log' --exclude 'data/\\\\*.db' --exclude 'data/\\\\*.sqlite' --exclude 'data/\\\\*.sqlite3' --exclude '.idea/' --exclude '.vscode/' --exclude 'node_modules/' --exclude 'vendor/' --exclude '.DS_Store' --exclude 'Thumbs.db' --exclude 'README.md' --exclude 'context.md' --verbose '${LOCAL_ROOT}' '${FTP_REMOTE}'" >> "${lftp_script_file}"
+    # Add exclude patterns - lftp mirror uses extended regex
+    # In lftp mirror, use [*] to match literal asterisk, or use regex patterns
+    # Write directly to file to avoid bash escaping issues
+    printf '%s' "${mirror_cmd}" >> "${lftp_script_file}"
+    printf ' --exclude ".git/"' >> "${lftp_script_file}"
+    printf ' --exclude ".agent-logs/"' >> "${lftp_script_file}"
+    printf ' --exclude "_backups/"' >> "${lftp_script_file}"
+    printf ' --exclude ".deployments/"' >> "${lftp_script_file}"
+    printf ' --exclude ".env"' >> "${lftp_script_file}"
+    printf ' --exclude ".env.local"' >> "${lftp_script_file}"
+    printf ' --exclude ".env.example"' >> "${lftp_script_file}"
+    printf ' --exclude "deploy.sh"' >> "${lftp_script_file}"
+    printf ' --exclude ".deployignore"' >> "${lftp_script_file}"
+    printf ' --exclude "[*].log"' >> "${lftp_script_file}"
+    printf ' --exclude "data/[*].db"' >> "${lftp_script_file}"
+    printf ' --exclude "data/[*].sqlite"' >> "${lftp_script_file}"
+    printf ' --exclude "data/[*].sqlite3"' >> "${lftp_script_file}"
+    printf ' --exclude ".idea/"' >> "${lftp_script_file}"
+    printf ' --exclude ".vscode/"' >> "${lftp_script_file}"
+    printf ' --exclude "node_modules/"' >> "${lftp_script_file}"
+    printf ' --exclude "vendor/"' >> "${lftp_script_file}"
+    printf ' --exclude ".DS_Store"' >> "${lftp_script_file}"
+    printf ' --exclude "Thumbs.db"' >> "${lftp_script_file}"
+    printf ' --exclude "README.md"' >> "${lftp_script_file}"
+    printf ' --exclude "context.md"' >> "${lftp_script_file}"
+    printf ' --verbose "%s" "%s"\n' "${LOCAL_ROOT}" "${FTP_REMOTE}" >> "${lftp_script_file}"
     echo "quit" >> "${lftp_script_file}"
     
     log "Connecting to server..."
