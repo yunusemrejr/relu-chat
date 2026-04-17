@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReLU.chat — Coming Soon</title>
-<meta name="description" content="Free, browser-based, privacy-first open-source chatbots that don't rely on LLMs. Join the waitlist for ReLU.chat.">
+<title>ReLU.chat — Interactive Chatbots</title>
+<meta name="description" content="Free, browser-based, privacy-first open-source chatbots. Explore interactive visualizations and tools.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://reult.chat/">
 
-<meta property="og:title" content="ReLU.chat — Coming Soon">
-<meta property="og:description" content="Free, browser-based, privacy-first open-source chatbots that don't rely on LLMs.">
+<meta property="og:title" content="ReLU.chat — Interactive Chatbots">
+<meta property="og:description" content="Free, browser-based, privacy-first open-source chatbots and interactive tools.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://reult.chat/">
 <meta property="og:image" content="https://reult.chat/assets/logo.png">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ReLU.chat — Coming Soon">
-<meta name="twitter:description" content="Free, browser-based, privacy-first open-source chatbots that don't rely on LLMs.">
+<meta name="twitter:title" content="ReLU.chat — Interactive Chatbots">
+<meta name="twitter:description" content="Free, browser-based, privacy-first open-source chatbots and interactive tools.">
 
-<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+<link rel="icon" href="assets/logo.png" type="image/png">
 
 <style>
 *, *::before, *::after {
@@ -29,8 +29,10 @@
 
 :root {
   --bg: #08090a;
-  --bg-elevated: rgba(255,255,255,0.02);
+  --bg-card: rgba(255,255,255,0.03);
+  --bg-card-hover: rgba(255,255,255,0.06);
   --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(108,92,231,0.4);
   --text-primary: #f7f8f8;
   --text-secondary: #8a8f98;
   --text-tertiary: #5a5f68;
@@ -52,7 +54,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -74,21 +75,25 @@ body::before {
 .container {
   position: relative;
   z-index: 1;
-  max-width: 640px;
+  max-width: 900px;
   width: 100%;
-  padding: 2rem 1.5rem;
+  padding: 3rem 1.5rem;
+}
+
+.header {
   text-align: center;
+  margin-bottom: 3rem;
 }
 
 .logo-container {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .logo {
-  width: 160px;
+  width: 140px;
   height: auto;
   opacity: 0.95;
   filter: drop-shadow(0 0 40px var(--accent-glow));
@@ -105,7 +110,7 @@ h1 {
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.1;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -115,8 +120,8 @@ h1 {
 .tagline {
   font-size: 1.125rem;
   color: var(--text-secondary);
-  max-width: 480px;
-  margin: 0 auto 2.5rem;
+  max-width: 520px;
+  margin: 0 auto;
   line-height: 1.7;
 }
 
@@ -125,12 +130,131 @@ h1 {
   font-weight: 600;
 }
 
+/* Chatbots Grid */
+.chatbots-section {
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-title svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--accent);
+}
+
+.chatbots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.chatbot-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.chatbot-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(108,92,231,0.15);
+}
+
+.chatbot-card.coming-soon {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.chatbot-card.coming-soon:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border);
+}
+
+.chatbot-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(108,92,231,0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.chatbot-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--accent);
+}
+
+.chatbot-card h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.chatbot-card p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.chatbot-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.tag {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.625rem;
+  background: rgba(108,92,231,0.1);
+  border: 1px solid rgba(108,92,231,0.2);
+  border-radius: 99px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.chatbot-card.coming-soon .chatbot-icon {
+  background: rgba(90,95,104,0.2);
+}
+
+.chatbot-card.coming-soon .chatbot-icon svg {
+  stroke: var(--text-tertiary);
+}
+
+.chatbot-card.coming-soon .tag {
+  background: rgba(90,95,104,0.15);
+  border-color: rgba(90,95,104,0.25);
+  color: var(--text-tertiary);
+}
+
+/* Features */
 .features {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
   justify-content: center;
-  margin-bottom: 2.5rem;
+  margin: 2rem 0;
 }
 
 .feature-badge {
@@ -138,7 +262,7 @@ h1 {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: var(--bg-elevated);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 9999px;
   font-size: 0.875rem;
@@ -158,8 +282,21 @@ h1 {
   stroke: var(--accent);
 }
 
+/* Signup Section */
 .signup-section {
-  margin-top: 1rem;
+  margin-top: 2rem;
+  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.signup-section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
 }
 
 .signup-section p {
@@ -182,7 +319,7 @@ h1 {
 input[type="email"] {
   flex: 1;
   padding: 0.875rem 1rem;
-  background: var(--bg-elevated);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--text-primary);
@@ -258,10 +395,12 @@ button[type="submit"]:disabled {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Footer */
 .footer {
   margin-top: 3rem;
   padding-top: 2rem;
   border-top: 1px solid var(--border);
+  text-align: center;
 }
 
 .footer p {
@@ -280,13 +419,14 @@ button[type="submit"]:disabled {
 }
 
 @media (max-width: 640px) {
-  .container { padding: 1.5rem 1rem; }
+  .container { padding: 2rem 1rem; }
   h1 { font-size: 1.875rem; }
   .tagline { font-size: 1rem; }
   .form-row { flex-direction: column; }
-  .logo { width: 120px; }
+  .logo { width: 100px; }
   .features { gap: 0.5rem; }
   .feature-badge { font-size: 0.8125rem; padding: 0.4rem 0.8rem; }
+  .chatbots-grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -297,16 +437,16 @@ button[type="submit"]:disabled {
 </head>
 <body>
 
-<main class="container" role="main">
-  <div class="logo-container">
-    <img src="assets/logo.png" alt="ReLU.chat" class="logo" width="160" height="167">
-  </div>
-
-  <h1>ReLU.chat</h1>
-
-  <p class="tagline">
-    Free, browser-based, <strong>privacy-first open-source chatbots</strong> that don't rely on LLMs.
-  </p>
+<div class="container">
+  <header class="header">
+    <div class="logo-container">
+      <img src="assets/logo.png" alt="ReLU.chat" class="logo" width="140" height="147">
+    </div>
+    <h1>ReLU.chat</h1>
+    <p class="tagline">
+      Free, browser-based, <strong>privacy-first open-source chatbots</strong> and interactive tools.
+    </p>
+  </header>
 
   <div class="features">
     <span class="feature-badge">
@@ -327,9 +467,30 @@ button[type="submit"]:disabled {
     </span>
   </div>
 
-  <div class="signup-section">
-    <p>Be the first to know when we launch.</p>
+  <section class="chatbots-section">
+    <h2 class="section-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Available Chatbots
+    </h2>
+    <div class="chatbots-grid">
+      <a href="chat/game-theory-chat/" class="chatbot-card coming-soon">
+        <div class="chatbot-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </div>
+        <h3>Game Theory Chat</h3>
+        <p>Interactive game theory scenarios and strategy exploration.</p>
+        <div class="chatbot-tags">
+          <span class="tag">Strategy</span>
+          <span class="tag">Interactive</span>
+          <span class="tag">Coming Soon</span>
+        </div>
+      </a>
+    </div>
+  </section>
 
+  <section class="signup-section">
+    <h2>Stay Updated</h2>
+    <p>Be the first to know when we launch new chatbots.</p>
     <form class="form-container" id="signup-form" action="api/subscribe.php" method="POST">
       <div class="form-row">
         <input type="email" name="email" id="email" placeholder="Enter your email" required autocomplete="email" aria-label="Email address">
@@ -337,13 +498,12 @@ button[type="submit"]:disabled {
       </div>
       <div id="form-message" class="form-message" role="alert" aria-live="polite"></div>
     </form>
-  </div>
+  </section>
 
   <footer class="footer">
     <p>&copy; 2026 ReLU.chat. Built with privacy in mind.</p>
-    <p style="margin-top:0.5rem"><a href="chat/odoo-validator.html">Try the Odoo Code Validator</a></p>
   </footer>
-</main>
+</div>
 
 <script>
 (function() {
