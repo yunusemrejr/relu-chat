@@ -138,11 +138,9 @@ deploy() {
     trap "rm -f '${lftp_script_file}'" EXIT
     
     # Write lftp settings
-    # Namecheap shared hosting requires FTPS (explicit TLS)
+    # This Namecheap server uses plain FTP (not FTPS)
     cat > "${lftp_script_file}" << EOF
-set ftp:ssl-force true
-set ftp:ssl-protect-data true
-set ssl:verify-certificate false
+set ftp:ssl-allow false
 set ftp:passive-mode on
 set net:timeout 30
 set net:max-retries 3
@@ -197,8 +195,8 @@ EOF
     
     # Execute lftp with the script file, passing credentials via URL to avoid
     # stdin conflicts when piping the script
-    # Use ftps:// for explicit TLS (required by Namecheap)
-    if lftp "ftps://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
+    # Use ftp:// (plain FTP - this server doesn't support FTPS)
+    if lftp "ftp://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
         log "Deployment completed successfully"
         return 0
     else
@@ -210,7 +208,7 @@ EOF
         sed -i 's/set net:timeout 30/set net:timeout 60/' "${lftp_script_file}"
         sed -i 's/set net:max-retries 3/set net:max-retries 5/' "${lftp_script_file}"
         
-    if lftp "ftps://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
+    if lftp "ftp://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
             log "Retry successful"
             return 0
         else
