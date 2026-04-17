@@ -1,13 +1,16 @@
 # .deployignore — Files/directories excluded from FTP deployment
 # These patterns are passed to lftp mirror --exclude
 
+# Credentials and sensitive files
+ftp-info.txt
+.env
+.env.local
+.env.example
+
 .git
 .gitignore
 .agent-logs
 _backups
-.env
-.env.local
-.env.example
 deploy.sh
 .deployignore
 *.log
