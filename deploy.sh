@@ -135,7 +135,9 @@ deploy() {
     
     # Write lftp settings
     cat > "${lftp_script_file}" << EOF
-set ftp:ssl-allow no
+set ftp:ssl-force true
+set ftp:ssl-protect-data true
+set ssl:verify-certificate false
 set ftp:passive-mode on
 set net:timeout 30
 set net:max-retries 3
