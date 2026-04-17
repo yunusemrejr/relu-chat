@@ -146,12 +146,12 @@ deploy() {
         mirror_cmd+=" --delete --continue"
     fi
     
-    # Add exclude patterns - lftp mirror uses shell glob patterns
+    # Add exclude patterns - lftp mirror uses regex patterns, * must be escaped as \\*
     # Each pattern needs to be a separate --exclude argument
     mirror_cmd+=" --exclude '.git/' --exclude '.agent-logs/' --exclude '_backups/'"
     mirror_cmd+=" --exclude '.env' --exclude '.env.local' --exclude '.env.example'"
     mirror_cmd+=" --exclude 'deploy.sh' --exclude '.deployignore'"
-    mirror_cmd+=" --exclude '*.log' --exclude 'data/*.db' --exclude 'data/*.sqlite' --exclude 'data/*.sqlite3'"
+    mirror_cmd+=" --exclude '\\*.log' --exclude 'data/\\*.db' --exclude 'data/\\*.sqlite' --exclude 'data/\\*.sqlite3'"
     mirror_cmd+=" --exclude '.idea/' --exclude '.vscode/'"
     mirror_cmd+=" --exclude 'node_modules/' --exclude 'vendor/'"
     mirror_cmd+=" --exclude '.DS_Store' --exclude 'Thumbs.db'"
