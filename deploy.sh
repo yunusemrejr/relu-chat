@@ -129,21 +129,15 @@ deploy() {
     log "Starting deployment to ${FTP_HOST}:${FTP_PORT}${FTP_REMOTE}"
     log "User: ${FTP_USER}"
     
-    # Build exclude patterns for lftp mirror
-    local exclude_patterns=(
-        '.git' '.agent-logs' '_backups' '.env*' 'deploy.sh' '.deployignore'
-        '*.log' 'data/*.db' 'data/*.sqlite' 'data/*.sqlite3'
-        '.idea' '.vscode' 'node_modules' 'vendor' '.DS_Store' 'Thumbs.db'
-        'README.md' 'context.md'
-    )
-    
-    local exclude_args=""
-    for pattern in "${exclude_patterns[@]}"; do
-        exclude_args+=" --exclude='${pattern}'"
-    done
-    
     # Build lftp settings
     local lftp_settings="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 30; set net:max-retries 3; set ftp:transfer-mode binary;"
+    
+    # Build exclude patterns for lftp mirror (each --exclude on its own)
+    # lftp mirror uses glob patterns, not regex
+    local exclude_args=""
+    for pattern in '.git' '.agent-logs' '_backups' '.env*' 'deploy.sh' '.deployignore' '*.log' 'data/*.db' 'data/*.sqlite' 'data/*.sqlite3' '.idea' '.vscode' 'node_modules' 'vendor' '.DS_Store' 'Thumbs.db' 'README.md' 'context.md'; do
+        exclude_args+=" --exclude '${pattern}'"
+    done
     
     if [[ "${VERBOSE:-0}" == "1" ]]; then
         lftp_settings+=" set xfer:log true;"
