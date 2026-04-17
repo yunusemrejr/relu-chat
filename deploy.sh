@@ -129,21 +129,14 @@ deploy() {
     log "Starting deployment to ${FTP_HOST}:${FTP_PORT}${FTP_REMOTE}"
     log "User: ${FTP_USER}"
     
-    # Build lftp settings
-    local lftp_settings="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 30; set net:max-retries 3; set ftp:transfer-mode binary;"
-    
-    # Build exclude patterns for lftp mirror (each --exclude on its own)
-    # lftp mirror uses glob patterns, not regex
-    local exclude_args=""
-    for pattern in '.git' '.agent-logs' '_backups' '.env*' 'deploy.sh' '.deployignore' '*.log' 'data/*.db' 'data/*.sqlite' 'data/*.sqlite3' '.idea' '.vscode' 'node_modules' 'vendor' '.DS_Store' 'Thumbs.db' 'README.md' 'context.md'; do
-        exclude_args+=" --exclude '${pattern}'"
-    done
+    # Build lftp settings (use correct variable names)
+    local lftp_settings="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 30; set net:max-retries 3; set file:transfer-mode binary;"
     
     if [[ "${VERBOSE:-0}" == "1" ]]; then
         lftp_settings+=" set xfer:log true;"
     fi
     
-    # Build mirror command
+    # Build mirror command with proper exclude patterns (lftp uses glob, escape *)
     local mirror_cmd="mirror --reverse"
     if [[ "${DRY_RUN:-0}" == "1" ]]; then
         log "DRY RUN MODE - No files will be transferred"
@@ -151,10 +144,20 @@ deploy() {
     else
         mirror_cmd+=" --delete --continue"
     fi
-    mirror_cmd+=" --verbose${exclude_args} '${LOCAL_ROOT}' '${FTP_REMOTE}'"
+    
+    # Add exclude patterns one by one with proper escaping
+    mirror_cmd+=" --exclude '.git/' --exclude '.agent-logs/' --exclude '_backups/'"
+    mirror_cmd+=" --exclude '.env' --exclude '.env.local' --exclude '.env.example'"
+    mirror_cmd+=" --exclude 'deploy.sh' --exclude '.deployignore'"
+    mirror_cmd+=" --exclude '*.log' --exclude 'data/*.db' --exclude 'data/*.sqlite' --exclude 'data/*.sqlite3'"
+    mirror_cmd+=" --exclude '.idea/' --exclude '.vscode/'"
+    mirror_cmd+=" --exclude 'node_modules/' --exclude 'vendor/'"
+    mirror_cmd+=" --exclude '.DS_Store' --exclude 'Thumbs.db'"
+    mirror_cmd+=" --exclude 'README.md' --exclude 'context.md'"
+    mirror_cmd+=" --verbose '${LOCAL_ROOT}' '${FTP_REMOTE}'"
     
     # Full lftp command: lftp -c "open -u user,pass host:port; settings; mirror_cmd; quit"
-    local full_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${lftp_settings} ${mirror_cmd}; quit\""
+    local full_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${lftp_settings}; ${mirror_cmd}; quit\""
     
     log "Connecting to server..."
     
@@ -167,8 +170,8 @@ deploy() {
         
         # Retry with longer timeout
         log "Attempting retry with longer timeout..."
-        local retry_settings="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 60; set net:max-retries 5; set ftp:transfer-mode binary;"
-        local retry_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${retry_settings} ${mirror_cmd}; quit\""
+        local retry_settings="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 60; set net:max-retries 5; set file:transfer-mode binary;"
+        local retry_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${retry_settings}; ${mirror_cmd}; quit\""
         
         if eval "${retry_cmd}" 2>&1 | tee -a "${LOG_FILE}"; then
             log "Retry successful"
