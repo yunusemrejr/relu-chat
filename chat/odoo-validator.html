@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odoo Code Validator — ReLU.chat</title>
+<meta name="description" content="A rule-based AI agent that validates Python code for Odoo ERP deployments. Paste code snippets and get instant feedback on correctness, compatibility, and production safety.">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="Odoo Code Validator — ReLU.chat">
+<meta property="og:description" content="Validate Odoo shell code before production deployment.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://reult.chat/chat/odoo-validator.html">
+
+<link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #08090a;
+  --bg-elevated: rgba(255,255,255,0.02);
+  --bg-message-user: rgba(108,92,231,0.15);
+  --bg-message-bot: rgba(255,255,255,0.03);
+  --border: rgba(255,255,255,0.08);
+  --text-primary: #f7f8f8;
+  --text-secondary: #8a8f98;
+  --text-tertiary: #5a5f68;
+  --accent: #6c5ce7;
+  --accent-glow: rgba(108,92,231,0.25);
+  --accent-hover: #7d6ff0;
+  --success: #27ae60;
+  --success-bg: rgba(39,174,96,0.1);
+  --warning: #f39c12;
+  --warning-bg: rgba(243,156,18,0.1);
+  --error: #e74c3c;
+  --error-bg: rgba(231,76,60,0.1);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 50% 40%, rgba(108,92,231,0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.header {
+  flex-shrink: 0;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(8,9,10,0.95);
+  backdrop-filter: blur(12px);
+}
+
+.header-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.header-back:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(108,92,231,0.08);
+}
+
+.header-back svg {
+  width: 18px;
+  height: 18px;
+}
+
+.header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.header h1 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.header p {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  scroll-behavior: smooth;
+}
+
+.messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.message {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 85%;
+  animation: fadeIn 0.3s ease;
+}
+
+.message.bot {
+  align-self: flex-start;
+}
+
+.message.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.message.bot .avatar {
+  background: var(--accent);
+  color: #fff;
+}
+
+.message.user .avatar {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.message-content {
+  padding: 0.875rem 1.125rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.message.bot .message-content {
+  background: var(--bg-message-bot);
+  border: 1px solid var(--border);
+  border-top-left-radius: 4px;
+}
+
+.message.user .message-content {
+  background: var(--bg-message-user);
+  border: 1px solid rgba(108,92,231,0.2);
+  border-top-right-radius: 4px;
+}
+
+.message-content code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: rgba(255,255,255,0.06);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.message-content pre {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.message-content pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.validation-block {
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border-left: 3px solid;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.validation-block.valid {
+  background: var(--success-bg);
+  border-left-color: var(--success);
+}
+
+.validation-block.invalid {
+  background: var(--error-bg);
+  border-left-color: var(--error);
+}
+
+.validation-block.warning {
+  background: var(--warning-bg);
+  border-left-color: var(--warning);
+}
+
+.validation-block .label {
+  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  margin-bottom: 0.25rem;
+}
+
+.validation-block.valid .label { color: var(--success); }
+.validation-block.invalid .label { color: var(--error); }
+.validation-block.warning .label { color: var(--warning); }
+
+.validation-block .detail {
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+}
+
+.validation-block .detail strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.warning-banner {
+  margin: 0.5rem 0;
+  padding: 0.875rem 1rem;
+  background: rgba(231,76,60,0.08);
+  border: 1px solid rgba(231,76,60,0.25);
+  border-radius: 8px;
+  display: flex;
+  gap: 0.625rem;
+  align-items: flex-start;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.warning-banner svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke: var(--error);
+  margin-top: 0.125rem;
+}
+
+.input-area {
+  flex-shrink: 0;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background: rgba(8,9,10,0.95);
+  backdrop-filter: blur(12px);
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.code-input {
+  width: 100%;
+  min-height: 100px;
+  max-height: 200px;
+  padding: 0.875rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.code-input::placeholder {
+  color: var(--text-tertiary);
+  font-family: var(--font);
+  font-size: 0.9375rem;
+}
+
+.code-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input-hint {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  flex: 1;
+}
+
+.btn-send {
+  padding: 0.625rem 1.25rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.btn-send:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.btn-send:active {
+  transform: scale(0.97);
+}
+
+.btn-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-send svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-clear {
+  padding: 0.625rem 1rem;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-clear:hover {
+  border-color: var(--error);
+  color: var(--error);
+  background: var(--error-bg);
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 0.5rem 0;
+}
+
+.typing-indicator span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  animation: typing 1.2s ease-in-out infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1.2); }
+}
+
+@media (max-width: 640px) {
+  .app { max-width: 100%; }
+  .header { padding: 0.75rem 1rem; }
+  .header h1 { font-size: 1rem; }
+  .header p { font-size: 0.75rem; }
+  .messages { padding: 1rem; gap: 1rem; }
+  .message { max-width: 92%; }
+  .input-area { padding: 0.75rem 1rem; }
+  .code-input { min-height: 80px; font-size: 0.8125rem; }
+  .btn-send { padding: 0.625rem 1rem; font-size: 0.8125rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="header">
+    <a href="../index.html" class="header-back" aria-label="Back to home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </a>
+    <div class="header-info">
+      <h1>Odoo Code Deployment Validator</h1>
+      <p>Paste Python code snippets for odoo-bin shell. Get instant validation feedback.</p>
+    </div>
+  </header>
+
+  <main class="messages" id="messages" role="log" aria-live="polite">
+  </main>
+
+  <div class="input-area">
+    <div class="input-wrapper">
+      <textarea
+        class="code-input"
+        id="code-input"
+        placeholder="Paste your Python code snippet here...&#10;&#10;Example:&#10;env['res.partner'].search([('is_company', '=', True)]).write({'customer': True})"
+        rows="4"
+        aria-label="Python code input"
+        spellcheck="false"
+      ></textarea>
+      <div class="input-row">
+        <span class="input-hint">Paste code piece-by-piece. Last piece = execution block.</span>
+        <button class="btn-clear" id="btn-clear" aria-label="Clear input">Clear</button>
+        <button class="btn-send" id="btn-send" aria-label="Validate code">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Validate
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const messagesEl = document.getElementById('messages');
+  const codeInput = document.getElementById('code-input');
+  const btnSend = document.getElementById('btn-send');
+  const btnClear = document.getElementById('btn-clear');
+
+  const ODOO_MODELS = [
+    'res.partner', 'res.users', 'res.company', 'res.country', 'res.currency',
+    'product.template', 'product.product', 'product.category',
+    'sale.order', 'sale.order.line', 'purchase.order', 'purchase.order.line',
+    'account.move', 'account.move.line', 'account.journal', 'account.account',
+    'account.payment', 'stock.picking', 'stock.move', 'stock.location',
+    'stock.quant', 'hr.employee', 'hr.department', 'mail.thread', 'mail.message',
+    'ir.model', 'ir.model.fields', 'ir.ui.view', 'ir.ui.menu', 'ir.actions',
+    'ir.config_parameter', 'ir.attachment', 'ir.cron', 'website', 'portal.user',
+    'pos.session', 'pos.order', 'pos.order.line', 'project.project', 'project.task',
+    'analytic.account', 'payment.transaction', 'auth.oauth.provider'
+  ];
+
+  const ODOO_METHODS = [
+    'search', 'browse', 'create', 'write', 'unlink', 'read', 'copy',
+    'search_count', 'exists', 'ensure_one', 'filtered', 'mapped', 'sorted',
+    'with_context', 'sudo', 'with_user', 'with_company', 'invalidate_cache',
+    'refresh', 'name_search', 'name_get', 'name_create', 'default_get',
+    'onchange', 'action_confirm', 'action_cancel', 'action_draft',
+    'fields_get', 'fields_view_get', 'check_access_rights', 'check_access_rule',
+    'perm_read', 'search_read', 'get_formview_id', 'get_formview_accessor',
+    'open_form', 'action_open', 'message_post', 'message_subscribe',
+    'activity_schedule', 'activity_feedback', 'activity_reschedule'
+  ];
+
+  const DEPRECATED_PATTERNS = [
+    { pattern: /\bapi\.v7\b|\bapi\.v8\b/i, msg: 'api.v7/api.v8 decorators are obsolete. Use @api.model, @api.multi (v10-v14), or plain methods (v15+).' },
+    { pattern: /\b@api\.multi\b/i, msg: '@api.multi was removed in Odoo 16. Use @api.model or plain methods.' },
+    { pattern: /\b\.message_post\(.*auto_subscribe=False\)/i, msg: 'auto_subscribe parameter removed in Odoo 14.' },
+    { pattern: /\b\.copy\(/, msg: 'copy() works but consider using with_context(). Avoid in shell scripts — prefer create() with explicit values.' },
+    { pattern: /\bopenerp\./i, msg: '"openerp" namespace is deprecated since Odoo 10. Use "odoo" instead.' },
+    { pattern: /\b\.browse\(\s*\[.*\]\s*\)\.write\(/, msg: 'Batch write on browsed records — ensure recordset is non-empty to avoid silent failures.' },
+    { pattern: /\b\.search\(\s*\[\s*\]\s*\)\.write\(/, msg: 'Writing on empty search result. This is a no-op but may indicate a logic error.' },
+    { pattern: /\b\.search\(.*limit=0\)/i, msg: 'limit=0 means no limit in Odoo — verify this is intentional.' },
+    { pattern: /\btime\.sleep\b/i, msg: 'time.sleep() in shell blocks the entire process. Use with caution.' },
+    { pattern: /\bself\._cr\b|\bself\.env\.cr\b/i, msg: 'Direct cursor access detected. Ensure no uncommitted writes.' },
+    { pattern: /\bosystem\b|\b__import__\b|\bexec\b|\beval\b/i, msg: 'Dynamic code execution detected. High security risk in production shell.' },
+    { pattern: /\b\.sudo\(\)/i, msg: 'sudo() bypasses all access rules. Verify this is intentional and scoped tightly.' },
+    { pattern: /\b\.unlink\(/, msg: 'unlink() is destructive. Verify records exist and data loss is acceptable.' },
+    { pattern: /\bCREATE\s+OR\s+REPLACE\b/i, msg: 'Raw SQL DDL detected. Irreversible without manual rollback.' },
+    { pattern: /\bUPDATE\s+\w+\s+SET\b/i, msg: 'Raw SQL UPDATE detected. Bypasses Odoo ORM, access rules, and computed fields.' },
+    { pattern: /\bDELETE\s+FROM\b/i, msg: 'Raw SQL DELETE detected. Bypasses Odoo ORM, cascades, and computed fields.' },
+    { pattern: /\b\.flush\b/i, msg: 'flush() forces DB writes. In shell context, changes commit immediately anyway.' },
+    { pattern: /\b\.invalidate_cache\(\)/i, msg: 'invalidate_cache() is deprecated in Odoo 16+. Use invalidate_recordset().' },
+    { pattern: /\b\.read_group\b/i, msg: 'read_group() is valid but verify groupby fields are store=True for performance.' },
+    { pattern: /\benv\.cr\.execute\b/i, msg: 'Direct SQL execution bypasses ORM safety. Verify query is parameterized.' },
+    { pattern: /\benv\.cr\.mogri\b/i, msg: 'mogri() is not a valid cursor method. Did you mean execute()?' },
+  ];
+
+  const HALLUCINATION_PATTERNS = [
+    { pattern: /\benv\.model\(/i, msg: 'env.model() is not a standard Odoo API. Use env["model.name"] instead.' },
+    { pattern: /\b\.search_all\b/i, msg: 'search_all() does not exist. Did you mean search()?' },
+    { pattern: /\b\.find\b\(/i, msg: 'find() is not an Odoo ORM method. Use search() or browse().' },
+    { pattern: /\b\.get_record\b/i, msg: 'get_record() does not exist. Use browse(id) or search() with domain.' },
+    { pattern: /\b\.update\b\(/i, msg: 'update() is not an Odoo ORM method. Use write() instead.' },
+    { pattern: /\b\.save\b\(/i, msg: 'save() is not an Odoo ORM method. Changes are saved on write()/create() or auto-committed in shell.' },
+    { pattern: /\b\.fetch_all\b/i, msg: 'fetch_all() does not exist. Use search() which returns a recordset.' },
+    { pattern: /\b\.get_one\b/i, msg: 'get_one() does not exist. Use search(domain, limit=1) or browse(id).' },
+    { pattern: /\b\.first\b\(/i, msg: 'first() is not standard Odoo ORM. Use search(domain, limit=1) or sorted()[0].' },
+    { pattern: /\b\.last\b\(/i, msg: 'last() is not standard Odoo ORM. Use sorted()[-1] or search(domain, order="id desc", limit=1).' },
+    { pattern: /\b\.count\b\(/i, msg: 'count() is not an Odoo ORM method. Use search_count(domain) instead.' },
+    { pattern: /\b\.exists_and_active\b/i, msg: 'exists_and_active() does not exist. Chain .exists().filtered("active").' },
+    { pattern: /\b\.bulk_write\b/i, msg: 'bulk_write() does not exist. Use write() on a recordset.' },
+    { pattern: /\b\.atomic\b/i, msg: 'atomic() is not an Odoo ORM method.' },
+    { pattern: /\b\.transaction\b\(/i, msg: 'transaction() is not a standard Odoo ORM method on recordsets.' },
+    { pattern: /\b\.commit\b\(\)/i, msg: 'commit() is not called on recordsets. In shell, use env.cr.commit() — but be cautious.' },
+    { pattern: /\b\.rollback\b\(\)/i, msg: 'rollback() is not called on recordsets. In shell, use env.cr.rollback().' },
+    { pattern: /\b\.validate\b\(/i, msg: 'validate() is not a standard Odoo ORM method. Did you mean a model-specific method?' },
+    { pattern: /\b\.check\b\(/i, msg: 'check() alone is not standard. Use check_access_rights() or check_access_rule().' },
+    { pattern: /\b\.get_field\b/i, msg: 'get_field() is not standard. Use fields_get() on the model.' },
+    { pattern: /\b\.list_fields\b/i, msg: 'list_fields() does not exist. Use fields_get() or fields_view_get().' },
+    { pattern: /\b\.query\b\(/i, msg: 'query() is not standard. Use env.cr.execute() for raw SQL or search() for ORM.' },
+    { pattern: /\b\.raw\b\(/i, msg: 'raw() is not a standard Odoo ORM method.' },
+    { pattern: /\b\.execute\b\(/i, msg: 'execute() on a recordset is not standard. Use specific ORM methods or env[...].execute() for server actions.' },
+  ];
+
+  const VALID_PATTERNS = [
+    { pattern: /\benv\[['"]\w+(\.\w+)['"]\]/, desc: 'Model access via env' },
+    { pattern: /\bself\./, desc: 'Recordset method access' },
+    { pattern: /\b\.search\(/, desc: 'Domain search' },
+    { pattern: /\b\.browse\(/, desc: 'ID browse' },
+    { pattern: /\b\.create\(/, desc: 'Record creation' },
+    { pattern: /\b\.write\(/, desc: 'Record update' },
+    { pattern: /\b\.unlink\(/, desc: 'Record deletion' },
+    { pattern: /\b\.read\(/, desc: 'Field read' },
+    { pattern: /\b\.with_context\(/, desc: 'Context modification' },
+    { pattern: /\b\.sudo\(/, desc: 'Privilege elevation' },
+    { pattern: /\benv\.cr\./, desc: 'Cursor access' },
+    { pattern: /\b\.filtered\(/, desc: 'Recordset filtering' },
+    { pattern: /\b\.mapped\(/, desc: 'Recordset mapping' },
+    { pattern: /\b\.sorted\(/, desc: 'Recordset sorting' },
+    { pattern: /\b\.exists\(/, desc: 'Existence check' },
+    { pattern: /\b\.ensure_one\(/, desc: 'Single record assertion' },
+    { pattern: /\b\.fields_get\(/, desc: 'Field introspection' },
+    { pattern: /\b\.search_count\(/, desc: 'Count query' },
+    { pattern: /\b\.name_search\(/, desc: 'Name search' },
+    { pattern: /\b\.message_post\(/, desc: 'Chatter post' },
+    { pattern: /\b\.copy\(/, desc: 'Record duplication' },
+    { pattern: /\b\.refresh\(/, desc: 'Cache refresh' },
+    { pattern: /\b\.invalidate_recordset\(/, desc: 'Cache invalidation (v16+)' },
+    { pattern: /\b\.action_confirm\b|\b\.action_cancel\b|\b\.action_draft\b/, desc: 'Workflow action' },
+    { pattern: /\b\.activity_schedule\(/, desc: 'Activity scheduling' },
+    { pattern: /\bwith\s+test_cr\b|with\s+new_cr\b/, desc: 'Cursor context' },
+  ];
+
+  function addMessage(content, type) {
+    const msg = document.createElement('div');
+    msg.className = 'message ' + type;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = type === 'bot' ? 'OV' : 'U';
+    avatar.setAttribute('aria-hidden', 'true');
+
+    const body = document.createElement('div');
+    body.className = 'message-content';
+    body.innerHTML = content;
+
+    msg.appendChild(avatar);
+    msg.appendChild(body);
+    messagesEl.appendChild(msg);
+    scrollToBottom();
+  }
+
+  function addTypingIndicator() {
+    const msg = document.createElement('div');
+    msg.className = 'message bot';
+    msg.id = 'typing-indicator';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = 'OV';
+    avatar.setAttribute('aria-hidden', 'true');
+
+    const body = document.createElement('div');
+    body.className = 'message-content';
+
+    const indicator = document.createElement('div');
+    indicator.className = 'typing-indicator';
+    indicator.innerHTML = '<span></span><span></span><span></span>';
+
+    body.appendChild(indicator);
+    msg.appendChild(avatar);
+    msg.appendChild(body);
+    messagesEl.appendChild(msg);
+    scrollToBottom();
+    return msg;
+  }
+
+  function scrollToBottom() {
+    requestAnimationFrame(function() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    });
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function validateCode(code) {
+    const results = { valid: [], invalid: [], warnings: [], hallucinations: [], info: [] };
+    const lines = code.split('\n');
+
+    let hasEnvAccess = false;
+    let hasSelfUsage = false;
+    let hasRawSQL = false;
+    let hasDestructive = false;
+    let hasSudo = false;
+    let hasTryExcept = false;
+    let modelFound = null;
+
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      var lineNum = i + 1;
+
+      if (/\benv\[['"]([^'"]+)['"]\]/.test(line)) {
+        hasEnvAccess = true;
+        var match = line.match(/\benv\[['"]([^'"]+)['"]\]/);
+        if (match) modelFound = match[1];
+      }
+
+      if (/^\s*def\s+(\w+)/.test(line)) {
+        var funcMatch = line.match(/^\s*def\s+(\w+)/);
+        if (funcMatch && funcMatch[1] !== '<lambda>') {
+          results.info.push({ line: lineNum, msg: 'Function definition: `' + funcMatch[1] + '()`' });
+        }
+      }
+
+      if (/\btry\b/.test(line)) hasTryExcept = true;
+      if (/\bself\b/.test(line)) hasSelfUsage = true;
+    }
+
+    for (var d = 0; d < DEPRECATED_PATTERNS.length; d++) {
+      var dp = DEPRECATED_PATTERNS[d];
+      var m = code.match(dp.pattern);
+      if (m) {
+        var isWarning = dp.pattern.source.indexOf('sudo') !== -1 ||
+                        dp.pattern.source.indexOf('unlink') !== -1 ||
+                        dp.pattern.source.indexOf('cr\.execute') !== -1 ||
+                        dp.pattern.source.indexOf('sleep') !== -1 ||
+                        dp.pattern.source.indexOf('flush') !== -1 ||
+                        dp.pattern.source.indexOf('copy') !== -1 ||
+                        dp.pattern.source.indexOf('limit=0') !== -1 ||
+                        dp.pattern.source.indexOf('search\(\)\.write') !== -1;
+        var entry = { line: '?', msg: dp.msg };
+        if (isWarning) {
+          results.warnings.push(entry);
+        } else {
+          results.invalid.push(entry);
+        }
+      }
+    }
+
+    for (var h = 0; h < HALLUCINATION_PATTERNS.length; h++) {
+      var hp = HALLUCINATION_PATTERNS[h];
+      if (hp.pattern.test(code)) {
+        results.hallucinations.push({ line: '?', msg: hp.msg });
+      }
+    }
+
+    var foundValid = false;
+    for (var v = 0; v < VALID_PATTERNS.length; v++) {
+      if (VALID_PATTERNS[v].pattern.test(code)) {
+        foundValid = true;
+        break;
+      }
+    }
+
+    if (!hasEnvAccess && !hasSelfUsage && code.trim().length > 10) {
+      results.warnings.push({ line: '?', msg: 'No `env` access or `self` reference detected. This code may not interact with Odoo ORM at all.' });
+    }
+
+    if (modelFound && ODOO_MODELS.indexOf(modelFound) === -1) {
+      if (!/^\w+(\.\w+)+$/.test(modelFound)) {
+        results.warnings.push({ line: '?', msg: 'Model name `' + modelFound + '` does not match standard Odoo naming convention (e.g., `module.model`).' });
+      }
+    }
+
+    if (hasDestructive && !hasTryExcept) {
+      results.warnings.push({ line: '?', msg: 'Destructive operation without try-except. Consider wrapping in error handling.' });
+    }
+
+    if (hasRawSQL && !hasTryExcept) {
+      results.warnings.push({ line: '?', msg: 'Raw SQL without try-except. SQL errors may leave the transaction in a bad state.' });
+    }
+
+    var isExecutionBlock = /\bif\s+__name__\s*==\s*['"]__main__['"]\b/.test(code) ||
+                           /^\s*if\s+__name__/.test(code) ||
+                           (code.includes('commit()') && code.includes('print(')) ||
+                           (hasEnvAccess && code.trim().split('\n').length > 5);
+
+    return {
+      results: results,
+      hasValidPatterns: foundValid,
+      isExecutionBlock: isExecutionBlock,
+      modelFound: modelFound,
+      hasTryExcept: hasTryExcept,
+      codeLength: code.trim().length
+    };
+  }
+
+  function buildResponse(validation) {
+    var r = validation.results;
+    var html = '';
+
+    var totalIssues = r.invalid.length + r.warnings.length + r.hallucinations.length;
+
+    if (totalIssues === 0 && validation.hasValidPatterns) {
+      html += '<div class="validation-block valid">';
+      html += '<div class="label">[VALID]</div>';
+      html += '<div class="detail">Code follows Odoo syntax and conventions. No deprecated APIs, hallucinated methods, or safety concerns detected.</div>';
+      html += '</div>';
+    } else if (totalIssues === 0) {
+      html += '<div class="validation-block warning">';
+      html += '<div class="label">[WARNING]</div>';
+      html += '<div class="detail">Code is syntactically valid Python but does not appear to use standard Odoo ORM patterns. Verify this is intentional.</div>';
+      html += '</div>';
+    } else {
+      var status = r.invalid.length > 0 ? 'INVALID' : (r.hallucinations.length > 0 ? 'INVALID' : 'WARNING');
+      var statusClass = r.invalid.length > 0 ? 'invalid' : (r.hallucinations.length > 0 ? 'invalid' : 'warning');
+
+      html += '<div class="validation-block ' + statusClass + '">';
+      html += '<div class="label">[' + status + ']</div>';
+      html += '<div class="detail">';
+
+      if (r.invalid.length > 0) {
+        html += '<strong>Issues found:</strong><br>';
+        for (var i = 0; i < r.invalid.length; i++) {
+          html += '• ' + escapeHtml(r.invalid[i].msg) + '<br>';
+        }
+      }
+
+      if (r.hallucinations.length > 0) {
+        html += '<strong>Hallucinated elements:</strong><br>';
+        for (var i = 0; i < r.hallucinations.length; i++) {
+          html += '• ' + escapeHtml(r.hallucinations[i].msg) + '<br>';
+        }
+      }
+
+      if (r.warnings.length > 0) {
+        html += '<strong>Warnings:</strong><br>';
+        for (var i = 0; i < r.warnings.length; i++) {
+          html += '• ' + escapeHtml(r.warnings[i].msg) + '<br>';
+        }
+      }
+
+      html += '</div></div>';
+    }
+
+    html += '<div style="margin-top:0.75rem;font-size:0.8125rem;color:var(--text-tertiary);line-height:1.6">';
+
+    if (validation.modelFound) {
+      html += '<strong>Model:</strong> ' + escapeHtml(validation.modelFound) + '<br>';
+    }
+
+    html += '<strong>Compatibility:</strong> ';
+    if (r.invalid.length === 0 && r.hallucinations.length === 0) {
+      html += 'Odoo 16–18 (verify model exists in your instance)<br>';
+    } else {
+      html += 'Check issues above for version-specific concerns<br>';
+    }
+
+    if (validation.isExecutionBlock) {
+      html += '<strong>Context:</strong> Execution block detected<br>';
+    }
+
+    html += '<strong>Risk:</strong> ';
+    if (r.invalid.length > 0 || r.hallucinations.length > 0) {
+      html += 'Do not deploy — fix issues first<br>';
+    } else if (r.warnings.length > 0) {
+      html += 'Review warnings before deploying<br>';
+    } else {
+      html += 'Low — standard ORM operations<br>';
+    }
+
+    html += '</div>';
+
+    html += '<div class="warning-banner">';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+    html += '<div><strong>⚠️ Always test the complete code sequence in a staging environment before production deployment.</strong><br>Shell execution applies changes instantly and permanently with no rollback mechanism.</div>';
+    html += '</div>';
+
+    if (r.invalid.length > 0 || r.hallucinations.length > 0) {
+      html += '<div style="margin-top:0.75rem;font-size:0.8125rem;line-height:1.6">';
+      html += '<strong style="color:var(--text-primary)">Recommended Actions:</strong><br>';
+      if (r.hallucinations.length > 0) {
+        html += '• Fix hallucinated methods — replace with standard Odoo ORM calls<br>';
+      }
+      if (r.invalid.length > 0) {
+        html += '• Address deprecated APIs and safety issues listed above<br>';
+      }
+      html += '• Test in odoo-bin shell with: <code>env[\'model.name\'].search(domain)</code><br>';
+      html += '• Run the full sequence in staging before production<br>';
+      html += '</div>';
+    } else if (r.warnings.length > 0) {
+      html += '<div style="margin-top:0.75rem;font-size:0.8125rem;line-height:1.6">';
+      html += '<strong style="color:var(--text-primary)">Recommended Actions:</strong><br>';
+      html += '• Review warnings above and verify intent<br>';
+      html += '• Test in staging with a small dataset first<br>';
+      html += '</div>';
+    } else {
+      html += '<div style="margin-top:0.75rem;font-size:0.8125rem;line-height:1.6">';
+      html += '<strong style="color:var(--text-primary)">Recommended Actions:</strong><br>';
+      html += '• Test in odoo-bin shell before production<br>';
+      html += '• ⚠️ Always test the full sequence in staging before production deployment<br>';
+      html += '</div>';
+    }
+
+    return html;
+  }
+
+  function handleValidate() {
+    var code = codeInput.value.trim();
+    if (!code) return;
+
+    addMessage('<pre>' + escapeHtml(code) + '</pre>', 'user');
+    codeInput.value = '';
+
+    var indicator = addTypingIndicator();
+
+    setTimeout(function() {
+      if (indicator && indicator.parentNode) {
+        indicator.parentNode.removeChild(indicator);
+      }
+
+      var validation = validateCode(code);
+      var response = buildResponse(validation);
+      addMessage(response, 'bot');
+    }, 600 + Math.random() * 400);
+  }
+
+  btnSend.addEventListener('click', handleValidate);
+
+  codeInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleValidate();
+    }
+  });
+
+  btnClear.addEventListener('click', function() {
+    codeInput.value = '';
+    codeInput.focus();
+  });
+
+  addMessage(
+    '<div style="font-weight:600;margin-bottom:0.5rem">Odoo Code Deployment Validator</div>' +
+    'I validate Python code snippets destined for <code>odoo-bin shell</code>. ' +
+    'I check for syntactical correctness, Odoo API compatibility (v16–18), hallucinated methods, and production safety risks.<br><br>' +
+    '<strong>How to use:</strong><br>' +
+    '• Paste code piece-by-piece<br>' +
+    '• I validate each piece independently<br>' +
+    '• When you submit the execution block, I\'ll remind you to test in staging<br><br>' +
+    '<strong>I will NOT:</strong> rewrite code, execute code, or assume missing context.<br>' +
+    '<strong>I will:</strong> flag deprecated APIs, hallucinated methods, and risky patterns.<br><br>' +
+    'Paste your first code snippet below.'
+  , 'bot');
+
+})();
+</script>
+
+</body>
+</html>
