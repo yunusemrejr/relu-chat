@@ -54,6 +54,7 @@ fi
 
 log() {
     local msg="[$(date '+%Y-%m-%d %H:%M:%S')] $*"
+    mkdir -p "$(dirname "${LOG_FILE}")" 2>/dev/null || true
     echo "$msg" | tee -a "${LOG_FILE}"
 }
 
