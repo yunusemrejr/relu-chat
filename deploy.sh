@@ -191,8 +191,9 @@ deploy() {
 # =============================================================================
 
 main() {
-    # Create log directory
+    # Create log and backup directories
     mkdir -p "$(dirname "${LOG_FILE}")"
+    mkdir -p "${BACKUP_DIR}"
     
     log "=========================================="
     log "ReLU.chat Deployment Script"
