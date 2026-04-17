@@ -5,7 +5,7 @@
 **relu.chat** is a coming soon landing page for a browser-based, privacy-first open-source chatbot platform that does not rely on LLMs.
 
 - **Domain**: reult.chat
-- **Hosting**: Linux shared hosting (Namecheap-style), Pure-FTPd with TLS
+- **Hosting**: Namecheap Linux shared hosting, Pure-FTPd with TLS (port 21)
 - **Backend**: PHP + SQLite for email collection
 - **Deployment**: FTP via lftp-based deployment script
 
@@ -17,27 +17,32 @@
 - [x] .htaccess security configuration
 - [x] Custom error pages (404, 403, 500)
 - [x] FTP deployment script (deploy.sh)
-- [ ] Production deployment — **BLOCKED: FTP credentials need verification**
+- [ ] Production deployment — **BLOCKED: FTP credentials invalid**
 
 ## Architecture Decisions
 
 1. **Single HTML file** for the coming soon page — no build step, no framework
 2. **PHP backend** for email capture — shared hosting constraint
 3. **SQLite** for data storage — no MySQL setup needed
-4. **SFTP/FTP deployment** via lftp script with environment variable credentials
-5. **Dark theme** inspired by Linear/ElevenLabs design systems — cinematic, privacy-focused aesthetic
+4. **FTP deployment** via lftp mirror with env var credentials
+5. **Dark theme** inspired by Linear/ElevenLabs design systems
 
 ## Active Tasks
 
-All code is complete. Deployment blocked pending FTP credential verification.
+All code complete. Deployment blocked pending valid FTP credentials.
 
 ## Open Flags
 
-- **WARNING — FTP Auth**: Server (Pure-FTPd, port 21, TLS) accepts username `relu@reult.chat` but rejects password. Credentials in `ftp-info.txt` may be incorrect or account not yet active. Verify in hosting control panel.
+- **WARNING — FTP Auth**: Pure-FTPd server on 199.188.200.140:21 rejects all credential combinations:
+  - `relu@reult.chat` + known password → 530 (username recognized, password wrong)
+  - `eartctvi` (cPanel username) + known password → 530
+  - `relu` + known password → 530
+  - **Action needed**: Verify FTP credentials in Namecheap cPanel → FTP Accounts. The password from ftp-info.txt is incorrect or the account is inactive.
 
 ## Forward Notes
 
-- Logo (logo.png, 596x622 RGBA PNG) relocated to `assets/`
-- Server: IP 199.188.200.140, Pure-FTPd with TLS, cert doesn't match IP (auto-disabled in script)
-- Remote path: /home/eartctvi/reult.chat
-- Once FTP credentials are verified, run `./deploy.sh` to push to production
+- **Namecheap path mapping**: Login lands at `/home/eartctvi/`, web root is `public_html/`
+- **Deploy script defaults updated**: FTP_USER=eartctvi, FTP_REMOTE=public_html
+- **To deploy**: Update `.env` with correct FTP password from cPanel, then run `./deploy.sh`
+- Logo (596x622 RGBA PNG) in `assets/`
+- Server cert doesn't match IP — script auto-disables cert verification
