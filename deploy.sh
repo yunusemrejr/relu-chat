@@ -201,7 +201,8 @@ EOF
         sed -i 's/set net:timeout 30/set net:timeout 60/' "${lftp_script_file}"
         sed -i 's/set net:max-retries 3/set net:max-retries 5/' "${lftp_script_file}"
         
-        if lftp "ftp://${FTP_USER}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
+    local FTP_USER_ENCODED="${FTP_USER//@/%40}"
+    if lftp "ftp://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
             log "Retry successful"
             return 0
         else
