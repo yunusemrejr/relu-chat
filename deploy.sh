@@ -129,15 +129,24 @@ deploy() {
     log "Starting deployment to ${FTP_HOST}:${FTP_PORT}${FTP_REMOTE}"
     log "User: ${FTP_USER}"
     
-    # Build lftp settings (use correct variable names from lftp)
-    # Note: ftp:passive-mode uses on/off, not yes/no. Binary is default for lftp.
-    local lftp_settings="set ftp:ssl-allow no; set ftp:passive-mode on; set net:timeout 30; set net:max-retries 3;"
+    # Create a temporary lftp script file to avoid bash escaping issues
+    local lftp_script_file=$(mktemp)
+    trap "rm -f '${lftp_script_file}'" EXIT
+    
+    # Write lftp settings
+    cat > "${lftp_script_file}" << EOF
+set ftp:ssl-allow no
+set ftp:passive-mode on
+set net:timeout 30
+set net:max-retries 3
+EOF
     
     if [[ "${VERBOSE:-0}" == "1" ]]; then
-        lftp_settings+=" set xfer:log true;"
+        echo "set xfer:log true" >> "${lftp_script_file}"
     fi
     
-    # Build mirror command
+    # Build mirror command with exclude patterns
+    # lftp mirror uses extended regex, * must be escaped as \\*
     local mirror_cmd="mirror --reverse"
     if [[ "${DRY_RUN:-0}" == "1" ]]; then
         log "DRY RUN MODE - No files will be transferred"
@@ -146,39 +155,14 @@ deploy() {
         mirror_cmd+=" --delete --continue"
     fi
     
-    # Add exclude patterns - lftp mirror uses regex patterns, * must be escaped as \\*
-    # Patterns must come BEFORE --reverse flag
-    local exclude_patterns=""
-    exclude_patterns+=" --exclude '.git/'"
-    exclude_patterns+=" --exclude '.agent-logs/'"
-    exclude_patterns+=" --exclude '_backups/'"
-    exclude_patterns+=" --exclude '.deployments/'"
-    exclude_patterns+=" --exclude '.env'"
-    exclude_patterns+=" --exclude '.env.local'"
-    exclude_patterns+=" --exclude '.env.example'"
-    exclude_patterns+=" --exclude 'deploy.sh'"
-    exclude_patterns+=" --exclude '.deployignore'"
-    exclude_patterns+=" --exclude '\\*.log'"
-    exclude_patterns+=" --exclude 'data/\\*.db'"
-    exclude_patterns+=" --exclude 'data/\\*.sqlite'"
-    exclude_patterns+=" --exclude 'data/\\*.sqlite3'"
-    exclude_patterns+=" --exclude '.idea/'"
-    exclude_patterns+=" --exclude '.vscode/'"
-    exclude_patterns+=" --exclude 'node_modules/'"
-    exclude_patterns+=" --exclude 'vendor/'"
-    exclude_patterns+=" --exclude '.DS_Store'"
-    exclude_patterns+=" --exclude 'Thumbs.db'"
-    exclude_patterns+=" --exclude 'README.md'"
-    exclude_patterns+=" --exclude 'context.md'"
-    
-    mirror_cmd+="${exclude_patterns} --verbose '${LOCAL_ROOT}' '${FTP_REMOTE}'"
-    
-    # Full lftp command: lftp -c "open -u user,pass host:port; settings; mirror_cmd; quit"
-    local full_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${lftp_settings}; ${mirror_cmd}; quit\""
+    # Add exclude patterns - each on its own line for the script file
+    echo "${mirror_cmd} --exclude '.git/' --exclude '.agent-logs/' --exclude '_backups/' --exclude '.deployments/' --exclude '.env' --exclude '.env.local' --exclude '.env.example' --exclude 'deploy.sh' --exclude '.deployignore' --exclude '\\\\*.log' --exclude 'data/\\\\*.db' --exclude 'data/\\\\*.sqlite' --exclude 'data/\\\\*.sqlite3' --exclude '.idea/' --exclude '.vscode/' --exclude 'node_modules/' --exclude 'vendor/' --exclude '.DS_Store' --exclude 'Thumbs.db' --exclude 'README.md' --exclude 'context.md' --verbose '${LOCAL_ROOT}' '${FTP_REMOTE}'" >> "${lftp_script_file}"
+    echo "quit" >> "${lftp_script_file}"
     
     log "Connecting to server..."
     
-    if eval "${full_cmd}" 2>&1 | tee -a "${LOG_FILE}"; then
+    # Execute lftp with the script file
+    if lftp -u "${FTP_USER}","${FTP_PASS}" "ftp://${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
         log "Deployment completed successfully"
         return 0
     else
@@ -187,10 +171,10 @@ deploy() {
         
         # Retry with longer timeout
         log "Attempting retry with longer timeout..."
-        local retry_settings="set ftp:ssl-allow no; set ftp:passive-mode on; set net:timeout 60; set net:max-retries 5;"
-        local retry_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${retry_settings}; ${mirror_cmd}; quit\""
+        sed -i 's/set net:timeout 30/set net:timeout 60/' "${lftp_script_file}"
+        sed -i 's/set net:max-retries 3/set net:max-retries 5/' "${lftp_script_file}"
         
-        if eval "${retry_cmd}" 2>&1 | tee -a "${LOG_FILE}"; then
+        if lftp -u "${FTP_USER}","${FTP_PASS}" "ftp://${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
             log "Retry successful"
             return 0
         else
