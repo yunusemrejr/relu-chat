@@ -5,10 +5,10 @@ export function escapeHTML(s) { return s.replace(/[&<>"']/g, m => ({'&':'&amp;',
 export function md(t) { return t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>'); }
 
 export function setStatus(t, ready = false) {
-  const statusText = document.getElementById('statusText');
+  const statusText = document.getElementById('status-text');
   const dot = document.getElementById('dot');
-  statusText.textContent = t;
-  dot.classList.toggle('ready', ready);
+  if (statusText) statusText.textContent = t;
+  if (dot) dot.classList.toggle('ready', ready);
 }
 
 export function pushMessage(role, html, meta) {

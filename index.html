@@ -37,13 +37,14 @@
   --bg-card: rgba(255,255,255,0.02);
   --bg-card-hover: rgba(255,255,255,0.04);
   --border: rgba(255,255,255,0.06);
-  --border-hover: rgba(108,92,231,0.5);
+  --border-hover: rgba(30,58,138,0.6);
   --text-primary: #f7f8f8;
   --text-secondary: #8a8f98;
   --text-tertiary: #5a5f68;
-  --accent: #6c5ce7;
-  --accent-glow: rgba(108,92,231,0.3);
-  --accent-hover: #7d6ff0;
+  --accent: #1e3a8a;
+  --accent-light: #3b82f6;
+  --accent-glow: rgba(30,58,138,0.3);
+  --accent-hover: #2563eb;
   --success: #27ae60;
   --success-glow: rgba(39,174,96,0.3);
   --error: #e74c3c;
@@ -53,9 +54,9 @@
     rgba(0,0,0,0.04) 0px 2px 4px,
     rgba(0,0,0,0.04) 0px 8px 16px -8px;
   --shadow-card-hover:
-    rgba(108,92,231,0.15) 0px 0px 0px 1px,
-    rgba(108,92,231,0.08) 0px 4px 12px,
-    rgba(108,92,231,0.12) 0px 16px 32px -12px;
+    rgba(30,58,138,0.2) 0px 0px 0px 1px,
+    rgba(30,58,138,0.1) 0px 4px 12px,
+    rgba(30,58,138,0.15) 0px 16px 32px -12px;
   --shadow-button:
     rgba(0,0,0,0.08) 0px 0px 0px 1px,
     rgba(0,0,0,0.12) 0px 1px 2px;
@@ -90,8 +91,8 @@ body::before {
   width: 200%;
   height: 200%;
   background: 
-    radial-gradient(ellipse at 50% 30%, rgba(108,92,231,0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 60%, rgba(108,92,231,0.04) 0%, transparent 40%);
+    radial-gradient(ellipse at 50% 30%, rgba(30,58,138,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(59,130,246,0.06) 0%, transparent 40%);
   pointer-events: none;
   z-index: 0;
 }
@@ -121,12 +122,12 @@ body::before {
   width: 120px;
   height: auto;
   opacity: 0.95;
-  filter: drop-shadow(0 0 32px rgba(108,92,231,0.25));
+  filter: drop-shadow(0 0 32px rgba(30,58,138,0.35));
   transition: filter 0.3s ease, transform 0.3s ease;
 }
 
 .logo:hover {
-  filter: drop-shadow(0 0 48px rgba(108,92,231,0.35));
+  filter: drop-shadow(0 0 48px rgba(59,130,246,0.45));
   transform: scale(1.02);
 }
 
@@ -189,7 +190,7 @@ h1 {
   width: 14px;
   height: 14px;
   flex-shrink: 0;
-  stroke: var(--accent);
+  stroke: var(--accent-light);
 }
 
 /* Chatbots Section */
@@ -213,7 +214,7 @@ h1 {
 .section-title svg {
   width: 16px;
   height: 16px;
-  stroke: var(--accent);
+  stroke: var(--accent-light);
 }
 
 .chatbots-grid {
@@ -243,7 +244,7 @@ h1 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(108,92,231,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(30,58,138,0.4), transparent);
   opacity: 0;
   transition: opacity 0.25s ease;
 }
@@ -262,19 +263,19 @@ h1 {
 .chatbot-icon {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, rgba(108,92,231,0.15), rgba(108,92,231,0.08));
+  background: linear-gradient(135deg, rgba(30,58,138,0.25), rgba(59,130,246,0.12));
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
-  border: 1px solid rgba(108,92,231,0.2);
+  border: 1px solid rgba(30,58,138,0.3);
 }
 
 .chatbot-icon svg {
   width: 22px;
   height: 22px;
-  stroke: var(--accent);
+  stroke: var(--accent-light);
 }
 
 .chatbot-card h3 {
@@ -301,8 +302,8 @@ h1 {
 .tag {
   font-size: 0.6875rem;
   padding: 0.25rem 0.625rem;
-  background: rgba(108,92,231,0.08);
-  border: 1px solid rgba(108,92,231,0.15);
+  background: rgba(30,58,138,0.12);
+  border: 1px solid rgba(30,58,138,0.2);
   border-radius: 99px;
   color: var(--text-secondary);
   font-weight: 500;
@@ -310,8 +311,8 @@ h1 {
 }
 
 .chatbot-card:hover .tag {
-  background: rgba(108,92,231,0.12);
-  border-color: rgba(108,92,231,0.25);
+  background: rgba(30,58,138,0.18);
+  border-color: rgba(59,130,246,0.35);
   color: var(--text-primary);
 }
 
@@ -335,7 +336,7 @@ h1 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(108,92,231,0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(30,58,138,0.3), transparent);
 }
 
 .signup-section h2 {
@@ -381,7 +382,7 @@ input[type="email"]::placeholder {
 }
 
 input[type="email"]:focus {
-  border-color: var(--accent);
+  border-color: var(--accent-light);
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
@@ -404,7 +405,7 @@ button[type="submit"]:hover {
   background: var(--accent-hover);
   box-shadow: 
     rgba(0,0,0,0.08) 0px 0px 0px 1px,
-    rgba(108,92,231,0.2) 0px 4px 12px;
+    rgba(30,58,138,0.35) 0px 4px 12px;
 }
 
 button[type="submit"]:active {
@@ -465,7 +466,7 @@ button[type="submit"]:disabled {
 }
 
 .footer a:hover {
-  color: var(--accent);
+  color: var(--accent-light);
 }
 
 /* Responsive */
