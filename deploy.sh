@@ -147,16 +147,31 @@ deploy() {
     fi
     
     # Add exclude patterns - lftp mirror uses regex patterns, * must be escaped as \\*
-    # Each pattern needs to be a separate --exclude argument
-    mirror_cmd+=" --exclude '.git/' --exclude '.agent-logs/' --exclude '_backups/'"
-    mirror_cmd+=" --exclude '.env' --exclude '.env.local' --exclude '.env.example'"
-    mirror_cmd+=" --exclude 'deploy.sh' --exclude '.deployignore'"
-    mirror_cmd+=" --exclude '\\*.log' --exclude 'data/\\*.db' --exclude 'data/\\*.sqlite' --exclude 'data/\\*.sqlite3'"
-    mirror_cmd+=" --exclude '.idea/' --exclude '.vscode/'"
-    mirror_cmd+=" --exclude 'node_modules/' --exclude 'vendor/'"
-    mirror_cmd+=" --exclude '.DS_Store' --exclude 'Thumbs.db'"
-    mirror_cmd+=" --exclude 'README.md' --exclude 'context.md'"
-    mirror_cmd+=" --verbose '${LOCAL_ROOT}' '${FTP_REMOTE}'"
+    # Patterns must come BEFORE --reverse flag
+    local exclude_patterns=""
+    exclude_patterns+=" --exclude '.git/'"
+    exclude_patterns+=" --exclude '.agent-logs/'"
+    exclude_patterns+=" --exclude '_backups/'"
+    exclude_patterns+=" --exclude '.deployments/'"
+    exclude_patterns+=" --exclude '.env'"
+    exclude_patterns+=" --exclude '.env.local'"
+    exclude_patterns+=" --exclude '.env.example'"
+    exclude_patterns+=" --exclude 'deploy.sh'"
+    exclude_patterns+=" --exclude '.deployignore'"
+    exclude_patterns+=" --exclude '\\*.log'"
+    exclude_patterns+=" --exclude 'data/\\*.db'"
+    exclude_patterns+=" --exclude 'data/\\*.sqlite'"
+    exclude_patterns+=" --exclude 'data/\\*.sqlite3'"
+    exclude_patterns+=" --exclude '.idea/'"
+    exclude_patterns+=" --exclude '.vscode/'"
+    exclude_patterns+=" --exclude 'node_modules/'"
+    exclude_patterns+=" --exclude 'vendor/'"
+    exclude_patterns+=" --exclude '.DS_Store'"
+    exclude_patterns+=" --exclude 'Thumbs.db'"
+    exclude_patterns+=" --exclude 'README.md'"
+    exclude_patterns+=" --exclude 'context.md'"
+    
+    mirror_cmd+="${exclude_patterns} --verbose '${LOCAL_ROOT}' '${FTP_REMOTE}'"
     
     # Full lftp command: lftp -c "open -u user,pass host:port; settings; mirror_cmd; quit"
     local full_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${lftp_settings}; ${mirror_cmd}; quit\""
