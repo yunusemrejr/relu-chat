@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReLU.chat — Coming Soon</title>
+<meta name="description" content="Free, browser-based, privacy-first open-source chatbots that don't rely on LLMs. Join the waitlist for ReLU.chat.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://reult.chat/">
+
+<meta property="og:title" content="ReLU.chat — Coming Soon">
+<meta property="og:description" content="Free, browser-based, privacy-first open-source chatbots that don't rely on LLMs.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://reult.chat/">
+<meta property="og:image" content="https://reult.chat/assets/logo.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ReLU.chat — Coming Soon">
+<meta name="twitter:description" content="Free, browser-based, privacy-first open-source chatbots that don't rely on LLMs.">
+
+<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #08090a;
+  --bg-elevated: rgba(255,255,255,0.02);
+  --border: rgba(255,255,255,0.08);
+  --text-primary: #f7f8f8;
+  --text-secondary: #8a8f98;
+  --text-tertiary: #5a5f68;
+  --accent: #6c5ce7;
+  --accent-glow: rgba(108,92,231,0.25);
+  --accent-hover: #7d6ff0;
+  --success: #27ae60;
+  --error: #e74c3c;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 50% 40%, rgba(108,92,231,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  width: 100%;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 160px;
+  height: auto;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 40px var(--accent-glow));
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+.tagline strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.feature-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.feature-badge:hover {
+  border-color: rgba(108,92,231,0.4);
+  background: rgba(108,92,231,0.06);
+}
+
+.feature-badge svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke: var(--accent);
+}
+
+.signup-section {
+  margin-top: 1rem;
+}
+
+.signup-section p {
+  font-size: 0.95rem;
+  color: var(--text-tertiary);
+  margin-bottom: 1.25rem;
+}
+
+.form-container {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+input[type="email"] {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+input[type="email"]::placeholder {
+  color: var(--text-tertiary);
+}
+
+input[type="email"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+button[type="submit"] {
+  padding: 0.875rem 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+button[type="submit"]:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+button[type="submit"]:active {
+  transform: scale(0.97);
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.form-message {
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-top: 0.75rem;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.form-message.success {
+  display: block;
+  background: rgba(39,174,96,0.1);
+  border: 1px solid rgba(39,174,96,0.3);
+  color: var(--success);
+}
+
+.form-message.error {
+  display: block;
+  background: rgba(231,76,60,0.1);
+  border: 1px solid rgba(231,76,60,0.3);
+  color: var(--error);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer p {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+}
+
+.footer a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer a:hover {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .container { padding: 1.5rem 1rem; }
+  h1 { font-size: 1.875rem; }
+  .tagline { font-size: 1rem; }
+  .form-row { flex-direction: column; }
+  .logo { width: 120px; }
+  .features { gap: 0.5rem; }
+  .feature-badge { font-size: 0.8125rem; padding: 0.4rem 0.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo { animation: none; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<main class="container" role="main">
+  <div class="logo-container">
+    <img src="assets/logo.png" alt="ReLU.chat" class="logo" width="160" height="167">
+  </div>
+
+  <h1>ReLU.chat</h1>
+
+  <p class="tagline">
+    Free, browser-based, <strong>privacy-first open-source chatbots</strong> that don't rely on LLMs.
+  </p>
+
+  <div class="features">
+    <span class="feature-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Privacy-first
+    </span>
+    <span class="feature-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/></svg>
+      Browser-based
+    </span>
+    <span class="feature-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      Open-source
+    </span>
+    <span class="feature-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      No LLMs
+    </span>
+  </div>
+
+  <div class="signup-section">
+    <p>Be the first to know when we launch.</p>
+
+    <form class="form-container" id="signup-form" action="api/subscribe.php" method="POST">
+      <div class="form-row">
+        <input type="email" name="email" id="email" placeholder="Enter your email" required autocomplete="email" aria-label="Email address">
+        <button type="submit" id="submit-btn">Notify Me</button>
+      </div>
+      <div id="form-message" class="form-message" role="alert" aria-live="polite"></div>
+    </form>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 ReLU.chat. Built with privacy in mind.</p>
+  </footer>
+</main>
+
+<script>
+(function() {
+  const form = document.getElementById('signup-form');
+  const emailInput = document.getElementById('email');
+  const submitBtn = document.getElementById('submit-btn');
+  const messageEl = document.getElementById('form-message');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    if (!email || !email.includes('@')) {
+      showMessage('Please enter a valid email address.', 'error');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    const formData = new FormData();
+    formData.append('email', email);
+
+    fetch('api/subscribe.php', {
+      method: 'POST',
+      body: formData,
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.success) {
+        showMessage('You\'re on the list! We\'ll notify you when we launch.', 'success');
+        emailInput.value = '';
+      } else {
+        showMessage(data.error || 'Something went wrong. Please try again.', 'error');
+      }
+    })
+    .catch(function() {
+      showMessage('Connection error. Please try again.', 'error');
+    })
+    .finally(function() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Notify Me';
+    });
+  });
+
+  function showMessage(text, type) {
+    messageEl.textContent = text;
+    messageEl.className = 'form-message ' + type;
+    setTimeout(function() {
+      messageEl.className = 'form-message';
+    }, 6000);
+  }
+})();
+</script>
+
+</body>
+</html>

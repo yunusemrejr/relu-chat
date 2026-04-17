@@ -1,0 +1,28 @@
+# .deployignore — Files/directories excluded from FTP deployment
+# These patterns are passed to lftp mirror --exclude
+
+.git
+.gitignore
+.agent-logs
+_backups
+.env
+.env.local
+.env.example
+deploy.sh
+.deployignore
+*.log
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+.idea
+.vscode
+node_modules
+vendor
+composer.json
+composer.lock
+package.json
+package-lock.json
+.DS_Store
+Thumbs.db
+README.md
+context.md
