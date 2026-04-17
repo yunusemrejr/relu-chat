@@ -171,6 +171,7 @@ EOF
     printf ' --exclude ".env"' >> "${lftp_script_file}"
     printf ' --exclude ".env.local"' >> "${lftp_script_file}"
     printf ' --exclude ".env.example"' >> "${lftp_script_file}"
+    printf ' --exclude "ftp-info.txt"' >> "${lftp_script_file}"
     printf ' --exclude "deploy.sh"' >> "${lftp_script_file}"
     printf ' --exclude ".deployignore"' >> "${lftp_script_file}"
     printf ' --exclude ".*\\.log$"' >> "${lftp_script_file}"
