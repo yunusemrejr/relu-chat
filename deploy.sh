@@ -18,7 +18,7 @@
 #   FTP_HOST   - Server IP or hostname (default: 199.188.200.140)
 #   FTP_USER   - FTP username (default: relu@reult.chat)
 #   FTP_PASS   - FTP password (required, no default)
-#   FTP_REMOTE - Remote path (default: /)
+#   FTP_REMOTE - Remote path (default: /home/eartctvi/reult.chat)
 #   FTP_PORT   - FTP port (default: 21)
 #
 
@@ -38,7 +38,7 @@ ENV_FILE="${SCRIPT_DIR}/.env"
 FTP_HOST="${FTP_HOST:-199.188.200.140}"
 FTP_USER="${FTP_USER:-relu@reult.chat}"
 FTP_PASS="${FTP_PASS:-}"
-FTP_REMOTE="${FTP_REMOTE:-/}"
+FTP_REMOTE="${FTP_REMOTE:-/home/eartctvi/reult.chat}"
 FTP_PORT="${FTP_PORT:-21}"
 
 # Load .env file if it exists (but never commit it)
@@ -187,9 +187,13 @@ EOF
     
     log "Connecting to server..."
     
+    # URL-encode the username (in case it contains @ or other special chars)
+    local FTP_USER_ENCODED="${FTP_USER//@/%40}"
+    
     # Execute lftp with the script file, passing credentials via URL to avoid
     # stdin conflicts when piping the script
-    if lftp "ftp://${FTP_USER}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
+    # Use ftps:// for explicit TLS (FTP AUTH TLS)
+    if lftp "ftps://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
         log "Deployment completed successfully"
         return 0
     else
@@ -201,8 +205,7 @@ EOF
         sed -i 's/set net:timeout 30/set net:timeout 60/' "${lftp_script_file}"
         sed -i 's/set net:max-retries 3/set net:max-retries 5/' "${lftp_script_file}"
         
-    local FTP_USER_ENCODED="${FTP_USER//@/%40}"
-    if lftp "ftp://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
+    if lftp "ftps://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
             log "Retry successful"
             return 0
         else
