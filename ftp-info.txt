@@ -1,5 +1,5 @@
-/home/eartctvi/reult.chat
- relu@reult.chat
-  url: reult.chat
+/home/eartctvi/relu.chat
+ relu@relu.chat
+  url: relu.chat
 password:  e9qHcFxmuZd15KpFRrB5
 IP: 199.188.200.140
