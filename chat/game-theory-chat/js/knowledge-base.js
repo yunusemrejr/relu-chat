@@ -2,6 +2,10 @@ export function kb(id, name, aliases, summary, f) {
   return { id, name, aliases: [name.toLowerCase(), ...aliases.map(a => a.toLowerCase())], summary, f };
 }
 
+export function entryText(e) {
+  return `${e.name} ${e.aliases.join(' ')} ${e.summary} ${e.f.def.join(' ')} ${e.f.int.join(' ')} ${e.f.ex.join(' ')} ${e.f.form.join(' ')} ${e.f.app.join(' ')}`;
+}
+
 export const KB = [
   kb('nash_eq','Nash Equilibrium',['nash','ne'],
     'A profile of strategies where no player can profit by unilateral deviation.',{
