@@ -5,19 +5,19 @@
 **relu.chat** is a coming soon landing page for a browser-based, privacy-first open-source chatbot platform that does not rely on LLMs.
 
 - **Domain**: reult.chat
-- **Hosting**: Linux shared hosting (Namecheap-style), Apache/LiteSpeed
+- **Hosting**: Linux shared hosting (Namecheap-style), Pure-FTPd with TLS
 - **Backend**: PHP + SQLite for email collection
 - **Deployment**: FTP via lftp-based deployment script
 
 ## Current State
 
 - [x] Git repository initialized
-- [ ] Coming soon page (in progress)
-- [ ] PHP email handler with SQLite
-- [ ] .htaccess security configuration
-- [ ] Custom error pages
-- [ ] FTP deployment script
-- [ ] Production deployment
+- [x] Coming soon page (index.html)
+- [x] PHP email handler with SQLite (api/subscribe.php)
+- [x] .htaccess security configuration
+- [x] Custom error pages (404, 403, 500)
+- [x] FTP deployment script (deploy.sh)
+- [ ] Production deployment — **BLOCKED: FTP credentials need verification**
 
 ## Architecture Decisions
 
@@ -29,18 +29,15 @@
 
 ## Active Tasks
 
-1. Create coming soon page with email capture
-2. PHP + SQLite email handler
-3. .htaccess with security, redirects, custom error pages
-4. FTP deployment script
-5. Push to production
+All code is complete. Deployment blocked pending FTP credential verification.
 
 ## Open Flags
 
-None currently.
+- **WARNING — FTP Auth**: Server (Pure-FTPd, port 21, TLS) accepts username `relu@reult.chat` but rejects password. Credentials in `ftp-info.txt` may be incorrect or account not yet active. Verify in hosting control panel.
 
 ## Forward Notes
 
-- Logo (logo.png, 596x622 RGBA PNG) needs to be relocated to `assets/` directory
-- FTP credentials stored in `ftp-info.txt` — must be moved to env vars in deploy script
-- Server IP: 199.188.200.140, User: relu@reult.chat, Remote path: /home/eartctvi/reult.chat
+- Logo (logo.png, 596x622 RGBA PNG) relocated to `assets/`
+- Server: IP 199.188.200.140, Pure-FTPd with TLS, cert doesn't match IP (auto-disabled in script)
+- Remote path: /home/eartctvi/reult.chat
+- Once FTP credentials are verified, run `./deploy.sh` to push to production
