@@ -129,14 +129,15 @@ deploy() {
     log "Starting deployment to ${FTP_HOST}:${FTP_PORT}${FTP_REMOTE}"
     log "User: ${FTP_USER}"
     
-    # Build lftp settings (use correct variable names)
-    local lftp_settings="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 30; set net:max-retries 3; set file:transfer-mode binary;"
+    # Build lftp settings (use correct variable names from lftp)
+    # Note: ftp:passive-mode uses on/off, not yes/no. Binary is default for lftp.
+    local lftp_settings="set ftp:ssl-allow no; set ftp:passive-mode on; set net:timeout 30; set net:max-retries 3;"
     
     if [[ "${VERBOSE:-0}" == "1" ]]; then
         lftp_settings+=" set xfer:log true;"
     fi
     
-    # Build mirror command with proper exclude patterns (lftp uses glob, escape *)
+    # Build mirror command
     local mirror_cmd="mirror --reverse"
     if [[ "${DRY_RUN:-0}" == "1" ]]; then
         log "DRY RUN MODE - No files will be transferred"
@@ -145,7 +146,8 @@ deploy() {
         mirror_cmd+=" --delete --continue"
     fi
     
-    # Add exclude patterns one by one with proper escaping
+    # Add exclude patterns - lftp mirror uses shell glob patterns
+    # Each pattern needs to be a separate --exclude argument
     mirror_cmd+=" --exclude '.git/' --exclude '.agent-logs/' --exclude '_backups/'"
     mirror_cmd+=" --exclude '.env' --exclude '.env.local' --exclude '.env.example'"
     mirror_cmd+=" --exclude 'deploy.sh' --exclude '.deployignore'"
@@ -170,7 +172,7 @@ deploy() {
         
         # Retry with longer timeout
         log "Attempting retry with longer timeout..."
-        local retry_settings="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 60; set net:max-retries 5; set file:transfer-mode binary;"
+        local retry_settings="set ftp:ssl-allow no; set ftp:passive-mode on; set net:timeout 60; set net:max-retries 5;"
         local retry_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${retry_settings}; ${mirror_cmd}; quit\""
         
         if eval "${retry_cmd}" 2>&1 | tee -a "${LOG_FILE}"; then
