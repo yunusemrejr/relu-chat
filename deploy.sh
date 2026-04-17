@@ -42,10 +42,14 @@ FTP_REMOTE="${FTP_REMOTE:-/home/eartctvi/reult.chat}"
 FTP_PORT="${FTP_PORT:-21}"
 
 # Load .env file if it exists (but never commit it)
+# Only set variables if not already defined via environment
 if [[ -f "${ENV_FILE}" ]]; then
-    set -a
-    source "${ENV_FILE}"
-    set +a
+    while IFS='=' read -r key value; do
+        # Skip comments and empty lines
+        [[ -z "$key" || "$key" =~ ^# ]] && continue
+        # Only set if not already defined
+        [[ -z "${!key:-}" ]] && export "$key=$value"
+    done < "${ENV_FILE}"
 fi
 
 # =============================================================================
