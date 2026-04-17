@@ -16,7 +16,7 @@
 #
 # Environment Variables (set in .env or export before running):
 #   FTP_HOST   - Server IP or hostname (default: 199.188.200.140)
-#   FTP_USER   - FTP username (default: relu@reult.chat)
+#   FTP_USER   - FTP username (default: relu@relu.chat)
 #   FTP_PASS   - FTP password (required, no default)
 #   FTP_REMOTE - Remote path (default: /home/eartctvi/reult.chat)
 #   FTP_PORT   - FTP port (default: 21)
@@ -36,7 +36,7 @@ ENV_FILE="${SCRIPT_DIR}/.env"
 
 # Default values
 FTP_HOST="${FTP_HOST:-199.188.200.140}"
-FTP_USER="${FTP_USER:-relu@reult.chat}"
+FTP_USER="${FTP_USER:-relu@relu.chat}"
 FTP_PASS="${FTP_PASS:-}"
 FTP_REMOTE="${FTP_REMOTE:-/home/eartctvi/reult.chat}"
 FTP_PORT="${FTP_PORT:-21}"
@@ -134,10 +134,11 @@ deploy() {
     trap "rm -f '${lftp_script_file}'" EXIT
     
     # Write lftp settings
-    # Note: This server (Namecheap shared hosting) uses plain FTP, not FTPS
-    # FTPS causes "gnutls_handshake: An unexpected TLS packet was received"
+    # Namecheap shared hosting requires FTPS (explicit TLS)
     cat > "${lftp_script_file}" << EOF
-set ftp:ssl-allow false
+set ftp:ssl-force true
+set ftp:ssl-protect-data true
+set ssl:verify-certificate false
 set ftp:passive-mode on
 set net:timeout 30
 set net:max-retries 3
@@ -192,8 +193,8 @@ EOF
     
     # Execute lftp with the script file, passing credentials via URL to avoid
     # stdin conflicts when piping the script
-    # Use ftp:// (plain FTP) - this server doesn't support FTPS
-    if lftp "ftp://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
+    # Use ftps:// for explicit TLS (required by Namecheap)
+    if lftp "ftps://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
         log "Deployment completed successfully"
         return 0
     else
@@ -205,7 +206,7 @@ EOF
         sed -i 's/set net:timeout 30/set net:timeout 60/' "${lftp_script_file}"
         sed -i 's/set net:max-retries 3/set net:max-retries 5/' "${lftp_script_file}"
         
-    if lftp "ftp://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
+    if lftp "ftps://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
             log "Retry successful"
             return 0
         else
