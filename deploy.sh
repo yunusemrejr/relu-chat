@@ -18,7 +18,7 @@
 #   FTP_HOST   - Server IP or hostname (default: 199.188.200.140)
 #   FTP_USER   - FTP username (default: relu@relu.chat)
 #   FTP_PASS   - FTP password (required, no default)
-#   FTP_REMOTE - Remote path (default: /home/eartctvi/reult.chat)
+#   FTP_REMOTE - Remote path (default: /)
 #   FTP_PORT   - FTP port (default: 21)
 #
 
@@ -38,7 +38,7 @@ ENV_FILE="${SCRIPT_DIR}/.env"
 FTP_HOST="${FTP_HOST:-199.188.200.140}"
 FTP_USER="${FTP_USER:-relu@relu.chat}"
 FTP_PASS="${FTP_PASS:-}"
-FTP_REMOTE="${FTP_REMOTE:-/home/eartctvi/reult.chat}"
+FTP_REMOTE="${FTP_REMOTE:-/}"
 FTP_PORT="${FTP_PORT:-21}"
 
 # Load .env file if it exists (but never commit it)
