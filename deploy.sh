@@ -60,6 +60,7 @@ log() {
 
 log_error() {
     local msg="[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $*"
+    mkdir -p "$(dirname "${LOG_FILE}")" 2>/dev/null || true
     echo "$msg" | tee -a "${LOG_FILE}" >&2
 }
 
@@ -128,59 +129,56 @@ deploy() {
     log "Starting deployment to ${FTP_HOST}:${FTP_PORT}${FTP_REMOTE}"
     log "User: ${FTP_USER}"
     
-    # Build lftp command
-    local lftp_cmd="lftp -c"
-    local lftp_script=""
+    # Build exclude patterns for lftp mirror
+    local exclude_patterns=(
+        '.git' '.agent-logs' '_backups' '.env*' 'deploy.sh' '.deployignore'
+        '*.log' 'data/*.db' 'data/*.sqlite' 'data/*.sqlite3'
+        '.idea' '.vscode' 'node_modules' 'vendor' '.DS_Store' 'Thumbs.db'
+        'README.md' 'context.md'
+    )
     
-    # Connection settings
-    lftp_script+="set ftp:ssl-allow no; "  # Plain FTP (change to 'yes' for FTPS)
-    lftp_script+="set ftp:passive-mode yes; "
-    lftp_script+="set net:timeout 30; "
-    lftp_script+="set net:reconnect-interval-base 5; "
-    lftp_script+="set net:max-retries 3; "
-    lftp_script+="set ftp:transfer-mode binary; "
+    local exclude_args=""
+    for pattern in "${exclude_patterns[@]}"; do
+        exclude_args+=" --exclude='${pattern}'"
+    done
     
-    # Logging
+    # Build lftp settings
+    local lftp_settings="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 30; set net:max-retries 3; set ftp:transfer-mode binary;"
+    
     if [[ "${VERBOSE:-0}" == "1" ]]; then
-        lftp_script+="set xfer:log true; "
+        lftp_settings+=" set xfer:log true;"
     fi
     
-    # Dry run mode
+    # Build mirror command
+    local mirror_cmd="mirror --reverse"
     if [[ "${DRY_RUN:-0}" == "1" ]]; then
         log "DRY RUN MODE - No files will be transferred"
-        lftp_script+="mirror --reverse --dry-run --exclude='.git' --exclude='.agent-logs' --exclude='_backups' --exclude='.env*' --exclude='deploy.sh' --exclude='.deployignore' --exclude='*.log' --exclude='data/*.db' --exclude='data/*.sqlite' --exclude='data/*.sqlite3' --exclude='.idea' --exclude='.vscode' --exclude='node_modules' --exclude='vendor' --exclude='.DS_Store' --exclude='Thumbs.db' --exclude='README.md' --exclude='context.md' "
+        mirror_cmd+=" --dry-run"
     else
-        # Actual deployment with delete to sync exactly
-        lftp_script+="mirror --reverse --delete --continue --exclude='.git' --exclude='.agent-logs' --exclude='_backups' --exclude='.env*' --exclude='deploy.sh' --exclude='.deployignore' --exclude='*.log' --exclude='data/*.db' --exclude='data/*.sqlite' --exclude='data/*.sqlite3' --exclude='.idea' --exclude='.vscode' --exclude='node_modules' --exclude='vendor' --exclude='.DS_Store' --exclude='Thumbs.db' --exclude='README.md' --exclude='context.md' "
+        mirror_cmd+=" --delete --continue"
     fi
+    mirror_cmd+=" --verbose${exclude_args} '${LOCAL_ROOT}' '${FTP_REMOTE}'"
     
-    lftp_script+="--verbose '${LOCAL_ROOT}' '${FTP_REMOTE}'"
+    # Full lftp command: lftp -c "open -u user,pass host:port; settings; mirror_cmd; quit"
+    local full_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${lftp_settings} ${mirror_cmd}; quit\""
     
-    # Execute deployment
     log "Connecting to server..."
     
-    if eval ${lftp_cmd} -u "${FTP_USER}","${FTP_PASS}" "ftp://${FTP_HOST}:${FTP_PORT}" -e "${lftp_script}; quit" 2>&1 | tee -a "${LOG_FILE}"; then
+    if eval "${full_cmd}" 2>&1 | tee -a "${LOG_FILE}"; then
         log "Deployment completed successfully"
+        return 0
     else
         local exit_code=${PIPESTATUS[0]}
         log_error "Deployment failed with exit code ${exit_code}"
         
-        # Retry with different settings
-        log "Attempting retry with alternative settings..."
+        # Retry with longer timeout
+        log "Attempting retry with longer timeout..."
+        local retry_settings="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 60; set net:max-retries 5; set ftp:transfer-mode binary;"
+        local retry_cmd="lftp -c \"open -u '${FTP_USER}','${FTP_PASS}' ftp://${FTP_HOST}:${FTP_PORT}; ${retry_settings} ${mirror_cmd}; quit\""
         
-        # Try with explicit passive mode and longer timeout
-        local retry_script="set ftp:ssl-allow no; set ftp:passive-mode yes; set net:timeout 60; set net:max-retries 5; "
-        
-        if [[ "${DRY_RUN:-0}" == "1" ]]; then
-            retry_script+="mirror --reverse --dry-run --exclude='.git' --exclude='.agent-logs' --exclude='_backups' --exclude='.env*' --exclude='deploy.sh' --exclude='.deployignore' --exclude='*.log' --exclude='data/*.db' --exclude='data/*.sqlite' --exclude='data/*.sqlite3' --exclude='.idea' --exclude='.vscode' --exclude='node_modules' --exclude='vendor' --exclude='.DS_Store' --exclude='Thumbs.db' --exclude='README.md' --exclude='context.md' "
-        else
-            retry_script+="mirror --reverse --delete --continue --exclude='.git' --exclude='.agent-logs' --exclude='_backups' --exclude='.env*' --exclude='deploy.sh' --exclude='.deployignore' --exclude='*.log' --exclude='data/*.db' --exclude='data/*.sqlite' --exclude='data/*.sqlite3' --exclude='.idea' --exclude='.vscode' --exclude='node_modules' --exclude='vendor' --exclude='.DS_Store' --exclude='Thumbs.db' --exclude='README.md' --exclude='context.md' "
-        fi
-        
-        retry_script+="--verbose '${LOCAL_ROOT}' '${FTP_REMOTE}'"
-        
-        if eval ${lftp_cmd} -u "${FTP_USER}","${FTP_PASS}" "ftp://${FTP_HOST}:${FTP_PORT}" -e "${retry_script}; quit" 2>&1 | tee -a "${LOG_FILE}"; then
+        if eval "${retry_cmd}" 2>&1 | tee -a "${LOG_FILE}"; then
             log "Retry successful"
+            return 0
         else
             die "Deployment failed after retry. Check credentials and server connectivity."
         fi
