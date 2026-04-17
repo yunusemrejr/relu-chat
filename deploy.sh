@@ -156,7 +156,7 @@ EOF
     fi
     
     # Add exclude patterns - lftp mirror uses extended regex
-    # In lftp mirror, use [*] to match literal asterisk, or use regex patterns
+    # Use proper regex patterns: .*\.log$ for matching files by extension
     # Write directly to file to avoid bash escaping issues
     printf '%s' "${mirror_cmd}" >> "${lftp_script_file}"
     printf ' --exclude ".git/"' >> "${lftp_script_file}"
@@ -168,10 +168,10 @@ EOF
     printf ' --exclude ".env.example"' >> "${lftp_script_file}"
     printf ' --exclude "deploy.sh"' >> "${lftp_script_file}"
     printf ' --exclude ".deployignore"' >> "${lftp_script_file}"
-    printf ' --exclude "[*].log"' >> "${lftp_script_file}"
-    printf ' --exclude "data/[*].db"' >> "${lftp_script_file}"
-    printf ' --exclude "data/[*].sqlite"' >> "${lftp_script_file}"
-    printf ' --exclude "data/[*].sqlite3"' >> "${lftp_script_file}"
+    printf ' --exclude ".*\\.log$"' >> "${lftp_script_file}"
+    printf ' --exclude "data/.*\\.db$"' >> "${lftp_script_file}"
+    printf ' --exclude "data/.*\\.sqlite$"' >> "${lftp_script_file}"
+    printf ' --exclude "data/.*\\.sqlite3$"' >> "${lftp_script_file}"
     printf ' --exclude ".idea/"' >> "${lftp_script_file}"
     printf ' --exclude ".vscode/"' >> "${lftp_script_file}"
     printf ' --exclude "node_modules/"' >> "${lftp_script_file}"
