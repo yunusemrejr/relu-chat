@@ -18,8 +18,8 @@
 |-------|-------|-------|
 | --bg | #08090a | Page background |
 | --bg-elevated | #0d0f12 | Elevated surfaces |
-| --bg-card | rgba(255,255,255,0.02) | Card backgrounds |
-| --bg-card-hover | rgba(255,255,255,0.04) | Card hover |
+| --bg-card | rgba(255,255,255,0.008) | Card backgrounds (darker) |
+| --bg-card-hover | rgba(255,255,255,0.025) | Card hover |
 | --border | rgba(255,255,255,0.06) | Default borders |
 | --border-hover | rgba(59,130,246,0.4) | Hover borders |
 | --text-primary | #f7f8f8 | Headings, primary text |
