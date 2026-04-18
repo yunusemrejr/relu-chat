@@ -1,4 +1,4 @@
-import { KB, kb } from './knowledge-base.js';
+import { KB } from './knowledge-base.js';
 
 const OPENERS = ["", "In short, ", "Here's the idea: ", "Let's unpack it. ", "Great question — ", "Consider this: "];
 const CONNECTORS = {
