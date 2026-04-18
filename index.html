@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReLU.chat — Interactive Chatbots</title>
+<title>ReLU.chat — Interactive On-Device Chatbots</title>
 <meta name="description" content="Free, browser-based, privacy-first open-source chatbots. Explore interactive visualizations and tools.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://reult.chat/">
+<link rel="canonical" href="https://relu.chat/">
 
-<meta property="og:title" content="ReLU.chat — Interactive Chatbots">
+<meta property="og:title" content="ReLU.chat — Interactive On-Device Chatbots">
 <meta property="og:description" content="Free, browser-based, privacy-first open-source chatbots and interactive tools.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://reult.chat/">
-<meta property="og:image" content="https://reult.chat/assets/logo.png">
+<meta property="og:url" content="https://relu.chat/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ReLU.chat — Interactive Chatbots">
+<meta name="twitter:title" content="ReLU.chat — Interactive On-Device Chatbots">
 <meta name="twitter:description" content="Free, browser-based, privacy-first open-source chatbots and interactive tools.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="icon" href="assets/logo.png" type="image/png">
 
@@ -37,7 +37,7 @@
   --bg-card: rgba(255,255,255,0.02);
   --bg-card-hover: rgba(255,255,255,0.04);
   --border: rgba(255,255,255,0.06);
-  --border-hover: rgba(30,58,138,0.6);
+  --border-hover: rgba(59,130,246,0.4);
   --text-primary: #f7f8f8;
   --text-secondary: #8a8f98;
   --text-tertiary: #5a5f68;
@@ -49,14 +49,14 @@
   --success-glow: rgba(39,174,96,0.3);
   --error: #e74c3c;
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --shadow-card: 
+  --shadow-card:
     rgba(0,0,0,0.08) 0px 0px 0px 1px,
     rgba(0,0,0,0.04) 0px 2px 4px,
     rgba(0,0,0,0.04) 0px 8px 16px -8px;
   --shadow-card-hover:
-    rgba(30,58,138,0.2) 0px 0px 0px 1px,
-    rgba(30,58,138,0.1) 0px 4px 12px,
-    rgba(30,58,138,0.15) 0px 16px 32px -12px;
+    rgba(59,130,246,0.15) 0px 0px 0px 1px,
+    rgba(59,130,246,0.08) 0px 4px 12px,
+    rgba(59,130,246,0.12) 0px 16px 32px -12px;
   --shadow-button:
     rgba(0,0,0,0.08) 0px 0px 0px 1px,
     rgba(0,0,0,0.12) 0px 1px 2px;
@@ -66,16 +66,16 @@
   --radius-xl: 20px;
 }
 
-html { font-size: 16px; }
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text-primary);
   min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -83,225 +83,700 @@ body {
   font-feature-settings: "cv01", "ss03";
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: 
-    radial-gradient(ellipse at 50% 30%, rgba(30,58,138,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 60%, rgba(59,130,246,0.06) 0%, transparent 40%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.container {
-  position: relative;
-  z-index: 1;
-  max-width: 960px;
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   width: 100%;
-  padding: 4rem 2rem;
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Header */
-.header {
-  text-align: center;
-  margin-bottom: 3.5rem;
+.site-nav.scrolled {
+  background-color: rgba(8, 9, 10, 0.75);
+  border-color: var(--border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px;
 }
 
-.logo-container {
-  margin-bottom: 1.75rem;
+.nav-container {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  gap: 1.5rem;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+
+.nav-logo img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
   align-items: center;
 }
 
-.logo {
-  width: 120px;
-  height: auto;
-  opacity: 0.95;
-  filter: drop-shadow(0 0 32px rgba(30,58,138,0.35));
-  transition: filter 0.3s ease, transform 0.3s ease;
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  letter-spacing: -0.01em;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 48px rgba(59,130,246,0.45));
-  transform: scale(1.02);
+.nav-links a:hover {
+  color: var(--text-primary);
 }
 
-h1 {
-  font-size: 3rem;
-  font-weight: 700;
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-button), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.nav-cta:hover {
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.35) 0px 4px 12px, inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* Mobile menu checkbox hack */
+.nav-toggle-input {
+  display: none;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  z-index: 101;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nav-toggle-input:checked ~ .site-nav .nav-toggle span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.nav-toggle-input:checked ~ .site-nav .nav-toggle span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle-input:checked ~ .site-nav .nav-toggle span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.mobile-nav {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(8,9,10,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 99;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.mobile-nav a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition: color 0.2s ease;
+}
+
+.mobile-nav a:hover {
+  color: var(--accent-light);
+}
+
+.mobile-nav .mobile-cta {
+  margin-top: 1rem;
+  padding: 0.875rem 2rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-button);
+}
+
+.nav-toggle-input:checked ~ .mobile-nav {
+  display: flex;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 5rem 1.5rem;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-bg-glow {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 160%;
+  height: 160%;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(30,58,138,0.16) 0%, rgba(59,130,246,0.07) 30%, transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 40%),
+    radial-gradient(circle at 20% 80%, rgba(30,58,138,0.08) 0%, transparent 45%);
+  animation: floatGlow 15s ease-in-out infinite;
+}
+
+.hero-bg-orb {
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.08), transparent 70%);
+  filter: blur(40px);
+  animation: floatGlow 20s ease-in-out infinite reverse;
+}
+
+.hero-bg-mesh {
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59,130,246,0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(30,58,138,0.08), transparent);
+}
+
+.hero-bg-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.12); opacity: 0.75; }
+}
+
+@keyframes floatGlow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  33% { transform: translate(-45%, -52%) scale(1.05); }
+  66% { transform: translate(-55%, -48%) scale(0.95); }
+}
+
+.hero-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hero-accent-line {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
+  border-radius: 1px;
+  margin-bottom: 0.5rem;
+  animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.05;
   letter-spacing: -0.04em;
-  line-height: 1.1;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #ffffff 0%, #a8a8b0 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #b0b8c8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  max-width: 900px;
 }
 
-.tagline {
-  font-size: 1.125rem;
-  color: var(--text-secondary);
-  max-width: 540px;
-  margin: 0 auto;
+.hero-subhead {
+  font-size: clamp(1.0625rem, 2vw, 1.25rem);
   line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 560px;
   font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
-.tagline strong {
-  color: var(--text-primary);
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
   font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  letter-spacing: -0.01em;
 }
 
-/* Features */
-.features {
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  color: #ffffff;
+  border-color: var(--accent);
+  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.35) 0px 4px 16px, inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  border-color: var(--accent-hover);
+  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.45) 0px 8px 24px, inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.btn-ghost:hover {
+  background-color: var(--bg-card);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-card);
+}
+
+.hero-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 0.625rem;
   justify-content: center;
-  margin: 2.5rem 0;
+  margin-top: 0.75rem;
+  animation: fadeUp 0.8s 0.15s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-.feature-badge {
+.badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
   padding: 0.5rem 0.875rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
   border-radius: 9999px;
-  font-size: 0.8125rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
   color: var(--text-secondary);
+  font-size: 0.8125rem;
   font-weight: 500;
+  white-space: nowrap;
   transition: all 0.2s ease;
 }
 
-.feature-badge:hover {
+.badge:hover {
   border-color: var(--border-hover);
   background: var(--bg-card-hover);
   color: var(--text-primary);
 }
 
-.feature-badge svg {
+.badge svg {
   width: 14px;
   height: 14px;
-  flex-shrink: 0;
   stroke: var(--accent-light);
+  flex-shrink: 0;
 }
 
-/* Chatbots Section */
-.chatbots-section {
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   SECTION COMMON
+   ============================================================ */
+.section-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   margin-bottom: 3.5rem;
 }
 
-.section-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.75rem;
-}
-
-.section-title svg {
-  width: 16px;
-  height: 16px;
+.section-header svg {
+  width: 20px;
+  height: 20px;
   stroke: var(--accent-light);
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 
-.chatbots-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
+.section-header h2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
 }
 
-.chatbot-card {
+/* ============================================================
+   HOW IT WORKS
+   ============================================================ */
+#how-it-works { padding: 8rem 0; position: relative; }
+
+#how-it-works::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.2), transparent);
+}
+
+.steps-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.step-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  display: block;
+  padding: 2.25rem;
   position: relative;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
-.chatbot-card::before {
+.step-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(30,58,138,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.5), transparent);
   opacity: 0;
   transition: opacity 0.25s ease;
 }
 
-.chatbot-card:hover::before {
-  opacity: 1;
+.step-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, rgba(59,130,246,0.12), transparent 40%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
-.chatbot-card:hover {
+.step-card:hover {
   background: var(--bg-card-hover);
-  border-color: var(--border-hover);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-card-hover);
 }
 
-.chatbot-icon {
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, rgba(30,58,138,0.25), rgba(59,130,246,0.12));
+.step-card:hover::before { opacity: 1; }
+.step-card:hover::after { opacity: 1; }
+
+.step-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent-light), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.step-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.625rem;
+  letter-spacing: -0.02em;
+}
+
+.step-desc {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 280px;
+}
+
+/* ============================================================
+   FEATURES
+   ============================================================ */
+#features { padding: 2rem 0 8rem; position: relative; }
+
+#features::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.2), transparent);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.feature-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.feature-card:hover::before { opacity: 1; }
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
-  border: 1px solid rgba(30,58,138,0.3);
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, rgba(30,58,138,0.35), rgba(59,130,246,0.12));
+  border: 1px solid rgba(59,130,246,0.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(30,58,138,0.15);
 }
 
-.chatbot-icon svg {
+.feature-icon svg {
   width: 22px;
   height: 22px;
   stroke: var(--accent-light);
 }
 
-.chatbot-card h3 {
+.feature-title {
   font-size: 1.0625rem;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
-.chatbot-card p {
-  font-size: 0.875rem;
+.feature-desc {
+  font-size: 0.9375rem;
+  line-height: 1.65;
   color: var(--text-secondary);
-  line-height: 1.6;
 }
 
-.chatbot-tags {
+/* ============================================================
+   SHOWCASE
+   ============================================================ */
+#showcase { padding: 2rem 0 6rem; }
+
+.showcase-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 3.5rem;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+
+.showcase-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.showcase-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(30,58,138,0.5), transparent);
+}
+
+.showcase-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.showcase-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.showcase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.25rem;
+  padding: 0.375rem 0.75rem;
+  background: rgba(30,58,138,0.1);
+  border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 99px;
+}
+
+.showcase-badge svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--accent-light);
+}
+
+.showcase-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  background: linear-gradient(180deg, #ffffff 0%, #b0b8c8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.showcase-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.showcase-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
-.tag {
-  font-size: 0.6875rem;
-  padding: 0.25rem 0.625rem;
+.showcase-tag {
+  font-size: 0.75rem;
+  padding: 0.375rem 0.875rem;
   background: rgba(30,58,138,0.12);
   border: 1px solid rgba(30,58,138,0.2);
   border-radius: 99px;
@@ -310,63 +785,257 @@ h1 {
   transition: all 0.2s ease;
 }
 
-.chatbot-card:hover .tag {
+.showcase-card:hover .showcase-tag {
   background: rgba(30,58,138,0.18);
   border-color: rgba(59,130,246,0.35);
   color: var(--text-primary);
 }
 
-/* Signup Section */
-.signup-section {
-  margin-top: 3rem;
-  padding: 2.5rem;
+.showcase-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-button), inset 0 1px 0 rgba(255,255,255,0.06);
+  width: fit-content;
+  letter-spacing: -0.01em;
+}
+
+.showcase-cta:hover {
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.35) 0px 4px 12px, inset 0 1px 0 rgba(255,255,255,0.08);
+  transform: translateY(-1px);
+}
+
+.showcase-cta svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.showcase-cta:hover svg { transform: translateX(3px); }
+
+.showcase-coming-soon {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  margin-top: 1.25rem;
+}
+
+.showcase-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.showcase-visual::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  left: 10%;
+  right: 10%;
+  height: 40%;
+  background: radial-gradient(ellipse at center, rgba(59,130,246,0.12), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chat-mockup {
+  width: 100%;
+  max-width: 340px;
   background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 24px 56px -16px rgba(0,0,0,0.6), 0 0 0 1px rgba(59,130,246,0.06);
+  position: relative;
+  z-index: 1;
+}
+
+.chat-mockup-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.125rem;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border);
+}
+
+.chat-mockup-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.chat-mockup-dot:nth-child(1) { background: #e74c3c; }
+.chat-mockup-dot:nth-child(2) { background: #f1c40f; }
+.chat-mockup-dot:nth-child(3) { background: #27ae60; }
+
+.chat-mockup-title {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.chat-mockup-body {
+  padding: 1.125rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-height: 240px;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 0.625rem 0.875rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  animation: bubblePop 0.4s ease backwards;
+}
+
+@keyframes bubblePop {
+  from { opacity: 0; transform: scale(0.92) translateY(4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.chat-bubble.bot {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-bubble.user {
+  background: linear-gradient(135deg, rgba(30,58,138,0.4), rgba(59,130,246,0.25));
+  border: 1px solid rgba(59,130,246,0.3);
+  color: var(--text-primary);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble:nth-child(1) { animation-delay: 0.1s; }
+.chat-bubble:nth-child(2) { animation-delay: 0.3s; }
+.chat-bubble:nth-child(3) { animation-delay: 0.5s; }
+.chat-bubble:nth-child(4) { animation-delay: 0.7s; }
+
+.chat-mockup-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.125rem;
+  border-top: 1px solid var(--border);
+}
+
+.chat-mockup-input-bar {
+  flex: 1;
+  height: 30px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+}
+
+.chat-mockup-send {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+/* ============================================================
+   NEWSLETTER
+   ============================================================ */
+#newsletter { padding: 2rem 0 8rem; }
+
+.newsletter-card {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2.5rem;
+  background: linear-gradient(180deg, rgba(13,15,18,0.9), rgba(13,15,18,0.6));
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   text-align: center;
-  box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow-card), 0 0 80px -40px rgba(30,58,138,0.1);
+  transition: all 0.3s ease;
 }
 
-.signup-section::before {
+.newsletter-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(59,130,246,0.3), transparent 30%, transparent 70%, rgba(30,58,138,0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.newsletter-card::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(30,58,138,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(30,58,138,0.4), transparent);
 }
 
-.signup-section h2 {
-  font-size: 1.375rem;
-  font-weight: 600;
+.newsletter-card:hover {
+  border-color: rgba(59,130,246,0.25);
+  box-shadow: 0 0 48px -12px rgba(30,58,138,0.2);
+}
+
+.newsletter-title {
+  font-size: 1.625rem;
+  font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.625rem;
   letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #ffffff 0%, #b0b8c8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.signup-section p {
-  font-size: 0.9375rem;
+.newsletter-desc {
+  font-size: 1rem;
   color: var(--text-tertiary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
+  line-height: 1.6;
 }
 
-.form-container {
-  max-width: 440px;
+.newsletter-form {
+  max-width: 460px;
   margin: 0 auto;
 }
 
-.form-row {
+.newsletter-form-row {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
 
-input[type="email"] {
+.newsletter-input {
   flex: 1;
-  padding: 0.875rem 1rem;
+  padding: 0.9375rem 1.125rem;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -377,18 +1046,17 @@ input[type="email"] {
   outline: none;
 }
 
-input[type="email"]::placeholder {
-  color: var(--text-tertiary);
-}
+.newsletter-input::placeholder { color: var(--text-tertiary); }
 
-input[type="email"]:focus {
+.newsletter-input:focus {
   border-color: var(--accent-light);
   box-shadow: 0 0 0 3px var(--accent-glow);
+  background: var(--bg-card-hover);
 }
 
-button[type="submit"] {
-  padding: 0.875rem 1.375rem;
-  background: var(--accent);
+.newsletter-btn {
+  padding: 0.9375rem 1.5rem;
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
   color: #fff;
   border: none;
   border-radius: var(--radius-md);
@@ -398,43 +1066,38 @@ button[type="submit"] {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  box-shadow: var(--shadow-button);
+  box-shadow: var(--shadow-button), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
-button[type="submit"]:hover {
-  background: var(--accent-hover);
-  box-shadow: 
-    rgba(0,0,0,0.08) 0px 0px 0px 1px,
-    rgba(30,58,138,0.35) 0px 4px 12px;
+.newsletter-btn:hover {
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.35) 0px 4px 12px, inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
-button[type="submit"]:active {
-  transform: scale(0.97);
-}
+.newsletter-btn:active { transform: scale(0.97); }
 
-button[type="submit"]:disabled {
+.newsletter-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
 }
 
-.form-message {
+.newsletter-message {
   font-size: 0.8125rem;
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
-  margin-top: 0.75rem;
   display: none;
   animation: fadeIn 0.3s ease;
 }
 
-.form-message.success {
+.newsletter-message.success {
   display: block;
   background: rgba(39,174,96,0.08);
   border: 1px solid rgba(39,174,96,0.25);
   color: var(--success);
 }
 
-.form-message.error {
+.newsletter-message.error {
   display: block;
   background: rgba(231,76,60,0.08);
   border: 1px solid rgba(231,76,60,0.25);
@@ -446,139 +1109,480 @@ button[type="submit"]:disabled {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Footer */
-.footer {
-  margin-top: 4rem;
-  padding-top: 2rem;
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 2rem;
   border-top: 1px solid var(--border);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: relative;
 }
 
-.footer p {
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.3), transparent);
+}
+
+.footer-left {
   font-size: 0.8125rem;
   color: var(--text-tertiary);
 }
 
-.footer a {
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.2s ease;
+  font-weight: 500;
 }
 
-.footer a:hover {
-  color: var(--accent-light);
+.footer-link:hover { color: var(--accent-light); }
+
+.footer-link svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-  .container { padding: 2.5rem 1.25rem; }
-  h1 { font-size: 2rem; }
-  .tagline { font-size: 1rem; }
-  .form-row { flex-direction: column; }
-  .logo { width: 100px; }
-  .features { gap: 0.5rem; }
-  .feature-badge { font-size: 0.75rem; padding: 0.375rem 0.75rem; }
-  .chatbots-grid { grid-template-columns: 1fr; }
-  .signup-section { padding: 1.75rem; }
+/* ============================================================
+   REVEAL ANIMATIONS
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (min-width: 640px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 768px) {
+  .steps-grid {
+    flex-direction: row;
+    gap: 0;
+  }
+  .step-card {
+    flex: 1;
+    margin: 0 0.75rem;
+  }
+  .step-card:first-child { margin-left: 0; }
+  .step-card:last-child { margin-right: 0; }
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 3.5rem;
+    left: 16%;
+    right: 16%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--text-tertiary), transparent);
+    opacity: 0.2;
+    z-index: 0;
+  }
+  .step-card { z-index: 1; }
+}
+
+@media (min-width: 900px) {
+  .features-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .nav-container { padding: 1rem 2rem; }
+}
+
+@media (max-width: 768px) {
+  .nav-links, .nav-cta { display: none; }
+  .nav-toggle { display: flex; }
+  .showcase-card {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding: 2rem;
+  }
+  .showcase-visual { order: -1; }
+  .chat-mockup { max-width: 100%; }
+  .newsletter-card { padding: 2rem 1.5rem; }
+  .newsletter-form-row { flex-direction: column; }
+  .site-footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  .hero { padding: 4rem 1.25rem; }
+  .step-card { padding: 1.75rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  html { scroll-behavior: auto; }
+  .hero-bg-glow { animation: none; opacity: 0.5; }
+  .hero-content, .hero-badges { animation: none; opacity: 1; }
+  .btn, .nav-links a, .nav-cta, .site-nav, .reveal, .step-card, .feature-card, .showcase-card {
+    transition: none !important;
+    animation: none !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .showcase-card { opacity: 1; transform: none; }
 }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <header class="header">
-    <div class="logo-container">
-      <img src="assets/logo.png" alt="ReLU.chat" class="logo" width="120" height="126">
-    </div>
-    <h1>ReLU.chat</h1>
-    <p class="tagline">
-      Free, browser-based, <strong>privacy-first open-source chatbots</strong>.
-    </p>
-  </header>
+<input type="checkbox" id="nav-toggle-input" class="nav-toggle-input" aria-hidden="true">
 
-  <div class="features">
-    <span class="feature-badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      Privacy-first
-    </span>
-    <span class="feature-badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      Browser-based
-    </span>
-    <span class="feature-badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6"/><path d="M2 12h18"/></svg>
-      Open-source
-    </span>
-    <span class="feature-badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      No LLMs
-    </span>
+<!-- ==================== NAVIGATION ==================== -->
+<nav class="site-nav" id="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">
+      <img src="assets/logo.png" alt="ReLU.chat" width="28" height="28">
+      <span>ReLU.chat</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#showcase">Chat</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+    </ul>
+    <a href="chat/game-theory-chat/" class="nav-cta">Get Started</a>
+    <label for="nav-toggle-input" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
   </div>
+</nav>
 
-  <section class="chatbots-section">
-    <h2 class="section-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Available Chatbots
-    </h2>
-    <div class="chatbots-grid">
-      <a href="chat/game-theory-chat/" class="chatbot-card">
-        <div class="chatbot-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-        </div>
-        <h3>Game Theory Chat</h3>
-        <p>On-device NLU assistant for Nash equilibrium, Shapley value, auctions, and more.</p>
-        <div class="chatbot-tags">
-          <span class="tag">Strategy</span>
-          <span class="tag">On-device AI</span>
-          <span class="tag">LaTeX</span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <section class="signup-section">
-    <h2>Stay Updated</h2>
-    <p>Be the first to know when we launch new chatbots.</p>
-    <form class="form-container" id="signup-form" action="api/subscribe.php" method="POST">
-      <div class="form-row">
-        <input type="email" name="email" id="email" placeholder="Enter your email" required autocomplete="email" aria-label="Email address">
-        <button type="submit" id="submit-btn">Notify Me</button>
-      </div>
-      <div id="form-message" class="form-message" role="alert" aria-live="polite"></div>
-    </form>
-  </section>
-
-  <footer class="footer">
-    <p>&copy; 2026 ReLU.chat. Built with privacy in mind.</p>
-  </footer>
+<!-- Mobile overlay nav -->
+<div class="mobile-nav" aria-hidden="true">
+  <a href="#features" onclick="document.getElementById('nav-toggle-input').checked=false">Features</a>
+  <a href="#showcase" onclick="document.getElementById('nav-toggle-input').checked=false">Chat</a>
+  <a href="#how-it-works" onclick="document.getElementById('nav-toggle-input').checked=false">How It Works</a>
+  <a href="chat/game-theory-chat/" class="mobile-cta" onclick="document.getElementById('nav-toggle-input').checked=false">Get Started</a>
 </div>
 
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-bg-mesh"></div>
+    <div class="hero-bg-grain"></div>
+    <div class="hero-bg-orb"></div>
+  </div>
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-accent-line"></div>
+      <h1>Interactive AI.<br>Zero Privacy Compromise.</h1>
+      <p class="hero-subhead">On-device, browser-based, open-source chatbots. Your conversations never leave your computer — no servers, no tracking, no LLMs.</p>
+      <div class="hero-ctas">
+        <a href="chat/game-theory-chat/" class="btn btn-primary">Try Game Theory Chat</a>
+        <a href="https://github.com/relu-chat" class="btn btn-ghost" target="_blank" rel="noopener noreferrer">View Source</a>
+      </div>
+      <div class="hero-badges">
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Privacy-first
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Browser-based
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6"/><path d="M2 12h18"/></svg>
+          Open-source
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          No LLMs
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<section id="how-it-works">
+  <div class="section-wrap">
+    <div class="section-header">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      <h2>How It Works</h2>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card reveal" style="--i:0">
+        <div class="step-number">01</div>
+        <div class="step-title">Load</div>
+        <div class="step-desc">Transformer model downloads once to your browser. A one-time warm-up, then it's yours forever.</div>
+      </div>
+      <div class="step-card reveal" style="--i:1">
+        <div class="step-number">02</div>
+        <div class="step-title">Understand</div>
+        <div class="step-desc">On-device NLP parses your intent and matches concepts using embeddings — entirely locally.</div>
+      </div>
+      <div class="step-card reveal" style="--i:2">
+        <div class="step-number">03</div>
+        <div class="step-title">Respond</div>
+        <div class="step-desc">Weighted fragment composition builds precise answers, rendered with beautiful LaTeX notation.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FEATURES ==================== -->
+<section id="features">
+  <div class="section-wrap">
+    <div class="section-header">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      <h2>Features</h2>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal" style="--i:0">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+            <rect x="9" y="9" width="6" height="6"/>
+            <path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/>
+          </svg>
+        </div>
+        <div class="feature-title">On-Device AI</div>
+        <div class="feature-desc">Transformer runs entirely in your browser. No data leaves your machine.</div>
+      </div>
+
+      <div class="feature-card reveal" style="--i:1">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="feature-title">Privacy-First</div>
+        <div class="feature-desc">No accounts, no tracking, no server-side processing. Just you and your browser.</div>
+      </div>
+
+      <div class="feature-card reveal" style="--i:2">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <div class="feature-title">Open Source</div>
+        <div class="feature-desc">Fully transparent. Inspect the code, fork it, extend it. Built for the community.</div>
+      </div>
+
+      <div class="feature-card reveal" style="--i:3">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <div class="feature-title">No LLMs</div>
+        <div class="feature-desc">Deterministic, explainable responses. No hallucinations, no API costs, no vendor lock-in.</div>
+      </div>
+
+      <div class="feature-card reveal" style="--i:4">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            <path d="M8 7h6M8 11h4"/>
+          </svg>
+        </div>
+        <div class="feature-title">LaTeX Support</div>
+        <div class="feature-desc">Mathematical notation rendered beautifully with KaTeX. Perfect for game theory formulas.</div>
+      </div>
+
+      <div class="feature-card reveal" style="--i:5">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <div class="feature-title">Browser-Based</div>
+        <div class="feature-desc">Works anywhere. No installs, no dependencies, just a URL. Desktop, tablet, or mobile.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SHOWCASE ==================== -->
+<section id="showcase">
+  <div class="section-wrap">
+    <div class="showcase-card" id="showcase-card">
+      <div class="showcase-content">
+        <div class="showcase-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Featured Chatbot
+        </div>
+        <h3 class="showcase-title">Game Theory Chat</h3>
+        <p class="showcase-desc">On-device NLU assistant for Nash equilibrium, Shapley value, auctions, prisoner's dilemma, and more. Ask in natural language — get precise, mathematical answers with LaTeX rendering.</p>
+        <div class="showcase-tags">
+          <span class="showcase-tag">Strategy</span>
+          <span class="showcase-tag">On-device AI</span>
+          <span class="showcase-tag">LaTeX</span>
+          <span class="showcase-tag">Mathematics</span>
+        </div>
+        <a href="chat/game-theory-chat/" class="showcase-cta">
+          Launch Chat
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+        <p class="showcase-coming-soon">More chatbots coming soon</p>
+      </div>
+      <div class="showcase-visual">
+        <div class="chat-mockup">
+          <div class="chat-mockup-header">
+            <div class="chat-mockup-dot"></div>
+            <div class="chat-mockup-dot"></div>
+            <div class="chat-mockup-dot"></div>
+            <span class="chat-mockup-title">Game Theory Chat</span>
+          </div>
+          <div class="chat-mockup-body">
+            <div class="chat-bubble user">How do I find the Nash equilibrium?</div>
+            <div class="chat-bubble bot">For a 2x2 game, check each player's best response. If both play best responses to each other, that's a Nash equilibrium.</div>
+            <div class="chat-bubble bot latex">u_i(s_i^*, s_{-i}^*) ≥ u_i(s_i, s_{-i}^*)</div>
+            <div class="chat-bubble user">Can you compute the Shapley value?</div>
+          </div>
+          <div class="chat-mockup-input">
+            <div class="chat-mockup-input-bar"></div>
+            <div class="chat-mockup-send"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== NEWSLETTER ==================== -->
+<section id="newsletter">
+  <div class="section-wrap">
+    <div class="newsletter-card">
+      <h2 class="newsletter-title">Stay Updated</h2>
+      <p class="newsletter-desc">Be the first to know when new chatbots launch. No spam, unsubscribe anytime.</p>
+      <form class="newsletter-form" id="newsletter-form" action="api/subscribe.php" method="POST">
+        <div class="newsletter-form-row">
+          <input type="email" name="email" class="newsletter-input" placeholder="Enter your email" required autocomplete="email" aria-label="Email address">
+          <button type="submit" class="newsletter-btn" id="newsletter-btn">Notify Me</button>
+        </div>
+        <div id="newsletter-message" class="newsletter-message" role="alert" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="site-footer">
+  <p class="footer-left">&copy; 2026 ReLU.chat. Built with privacy in mind.</p>
+  <div class="footer-right">
+    <a href="https://github.com/relu-chat" class="footer-link" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      GitHub
+    </a>
+    <a href="#" class="footer-link" id="back-to-top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+      Back to top
+    </a>
+  </div>
+</footer>
+
+<!-- ==================== SCRIPTS ==================== -->
 <script>
 (function() {
-  const form = document.getElementById('signup-form');
-  const emailInput = document.getElementById('email');
-  const submitBtn = document.getElementById('submit-btn');
-  const messageEl = document.getElementById('form-message');
+  'use strict';
+
+  /* Nav scroll effect */
+  var navbar = document.getElementById('navbar');
+  function onScroll() {
+    if (window.scrollY > 20) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* Reveal on scroll */
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+  /* Showcase card reveal */
+  var showcase = document.getElementById('showcase-card');
+  if (showcase) {
+    var showcaseObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          showcase.classList.add('visible');
+          showcaseObserver.unobserve(showcase);
+        }
+      });
+    }, { threshold: 0.15 });
+    showcaseObserver.observe(showcase);
+  }
+
+  /* Newsletter form */
+  var form = document.getElementById('newsletter-form');
+  var emailInput = form.querySelector('input[type="email"]');
+  var submitBtn = document.getElementById('newsletter-btn');
+  var messageEl = document.getElementById('newsletter-message');
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-
-    const email = emailInput.value.trim();
-    if (!email || !email.includes('@')) {
+    var email = emailInput.value.trim();
+    if (!email || email.indexOf('@') === -1) {
       showMessage('Please enter a valid email address.', 'error');
       return;
     }
-
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
-
-    const formData = new FormData();
+    var formData = new FormData();
     formData.append('email', email);
-
     fetch('api/subscribe.php', {
       method: 'POST',
       body: formData,
@@ -604,11 +1608,17 @@ button[type="submit"]:disabled {
 
   function showMessage(text, type) {
     messageEl.textContent = text;
-    messageEl.className = 'form-message ' + type;
+    messageEl.className = 'newsletter-message ' + type;
     setTimeout(function() {
-      messageEl.className = 'form-message';
+      messageEl.className = 'newsletter-message';
     }, 6000);
   }
+
+  /* Back to top */
+  document.getElementById('back-to-top').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 })();
 </script>
 
