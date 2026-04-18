@@ -1,1 +1,0 @@
-No collisions yet.

@@ -47,16 +47,11 @@ npx serve .
 
 ## Deployment
 
-1. Copy `deploy.sh.example` to `deploy.sh`
-2. Create a `.env` file with your FTP credentials:
-   ```
-   FTP_HOST=your_server_ip
-   FTP_USER=your_ftp_username
-   FTP_PASS=your_ftp_password
-   FTP_REMOTE=/
-   FTP_PORT=21
-   ```
-3. Run `./deploy.sh`
+Deploy the contents of this repository to any static file server. The site requires:
+
+- A web server with PHP support (for `api/subscribe.php`)
+- HTTPS enabled
+- Proper MIME types for CSS, JS, and WASM files
 
 ## License
 

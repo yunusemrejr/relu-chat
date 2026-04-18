@@ -5,18 +5,21 @@
 ftp-info.txt
 
 # Documentation - STRICTLY LOCAL ONLY
-# Must never be published to remote repository or production server
 docs/
 
-# Deployment (contains credential references)
+# Deployment scripts and logs
 deploy.sh
+deploy.sh.example
+.deployignore
 deploy-*.log
+*.log
 
-# Logs and backups
+# Internal agent coordination
 .agent-logs/
+
+# Local backups and deployment artifacts
 _backups/
 .deployments/
-*.log
 
 # Data
 data/*.db
