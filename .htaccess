@@ -66,7 +66,7 @@ Options -Indexes
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 
     # CSP — allow self, jsdelivr CDN for KaTeX/Transformers, Cloudflare Insights, Google Fonts, HuggingFace for model downloads, and data: for images
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' data: https://huggingface.co; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://cdn.jsdelivr.net https://huggingface.co https://cdn.huggingface.co; frame-ancestors 'self'"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' data: https://huggingface.co; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://cdn.jsdelivr.net https://huggingface.co https://cdn.huggingface.co https://cas-bridge.xethub.hf.co; frame-ancestors 'self'"
 
     # Remove server signature
     Header always unset Server
