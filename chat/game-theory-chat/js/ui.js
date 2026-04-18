@@ -6,9 +6,11 @@ export function md(t) { return t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'
 
 export function setStatus(t, ready = false) {
   const statusText = document.getElementById('status-text');
+  const container = document.getElementById('status-container');
   const dot = document.getElementById('dot');
   if (statusText) statusText.textContent = t;
-  if (dot) dot.classList.toggle('ready', ready);
+  if (container) container.classList.toggle('ready', ready);
+  if (dot && ready) dot.style.boxShadow = '0 0 8px rgba(34, 197, 94, 0.5)';
 }
 
 export function pushMessage(role, html, meta) {

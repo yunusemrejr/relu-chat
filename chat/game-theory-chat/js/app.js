@@ -133,7 +133,8 @@ for (const s of SUGGESTIONS) {
 }
 
 pushMessage('bot',
-  'Hi! I\'m an <strong>on-device</strong> assistant specialized in <strong>mathematical game theory</strong>. I understand your question with a transformer running entirely in your browser and compose responses from weighted concept fragments — nothing is sent to a server.<br><br>The first query will warm up the model (a one-time download). Try a suggestion below, or ask your own question.'
+  'Hi! I\'m an <strong>on-device</strong> assistant specialized in <strong>mathematical game theory</strong>. I understand your question with a transformer running entirely in your browser and compose responses from weighted concept fragments — nothing is sent to a server.<br><br>The first query will warm up the model (a one-time download). Try a suggestion below, or ask your own question.',
+  [{ text: 'ON DEVICE', type: 'intent' }]
 );
 
 document.querySelectorAll('.suggestions-inline .suggestion').forEach(btn => {
