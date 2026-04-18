@@ -37,11 +37,6 @@ export function tokens(t) { return t.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').
 
 export function bowVec(t, vocab) { const v = new Array(vocab.size).fill(0); for (const tk of tokens(t)) if (vocab.has(tk)) v[vocab.get(tk)] += 1; const n = Math.sqrt(v.reduce((a, b) => a + b * b, 0)) + 1e-9; return v.map(x => x / n); }
 
-export function entryText(e) {
-  const frags = Object.values(e.f).flat().join(' ');
-  return `${e.name}. ${e.summary} ${frags}`;
-}
-
 export function extractEntities(query) {
   const q = ' ' + query.toLowerCase() + ' ';
   const found = [], seen = new Set();
