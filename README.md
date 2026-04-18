@@ -8,20 +8,21 @@
 - **Browser-based** — No installation required, works on any modern browser
 - **Open-source** — Fully auditable codebase
 - **No LLMs** — Lightweight NLU with transformer-based embeddings + knowledge base retrieval
+- **Configurable** — All thresholds centralized in `config.js`
+- **Fast** — Parallel KB encoding, LRU cache, pre-compiled entity patterns
 
 ## Chatbots
 
 | Chatbot | Description |
 |---------|-------------|
-| [Game Theory Chat](chat/game-theory-chat/) | On-device assistant for game theory concepts: Nash equilibrium, Shapley value, auctions, and more |
+| [Game Theory Chat](chat/game-theory-chat/) | On-device assistant for game theory concepts: Nash equilibrium, Shapley value, auctions, and more (55+ topics) |
 
 ## How It Works
 
-1. **Load** — The transformer model downloads once and caches in your browser
-2. **Encode** — Your question is embedded locally using the model
-3. **Retrieve** — Relevant knowledge base fragments are found via similarity search
-4. **Compose** — A response is assembled from weighted fragments, with intent classification
-5. **Render** — Mathematical notation is typeset with KaTeX
+1. **Load** — The transformer model downloads once and caches in your browser. Parallel encoding of 55+ concepts.
+2. **Understand** — On-device NLP classifies your intent, extracts entities via pre-compiled patterns, and retrieves concepts using embeddings.
+3. **Respond** — Weighted fragment composition with linguistic connectors builds precise, diverse answers.
+4. **Render** — Mathematical notation is typeset with KaTeX.
 
 Everything runs entirely on your device. Nothing is sent to any server.
 
@@ -31,6 +32,7 @@ Everything runs entirely on your device. Nothing is sent to any server.
 - **KaTeX** — Fast LaTeX math rendering
 - **Vanilla JS** — No framework dependencies
 - **CSS** — Custom design system with CSS variables
+- **Config** — Centralized thresholds in `config.js`
 
 ## Development
 
