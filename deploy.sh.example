@@ -1,0 +1,103 @@
+#!/bin/bash
+#
+# ReLU.chat — Production Deployment Script (Example)
+#
+# This script deploys local changes to the production server via FTP.
+# Copy this file to deploy.sh and configure your credentials.
+#
+# Usage:
+#   ./deploy.sh                    # Deploy all changes
+#   DRY_RUN=1 ./deploy.sh          # Preview changes without uploading
+#   VERBOSE=1 ./deploy.sh          # Show detailed transfer logs
+#
+# Requirements:
+#   - lftp (install: sudo apt install lftp)
+#   - Git (all changes must be committed before deployment)
+#
+# Setup:
+#   1. Copy this file: cp deploy.sh.example deploy.sh
+#   2. Create .env file with your credentials:
+#      FTP_HOST=your_server_ip
+#      FTP_USER=your_ftp_username
+#      FTP_PASS=your_ftp_password
+#      FTP_REMOTE=/
+#      FTP_PORT=21
+#   3. Make executable: chmod +x deploy.sh
+#   4. Run: ./deploy.sh
+#
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOCAL_ROOT="${SCRIPT_DIR}"
+LOG_FILE="${SCRIPT_DIR}/.deployments/deploy-$(date +%Y%m%d-%H%M%S).log"
+BACKUP_DIR="${SCRIPT_DIR}/_backups"
+ENV_FILE="${SCRIPT_DIR}/.env"
+
+# Load configuration from .env
+FTP_HOST="${FTP_HOST:-}"
+FTP_USER="${FTP_USER:-}"
+FTP_PASS="${FTP_PASS:-}"
+FTP_REMOTE="${FTP_REMOTE:-/}"
+FTP_PORT="${FTP_PORT:-21}"
+
+if [[ -f "${ENV_FILE}" ]]; then
+    while IFS='=' read -r key value; do
+        [[ -z "$key" || "$key" =~ ^# ]] && continue
+        [[ -z "${!key:-}" ]] && export "$key=$value"
+    done < "${ENV_FILE}"
+fi
+
+log() {
+    local msg="[$(date '+%Y-%m-%d %H:%M:%S')] $*"
+    mkdir -p "$(dirname "${LOG_FILE}")" 2>/dev/null || true
+    echo "$msg" | tee -a "${LOG_FILE}"
+}
+
+die() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $*" >&2
+    exit 1
+}
+
+command -v lftp >/dev/null 2>&1 || die "lftp is required"
+command -v git >/dev/null 2>&1 || die "git is required"
+
+[[ -n "${FTP_PASS}" ]] || die "FTP_PASS is required. Set it in .env"
+
+cd "${LOCAL_ROOT}"
+if ! git diff-index --quiet HEAD --; then
+    die "Uncommitted changes detected. Commit all changes before deployment."
+fi
+
+log "Starting deployment..."
+
+lftp_script_file=$(mktemp)
+trap "rm -f '${lftp_script_file}'" EXIT
+
+cat > "${lftp_script_file}" << EOF
+set ftp:ssl-allow false
+set ftp:passive-mode on
+set net:timeout 30
+set net:max-retries 3
+EOF
+
+mirror_cmd="mirror --reverse --delete --continue"
+printf '%s' "${mirror_cmd}" >> "${lftp_script_file}"
+printf ' --exclude ".git/"' >> "${lftp_script_file}"
+printf ' --exclude ".agent-logs/"' >> "${lftp_script_file}"
+printf ' --exclude "_backups/"' >> "${lftp_script_file}"
+printf ' --exclude ".deployments/"' >> "${lftp_script_file}"
+printf ' --exclude ".env"' >> "${lftp_script_file}"
+printf ' --exclude "ftp-info.txt"' >> "${lftp_script_file}"
+printf ' --exclude "deploy.sh"' >> "${lftp_script_file}"
+printf ' --exclude "node_modules/"' >> "${lftp_script_file}"
+printf ' --exclude ".DS_Store"' >> "${lftp_script_file}"
+printf ' --verbose "%s" "%s"\n' "${LOCAL_ROOT}" "${FTP_REMOTE}" >> "${lftp_script_file}"
+echo "quit" >> "${lftp_script_file}"
+
+FTP_USER_ENCODED="${FTP_USER//@/%40}"
+if lftp "ftp://${FTP_USER_ENCODED}:${FTP_PASS}@${FTP_HOST}:${FTP_PORT}" < "${lftp_script_file}" 2>&1 | tee -a "${LOG_FILE}"; then
+    log "Deployment completed successfully"
+else
+    die "Deployment failed. Check credentials and server connectivity."
+fi

@@ -1,47 +1,62 @@
 # ReLU.chat
 
-Free, browser-based, privacy-first open-source chatbots that don't rely on LLMs.
+**On-device, browser-based, open-source chatbots.** Your conversations never leave your computer — no servers, no tracking, no LLMs.
 
-## Project Structure
+## Features
 
-```
-.
-├── index.html          # Coming soon page with email capture
-├── assets/
-│   └── logo.png        # Brand logo
-├── api/
-│   └── subscribe.php   # Email subscription handler (PHP + SQLite)
-├── data/               # SQLite database storage (git-ignored)
-├── errors/
-│   ├── 404.html        # Custom 404 page
-│   ├── 403.html        # Custom 403 page
-│   └── 500.html        # Custom 500 page
-├── .htaccess           # Apache/LiteSpeed security config
-├── deploy.sh           # FTP deployment script
-├── .deployignore       # Files excluded from deployment
-└── .env                # FTP credentials (git-ignored)
-```
+- **Privacy-first** — All processing happens in your browser using WebAssembly
+- **Browser-based** — No installation required, works on any modern browser
+- **Open-source** — Fully auditable codebase
+- **No LLMs** — Lightweight NLU with transformer-based embeddings + knowledge base retrieval
+
+## Chatbots
+
+| Chatbot | Description |
+|---------|-------------|
+| [Game Theory Chat](chat/game-theory-chat/) | On-device assistant for game theory concepts: Nash equilibrium, Shapley value, auctions, and more |
+
+## How It Works
+
+1. **Load** — The transformer model downloads once and caches in your browser
+2. **Encode** — Your question is embedded locally using the model
+3. **Retrieve** — Relevant knowledge base fragments are found via similarity search
+4. **Compose** — A response is assembled from weighted fragments, with intent classification
+5. **Render** — Mathematical notation is typeset with KaTeX
+
+Everything runs entirely on your device. Nothing is sent to any server.
+
+## Tech Stack
+
+- **Transformers.js** — In-browser ML with `@xenova/transformers`
+- **KaTeX** — Fast LaTeX math rendering
+- **Vanilla JS** — No framework dependencies
+- **CSS** — Custom design system with CSS variables
 
 ## Development
 
-The coming soon page is a single HTML file with embedded CSS/JS — no build step required. Open `index.html` in a browser to preview.
+```bash
+# Clone the repository
+git clone https://github.com/yunusemrejr/relu-chat.git
+cd relu-chat
+
+# Serve locally (any static file server works)
+python -m http.server 8000
+# or
+npx serve .
+```
 
 ## Deployment
 
-1. Copy `.env.example` to `.env`
-2. Fill in your FTP credentials from your hosting control panel
-3. Run `DRY_RUN=1 ./deploy.sh` to test
-4. Run `./deploy.sh` to deploy
-
-### Environment Variables
-
-| Variable | Description | Default |
-|---|---|---|
-| `FTP_HOST` | Server IP or hostname | `199.188.200.140` |
-| `FTP_USER` | cPanel/FTP username | `eartctvi` |
-| `FTP_PASS` | FTP password | (required) |
-| `FTP_REMOTE` | Remote web root | `public_html` |
-| `FTP_PORT` | FTP port | `21` |
+1. Copy `deploy.sh.example` to `deploy.sh`
+2. Create a `.env` file with your FTP credentials:
+   ```
+   FTP_HOST=your_server_ip
+   FTP_USER=your_ftp_username
+   FTP_PASS=your_ftp_password
+   FTP_REMOTE=/
+   FTP_PORT=21
+   ```
+3. Run `./deploy.sh`
 
 ## License
 

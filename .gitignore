@@ -1,47 +1,34 @@
-# Dependencies
-node_modules/
-vendor/
-
-# Environment
+# Secrets and credentials
 .env
 .env.local
-.env.*.local
+.env.example
+ftp-info.txt
+
+# Deployment (contains credential references)
+deploy.sh
+
+# Logs and backups
+.agent-logs/
+_backups/
+.deployments/
+*.log
+
+# Data
+data/*.db
+data/*.sqlite
+data/*.sqlite3
 
 # IDE
 .idea/
 .vscode/
-*.swp
-*.swo
+
+# Dependencies
+node_modules/
+vendor/
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-logs/
-
-# SQLite
-*.db
-*.sqlite
-*.sqlite3
-
-# Data directory contents (keep structure, ignore data)
-data/*
-!data/.gitkeep
-
-# Backups
-_backups/
-*.bak
-*.backup
-
-# Agent logs (optional — uncomment if you want to track these in git)
-# .agent-logs/
-
-# FTP / deploy
-*.ftp
-
-# Cache
-cache/
-tmp/
-.env
+# Misc
+context.md
