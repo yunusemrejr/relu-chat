@@ -57,11 +57,25 @@
     </div>
 
     <div id="messages" role="log" aria-live="polite" aria-label="Chat messages">
-      <div class="msg bot">
-        <div class="msg-content">
-          <div class="msg-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-          </div>
+            <div class="msg bot">
+              <div class="msg-content">
+                <div class="msg-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="msg-body">
+                  <div class="meta">
+                    <span class="chip intent">Welcome</span>
+                  </div>
+                  <p>Hey! I'm your on-device game theory assistant. Ask me about:</p>
+                  <div class="suggestions-inline">
+                    <button class="suggestion" data-q="What is Nash equilibrium?">Nash equilibrium</button>
+                    <button class="suggestion" data-q="Explain the Prisoner's Dilemma">Prisoner's Dilemma</button>
+                    <button class="suggestion" data-q="What is the Shapley value?">Shapley value</button>
+                    <button class="suggestion" data-q="How do auctions work?">Auctions</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           <div class="msg-body">
             <div class="msg-meta">
               <span class="chip intent">Welcome</span>

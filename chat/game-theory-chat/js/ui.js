@@ -15,27 +15,61 @@ export function pushMessage(role, html, meta) {
   const messagesEl = document.getElementById('messages');
   const div = document.createElement('div');
   div.className = 'msg ' + role;
-  if (meta && meta.length) {
-    const m = document.createElement('div');
-    m.className = 'meta';
-    for (const c of meta) {
-      const chip = document.createElement('span');
-      chip.className = 'chip ' + (c.type || '');
-      chip.textContent = c.text;
-      m.appendChild(chip);
+
+  if (role === 'bot') {
+    const content = document.createElement('div');
+    content.className = 'msg-content';
+
+    const icon = document.createElement('div');
+    icon.className = 'msg-icon';
+    icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+
+    const body = document.createElement('div');
+    body.className = 'msg-body';
+
+    if (meta && meta.length) {
+      const m = document.createElement('div');
+      m.className = 'meta';
+      for (const c of meta) {
+        const chip = document.createElement('span');
+        chip.className = 'chip ' + (c.type || '');
+        chip.textContent = c.text;
+        m.appendChild(chip);
+      }
+      body.appendChild(m);
     }
-    div.appendChild(m);
+
+    const c = document.createElement('div');
+    c.innerHTML = html;
+    body.appendChild(c);
+
+    content.appendChild(icon);
+    content.appendChild(body);
+    div.appendChild(content);
+  } else {
+    const content = document.createElement('div');
+    content.className = 'msg-content';
+
+    const body = document.createElement('div');
+    body.className = 'msg-body';
+    const c = document.createElement('div');
+    c.innerHTML = html;
+    body.appendChild(c);
+
+    content.appendChild(body);
+    div.appendChild(content);
   }
-  const c = document.createElement('div');
-  c.innerHTML = html;
-  div.appendChild(c);
+
   messagesEl.appendChild(div);
   messagesEl.scrollTop = messagesEl.scrollHeight;
   if (window.renderMathInElement) {
-    renderMathInElement(c, {
-      delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],
-      throwOnError: false
-    });
+    const target = role === 'bot' ? div.querySelector('.msg-body > div:last-child') : div.querySelector('.msg-body > div');
+    if (target) {
+      renderMathInElement(target, {
+        delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],
+        throwOnError: false
+      });
+    }
   }
   return div;
 }
