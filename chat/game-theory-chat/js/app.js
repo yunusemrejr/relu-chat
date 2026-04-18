@@ -54,7 +54,7 @@ async function init() {
     }
     bar.style.width = '100%';
     setTimeout(() => bar.style.width = '0%', 500);
-    setStatus('ready · on-device', true);
+    setStatus('ready', true);
   } catch (err) {
     console.error('Model load failed, using BOW fallback:', err);
     const voc = new Set();
@@ -64,7 +64,7 @@ async function init() {
     [...voc].forEach((w, i) => bowVocab.set(w, i));
     entryEmb = KB.map(e => bowVec(entryText(e), bowVocab));
     for (const k of Object.keys(INTENTS)) intentEmb[k] = INTENTS[k].prototypes.map(p => bowVec(p, bowVocab));
-    setStatus('offline mode (bag-of-words)', true);
+    setStatus('offline mode', true);
   }
   ready = true;
   sendBtn.disabled = false;
@@ -133,8 +133,7 @@ for (const s of SUGGESTIONS) {
 }
 
 pushMessage('bot',
-  'Hi! I\'m an <strong>on-device</strong> assistant specialized in <strong>mathematical game theory</strong>. I understand your question with a transformer running entirely in your browser and compose responses from weighted concept fragments — nothing is sent to a server.<br><br>The first query will warm up the model (a one-time download). Try a suggestion below, or ask your own question.',
-  [{ text: 'ON DEVICE', type: 'intent' }]
+  '<span style="font-size:1.125rem;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;">Game Theory Chat</span><br><br>Hi! I\'m an <strong>on-device</strong> assistant specialized in <strong>mathematical game theory</strong>. I understand your question with a transformer running entirely in your browser and compose responses from weighted concept fragments — nothing is sent to a server.<br><br>The first query will warm up the model (a one-time download). Try a suggestion below, or ask your own question.'
 );
 
 document.querySelectorAll('.suggestions-inline .suggestion').forEach(btn => {
