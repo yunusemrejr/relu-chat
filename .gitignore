@@ -6,6 +6,7 @@ ftp-info.txt
 
 # Deployment (contains credential references)
 deploy.sh
+deploy-*.log
 
 # Logs and backups
 .agent-logs/
