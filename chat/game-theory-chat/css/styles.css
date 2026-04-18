@@ -207,6 +207,9 @@ body {
   padding: 1.5rem 1.25rem;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(59,130,246,0.03) 0%, transparent 40%);
 }
 
 #messages::-webkit-scrollbar {
@@ -228,7 +231,7 @@ body {
 
 .msg {
   max-width: 85%;
-  margin: 0 0 1rem;
+  margin: 0 0 1.25rem;
   animation: fadeUp 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
@@ -273,6 +276,20 @@ body {
   border-radius: var(--radius-lg);
   padding: 1rem 1.25rem;
   transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.msg.bot .msg-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .msg.bot:hover .msg-body {
@@ -280,10 +297,14 @@ body {
   border-color: var(--border-hover);
 }
 
+.msg.bot:hover .msg-body::before {
+  opacity: 1;
+}
+
 .msg.bot .msg-body p {
   margin: 0;
   font-size: 0.9375rem;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--text-primary);
 }
 
@@ -323,10 +344,25 @@ body {
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: var(--radius-lg);
   box-shadow: rgba(30,58,138,0.3) 0px 4px 12px, rgba(59,130,246,0.15) 0px 8px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.msg.user .msg-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
 }
 
 .msg.user .msg-body p {
   color: #fff;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
 
 .meta {
