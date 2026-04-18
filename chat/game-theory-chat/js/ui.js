@@ -40,7 +40,7 @@ export function pushMessage(role, html, meta) {
   return div;
 }
 
-export function buildBowFallback(vocabSet, KB, entryEmb, intentEmb, INTENTS, bowVec, tokens) {
+export function buildBowFallback(vocabSet, KB, entryEmb, intentEmb, INTENTS, bowVec, tokens, entryText) {
   const voc = new Set();
   for (const e of KB) for (const t of tokens(entryText(e))) voc.add(t);
   for (const k of Object.keys(INTENTS)) for (const p of INTENTS[k].prototypes) for (const t of tokens(p)) voc.add(t);
