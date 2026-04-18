@@ -73,7 +73,7 @@ export const KB = [
           'In supermodular games with monotone best responses, pure equilibria always exist (Topkis-Milgrom-Roberts).'],
     app:['Frequently used in coordination problems, supply-chain contracting, and engineering design.','Often preferred for interpretability when they exist.']}),
 
-  kb('zero_sum','Zero-Sum Game',['zerosum','constant-sum','strictly competitive'],
+  kb('zero_sum','Zero-Sum Game',['zerosum','zero sum','constant-sum','strictly competitive'],
     'A game in which one player\'s gain exactly offsets the others\' losses.',{
     def:['A two-player game is zero-sum if $u_1(s)+u_2(s)=0$ for all $s\\in S_1\\times S_2$; it is constant-sum if $u_1(s)+u_2(s)=c$.',
          'Equivalently it is described by a single payoff matrix $A\\in\\mathbb{R}^{m\\times n}$ with row player maximizing $x^\\top A y$ and column player minimizing.'],
@@ -336,7 +336,7 @@ export const KB = [
           'Even in simple hedonic games, computing stable partitions can be NP-hard.'],
     app:['Political alliances, R&D consortia, group formation in social networks, and team formation in distributed computing.','Connects to matching theory and hedonic preferences.']}),
 
-  kb('nash_bargaining','Nash Bargaining Solution',['nash bargaining','bargaining solution'],
+  kb('nash_bargaining','Nash Bargaining Solution',['nash bargaining','bargaining solution','nash bargaining solution'],
     'The unique allocation satisfying Pareto-efficiency, symmetry, scale invariance, and IIA.',{
     def:['Given feasible set $F\\subseteq\\mathbb{R}^2$ and disagreement point $d$, $\\phi(F,d)=\\arg\\max_{x\\in F,\\,x\\ge d}(x_1-d_1)(x_2-d_2).$',
          'Generalizes to $n$ players via the weighted Nash product $\\prod_i(x_i-d_i)^{\\alpha_i}$.'],
