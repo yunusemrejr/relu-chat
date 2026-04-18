@@ -295,11 +295,7 @@ body {
   position: relative;
   overflow: visible;
   box-shadow: none;
-}
-
-
-
-.msg.bot .msg-body p {
+}.msg.bot .msg-body p {
   margin: 0;
   font-size: 0.9375rem;
   line-height: 1.65;
@@ -399,43 +395,6 @@ body {
   background: rgba(234, 179, 8, 0.1);
   border-color: rgba(234, 179, 8, 0.3);
   color: #fde047;
-}
-
-.suggestions-inline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.suggestions-inline .suggestion {
-  font-size: 0.8125rem;
-  padding: 0.625rem 1.125rem;
-  border-radius: var(--radius-md);
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  font-weight: 500;
-  font-family: var(--font);
-  white-space: nowrap;
-  letter-spacing: -0.01em;
-}
-
-.suggestions-inline .suggestion:hover {
-  border-color: var(--accent);
-  color: var(--text-primary);
-  background: rgba(30,58,138,0.1);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--accent-glow);
-}
-
-.suggestions-inline .suggestion:active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-  transform: translateY(0);
 }
 
 .suggestions {

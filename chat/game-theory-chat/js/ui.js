@@ -65,7 +65,7 @@ export function pushMessage(role, html, meta) {
   messagesEl.appendChild(div);
   messagesEl.scrollTop = messagesEl.scrollHeight;
   if (window.renderMathInElement) {
-    const target = role === 'bot' ? div.querySelector('.msg-body > div:last-child') : div.querySelector('.msg-body > div');
+    const target = role === 'bot' ? div.querySelector('.msg-body > div:not(.meta)') : div.querySelector('.msg-body > div');
     if (target) {
       renderMathInElement(target, {
         delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],

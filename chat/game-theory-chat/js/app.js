@@ -1,6 +1,7 @@
 import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
 import { KB, entryText } from './knowledge-base.js';
-import { INTENTS, compose, softmax, weightedChoice, cosine, bowVec, tokens, pick } from './nlp.js';
+import { INTENTS, compose, softmax, weightedChoice, cosine, bowVec, tokens, pick, compileAliasRegex } from './nlp.js';
+import { CONFIG } from './config.js';
 import { $, escapeHTML, md, setStatus, pushMessage } from './ui.js';
 
 env.allowLocalModels = false;
@@ -9,8 +10,26 @@ env.useBrowserCache = true;
 const messagesEl = $('#messages'), form = $('#form'), input = $('#input'), sendBtn = $('#send');
 const bar = $('#bar');
 
-let extractor = null, entryEmb = [], intentEmb = {}, fragEmbCache = new Map();
+let extractor = null, entryEmb = [], intentEmb = {}, lastTopic = null;
 let ready = false, busy = false;
+
+class LRUCache {
+  constructor(max) { this.max = max; this.cache = new Map(); }
+  get(key) {
+    if (!this.cache.has(key)) return undefined;
+    const v = this.cache.get(key);
+    this.cache.delete(key);
+    this.cache.set(key, v);
+    return v;
+  }
+  set(key, val) {
+    if (this.cache.has(key)) this.cache.delete(key);
+    else if (this.cache.size >= this.max) this.cache.delete(this.cache.keys().next().value);
+    this.cache.set(key, val);
+  }
+}
+
+const fragEmbCache = new LRUCache(CONFIG.CACHE.MAX_SIZE);
 
 async function embed(text) {
   if (extractor) {
@@ -21,9 +40,9 @@ async function embed(text) {
 }
 
 async function embedCached(text) {
-  if (fragEmbCache.has(text)) return fragEmbCache.get(text);
+  if (fragEmbCache.get(text)) return fragEmbCache.get(text);
   const v = await embed(text);
-  if (fragEmbCache.size < 1000) fragEmbCache.set(text, v);
+  fragEmbCache.set(text, v);
   return v;
 }
 
@@ -32,8 +51,8 @@ let bowVocab = null;
 async function init() {
   try {
     setStatus('loading transformer…');
-    extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
-      quantized: true,
+    extractor = await pipeline('feature-extraction', CONFIG.EMBEDDING.model, {
+      quantized: CONFIG.EMBEDDING.quantized,
       progress_callback: (p) => {
         if (p.status === 'progress' && p.total) {
           const pct = (p.loaded / p.total) * 100;
@@ -44,9 +63,12 @@ async function init() {
     });
     setStatus('encoding knowledge base…');
     bar.style.width = '0%';
-    for (let i = 0; i < KB.length; i++) {
-      entryEmb.push(await embed(entryText(KB[i])));
-      bar.style.width = ((i + 1) / KB.length * 100) + '%';
+    compileAliasRegex();
+    const BATCH = 4;
+    for (let i = 0; i < KB.length; i += BATCH) {
+      const batch = KB.slice(i, i + BATCH).map(e => embed(entryText(e)));
+      entryEmb.push(...await Promise.all(batch));
+      bar.style.width = (Math.min(i + BATCH, KB.length) / KB.length * 100) + '%';
     }
     for (const k of Object.keys(INTENTS)) {
       intentEmb[k] = [];
@@ -58,6 +80,7 @@ async function init() {
   } catch (err) {
     console.error('Model load failed, using BOW fallback:', err);
     const voc = new Set();
+    compileAliasRegex();
     for (const e of KB) for (const t of tokens(entryText(e))) voc.add(t);
     for (const k of Object.keys(INTENTS)) for (const p of INTENTS[k].prototypes) for (const t of tokens(p)) voc.add(t);
     bowVocab = new Map();
@@ -78,9 +101,15 @@ async function handle(query) {
   const typingEl = pushMessage('bot', '<div class="typing"><span></span><span></span><span></span></div>');
   try {
     const qEmb = await embed(query);
-    const { text, meta } = await compose(query, qEmb, embedCached, entryEmb, intentEmb);
+    const { text, meta } = await compose(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic);
     typingEl.remove();
     pushMessage('bot', md(text), meta);
+    if (meta) {
+      const topicEntries = meta.filter(m => m.type === '');
+      if (topicEntries.length > 0) {
+        lastTopic = KB.find(e => e.name === topicEntries[0].text)?.id || null;
+      }
+    }
   } catch (err) {
     console.error(err);
     typingEl.remove();
@@ -135,14 +164,6 @@ for (const s of SUGGESTIONS) {
 pushMessage('bot',
   '<span style="font-size:1.125rem;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;">Game Theory Chat</span><br><br>Hi! I\'m an <strong>on-device</strong> assistant specialized in <strong>mathematical game theory</strong>. I understand your question with a transformer running entirely in your browser and compose responses from weighted concept fragments — nothing is sent to a server.<br><br>The first query will warm up the model (a one-time download). Try a suggestion below, or ask your own question.'
 );
-
-document.querySelectorAll('.suggestion[data-q]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (!ready || busy) return;
-    input.value = btn.dataset.q;
-    form.requestSubmit();
-  });
-});
 
 sendBtn.disabled = true;
 init();
