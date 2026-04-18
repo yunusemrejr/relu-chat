@@ -4,20 +4,169 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>403 — Access Denied | ReLU.chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/logo.png" type="image/png">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#08090a;color:#f7f8f8;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem}
-h1{font-size:4rem;font-weight:700;color:#e74c3c;margin-bottom:0.5rem}
-h2{font-size:1.5rem;font-weight:600;color:#8a8f98;margin-bottom:1rem}
-p{color:#5a5f68;margin-bottom:2rem;max-width:400px}
-a{display:inline-block;padding:0.875rem 1.5rem;background:#6c5ce7;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;transition:background 0.2s}
-a:hover{background:#7d6ff0}
+:root {
+  --bg: #08090a;
+  --bg-card: rgba(255,255,255,0.02);
+  --border: rgba(255,255,255,0.06);
+  --text-primary: #f7f8f8;
+  --text-secondary: #8a8f98;
+  --text-tertiary: #5a5f68;
+  --accent: #1e3a8a;
+  --accent-light: #3b82f6;
+  --accent-glow: rgba(30,58,138,0.3);
+  --accent-hover: #2563eb;
+  --error: #e74c3c;
+  --error-glow: rgba(231,76,60,0.3);
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font);
+  background:
+    radial-gradient(1200px 800px at 70% -10%, rgba(30,58,138,0.15), var(--bg));
+  color: var(--text-primary);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  font-feature-settings: "cv01", "ss03";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.error-card {
+  max-width: 480px;
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 3.5rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 4px, rgba(0,0,0,0.04) 0px 8px 16px -8px;
+}
+
+.error-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(231,76,60,0.4), transparent);
+}
+
+.error-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(231,76,60,0.25), rgba(231,76,60,0.08));
+  border: 1px solid rgba(231,76,60,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(231,76,60,0.15);
+}
+
+.error-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--error);
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(180deg, #ffffff 0%, #b0b8c8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+p {
+  color: var(--text-tertiary);
+  margin-bottom: 2rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.35) 0px 4px 16px, inset 0 1px 0 rgba(255,255,255,0.06);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  letter-spacing: -0.01em;
+}
+
+.btn:hover {
+  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.45) 0px 8px 24px, inset 0 1px 0 rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.btn:hover svg {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; }
+}
 </style>
 </head>
 <body>
-<h1>403</h1>
-<h2>Access denied</h2>
-<p>You don't have permission to access this resource.</p>
-<a href="/">Back to home</a>
+  <div class="error-card">
+    <div class="error-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h1>403</h1>
+    <h2>Access denied</h2>
+    <p>You don't have permission to access this resource.</p>
+    <a href="/" class="btn">
+      Back to home
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
 </body>
 </html>

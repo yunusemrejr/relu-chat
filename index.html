@@ -350,6 +350,20 @@ body {
   animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
+.hero-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hero-logo img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(125, 211, 252, 0.3));
+}
+
 .hero h1 {
   font-size: clamp(2.5rem, 7vw, 4.5rem);
   font-weight: 800;
@@ -1297,6 +1311,9 @@ body {
   <div class="hero-container">
     <div class="hero-content">
       <div class="hero-accent-line"></div>
+      <div class="hero-logo">
+        <img src="assets/logo.png" alt="ReLU.chat" width="64" height="64">
+      </div>
       <h1>Interactive AI.<br>Zero Privacy Compromise.</h1>
       <p class="hero-subhead">On-device, browser-based, open-source chatbots. Your conversations never leave your computer — no servers, no tracking, no LLMs.</p>
       <div class="hero-ctas">

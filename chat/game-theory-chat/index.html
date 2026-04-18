@@ -6,13 +6,13 @@
 <title>Game Theory Chat — ReLU.chat</title>
 <meta name="description" content="On-device NLU assistant for game theory concepts: Nash equilibrium, Shapley value, auctions, and more.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://reult.chat/chat/game-theory-chat/">
+<link rel="canonical" href="https://relu.chat/chat/game-theory-chat/">
 
 <meta property="og:title" content="Game Theory Chat — ReLU.chat">
 <meta property="og:description" content="On-device NLU assistant for game theory concepts.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://reult.chat/chat/game-theory-chat/">
-<meta property="og:image" content="https://reult.chat/assets/logo.png">
+<meta property="og:url" content="https://relu.chat/chat/game-theory-chat/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Game Theory Chat — ReLU.chat">
@@ -20,7 +20,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <link rel="stylesheet" href="css/styles.css">
@@ -29,54 +29,73 @@
 </head>
 <body>
 
-<header>
-  <a href="/" class="back-btn" aria-label="Back to home">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-  </a>
-  <div class="logo">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+<nav class="site-nav" id="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">
+      <img src="../../assets/logo.png" alt="ReLU.chat" width="28" height="28">
+      <span>ReLU.chat</span>
+    </a>
+    <div class="nav-status">
+      <span class="dot" id="dot"></span>
+      <span id="status-text">Loading...</span>
+    </div>
   </div>
-  <div>
-    <div class="title">Game Theory Chat</div>
-    <div class="subtitle">On-device AI assistant</div>
-  </div>
-  <div class="status">
-    <span class="dot" id="dot"></span>
-    <span id="status-text">Loading...</span>
-  </div>
-</header>
+</nav>
 
 <div class="progress"><div id="bar"></div></div>
 
-<main id="messages" role="log" aria-live="polite" aria-label="Chat messages">
-  <div class="msg bot">
-    <div class="meta">
-      <span class="chip intent">Welcome</span>
+<main class="chat-layout">
+  <div class="chat-container">
+    <div class="chat-header-mobile">
+      <a href="/" class="back-btn" aria-label="Back to home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <div class="chat-title-mobile">
+        <span>Game Theory Chat</span>
+        <small>On-device AI assistant</small>
+      </div>
     </div>
-    <div>Hey! I'm your on-device game theory assistant. Ask me about:</div>
-    <div class="suggestions" style="margin-top:12px; padding:0; overflow-x:auto; display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="suggestion" data-q="What is Nash equilibrium?">Nash equilibrium</button>
-      <button class="suggestion" data-q="Explain the Prisoner's Dilemma">Prisoner's Dilemma</button>
-      <button class="suggestion" data-q="What is the Shapley value?">Shapley value</button>
-      <button class="suggestion" data-q="How do auctions work?">Auctions</button>
+
+    <div id="messages" role="log" aria-live="polite" aria-label="Chat messages">
+      <div class="msg bot">
+        <div class="msg-content">
+          <div class="msg-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <div class="msg-body">
+            <div class="msg-meta">
+              <span class="chip intent">Welcome</span>
+            </div>
+            <p>Hey! I'm your on-device game theory assistant. Ask me about:</p>
+            <div class="suggestions-inline">
+              <button class="suggestion" data-q="What is Nash equilibrium?">Nash equilibrium</button>
+              <button class="suggestion" data-q="Explain the Prisoner's Dilemma">Prisoner's Dilemma</button>
+              <button class="suggestion" data-q="What is the Shapley value?">Shapley value</button>
+              <button class="suggestion" data-q="How do auctions work?">Auctions</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="suggestions" id="suggestions">
+      <button class="suggestion" data-q="What is a mixed strategy?">Mixed strategy</button>
+      <button class="suggestion" data-q="Explain zero-sum games">Zero-sum games</button>
+      <button class="suggestion" data-q="What is evolutionary game theory?">Evolutionary GT</button>
+      <button class="suggestion" data-q="Tell me about the Centipede game">Centipede game</button>
+      <button class="suggestion" data-q="What is mechanism design?">Mechanism design</button>
     </div>
   </div>
+
+  <form id="form">
+    <div class="input-container">
+      <input id="input" type="text" placeholder="Ask about game theory..." autocomplete="off" aria-label="Message input">
+      <button id="send" type="submit" disabled aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </form>
 </main>
-
-<div class="suggestions" id="suggestions">
-  <button class="suggestion" data-q="What is a mixed strategy?">Mixed strategy</button>
-  <button class="suggestion" data-q="Explain zero-sum games">Zero-sum games</button>
-  <button class="suggestion" data-q="What is evolutionary game theory?">Evolutionary GT</button>
-  <button class="suggestion" data-q="Tell me about the Centipede game">Centipede game</button>
-  <button class="suggestion" data-q="What is mechanism design?">Mechanism design</button>
-</div>
-
-<form id="form">
-  <input id="input" type="text" placeholder="Ask about game theory..." autocomplete="off" aria-label="Message input">
-  <button id="send" type="submit" disabled aria-label="Send message">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-  </button>
-</form>
 
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
