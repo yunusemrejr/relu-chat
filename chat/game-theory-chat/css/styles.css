@@ -215,7 +215,8 @@ header {
   color: #fff;
   margin-left: auto;
   border-bottom-right-radius: 6px;
-  box-shadow: 
+  border-bottom-left-radius: var(--radius-lg);
+  box-shadow:
     rgba(30,58,138,0.3) 0px 4px 12px,
     rgba(59,130,246,0.15) 0px 8px 24px;
 }
@@ -224,10 +225,13 @@ header {
   background: var(--bot-bg);
   border: 1px solid var(--border);
   border-bottom-left-radius: 6px;
+  border-bottom-right-radius: var(--radius-lg);
+  backdrop-filter: blur(4px);
 }
 
 .msg.bot:hover {
   border-color: var(--border-hover);
+  background: var(--bg-card-hover);
 }
 
 .msg.bot strong {
@@ -359,17 +363,31 @@ form {
   padding: 0 16px 14px;
   overflow-x: auto;
   flex-shrink: 0;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
   -webkit-overflow-scrolling: touch;
 }
 
 .suggestions::-webkit-scrollbar {
-  display: none;
+  height: 4px;
+}
+
+.suggestions::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.suggestions::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.suggestions::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
 }
 
 .suggestion {
-  font-size: 12px;
-  padding: 8px 14px;
+  font-size: 12.5px;
+  padding: 9px 15px;
   border-radius: 99px;
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -377,26 +395,31 @@ form {
   white-space: nowrap;
   cursor: pointer;
   flex-shrink: 0;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 500;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .suggestion:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-hover);
   color: var(--text-primary);
+  transform: translateY(-1px);
 }
 
 .suggestion:active {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
+  transform: translateY(0);
 }
 
 .suggestion.active {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
 .typing {

@@ -1,4 +1,4 @@
-import { KB } from './knowledge-base.js';
+import { KB, entryText } from './knowledge-base.js';
 
 const OPENERS = ["", "In short, ", "Here's the idea: ", "Let's unpack it. ", "Great question — ", "Consider this: "];
 const CONNECTORS = {
@@ -90,7 +90,7 @@ export async function compose(query, qEmb, embedCached, entryEmb, intentEmb) {
 
   if (intent === 'greeting' && entities.length === 0 && ranked[0].s < 0.3) {
     return {
-      text: pick(OPENERS) + "I'm a focused on-device assistant for **mathematical game theory**. Ask me about Nash equilibrium, Shapley values, auctions, evolutionary stability, or any of 55+ topics I know — all processing runs in your browser.",
+      text: pick(OPENERS) + "I'm an on-device assistant focused on **mathematical game theory**. Ask me about Nash equilibrium, Shapley values, auctions, evolutionary stability, or any of 55+ topics I know — all processing runs in your browser.",
       meta: [{ text: 'intent: greeting', type: 'intent' }]
     };
   }
