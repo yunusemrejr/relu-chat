@@ -26,8 +26,16 @@ The script uses `lftp` with mirroring, respects `.deployignore`, and logs every 
   - Security headers
   - Gzip compression
 
+## Documentation Policy
+
+The `docs/` folder is **strictly local-only**. It is added to `.gitignore` and `.deployignore` and must never be published to:
+- Remote GitHub repository
+- Production server
+
+Documentation exists only in the local codebase and local git history. See [documentation-policy.md](documentation-policy.md) for full rules.
+
 ## CI/CD Note
 
-Currently manual. Future versions could add GitHub Actions with `lftp` or rsync over SSH.
+Currently manual. Future versions could add GitHub Actions with `lftp` or rsync over SSH (but must continue excluding `docs/`).
 
 See `deploy.sh` and root `README.md` for full instructions.

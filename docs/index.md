@@ -19,8 +19,13 @@ Welcome to the official documentation for **ReLU.chat** — a privacy-first, ful
 - **Lightweight ML**: Uses quantized `all-MiniLM-L6-v2` via Transformers.js
 - **Mathematical clarity**: Heavy use of KaTeX for game theory notation
 - **Auditable**: Single static site, no build step, pure vanilla JS
+- **Documentation is offline-only**: See [Documentation Policy](documentation-policy.md)
 
 Last updated: April 2026
 
-**Repository**: https://github.com/yunusemrejr/relu-chat
-**Live site**: https://relu.chat
+**Remote Repository** (public, no docs): https://github.com/yunusemrejr/relu-chat  
+**Live Production Site**: https://relu.chat  
+**Local Repository**: Contains full codebase + offline `docs/` folder (never pushed)  
+**Deployment**: Via `deploy.sh` + lftp (respects `.deployignore` — excludes `docs/`)  
+
+**Important**: The `docs/` folder exists **only** in the local git repository and on this device. It is never published to remote or production. This rule is documented within the docs themselves.

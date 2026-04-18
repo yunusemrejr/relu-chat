@@ -4,6 +4,10 @@
 .env.example
 ftp-info.txt
 
+# Documentation - STRICTLY LOCAL ONLY
+# Must never be published to remote repository or production server
+docs/
+
 # Deployment (contains credential references)
 deploy.sh
 deploy-*.log
