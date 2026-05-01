@@ -10,7 +10,6 @@ export function setStatus(t, ready = false) {
   const dot = document.getElementById('dot');
   if (statusText) statusText.textContent = t;
   if (container) container.classList.toggle('ready', ready);
-  if (dot && ready) dot.style.boxShadow = '0 0 8px rgba(34, 197, 94, 0.5)';
 }
 
 export function pushMessage(role, html, meta) {
