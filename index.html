@@ -1283,7 +1283,7 @@ body {
       <li><a href="#showcase">Chat</a></li>
       <li><a href="#how-it-works">How It Works</a></li>
     </ul>
-    <a href="chat/game-theory-chat/" class="nav-cta">Get Started</a>
+    <a href="chat/game-theory-chat/" class="nav-cta">Try Chat</a>
     <label for="nav-toggle-input" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span>
       <span></span>
@@ -1318,6 +1318,7 @@ body {
       <p class="hero-subhead">On-device, browser-based, open-source chatbots. Your conversations never leave your computer — no servers, no tracking, no LLMs.</p>
       <div class="hero-ctas">
         <a href="chat/game-theory-chat/" class="btn btn-primary">Try Game Theory Chat</a>
+        <a href="chat/golden-age-inquiry/" class="btn btn-primary">Try Golden Age Inquiry</a>
         <a href="https://github.com/yunusemrejr/relu-chat" class="btn btn-ghost" target="_blank" rel="noopener noreferrer">View Source</a>
       </div>
       <div class="hero-badges">
@@ -1466,7 +1467,7 @@ body {
       <div class="showcase-content">
         <div class="showcase-badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          Featured Chatbot
+          <span>Featured</span>
         </div>
         <h3 class="showcase-title">Game Theory Chat</h3>
         <p class="showcase-desc">On-device NLU assistant for Nash equilibrium, Shapley value, auctions, prisoner's dilemma, and more. Ask in natural language — get precise, mathematical answers with LaTeX rendering.</p>
@@ -1480,7 +1481,6 @@ body {
           Launch Chat
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
         </a>
-        <p class="showcase-coming-soon">More chatbots coming soon</p>
       </div>
       <div class="showcase-visual">
         <div class="chat-mockup">
@@ -1495,6 +1495,52 @@ body {
             <div class="chat-bubble bot">For a 2x2 game, check each player's best response. If both play best responses to each other, that's a Nash equilibrium.</div>
             <div class="chat-bubble bot latex">$u_i(s_i^*, s_{-i}^*) \ge u_i(s_i, s_{-i}^*)$</div>
             <div class="chat-bubble user">Can you compute the Shapley value?</div>
+          </div>
+          <div class="chat-mockup-input">
+            <div class="chat-mockup-input-bar"></div>
+            <div class="chat-mockup-send"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SHOWCASE 2 ==================== -->
+<section id="showcase">
+  <div class="section-wrap">
+    <div class="showcase-card" id="showcase-card-2">
+      <div class="showcase-content">
+        <div class="showcase-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span>New</span>
+        </div>
+        <h3 class="showcase-title">Golden Age Inquiry</h3>
+        <p class="showcase-desc">Explore the scientific and philosophical discoveries of the Islamic Golden Age. Ask about Al-Khwarizmi's algebra, Ibn al-Haytham's optics, the House of Wisdom, and the scholars who shaped modern science.</p>
+        <div class="showcase-tags">
+          <span class="showcase-tag">History of Science</span>
+          <span class="showcase-tag">Philosophy</span>
+          <span class="showcase-tag">On-device AI</span>
+          <span class="showcase-tag">Mathematics</span>
+        </div>
+        <a href="chat/golden-age-inquiry/" class="showcase-cta">
+          Launch Chat
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="showcase-visual">
+        <div class="chat-mockup">
+          <div class="chat-mockup-header">
+            <div class="chat-mockup-dot"></div>
+            <div class="chat-mockup-dot"></div>
+            <div class="chat-mockup-dot"></div>
+            <span class="chat-mockup-title">Golden Age Inquiry</span>
+          </div>
+          <div class="chat-mockup-body">
+            <div class="chat-bubble user">Who was Al-Khwarizmi?</div>
+            <div class="chat-bubble bot">Al-Khwarizmi (c. 780–850) founded algebra and introduced algorithms. His name gave us "algorithm" and his book "Al-Kitab al-Mukhtasar..." gave us "algebra."</div>
+            <div class="chat-bubble bot">He worked at the House of Wisdom in Baghdad, synthesizing Greek, Indian, and Persian mathematics.</div>
+            <div class="chat-bubble user">What is the Tusi couple?</div>
           </div>
           <div class="chat-mockup-input">
             <div class="chat-mockup-input-bar"></div>
@@ -1575,9 +1621,26 @@ body {
     var showcaseObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
-          showcase.classList.add('visible');
-          showcaseObserver.unobserve(showcase);
+          entry.target.classList.add('visible');
+          showcaseObserver.unobserve(entry.target);
         }
+      });
+    }, { threshold: 0.15 });
+    showcaseObserver.observe(showcase);
+  }
+
+  var showcase2 = document.getElementById('showcase-card-2');
+  if (showcase2) {
+    var showcaseObserver2 = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          showcaseObserver2.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    showcaseObserver2.observe(showcase2);
+  }
       });
     }, { threshold: 0.15 });
     showcaseObserver.observe(showcase);
