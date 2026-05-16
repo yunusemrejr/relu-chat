@@ -9,8 +9,6 @@ export function entryText(e) {
   return `${e.name} ${e.aliases.join(' ')} ${e.summary} ${e.f.def.join(' ')} ${e.f.int.join(' ')} ${e.f.ex.join(' ')} ${e.f.form.join(' ')} ${e.f.app.join(' ')}`;
 }
 
-export const KB_ID_TO_INDEX = new Map(KB.map((e, i) => [e.id, i]));
-
 export const KB = [
   kb('house_of_wisdom','House of Wisdom',['bayt al-hikmah','house of wisdom baghdad','bayt al-hikma','house of knowledge','bait al-hikmah'],
     'Major intellectual center in Abbasid Baghdad that housed a vast library and translation institute.',{
@@ -670,3 +668,5 @@ export const KB = [
          'It remains a classic of Arabic literature and philosophy, studied for its profound exploration of reason and faith.']},
    ['ibn_bajjah','ibn_rushd','philosophy_golden_age','al_ghazali'])
 ];
+
+export const KB_ID_TO_INDEX = new Map(KB.map((e, i) => [e.id, i]));
