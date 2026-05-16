@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
 
-header('Access-Control-Allow-Origin: https://reult.chat');
+header('Access-Control-Allow-Origin: https://relu.chat');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
 

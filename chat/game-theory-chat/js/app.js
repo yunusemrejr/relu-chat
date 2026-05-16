@@ -1,10 +1,13 @@
-import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+import { pipeline, env } from '/assets/transformers/transformers.js';
 import { KB, entryText } from './knowledge-base.js';
 import { INTENTS, compose, softmax, weightedChoice, cosine, bowVec, tokens, pick, compileAliasRegex } from './nlp.js';
 import { CONFIG } from './config.js';
 import { $, escapeHTML, md, setStatus, pushMessage } from './ui.js';
 
-env.allowLocalModels = false;
+env.allowLocalModels = true;
+env.allowRemoteModels = false;
+env.localModelPath = '/assets/models';
+env.backends.onnx.wasm.wasmPaths = '/assets/transformers/';
 env.useBrowserCache = true;
 
 const messagesEl = $('#messages'), form = $('#form'), input = $('#input'), sendBtn = $('#send');

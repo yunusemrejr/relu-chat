@@ -1,5 +1,5 @@
 export const CONFIG = {
-  EMBEDDING: { model: 'Xenova/all-MiniLM-L6-v2', quantized: true },
+  EMBEDDING: { model: 'all-MiniLM-L6-v2', quantized: true },
   THRESHOLDS: {
     OFF_TOPIC: 0.15,
     GREETING_FALLBACK: 0.25,
