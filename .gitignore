@@ -40,3 +40,7 @@ Thumbs.db
 
 # Misc
 context.md
+
+# Added: all markdown and text files
+*.md
+*.txt
