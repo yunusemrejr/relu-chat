@@ -1,5 +1,5 @@
-export const KB_VERSION = '1.1.0';
-export const KB_UPDATED = '2026-04-18';
+export const KB_VERSION = '1.2.0';
+export const KB_UPDATED = '2026-05-16';
 
 export function kb(id, name, aliases, summary, f, related=[]) {
   return { id, name, aliases: [name.toLowerCase(), ...aliases.map(a => a.toLowerCase())], summary, f, related };
@@ -47,7 +47,8 @@ export const KB = [
         'In a second-price (Vickrey) auction, truthfully bidding your value is a weakly dominant strategy.'],
     form:['If every player has a strictly dominant strategy, the resulting profile is the unique Nash equilibrium (a dominant-strategy equilibrium).',
           'Iterated elimination of strictly dominated strategies never removes a Nash equilibrium and commutes with order.'],
-    app:['Dominant-strategy incentive compatibility (DSIC) is the gold standard in mechanism design — see VCG mechanisms.','Used to simplify analysis of auctions, voting rules, and contract design.']}),
+    app:['Dominant-strategy incentive compatibility (DSIC) is the gold standard in mechanism design — see VCG mechanisms.','Used to simplify analysis of auctions, voting rules, and contract design.']},
+   ['nash_eq','ied','vickrey','mech_design']),
 
   kb('mixed_strat','Mixed Strategy',['mixed','randomized strategy','mixing'],
     'A probability distribution over a player\'s pure strategies.',{
@@ -71,7 +72,8 @@ export const KB = [
         'Matching Pennies has no pure Nash equilibrium.'],
     form:['A finite game may have zero, one, or many pure Nash equilibria; existence is not guaranteed unlike the mixed case.',
           'In supermodular games with monotone best responses, pure equilibria always exist (Topkis-Milgrom-Roberts).'],
-    app:['Frequently used in coordination problems, supply-chain contracting, and engineering design.','Often preferred for interpretability when they exist.']}),
+    app:['Frequently used in coordination problems, supply-chain contracting, and engineering design.','Often preferred for interpretability when they exist.']},
+   ['mixed_strat','nash_eq','extensive_form','battle_of_sexes']),
 
   kb('zero_sum','Zero-Sum Game',['zerosum','zero sum','constant-sum','strictly competitive'],
     'A game in which one player\'s gain exactly offsets the others\' losses.',{
@@ -108,7 +110,8 @@ export const KB = [
         'Traffic routing is naturally non-cooperative — drivers minimize their own travel time.'],
     form:['Nash (1951) proved existence of mixed equilibria in finite non-cooperative games. Refinements tighten predictions in dynamic and incomplete-information settings.',
           'Non-cooperative foundations for cooperative concepts are provided by the Nash program.'],
-    app:['Default framework for IO, auction theory, algorithmic game theory, and multi-agent RL.','Self-enforcing cooperation is recovered via repetition or contracts.']}),
+    app:['Default framework for IO, auction theory, algorithmic game theory, and multi-agent RL.','Self-enforcing cooperation is recovered via repetition or contracts.']},
+   ['coop_game','nash_eq','spe','bayesian_game']),
 
   kb('minimax','Minimax Theorem',['von neumann theorem','max-min','minmax'],
     'In any finite two-player zero-sum game, max-min and min-max values coincide in mixed strategies.',{
@@ -120,7 +123,8 @@ export const KB = [
         'A $3\\times 3$ RPS matrix has value $0$ with $(1/3,1/3,1/3)$ optimal.'],
     form:['Proof by LP duality: the row-player\'s LP $\\max v\\text{ s.t. }A^\\top x\\ge v\\mathbf{1},\\mathbf{1}^\\top x=1$ is dual to the column-player\'s, so strong duality gives the minimax equality.',
           'Generalizations include Sion\'s minimax theorem for quasi-concave/convex payoffs on compact convex sets.'],
-    app:['Foundation of LP duality, robust optimization, statistical decision theory, and adversarial training of generative models.','Fictitious play converges to the minimax value in zero-sum games.']}),
+    app:['Foundation of LP duality, robust optimization, statistical decision theory, and adversarial training of generative models.','Fictitious play converges to the minimax value in zero-sum games.']},
+   ['zero_sum','nash_eq','lp_duality','zermelo']),
 
   kb('extensive_form','Extensive-Form Game',['game tree','sequential','extensive form'],
     'A representation of sequential play using a rooted tree with information sets.',{
@@ -132,7 +136,8 @@ export const KB = [
         'Any chess position is a node in the extensive-form game of chess.'],
     form:['Kuhn\'s theorem: in games of perfect recall, mixed and behavior strategies are outcome-equivalent.',
           'Zermelo (1913) showed finite perfect-information games have a pure-strategy backward-induction solution.'],
-    app:['Used to analyze negotiations, repeated interactions, and multi-stage mechanism design.','Backward induction and subgame perfection are natural here.']}),
+    app:['Used to analyze negotiations, repeated interactions, and multi-stage mechanism design.','Backward induction and subgame perfection are natural here.']},
+   ['normal_form','spe','backward_induction','perfect_info']),
 
   kb('normal_form','Normal-Form Game',['strategic form','matrix game'],
     'A simultaneous-move representation via strategy sets and payoff functions.',{
@@ -144,7 +149,8 @@ export const KB = [
         'Any $n$-player finite game can be listed as an $n$-dimensional payoff tensor.'],
     form:['Nash equilibria in the normal form always exist in mixed strategies (Nash, 1950).',
           'The normal form captures strategic equivalence classes coarser than extensive-form equivalence.'],
-    app:['The default representation for matrix/bimatrix algorithms and LP-based equilibrium computation.','Ubiquitous in AI, IO, and introductory game theory.']}),
+    app:['The default representation for matrix/bimatrix algorithms and LP-based equilibrium computation.','Ubiquitous in AI, IO, and introductory game theory.']},
+   ['extensive_form','nash_eq','bimatrix']),
 
   kb('bayesian_game','Bayesian Game',['games of incomplete information','bayes nash','type space'],
     'A game in which players have private information (types) drawn from a common prior.',{
@@ -208,7 +214,8 @@ export const KB = [
         'In the Hawk-Dove game trajectories converge to the mixed ESS $x_H=v/c$.'],
     form:['For symmetric games, every ESS is asymptotically stable; strict Nash equilibria are asymptotically stable; interior Nash equilibria are Lyapunov-stable. Relative entropy to a Nash equilibrium is a Lyapunov function for doubly symmetric games.',
           'Related to Lotka-Volterra equations via a nonlinear change of variables.'],
-    app:['Used in population genetics, cultural learning, congestion adaptation, and multi-agent RL convergence analysis.','Models of social learning via imitation yield the same ODE.']}),
+    app:['Used in population genetics, cultural learning, congestion adaptation, and multi-agent RL convergence analysis.','Models of social learning via imitation yield the same ODE.']},
+   ['evo_gt','ess','nash_eq','poa']),
 
   kb('stackelberg','Stackelberg Competition',['stackelberg','leader-follower'],
     'A sequential duopoly in which a leader commits to an output and the follower best-responds.',{
@@ -220,7 +227,8 @@ export const KB = [
         'Security games deploy randomized commitments against best-responding attackers (Stackelberg security).'],
     form:['Leader\'s program is a bilevel optimization $\\max_{q_1}\\pi_1(q_1, q_2^*(q_1))$ — generally nonconvex but tractable in standard demand systems.',
           'Without commitment power, the game collapses to simultaneous Cournot.'],
-    app:['Industrial organization, pricing, and entry deterrence.','Stackelberg security games deploy patrol schedules at airports (ARMOR, IRIS).']}),
+    app:['Industrial organization, pricing, and entry deterrence.','Stackelberg security games deploy patrol schedules at airports (ARMOR, IRIS).']},
+   ['cournot','nash_eq','spe','backward_induction']),
 
   kb('cournot','Cournot Competition',['cournot','quantity competition'],
     'A simultaneous-move duopoly/oligopoly with quantity as the strategic variable.',{
@@ -232,7 +240,8 @@ export const KB = [
         'Two firms with these parameters earn $\\pi=a^2/9$ each.'],
     form:['Best response $q_i^*(q_{-i})=\\tfrac{1}{2}(a-\\sum_{j\\ne i}q_j)$ in the linear case; intersection gives the Nash equilibrium.',
           'As $n\\to\\infty$, the Cournot equilibrium converges to the competitive outcome (Walras).'],
-    app:['Benchmark model for quantity-setting oligopolies and merger analysis.','Used to bound deadweight loss from imperfect competition.']}),
+    app:['Benchmark model for quantity-setting oligopolies and merger analysis.','Used to bound deadweight loss from imperfect competition.']},
+   ['stackelberg','bertrand','nash_eq','poa']),
 
   kb('bertrand','Bertrand Competition',['bertrand','price competition'],
     'Simultaneous price-setting competition among firms producing a homogeneous good.',{
@@ -244,7 +253,8 @@ export const KB = [
         'Differentiated Bertrand with logit demand yields positive equilibrium markups.'],
     form:['With capacity constraints (Edgeworth-Bertrand) or product differentiation, equilibrium prices exceed marginal cost.',
           'Kreps-Scheinkman: Cournot outcomes emerge as the subgame perfect equilibrium of a two-stage capacity-then-price game.'],
-    app:['Explains why concentrated markets still exhibit competitive pricing if products are homogeneous.','Motivates product differentiation as a profit-protection strategy.']}),
+    app:['Explains why concentrated markets still exhibit competitive pricing if products are homogeneous.','Motivates product differentiation as a profit-protection strategy.']},
+   ['cournot','nash_eq','poa','mech_design']),
 
   kb('auction_theory','Auction Theory',['auctions'],
     'Study of resource allocation via bidding mechanisms.',{
@@ -334,7 +344,8 @@ export const KB = [
         'In political coalitions, the Banzhaf and Shapley-Shubik power indices measure pivotal influence.'],
     form:['Core-stability, Nash-stability, and individual stability each capture different robustness concepts for partitions.',
           'Even in simple hedonic games, computing stable partitions can be NP-hard.'],
-    app:['Political alliances, R&D consortia, group formation in social networks, and team formation in distributed computing.','Connects to matching theory and hedonic preferences.']}),
+    app:['Political alliances, R&D consortia, group formation in social networks, and team formation in distributed computing.','Connects to matching theory and hedonic preferences.']},
+   ['core','shapley','coop_game','hedonic']),
 
   kb('nash_bargaining','Nash Bargaining Solution',['nash bargaining','bargaining solution','nash bargaining solution'],
     'The unique allocation satisfying Pareto-efficiency, symmetry, scale invariance, and IIA.',{
@@ -346,7 +357,8 @@ export const KB = [
         'Wage bargaining with threat points gives each side a share of the surplus proportional to bargaining strength.'],
     form:['Nash (1950) axiomatization: Pareto-efficiency + symmetry + invariance to affine utility transformations + IIA uniquely identifies the product-maximizer.',
           'Rubinstein (1982) provided a non-cooperative microfoundation via alternating-offers bargaining.'],
-    app:['Labor-management negotiations, trade agreements, and divorce settlements.','Workhorse in matching/search models of the labor market.']}),
+    app:['Labor-management negotiations, trade agreements, and divorce settlements.','Workhorse in matching/search models of the labor market.']},
+   ['rubinstein','core','nash_eq','coop_game']),
 
   kb('rubinstein','Rubinstein Bargaining',['alternating offers','rubinstein-stahl'],
     'A non-cooperative alternating-offers model of bargaining with a unique subgame-perfect outcome.',{
@@ -358,7 +370,8 @@ export const KB = [
         'As $\\delta\\to 1$, the outcome converges to the symmetric Nash bargaining solution $(1/2,1/2)$.'],
     form:['Proved by stationary backward-induction: equate each player\'s offer to what they could obtain by waiting one period and proposing themselves.',
           'Provides the "Nash program" microfoundation for the Nash bargaining solution.'],
-    app:['Microfoundations for search-matching, wage determination, and bilateral trade.','Extensions incorporate outside options, risk of breakdown, and incomplete information.']}),
+    app:['Microfoundations for search-matching, wage determination, and bilateral trade.','Extensions incorporate outside options, risk of breakdown, and incomplete information.']},
+   ['nash_bargaining','spe','backward_induction','coop_game']),
 
   kb('corr_eq','Correlated Equilibrium',['correlated equilibrium','aumann correlated'],
     'An equilibrium in which players obey recommendations from a common randomization device.',{
@@ -409,7 +422,8 @@ export const KB = [
         'In 2-player normal form games, trembling-hand perfection coincides with playing undominated best responses.'],
     form:['Every trembling-hand perfect equilibrium is a Nash equilibrium that uses no weakly dominated strategies.',
           'In the extensive form, the analog is subgame-perfect trembling-hand perfection, strengthened further by sequential equilibrium.'],
-    app:['Motivates robust mechanism design and evolutionary robustness.','Commonly invoked to discard weakly dominated equilibria.']}),
+    app:['Motivates robust mechanism design and evolutionary robustness.','Commonly invoked to discard weakly dominated equilibria.']},
+   ['nash_eq','spe','trembling_hand','ied']),
 
   kb('battle_of_sexes','Battle of the Sexes',['bos','battle of sexes'],
     'A coordination game with asymmetric preferences over the two coordinated outcomes.',{
@@ -421,7 +435,8 @@ export const KB = [
         'Mixed equilibrium has player 1 choose $O$ with probability $2/3$ and player 2 choose $O$ with probability $1/3$.'],
     form:['Payoff-dominance selects $(O,O)$ for player 1 and $(F,F)$ for player 2 — they disagree. Risk-dominance and communication can break the tie.',
           'Correlated equilibrium expands the set of welfare-improving outcomes.'],
-    app:['Standards battles (VHS vs Betamax), meeting coordination, and platform choice.','Workhorse example in equilibrium selection and cheap-talk analysis.']}),
+    app:['Standards battles (VHS vs Betamax), meeting coordination, and platform choice.','Workhorse example in equilibrium selection and cheap-talk analysis.']},
+   ['stag_hunt','chicken','nash_eq','corr_eq']),
 
   kb('hawk_dove','Hawk-Dove Game',['hawk dove','chicken in biology'],
     'A symmetric 2x2 conflict game used to model animal contests.',{
@@ -433,7 +448,8 @@ export const KB = [
         'Observed frequencies of aggressive vs. submissive individuals in many species approximate mixed ESS.'],
     form:['Equivalent to Chicken in economics when costs exceed rewards.',
           'Under replicator dynamics, trajectories converge to the mixed ESS from any interior start.'],
-    app:['Animal-conflict theory, business "chicken" dynamics, and territorial disputes.','Foundational example in evolutionary stability analysis.']}),
+    app:['Animal-conflict theory, business "chicken" dynamics, and territorial disputes.','Foundational example in evolutionary stability analysis.']},
+   ['ess','evo_gt','chicken','replicator']),
 
   kb('stag_hunt','Stag Hunt',['stag-hunt','assurance game'],
     'A coordination game where mutual cooperation on the risky action maximizes welfare.',{
@@ -445,7 +461,8 @@ export const KB = [
         'International environmental agreements where only joint effort protects a common resource.'],
     form:['Harsanyi-Selten: $(S,S)$ is payoff-dominant, $(H,H)$ is risk-dominant. Experimentally, risk-dominance often prevails.',
           'Infinitely repeated play can select $(S,S)$ under sufficient patience.'],
-    app:['Models trust and assurance in coalitions, currency unions, and network standards.','Rousseau\'s original parable of cooperation.']}),
+    app:['Models trust and assurance in coalitions, currency unions, and network standards.','Rousseau\'s original parable of cooperation.']},
+   ['battle_of_sexes','nash_eq','coordination','repeated_game']),
 
   kb('chicken','Chicken Game',['chicken','hawk-dove economic'],
     'An anti-coordination game where both players prefer to yield if the other stays the course.',{
@@ -457,7 +474,8 @@ export const KB = [
         'Legislative budget standoffs exhibit chicken-style brinkmanship.'],
     form:['Schelling (1960): visible commitment — such as throwing away your steering wheel — is a rational move that shifts the equilibrium in your favor.',
           'Correlated equilibrium strictly improves average welfare over all Nash equilibria.'],
-    app:['Crisis bargaining, union-management strikes, and military deterrence.','Classic teaching example for commitment devices.']}),
+    app:['Crisis bargaining, union-management strikes, and military deterrence.','Classic teaching example for commitment devices.']},
+   ['hawk_dove','battle_of_sexes','nash_eq','corr_eq']),
 
   kb('matching_pennies','Matching Pennies',['matching pennies','odd-even'],
     'A zero-sum $2\\times 2$ game with no pure equilibrium and a unique uniform mixed equilibrium.',{
@@ -469,7 +487,8 @@ export const KB = [
         'Any $2\\times 2$ game with cyclic best responses is strategically equivalent.'],
     form:['Canonical example of a game with no pure Nash equilibrium; demonstrates the necessity of mixed strategies.',
           'Optimal randomization is derived via the minimax theorem.'],
-    app:['Penalty kicks, serve direction in tennis, randomized audits, and cybersecurity patrolling.','Base case for teaching mixed-strategy equilibrium.']}),
+    app:['Penalty kicks, serve direction in tennis, randomized audits, and cybersecurity patrolling.','Base case for teaching mixed-strategy equilibrium.']},
+   ['zero_sum','mixed_strat','minimax','nash_eq']),
 
   kb('ultimatum','Ultimatum Game',['ultimatum'],
     'A two-stage bargaining game highlighting the gap between rational prediction and observed fairness.',{
@@ -477,11 +496,12 @@ export const KB = [
          'Subgame-perfect equilibrium: proposer offers $x\\to 1$, responder accepts any $x<1$.'],
     int:['Self-interested rationality predicts a near-zero offer accepted; experiments show offers of $40$-$50$% and rejection of small offers.',
          'Fairness, reciprocity, and spite enter the empirical picture.'],
-    ex:['In the classical Güth-Schmittberger-Schwarze (1982) experiment, modal offers are $50/50$ and offers below $20$% are routinely rejected.',
+    ex:['In the classical G\\"uth-Schmittberger-Schwarze (1982) experiment, modal offers are $50/50$ and offers below $20$% are routinely rejected.',
         'Dictator-game variants remove responder power to isolate pure altruism.'],
     form:['SPE predictions fail empirically — led to behavioral economics models such as inequity aversion (Fehr-Schmidt) and reciprocity (Rabin).',
           'Evolutionary models with reputational tracking recover near-fair offers.'],
-    app:['Behavioral economics, experimental game theory, and cross-cultural anthropology (Henrich et al.).','Foundational data point for bounded rationality research.']}),
+    app:['Behavioral economics, experimental game theory, and cross-cultural anthropology (Henrich et al.).','Foundational data point for bounded rationality research.']},
+   ['spe','dictator_game','prisoners_dilemma','fairness']),
 
   kb('centipede','Centipede Game',['centipede'],
     'A multi-stage game where backward induction predicts immediate termination despite cooperative gains.',{
@@ -493,7 +513,8 @@ export const KB = [
         'Rosenthal\'s original centipede has rapidly escalating payoffs making the paradox sharp.'],
     form:['SPE is the unique backward-induction outcome; level-$k$ and quantal-response models rationalize observed behavior.',
           'Epistemic analyses show that $n$-fold common knowledge of rationality fails at long horizons.'],
-    app:['Teaches the empirical limits of backward induction and motivates bounded-rationality refinements.','Widely used in experimental economics labs.']}),
+    app:['Teaches the empirical limits of backward induction and motivates bounded-rationality refinements.','Widely used in experimental economics labs.']},
+   ['spe','backward_induction','prisoners_dilemma','common_knowledge']),
 
   kb('public_goods','Public-Goods Game',['public good','voluntary contribution'],
     'A game in which individuals contribute to a shared good; the efficient outcome is not individually rational.',{
@@ -502,10 +523,11 @@ export const KB = [
     int:['Free-riding is individually rational but collectively suboptimal.',
          'A multiplayer generalization of the Prisoner\'s Dilemma.'],
     ex:['Voluntary-contribution experiments (Isaac-Walker) typically show $40$-$60$% contribution decaying toward zero without punishment.',
-        'Punishment opportunities sustain cooperation (Fehr-Gächter).'],
+        'Punishment opportunities sustain cooperation (Fehr-G\\"achter).'],
     form:['Socially optimal contribution: $\\sum c_i^*=nw$; Nash: $c_i=0$. The efficiency gap scales with $\\alpha$ and $n$.',
           'Linter-Samuelson condition characterizes optimal public-good provision: sum of MRS equals MRT.'],
-    app:['Climate-change cooperation, open-source software, and team production.','Motivates institutions for monitoring and sanctioning free-riders.']}),
+    app:['Climate-change cooperation, open-source software, and team production.','Motivates institutions for monitoring and sanctioning free-riders.']},
+   ['prisoners_dilemma','tragedy_commons','nash_eq','poa']),
 
   kb('tragedy_commons','Tragedy of the Commons',['commons','common pool'],
     'Overuse of a shared resource when individual users ignore the externality they impose on others.',{
@@ -517,7 +539,8 @@ export const KB = [
         'Traffic congestion is a commons-like equilibrium with excessive driving.'],
     form:['Equivalent to a public-bad game; Pigouvian taxation internalizes the externality to implement the social optimum.',
           'Ostrom (1990) documented real-world governance institutions that sustain cooperation without privatization.'],
-    app:['Environmental policy, congestion pricing, and spectrum management.','Foundational concept in environmental economics.']}),
+    app:['Environmental policy, congestion pricing, and spectrum management.','Foundational concept in environmental economics.']},
+   ['public_goods','prisoners_dilemma','nash_eq','poa']),
 
   kb('signaling','Signaling Games',['signaling','spence'],
     'Dynamic incomplete-information games where an informed sender chooses a signal that a receiver observes.',{
@@ -553,8 +576,8 @@ export const KB = [
          'Information asymmetry requires trading off insurance for motivation.'],
     ex:['CEO compensation via stock options aligns manager and shareholder incentives but imposes risk.',
         'Sharecropping (Stiglitz) splits output to induce effort when labor is unobservable.'],
-    form:['Mirrlees-Holmström first-order approach: $1/u\'(w(y))=\\lambda+\\mu\\,\\partial\\ln f(y\\mid e)/\\partial e$ (informativeness principle).',
-          'Holmström (1979): any informative signal should be incorporated into the optimal contract.'],
+    form:['Mirrlees-Holmstr\\"om first-order approach: $1/u\'(w(y))=\\lambda+\\mu\\,\\partial\\ln f(y\\mid e)/\\partial e$ (informativeness principle).',
+          'Holmstr\\"om (1979): any informative signal should be incorporated into the optimal contract.'],
     app:['Executive pay, procurement contracts, insurance, and regulation.','Cornerstone of contract theory.']},
    ['screening','signaling','mech_design','bayesian_game']),
 
@@ -607,7 +630,8 @@ export const KB = [
         'Iterative dominance solves the traveler\'s dilemma at the minimum allowable value.'],
     form:['Iterated strict dominance preserves all Nash equilibria and yields a unique outcome independent of the order of elimination.',
           'Iterated weak dominance depends on the order and can discard Nash equilibria.'],
-    app:['Solution tool in auction theory and contract design; conceptual underpinning of rationalizability.','Foundation for level-$k$ models of strategic thinking.']}),
+    app:['Solution tool in auction theory and contract design; conceptual underpinning of rationalizability.','Foundation for level-$k$ models of strategic thinking.']},
+   ['dom_strat','rationalizability','nash_eq','common_knowledge']),
 
   kb('rationalizability','Rationalizability',['rationalizable'],
     'The set of strategies surviving iterated elimination of strategies that are never a best response.',{
@@ -619,19 +643,21 @@ export const KB = [
         'In zero-sum games, rationalizable strategies coincide with minimax strategies.'],
     form:['Bernheim and Pearce (1984): rationalizability is the common-knowledge-of-rationality solution concept.',
           'In two-player games, rationalizability equals iterated strict dominance.'],
-    app:['Useful for analyzing games where beliefs about equilibrium play are hard to justify.','Foundation of epistemic game theory.']}),
+    app:['Useful for analyzing games where beliefs about equilibrium play are hard to justify.','Foundation of epistemic game theory.']},
+   ['ied','nash_eq','dom_strat','common_knowledge']),
 
   kb('common_knowledge','Common Knowledge',['common knowledge','aumann'],
     'An event is common knowledge if everyone knows it, everyone knows that everyone knows it, and so on ad infinitum.',{
     def:['Formally $E$ is common knowledge if $E\\subseteq\\bigcap_{n\\ge 1}K^n E$, where $K E=\\bigcap_i K_i E$ and $K_i$ denotes player $i$\'s knowledge operator.',
          'In a Kripke model, $E$ is common knowledge at state $\\omega$ iff $E$ holds at every state reachable by the reflexive transitive closure of the agents\' accessibility relations.'],
-    int:['It is the infinite tower of mutual knowledge about a fact — not just you know, but you know I know, and I know you know I know, …',
+    int:['It is the infinite tower of mutual knowledge about a fact — not just you know, but you know I know, and I know you know I know, \u2026',
          'Small failures of this tower can dramatically change strategic outcomes.'],
     ex:['Aumann\'s "Agreeing to Disagree": common priors plus common knowledge of posteriors implies equal posteriors.',
         'The Muddy Children / Blue-Eyed Islanders puzzle hinges on common knowledge of the puzzle setup.'],
     form:['Rubinstein\'s e-mail game shows that approximate common knowledge is strictly weaker than full common knowledge.',
           'Monderer-Samet characterize common knowledge via self-evident events.'],
-    app:['Foundational for epistemic game theory, speculative trade, and cryptographic coordination.','Critical in the analysis of market microstructure and information cascades.']}),
+    app:['Foundational for epistemic game theory, speculative trade, and cryptographic coordination.','Critical in the analysis of market microstructure and information cascades.']},
+   ['ied','rationalizability','bayesian_game','harsanyi']),
 
   kb('potential','Potential Games',['potential game','monderer shapley'],
     'Games where all unilateral payoff changes are captured by a single real-valued function.',{
@@ -682,7 +708,8 @@ export const KB = [
         'Nim and other impartial games are fully solved (Sprague-Grundy theorem).'],
     form:['Proved by backward induction on the finite game tree.',
           'Generalized to infinite games by Martin\'s Borel Determinacy Theorem.'],
-    app:['Conceptual foundation for game-playing AI and combinatorial game theory.','Basis for alpha-beta pruning and minimax search.']}),
+    app:['Conceptual foundation for game-playing AI and combinatorial game theory.','Basis for alpha-beta pruning and minimax search.']},
+   ['backward_induction','extensive_form','minimax','nash_eq']),
 
   kb('harsanyi','Harsanyi Transformation',['harsanyi doctrine','type space transformation'],
     'Transforms games of incomplete information into games of imperfect information via a type space.',{
@@ -695,5 +722,293 @@ export const KB = [
     form:['Harsanyi (1967-68) Econometrica trilogy; the common-prior assumption is often called the Harsanyi doctrine.',
           'Mertens-Zamir constructed the universal type space ensuring a canonical model exists.'],
     app:['Auction theory, insurance, finance with asymmetric information, and mechanism design.','Essential conceptual tool in modern IO and information economics.']},
-   ['bayesian_game','pbe','common_knowledge'])
+   ['bayesian_game','pbe','common_knowledge']),
+
+  kb('pareto','Pareto Efficiency',['pareto optimality','pareto improvement','pareto frontier'],
+    'An allocation is Pareto efficient if no player can be made strictly better off without making someone else worse off.',{
+    def:['Allocation $a$ Pareto dominates $b$ if $u_i(a)\\ge u_i(b)$ for all $i$ and strict for some $i$. An allocation is Pareto efficient if no alternative Pareto-dominates it.',
+         'The Pareto frontier is the set of all Pareto-efficient allocations.'],
+    int:['It is the minimal standard for collective rationality: if everyone prefers $x$ to $y$, then $y$ should never be chosen.',
+         'Pareto efficiency is necessary but not sufficient for social optimality — it says nothing about distribution.'],
+    ex:['In the Prisoner\'s Dilemma, $(C,C)$ Pareto-dominates $(D,D)$, yet $(D,D)$ is the unique Nash equilibrium.',
+        'Any competitive equilibrium in a market is Pareto efficient (First Welfare Theorem).'],
+    form:['Mapping from strategy profiles to the payoff space $\\mathbb{R}^n$, the Pareto frontier consists of maximal points under the componentwise partial order.',
+          'Scalarization: maximizing $\\sum_i \\lambda_i u_i$ for positive weights $\\lambda$ traces the frontier for convex payoff sets.'],
+    app:['Used as a welfare benchmark in every branch of economics — trade, regulation, taxation, and mechanism design.','Pareto improvements are the gold standard for policy evaluation.' ]},
+   ['nash_eq','prisoners_dilemma','nash_bargaining','social_choice']),
+
+  kb('sequential_eq','Sequential Equilibrium',['sequential equilibrium','kreps wilson','consistent assessment'],
+    'A refinement of PBE requiring beliefs to be limits of fully mixed strategy perturbations.',{
+    def:['An assessment $(\\sigma,\\mu)$ is a sequential equilibrium if (i) $\\sigma$ is sequentially rational given $\\mu$, and (ii) $\\mu$ is consistent: there exist fully mixed $\\sigma^n\\to\\sigma$ with $\\mu^n\\to\\mu$ via Bayes\' rule.',
+         'Consistency links off-path beliefs to the limit of nearby strategies, ruling out arbitrary belief assignments.'],
+    int:['Sequential equilibrium demands that beliefs at every information set be the limit of beliefs from small trembles.',
+         'It is strictly stronger than PBE but weaker than trembling-hand perfection in the extensive form.'],
+    ex:['Kreps-Wilson (1982) introduced sequential equilibrium to analyze the chain-store paradox and reputation in finitely repeated games.',
+        'In signaling games, sequential equilibrium plus the intuitive criterion selects reasonable separating equilibria.'],
+    form:['Consistency requires a single sequence of completely mixed behavior strategies converging to $\\sigma$; $\\mu$ is the limit of the induced beliefs.',
+          'Kreps-Wilson existence: every finite extensive-form game has a sequential equilibrium.'],
+    app:['Reputation models, signaling games, and dynamic games where off-path beliefs matter.','Standard refinement in applied economic theory.' ]},
+   ['pbe','trembling','signaling','spe']),
+
+  kb('proper_eq','Proper Equilibrium',['proper equilibrium','myerson proper','trembling perfection refinement'],
+    'A refinement of trembling-hand perfection where more costly mistakes are infinitely less likely.',{
+    def:['$\\sigma^*$ is proper if there exists a sequence $\\sigma^n\\to\\sigma^*$ of fully mixed strategies with $\\sigma^n_i(s_i)\\le \\varepsilon^n \\sigma^n_i(s_i\')$ whenever $s_i$ is strictly worse than $s_i\'$ against $\\sigma^n_{-i}$, and $\\varepsilon^n\\to 0$.',
+         'Proper equilibria are always trembling-hand perfect and are invariant under elimination of strictly dominated strategies.'],
+    int:['Players are infinitely more careful about costly errors: a mistake that hurts more is made with vanishingly smaller probability.',
+         'Myerson (1978) introduced the concept to address the limitations of trembling-hand perfection.'],
+    ex:['In any normal-form game, proper equilibrium refines trembling-hand perfect by ruling out equilibria that rely on certain domination relationships.',
+        'A proper equilibrium always exists in every finite normal-form game (Myerson).'],
+    form:['Every proper equilibrium is trembling-hand perfect, and every trembling-hand perfect equilibrium is proper in generic games.',
+          'Van Damme (1984): proper equilibria are characterized by a lexicographic hierarchy of caution.'],
+    app:['Refined equilibrium selection in signaling and bargaining games.','Used in mechanism design to eliminate fragile Nash equilibria.' ]},
+   ['trembling','nash_eq','sequential_eq']),
+
+  kb('quantal_response','Quantal Response Equilibrium',['qre','mckelvey palfrey','stochastic choice','logit equilibrium'],
+    'An equilibrium where players best-respond noisily with choice probabilities increasing in expected payoff.',{
+    def:['In a QRE with logit errors, player $i$ chooses $s_i$ with probability $\\exp(\\lambda u_i(s_i,\\sigma_{-i})) / \\sum_{s_i\'}\\exp(\\lambda u_i(s_i\',\\sigma_{-i}))$, where $\\lambda\\ge 0$ is the precision parameter.',
+         'The fixed-point condition: $\\sigma_i^*(s_i) = \\Pr(\\text{choose } s_i \\mid u_i(\\cdot,\\sigma_{-i}^*))$ under a stochastic choice model.'],
+    int:['Players are more likely to choose better strategies but make errors with probability decreasing in payoff differences.',
+         'As $\\lambda\\to\\infty$, QRE converges to a Nash equilibrium; as $\\lambda\\to 0$, it converges to uniform randomization.'],
+    ex:['McKelvey-Palfrey (1995) showed QRE fits laboratory data from the centipede game and signaling games far better than Nash.',
+        'QRE explains why subjects in zero-sum games mix with slight deviations from the exact Nash prediction.'],
+    form:['The logit QRE is the most common specification; nested families include power-function and payoff-monotone QRE.',
+          'Structural estimation of $\\lambda$ from experimental data measures the degree of strategic sophistication.'],
+    app:['Behavioral game theory, experimental economics, and estimation of bounded rationality.','Used to predict behavior in auctions, contests, and coordination games.' ]},
+   ['nash_eq','level_k','centipede','corr_eq']),
+
+  kb('level_k','Level-k Reasoning',['level-k','cognitive hierarchy','depth of reasoning','iterated best response'],
+    'A bounded-rationality model where players best-respond to lower-level opponents in a hierarchy of strategic depth.',{
+    def:['Level-0 players choose uniformly or heuristically; level-$k$ players best-respond to level-$(k-1)$ opponents. A level-$\\infty$ player best-responds to level-$(\\infty-1)$ and converges to Nash.',
+         'The cognitive hierarchy model (Camerer-Ho-Chong) generalizes this with a Poisson distribution of levels.'],
+    int:['Real people do not do infinite strategic reasoning — they guess, then guess what others guess, stopping at 1-3 steps.',
+         'Level-1: "I want the best outcome given that everyone else plays randomly." Level-2: "They think level-1, so I should anticipate that."'],
+    ex:['In the "p-beauty contest" game (Nagel 1995), subjects\' choices cluster around level-1 and level-2 reasoning, with very few reaching the Nash equilibrium of $0$.',
+        'In the centipede game, level-1 explains early defection; higher levels explain deeper cooperation.'],
+    form:['The distribution of levels is often fitted as Poisson with mean $\\tau\\approx 1.5$ in lab experiments.',
+          'Level-$k$ differs from iterated dominance in that it is a behavioral model, not a normative refinement.'],
+    app:['Experimental economics, auction bidding behavior, and financial market speculation.','Foundation for behavioral game theory alongside QRE.' ]},
+   ['ied','quantal_response','centipede','rationalizability']),
+
+  kb('global_games','Global Games',['global game','carlsson van damme','noisy signals','incomplete information coordination'],
+    'Games of incomplete information where players observe noisy signals of an underlying state, often producing unique equilibrium.',{
+    def:['Players receive private signals $x_i = \\theta + \\varepsilon_i$ where $\\theta\\in\\mathbb{R}$ is the underlying state and $\\varepsilon_i$ are i.i.d. noise with small support. Equilibrium thresholds $x^*$ solve indifference given posterior beliefs.',
+         'Carlsson-van Damme (1993): in $2\\times 2$ games with strategic complementarities, the global game selects a unique equilibrium as noise vanishes.'],
+    int:['Introducing tiny amounts of private information can break the multiplicity of coordination games.',
+         'The global-game selection (the "risk-dominant" action) emerges naturally from higher-order uncertainty.'],
+    ex:['In a currency-attack model, traders observe noisy signals about fundamentals; the unique threshold equilibrium explains contagion and self-fulfilling crises (Morris-Shin 1998).',
+        'Bank runs, debt crises, and R&D investment have been studied as global games.'],
+    form:['As signal noise $\\sigma\\to 0$, the equilibrium converges to a unique threshold generally selecting the risk-dominant action.',
+          'Laplacian belief: at the critical signal, players are uniform about the state — the "global-game" prior.'],
+    app:['Macro-finance (currency crises, bank runs), political economy (revolutions), and industrial organization (entry).','Connects to the uniqueness of equilibrium in supermodular games.' ]},
+   ['supermodular','nash_eq','pbe','common_knowledge']),
+
+  kb('supermodular','Supermodular Games',['supermodular game','strategic complements','topkis monotonicity','lattice game'],
+    'A game in which a player\'s incentive to raise their action increases with opponents\' actions (strategic complements).',{
+    def:['A smooth game is supermodular if $\\partial^2 u_i / \\partial s_i \\partial s_j \\ge 0$ for all $i\\ne j$. For general lattices, $u_i$ has increasing differences in $(s_i,s_{-i})$ and the strategy space is a complete lattice.',
+         'The set of Nash equilibria forms a nonempty complete lattice with a largest and smallest element (Topkis, 1979).'],
+    int:['Actions are complements: if your rival does more, I want to do more too. This contrasts with Cournot (substitutes).',
+         'Strategic complements produce monotone best responses — the foundation for comparative statics without uniqueness.'],
+    ex:['Bertrand competition with differentiated goods (prices are complements), bank-run games, and network adoption.',
+        'Research joint ventures and arms races exhibit strategic complements.'],
+    form:['Topkis-Milgrom-Roberts monotonicity: if best responses are increasing, increasing the opponent\'s action raises your optimal action.',
+          'Milgrom-Roberts (1990): supermodular games have monotone comparative statics and converge under fictitious play.'],
+    app:['Industrial organization, macroeconomics, and network effects.','The natural framework for comparative statics in oligopoly and coordination.' ]},
+   ['global_games','nash_eq','potential','poa']),
+
+  kb('wardrop','Wardrop Equilibrium',['wardrop equilibrium','user equilibrium','wardrop principle','selfish routing'],
+    'A flow assignment in which every used path has equal cost and no unused path has lower cost.',{
+    def:['A flow $f$ on a directed graph with latency functions $\\ell_e(f_e)$ is a Wardrop equilibrium if for each O-D pair, all used paths $p$ have equal latency $L_p(f)=\\sum_{e\\in p}\\ell_e(f_e)$ and no unused path has strictly lower latency.',
+         'Beckmann-McGuire-Winsten (1956): Wardrop equilibrium minimizes the potential $\\sum_e\\int_0^{f_e}\\ell_e(t)\\,dt$.'],
+    int:['Drivers distribute themselves so that no individual can reduce their travel time by switching routes.',
+         'It is the Nash equilibrium of a nonatomic congestion game (continuum of infinitesimal agents).'],
+    ex:['Pigou\'s two-link network: one fast road ($\\ell(x)=1$) and one that congests ($\\ell(x)=x$). Wardrop splits flow $1/2$-$1/2$; socially optimal flow is $1/4$-$3/4$ giving PoA $=4/3$.',
+        'Braess\'s paradox: adding a link can increase equilibrium travel time for all.'],
+    form:['Variational inequality formulation: find $f^*$ such that $\\sum_e\\ell_e(f_e^*)(f_e-f_e^*)\\ge 0$ for all feasible $f$.',
+          'Equivalent to convex optimization: $\\min \\sum_e\\int_0^{f_e}\\ell_e(t)\\,dt$ subject to flow conservation.'],
+    app:['Transportation planning, Internet routing (BGP/OSPF), and communication network design.','Foundational in algorithmic game theory and the Price of Anarchy literature.' ]},
+   ['congestion','poa','potential','nash_eq']),
+
+  kb('price_of_stability','Price of Stability',['pos','price of stability'],
+    'The best-case ratio between the social cost of a Nash equilibrium and the social optimum.',{
+    def:['$\\mathrm{PoS}(G)=\\dfrac{\\min_{s\\in NE(G)} \\mathrm{cost}(s)}{\\min_{s}\\mathrm{cost}(s)}$ — the ratio of the best Nash equilibrium to the social optimum.',
+         'Always $\\ge 1$ and $\\le \\mathrm{PoA}$. It measures whether there exists an acceptably efficient equilibrium.'],
+    int:['While PoA looks at worst-case selfish outcomes, PoS checks if coordination failure is guaranteed or avoidable.',
+         'A low PoS means that even if agents play selfishly, the best equilibrium may still be near-efficient.'],
+    ex:['For network design (Shapley cost-sharing), PoS is $O(\\log n)$ while PoA can be as high as $n$ (Anshel`evich et al. 2004).',
+        'In congestion games with linear costs, PoS $= 1$ (the best equilibrium is optimal).'],
+    form:['Anshel`evich et al. (2008) gave the first general PoS bounds for network cost-sharing games.',
+          'The smoothness framework can bound PoA but not always PoS; potential methods are often used.'],
+    app:['Network design, cost-sharing, and mechanism design where the designer can recommend an equilibrium.','Complements PoA in the efficiency analysis of games.' ]},
+   ['poa','congestion','nash_eq','potential']),
+
+  kb('smoothed_poa','Smoothed Analysis of Price of Anarchy',['smoothed analysis','roughgarden','near tightness poa'],
+    'A framework showing that worst-case PoA bounds can be overly pessimistic — typical-case bounds are often dramatically better.',{
+    def:['In smoothed analysis, inputs are perturbed by small random noise; the smoothed PoA is the expected (or high-probability) ratio under $\\sigma$-perturbations. Roughgarden (2009) showed that strict Nash equilibria have near-optimal welfare under general conditions.',
+         'Smoothly-perturbed congestion games often have PoA close to 1, even when worst-case PoA is unbounded.'],
+    int:['Worst-case PoA bounds rely on fragile constructions — tiny perturbations often eliminate the worst equilibria.',
+         'Smoothed analysis bridges the gap between worst-case theory and observed performance in practice.'],
+    ex:['In atomic selfish routing, worst-case PoA can be $\\Theta(n)$ for certain latencies, but smoothed PoA is $O(1)$.',
+        'In congestion games, adding small random noise to latencies makes nearly all Nash equilibria approximately efficient.'],
+    form:['Roughgarden (2009) proved that for every $\\epsilon>0$, the PoA of $\\epsilon$-Nash equilibria in continuous nonatomic congestion games satisfies smoothed PoA $\\le 1+\\epsilon$.',
+          'The framework applies to any set of strategy profiles defined by equilibrium-like conditions that are robust to perturbation.'],
+    app:['Theoretical justification for why practical routing, auctions, and markets perform better than worst-case bounds suggest.','Bridges algorithmic game theory and real-world traffic engineering.' ]},
+   ['poa','congestion','wardrop','nash_eq']),
+
+  kb('no_regret','No-Regret Learning',['no regret','regret minimization','hannan consistency','calibrated learning'],
+    'Learning dynamics where a player\'s cumulative payoff is no worse than the best fixed action in hindsight, up to a vanishing average error.',{
+    def:['Cumulative regret of player $i$ after $T$ rounds is $R_i(T)=\\max_{s_i^*}\\sum_{t=1}^T u_i(s_i^*,s_{-i}^t)-\\sum_{t=1}^T u_i(s_i^t,s_{-i}^t)$. A no-regret algorithm guarantees $R_i(T)=o(T)$ (sublinear).',
+         'Hannan (1957): there exist strategies ensuring $\\lim_{T\\to\\infty} R_i(T)/T = 0$ in any finite game.'],
+    int:['No-regret means you eventually do as well as any fixed strategy — you learn to avoid systematic exploitation.',
+         'It does not require knowledge of the game or opponents — only observed payoffs.'],
+    ex:['Multiplicative weights / Hedge algorithm achieves regret $O(\\sqrt{T\\log n})$ in any finite action set.',
+        'In a repeated matching-pennies game, no-regret play converges to the minimax value.'],
+    form:['Hart-Mas-Colell (2000): if all players use no-regret algorithms, empirical play converges to the set of correlated equilibria.',
+          '"No internal regret" and "no swap regret" characterize convergence to correlated and coarse-correlated equilibria.'],
+    app:['Online learning, multi-agent systems, algorithmic game theory, and AI training (regret-based policy improvement).','Core theoretical foundation for multi-agent reinforcement learning.' ]},
+   ['corr_eq','fictitious_play','nash_eq','quantal_response']),
+
+  kb('fictitious_play','Fictitious Play',['fictitious play','brown robustson','best response dynamics'],
+    'A learning process in which players best-respond to the empirical distribution of past opponent play.',{
+    def:['At each round $t$, player $i$ forms beliefs $\\hat\\sigma_{-i}^t$ as the empirical frequency of opponents\' past actions and best-responds: $s_i^t\\in\\arg\\max_{s_i} u_i(s_i,\\hat\\sigma_{-i}^t)$.',
+         'Convergence in beliefs need not imply convergence in actions: the path can cycle.'],
+    int:['Players track what opponents have done historically and choose the action that would have been best against that history.',
+         'It captures a simple form of experiential learning without Bayesian updating.'],
+    ex:['Fictitious play converges to Nash in zero-sum games (Robinson 1951), potential games (Monderer-Shapley), and $2\\times 2$ games with strategic complements.',
+        'In Rock-Paper-Scissors, fictitious play cycles without converging.'],
+    form:['Brown (1951): originally proposed as a method to compute the value of zero-sum games.',
+          'Fictitious play is a best-response dynamic; smooth fictitious play replaces argmax with stochastic choice (QRE-like).'],
+    app:['Algorithmic game theory (computing equilibria), multi-agent learning, and economic modeling of boundedly rational learning.','Connects to reinforcement learning and regret minimization.' ]},
+   ['no_regret','nash_eq','quantal_response','corr_eq']),
+
+  kb('evol_stable_sets','Evolutionarily Stable Sets',['evolutionarily stable set','ess set','equilibrium selection egt','neutrally stable'],
+    'A set of strategies such that every strategy in the set resists invasion by any outside mutant.',{
+    def:['A set $A\\subseteq \\Delta(S)$ is evolutionarily stable if (i) for every $x,y\\in A$, $u(x,x)=u(y,x)=u(y,y)$ (equal payoffs within the set), and (ii) for every $x\\in A$, $y\\notin A$, there exists $\\bar\\varepsilon>0$ with $u(x,\\,\\varepsilon y+(1-\\varepsilon)x)>u(y,\\,\\varepsilon y+(1-\\varepsilon)x)$ for all $\\varepsilon\\in(0,\\bar\\varepsilon)$.',
+         'Thomas (1985) introduced ESSets to handle games where a single ESS does not exist but a set is collectively stable.'],
+    int:['When no single strategy is unbeatable, a pool of behavior may collectively resist invasion.',
+         'Think of a set of social norms or behavioral conventions that mutually reinforce each other.'],
+    ex:['In Rock-Paper-Scissors, the entire interior of the simplex is an evolutionarily stable set under certain payoff variants.',
+        'In the War of Attrition, any symmetric distribution over waiting times can form part of an ESSet.'],
+    form:['An ESSet is a closed singleton if and only if it contains an ESS.',
+          'Neutrally stable strategies (NSS) form a weaker version: $u(x,y)\\ge u(y,y)$ for all $y$ near $x$.'],
+    app:['Understanding polymorphism in biology, cultural norms, and convention formation.','Models situations where multiple behaviors co-exist stably.' ]},
+   ['ess','evo_gt','replicator','nash_eq']),
+
+  kb('cheap_talk','Cheap Talk',['cheap talk','crawford sobel','costless communication','pre-play communication'],
+    'Costless, non-binding, and verifiable communication prior to play that can influence equilibrium selection.',{
+    def:['In the Crawford-Sobel (1982) model, a privately informed sender sends a costless, non-binding message; the receiver then chooses an action. Because messages are costless, they are "cheap" — only the sender\'s preferences link messages to types.',
+         'Cheap talk can be informative only if sender and receiver preferences are sufficiently aligned (the "no-babbling" condition).'],
+    int:['Words cost nothing, so why believe them? Cheap talk works only when lying would hurt the liar\'s credibility.',
+         'Partial alignment of interests makes some information transmission possible — the "babbling" equilibrium (no information) always exists.'],
+    ex:['A manager making a forecast to investors: if both want the stock price to reflect true value, the forecast can be credible.',
+        'Political endorsements: if both voter and candidate want good policy, the signal conveys information.'],
+    form:['In the CS interval model with one-dimensional types and quadratic preferences, there exist informative equilibria partitioned into $N$ intervals when preference divergence $b$ is not too large.',
+          'The number of partition elements in the most informative equilibrium decreases as preference divergence grows.'],
+    app:['Political communication, corporate disclosures, advertising, and pre-trial negotiation.','Foundational model in information economics and political science.' ]},
+   ['signaling','pbe','common_knowledge','screening']),
+
+  kb('berge_eq','Berge Equilibrium',['berge equilibrium','altruistic equilibrium','social stability','zhukovskii'],
+    'An equilibrium where each player maximizes the payoff of all others, assuming they do not deviate from their Berge strategies.',{
+    def:['A strategy profile $s^*$ is a Berge equilibrium if for each player $i$, $u_i(s_i^*,s_{-i}^*)\\ge u_i(s_i,s_{-i}^*)$ for all $s_i\\in S_i$ (Nash condition), and additionally $u_i(s_i^*,s_{-i}^*)\\ge u_i(s_i^*,s_{-i})$ for all $s_{-i}\\in S_{-i}$ (Berge condition).',
+         'The second condition says player $i$\'s payoff is maximized at $s^*$ given $i$ plays their part — the opponent\'s choices do not harm $i$ at the equilibrium.'],
+    int:['In a Berge equilibrium, each player takes the action that is best for the others, creating a kind of altruistic balance.',
+         'It contrasts with Nash (self-interested) and provides a model of "I\'ll do what\'s good for you, trusting you\'ll do what\'s good for me."'],
+    ex:['In a two-player coordination game with Pareto-ranked equilibria, the payoff-dominant equilibrium is often also a Berge equilibrium.',
+        'Team sports: each player positions themselves to benefit teammates, relying on teammates to do the same.'],
+    form:['Every Nash equilibrium that is also Pareto efficient and satisfies $u_i(s_i^*,s_{-i}^*)=\\max_{s_{-i}}u_i(s_i^*,s_{-i})$ for all $i$ is a Berge equilibrium.',
+          'Berge (1957) introduced the concept; Colman (2006) revived it as a model of team reasoning.'],
+    app:['Team decision-making, cooperative behavior in social dilemmas, and evolutionary models of altruism.','Alternative to Nash in settings with group-oriented reasoning.' ]},
+   ['nash_eq','pareto','coop_game','nash_bargaining']),
+
+  kb('mean_field','Mean Field Game',['mean field game','mfg','large population game','lasry lions','continuous population'],
+    'A game with a continuum of players where each player\'s influence on aggregate is negligible, simplifying equilibrium to a PDE system.',{
+    def:['In a mean-field game, the state of the game is the distribution $m_t$ of agents over states. Each agent solves a Hamilton-Jacobi-Bellman equation $\\partial_t u + H(x,\\nabla u, m) = 0$, and the population evolves via the Fokker-Planck equation $\\partial_t m - \\mathrm{div}(m\\,\\partial_p H) = 0$. The system $(u,m)$ forms the MFG equilibrium.',
+         'Lasry-Lions (2006) and Huang-Caines-Malhamé (2006) independently developed the theory.'],
+    int:['With millions of agents, no individual can affect aggregate — but all are affected by it. The equilibrium couples optimal control (forward by agents) and population dynamics (forward in time).',
+         'MFG reduces a massive interactive system to two coupled PDEs, making analysis tractable.'],
+    ex:['Taxi fleets: each driver chooses a location; the distribution of all drivers determines earnings. The MFG equilibrium captures spatial equilibrium.',
+        'Emission models: each firm decides abatement; aggregate emissions determine climate damage.'],
+    form:['A stationary MFG: $\\lambda + H(x,\\nabla u, m) = 0$ and $\\mathrm{div}(m\\,\\partial_p H)=0$, solved together with boundary conditions.',
+          'Existence and uniqueness of classical solutions require monotonicity of the Hamiltonian in $m$ (Lasry-Lions).'],
+    app:['Economics (labor markets, wealth distribution), finance (systemic risk), engineering (autonomous driving), and epidemiology.','Active frontier in applied mathematics and algorithmic game theory.' ]},
+   ['nash_eq','evo_gt','potential','repeated_game']),
+
+  kb('algo_mech_design','Algorithmic Mechanism Design',['algorithmic mechanism design','amd','nisan','computationally efficient mechanisms'],
+    'The interface of mechanism design and computer science, concerned with computational tractability of incentive-compatible outcomes.',{
+    def:['Algorithmic mechanism design (AMD) studies the design of mechanisms whose outcome functions are polynomial-time computable, particularly when the social objective (e.g., welfare-maximizing allocation) is computationally hard.',
+         'Nisan-Ronen (1999) introduced AMD, focusing on algorithmic tractability, approximation, and communication efficiency.'],
+    int:['Classical mechanism design assumes the center can compute the optimal outcome. AMD asks: what if computing the outcome is NP-hard? Can we design computationally efficient, incentive-compatible approximations?',
+         'It brings together algorithmic analysis, game theory, and computational complexity.'],
+    ex:['Combinatorial auctions: allocating many items to bidders with complex preferences is NP-hard. AMD designs polynomial-time, incentive-compatible auction algorithms (e.g., greedy bundle auctions).',
+        'VCG mechanisms are not always computationally tractable; AMD develops computationally efficient VCG-like mechanisms.'],
+    form:['Key tools: approximation algorithms (polynomial-time with near-optimal guarantees), convex programming-based mechanisms, and communication complexity lower bounds.',
+          'AMD also studies "mechanism design without money" where payments are not allowed (e.g., matching, voting).'],
+    app:['Internet ad auctions (GSP, VCG), cloud resource allocation, spectrum auctions, and kidney exchange.','Foundational for the theory of electronic marketplaces.' ]},
+   ['mech_design','auction_theory','revelation','vickrey']),
+
+  kb('fair_division','Fair Division',['fair division','cake cutting','envy-freeness','proportionality','equitable division'],
+    'The study of how to divide resources among agents so that each receives a fair share according to some criterion.',{
+    def:['An allocation is proportional if each of $n$ agents receives at least $1/n$ of the total value by their own measure. It is envy-free if no agent prefers another\'s bundle to their own.',
+         'Fair division problems are categorized as divisible (cake-cutting) or indivisible (goods/items), and as homogeneous or heterogeneous.'],
+    int:['Fair division asks: what does each person deserve, and how can algorithms guarantee it without knowing their private valuations?',
+         'The canonical cake-cutting problem asks for a protocol guaranteeing each player a piece they value at $\\ge 1/n$ of the whole.'],
+    ex:['The "I cut, you choose" protocol for two players guarantees envy-free division.',
+        'Dubins-Spanier (1961) moving-knife protocol achieves proportional division for $n$ players.'],
+    form:['The Robertson-Webb query model formalizes cake-cutting algorithms that ask "evaluate" and "cut" queries.',
+          'Envy-free division for $n$ players with arbitrary valuations requires a number of queries that is $\\Theta(n\\log n)$ (Even-Paz) or more, and is not guaranteed to exist for indivisible goods.'],
+    app:['Estate settlement, divorce proceedings, international treaty negotiations (e.g., maritime boundaries), and resource allocation in computing.','Increasingly applied in AI for multi-agent resource allocation.' ]},
+   ['coop_game','shapley','core','nash_bargaining']),
+
+  kb('voting_theory','Voting Theory',['voting theory','voting rules','social choice function','plurality','ranked choice'],
+    'The study of procedures for aggregating individual preferences into a collective decision.',{
+    def:['A voting rule $F: \\mathcal{P}^n \\to A$ maps each profile of ranked or scored preferences over alternatives to a winner. Common rules: plurality, Borda count, instant-runoff (IRV), approval voting, Condorcet methods.',
+         'Key evaluation criteria: Pareto efficiency, Condorcet consistency, independence of irrelevant alternatives (IIA), strategy-proofness.'],
+    int:['No voting rule is perfect — Arrow\'s theorem shows any reasonable rule must violate at least one basic desideratum.',
+         'Different rules can produce wildly different outcomes from the same preferences, so the choice of rule is itself a political decision.'],
+    ex:['In the 2000 US presidential election, third-party candidate Ralph Nader split the vote, illustrating spoiler effects in plurality voting.',
+        'Borda count assigns points by rank position; it\'s used in Eurovision and some academic elections.'],
+    form:['Arrow (1951): no social welfare function for $\\ge 3$ alternatives simultaneously satisfies unrestricted domain, Pareto efficiency, IIA, and non-dictatorship.',
+          'The Gibbard-Satterthwaite theorem: every non-dictatorial voting rule with $\\ge 3$ alternatives is manipulable (not strategy-proof).'],
+    app:['Political elections, committee decision-making, collaborative filtering, and multi-agent preference aggregation.','Foundational in social choice theory and political science.' ]},
+   ['social_choice','mech_design','dom_strat','revelation']),
+
+  kb('social_choice','Social Choice Theory',['social choice','aggregation of preferences','arrow theorem','collective decision'],
+    'The theoretical study of how individual preferences and judgments can be aggregated into collective decisions.',{
+    def:['Social choice theory studies mappings from individual preferences, judgments, or welfare to collective outcomes: $f: \\mathcal{P}^n \\to X$, where $X$ is the set of social alternatives.',
+         'Core results: Arrow\'s impossibility theorem, Gibbard-Satterthwaite theorem, Sen\'s liberal paradox, and the median voter theorem.'],
+    int:['It reveals the logical limits of democracy and collective rationality — no aggregation method satisfies all desirable properties.',
+         'Social choice sits at the intersection of economics, political science, and philosophy.'],
+    ex:['Condorcet\'s paradox: majority preferences can cycle ($A$ beats $B$, $B$ beats $C$, $C$ beats $A$) even with rational voters.',
+        'Amartya Sen\'s liberal paradox: commitment to minimal liberty and Pareto efficiency can conflict.'],
+    form:['Arrow\'s theorem: for $|X|\\ge 3$, any SWF satisfying Pareto and IIA must be a dictatorship.',
+          'The Gibbard-Satterthwaite theorem: any non-dictatorial social choice function for $|X|\\ge 3$ is manipulable.'],
+    app:['Constitutional design, voting system analysis, welfare economics, and multi-agent systems.','Central to understanding the mathematical foundations of democracy.' ]},
+   ['voting_theory','mech_design','pareto','fair_division']),
+
+  kb('banzhaf','Banzhaf Power Index',['banzhaf index','banzhaf power','voting power','pivotal index'],
+    'A measure of a voter\'s ability to influence the outcome of a vote, calculated as the number of coalitions in which they are pivotal.',{
+    def:['In a weighted voting game $[q; w_1,\\ldots,w_n]$, a voter $i$ is critical (pivotal) for a coalition $S$ if adding $i$ to $S$ makes $S$ winning ($w(S)<q \\le w(S)+w_i$). The Banzhaf index is $\\beta_i = \\eta_i / \\sum_j \\eta_j$, where $\\eta_i$ is the number of coalitions in which $i$ is critical.',
+         'The absolute Banzhaf index is $\\eta_i / 2^{n-1}$ (proportion of coalitions where $i$ is pivotal).'],
+    int:['A voter\'s power is not their share of votes but their chance of being the deciding vote.',
+         'Banzhaf (1965) used this to show that the weighted voting system of Nassau County\'s Board of Supervisors gave some districts zero power despite having votes.'],
+    ex:['In the EU Council with triple majority rules, Banzhaf indices show that large countries have disproportionately high power relative to population.',
+        'In a shareholder election with 49% vs 51%, the 51% bloc has essentially all the power despite having only 2% more shares.'],
+    form:['Related to, but distinct from, the Shapley-Shubik index, which orders voters by random arrival rather than random coalitions.',
+          'Computing Banzhaf indices is #P-complete in general but tractable for small or structured games.'],
+    app:['Constitutional analysis, corporate governance, shareholder voting, and international treaty ratification.','Used in legal challenges to voting systems on equal-protection grounds.' ]},
+   ['core','shapley','coalition','voting_theory']),
+
+  kb('core_selection','Core Selection (Matching)',['stable matching','gale shapley','deferred acceptance','matching theory'],
+    'The selection of an allocation from the core of a matching market, typically via deferred-acceptance algorithms.',{
+    def:['In a two-sided matching market (e.g., men-women, workers-firms), a matching $\\mu$ is in the core if no blocking pair $(m,w)$ exists such that both prefer each other to their current partners under $\\mu$.',
+         'Gale-Shapley (1962) deferred acceptance algorithm finds the firm-optimal (or worker-optimal) stable matching in polynomial time.'],
+    int:['The core in matching corresponds to stability: no pair wants to leave their current match for each other.',
+         'Deferred acceptance simulates a market where one side proposes and the other provisionally holds the best offer, iteratively improving.'],
+    ex:['The National Resident Matching Program (NRMP) uses a deferred-acceptance algorithm to match medical residents to hospitals. The resulting match is stable (core-selected).',
+        'School choice programs in New York and Boston use variants of the Gale-Shapley mechanism.'],
+    form:['The set of stable matchings forms a distributive lattice with the man-optimal and woman-optimal matchings as extreme points.',
+          'The core is nonempty in any two-sided matching market with strict preferences (Gale-Shapley). In one-sided (roommate) problems, the core may be empty.'],
+    app:['Labor market matching, school assignment, kidney exchange, and online dating platforms.','Winner of the 2012 Nobel Memorial Prize (Shapley and Roth).' ]},
+   ['coalition','core','mech_design','fair_division'])
 ];
+
+export const KB_ID_TO_INDEX = new Map(KB.map((e, i) => [e.id, i]));

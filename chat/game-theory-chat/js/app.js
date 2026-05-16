@@ -107,7 +107,7 @@ async function handle(query) {
     if (meta) {
       const topicEntries = meta.filter(m => m.type === '');
       if (topicEntries.length > 0) {
-        lastTopic = KB.find(e => e.name === topicEntries[0].text)?.id || null;
+        lastTopic = KB.findIndex(e => e.name === topicEntries[0].text);
       }
     }
   } catch (err) {

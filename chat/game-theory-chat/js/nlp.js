@@ -1,4 +1,4 @@
-import { KB, entryText } from './knowledge-base.js';
+import { KB, entryText, KB_ID_TO_INDEX } from './knowledge-base.js';
 import { CONFIG } from './config.js';
 
 const OPENERS = ["", "In short, ", "Here's the idea: ", "Let's unpack it. ", "Great question — ", "Consider this: "];
@@ -13,16 +13,22 @@ const CONNECTORS = {
   app_to_int: ["The intuition is that ", "Intuitively, "]
 };
 const CLOSERS = ["", " Want me to go deeper on any piece?", " Ask me for a worked example or a related concept.", " Happy to connect this to another topic if helpful."];
+const SEE_ALSO_PREFIXES = ["See also: ", "Related topics: ", "You might also explore: ", "Further reading: "];
+const COMPARISON_OPENERS = {
+  both: "Both **{A}** and **{B}** are fundamental concepts in game theory. ",
+  contrast: "While **{A}** and **{B}** are related, they capture different strategic phenomena. ",
+  similarity: "**{A}** and **{B}** share important structural similarities. ",
+};
 const TRANSITIONS = ["\n\nRelatedly, ", "\n\nClosely linked — ", "\n\nConnected idea: ", "\n\nBuilding on that, "];
 
 export const INTENTS = {
-  definition: { prototypes: ["what is X", "define X", "explain X", "what does X mean", "tell me about X", "describe X"], order: ['def', 'int', 'ex'] },
-  example: { prototypes: ["give an example of X", "show me an example", "example of X", "illustrate X", "concrete case of X"], order: ['ex', 'int', 'def'] },
-  formal: { prototypes: ["formal definition of X", "prove X", "theorem about X", "math behind X", "derive X", "equation for X", "formalism of X"], order: ['form', 'def', 'ex'] },
-  application: { prototypes: ["applications of X", "where is X used", "uses of X", "real world X", "practical use of X", "why is X useful"], order: ['app', 'ex', 'int'] },
-  comparison: { prototypes: ["difference between X and Y", "X vs Y", "compare X and Y", "how is X different from Y", "relation between X and Y"], order: ['def', 'int', 'ex'] },
-  greeting: { prototypes: ["hi", "hello", "hey there", "good morning", "how are you", "what up"], order: null },
-  help: { prototypes: ["help", "what can you do", "how do i use this", "what topics do you know", "menu"], order: null }
+  definition: { prototypes: ["what is X", "define X", "explain X", "what does X mean", "tell me about X", "describe X", "what is meant by X", "what is the meaning of X", "explain the concept of X", "what is X in game theory"], order: ['def', 'int', 'ex'] },
+  example: { prototypes: ["give an example of X", "show me an example", "example of X", "illustrate X", "concrete case of X", "an example of X", "show an example", "give examples of X", "illustrate with an example"], order: ['ex', 'int', 'def'] },
+  formal: { prototypes: ["formal definition of X", "prove X", "theorem about X", "math behind X", "derive X", "equation for X", "formalism of X", "mathematical definition of X", "proof of X", "formal proof of X", "rigorous definition of X", "formal treatment of X", "mathematical formulation of X"], order: ['form', 'def', 'ex'] },
+  application: { prototypes: ["applications of X", "where is X used", "uses of X", "real world X", "practical use of X", "why is X useful", "how is X applied", "real-world applications of X", "where does X apply", "practical applications of X", "use cases of X"], order: ['app', 'ex', 'int'] },
+  comparison: { prototypes: ["difference between X and Y", "X vs Y", "compare X and Y", "how is X different from Y", "relation between X and Y", "X versus Y", "X compared to Y", "compare X with Y", "difference between X and Y in game theory"], order: ['def', 'int', 'ex'] },
+  greeting: { prototypes: ["hi", "hello", "hey there", "good morning", "how are you", "what up", "hey", "hi there", "good afternoon", "good evening"], order: null },
+  help: { prototypes: ["help", "what can you do", "how do i use this", "what topics do you know", "menu", "what can you help with", "list topics", "what do you know"], order: null }
 };
 
 export function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
@@ -36,11 +42,26 @@ export function weightedChoice(items, w) { let total = w.reduce((a, b) => a + b,
 const STOP = new Set("a an the of in on at for to with and or is are was were be been being what which who whom whose this that these those i you he she it we they them us my your his her its our their me do does did can could should would will might may has have had".split(' '));
 export function tokens(t) { return t.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(w => w && !STOP.has(w)); }
 
+function normalizeAlias(a) {
+  return a.toLowerCase()
+    .replace(/[’']/g, "'")
+    .replace(/\s+-\s+/g, '-')
+    .trim();
+}
+
 export function bowVec(t, vocab) { const v = new Array(vocab.size).fill(0); for (const tk of tokens(t)) if (vocab.has(tk)) v[vocab.get(tk)] += 1; const n = Math.sqrt(v.reduce((a, b) => a + b * b, 0)) + 1e-9; return v.map(x => x / n); }
 
 export function compileAliasRegex() {
   for (const e of KB) {
-    e.aliasRegex = e.aliases.map(a => new RegExp('\\b' + a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i'));
+    e.aliasRegex = [];
+    e.aliasPartialRegex = [];
+    for (const a of e.aliases) {
+      const na = normalizeAlias(a);
+      const escaped = na.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const escapedPartial = escaped.replace(/\\?\s+/g, '\\s*');
+      e.aliasRegex.push(new RegExp('(?:^|\\s|\\b)' + escaped + '(?:\\s|\\b|$)', 'i'));
+      e.aliasPartialRegex.push(new RegExp('(?:^|\\s)' + escapedPartial + '(?:\\s|$)', 'i'));
+    }
   }
 }
 
@@ -48,8 +69,16 @@ export function extractEntities(query) {
   const q = ' ' + query.toLowerCase() + ' ';
   const found = [], seen = new Set();
   for (let i = 0; i < KB.length; i++) {
-    for (const re of KB[i].aliasRegex) {
-      if (re.test(q) && !seen.has(KB[i].id)) {
+    for (let j = 0; j < KB[i].aliasRegex.length; j++) {
+      if (KB[i].aliasRegex[j].test(q) && !seen.has(KB[i].id)) {
+        found.push(i);
+        seen.add(KB[i].id);
+        break;
+      }
+    }
+    if (seen.has(KB[i].id)) continue;
+    for (let j = 0; j < KB[i].aliasPartialRegex.length; j++) {
+      if (KB[i].aliasPartialRegex[j].test(q) && !seen.has(KB[i].id)) {
         found.push(i);
         seen.add(KB[i].id);
         break;
@@ -65,14 +94,21 @@ export function rankEntries(qEmb, entryEmb) {
 
 export async function classifyIntent(qEmb, intentEmb) {
   const scores = {};
+  const rawMax = {};
   for (const k of Object.keys(INTENTS)) {
     let max = -1;
     for (const pe of intentEmb[k]) { const s = cosine(qEmb, pe); if (s > max) max = s; }
-    scores[k] = max * Math.log(intentEmb[k].length + 1);
+    rawMax[k] = max;
+    const countNorm = Math.log(intentEmb[k].length + 1);
+    scores[k] = max * countNorm;
   }
   let best = 'definition', bs = -1;
   for (const k in scores) if (scores[k] > bs) { bs = scores[k]; best = k; }
-  return { intent: best, scores };
+  const confThresholds = CONFIG.THRESHOLDS.CONFIDENCE || {};
+  if (confThresholds[best] !== undefined && rawMax[best] < confThresholds[best]) {
+    best = 'definition';
+  }
+  return { intent: best, scores, rawScores: rawMax };
 }
 
 export async function selectFragment(entry, cat, qEmb, embedCached) {
@@ -84,7 +120,9 @@ export async function selectFragment(entry, cat, qEmb, embedCached) {
     const v = await embedCached(fr);
     scores.push(cosine(qEmb, v));
   }
-  const w = softmax(scores, CONFIG.COMPOSITION.FRAGMENT_TEMP);
+  const catTemp = (CONFIG.COMPOSITION.FRAGMENT_TEMP_BY_CAT && CONFIG.COMPOSITION.FRAGMENT_TEMP_BY_CAT[cat])
+    || CONFIG.COMPOSITION.FRAGMENT_TEMP;
+  const w = softmax(scores, catTemp);
   return weightedChoice(frags, w);
 }
 
@@ -93,8 +131,8 @@ export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, las
   let entities = extractEntities(query);
   const { intent } = await classifyIntent(qEmb, intentEmb);
 
-  if (entities.length === 0 && lastTopic && ranked[0].s > 0.25) {
-    entities = [KB.findIndex(e => e.id === lastTopic)];
+  if (entities.length === 0 && lastTopic !== null && lastTopic >= 0 && ranked[0].s > 0.25) {
+    entities = [lastTopic];
   }
 
   if (intent === 'greeting' && entities.length === 0 && ranked[0].s < CONFIG.THRESHOLDS.GREETING_FALLBACK) {
@@ -130,6 +168,12 @@ export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, las
   const order = INTENTS[intent]?.order || ['def', 'int', 'ex'];
 
   let parts = [];
+  if (intent === 'comparison' && topEntries.length >= 2) {
+    const eA = KB[topEntries[0]], eB = KB[topEntries[1]];
+    const openerKey = Math.random() < 0.33 ? 'similarity' : (Math.random() < 0.5 ? 'contrast' : 'both');
+    const openerText = COMPARISON_OPENERS[openerKey].replace('{A}', eA.name).replace('{B}', eB.name);
+    parts.push(openerText);
+  }
   for (let ei = 0; ei < topEntries.length; ei++) {
     const entry = KB[topEntries[ei]];
     const pieces = [];
@@ -144,10 +188,10 @@ export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, las
         const key = `${prev}_to_${cat}`;
         const pool = CONNECTORS[key];
         if (pool) connector = pick(pool);
+      } else if (intent === 'comparison' && topEntries.length >= 2 && ei === 0) {
+        connector = "";
       } else if (ei === 0 && intent !== 'comparison') {
         connector = Math.random() < 0.6 ? `**${entry.name}** — ` : "";
-      } else if (intent === 'comparison' && topEntries.length >= 2 && ei === 0) {
-        connector = `**${KB[topEntries[0]].name}** vs **${KB[topEntries[1]].name}** — `;
       } else {
         connector = pick(TRANSITIONS).replace(/\\n/g, '\n') + `**${entry.name}**: `;
       }
@@ -157,8 +201,19 @@ export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, las
     parts.push(pieces.join(' '));
   }
 
-  let text = pick(OPENERS) + parts[0];
+  let text = (intent !== 'comparison' || topEntries.length < 2 ? pick(OPENERS) : '') + parts[0];
   for (let i = 1; i < parts.length; i++) text += parts[i];
+
+  const lastEntry = KB[topEntries[topEntries.length - 1]];
+  if (lastEntry.related && lastEntry.related.length > 0) {
+    const relNames = lastEntry.related.slice(0, 3).map(rid => {
+      const ri = KB_ID_TO_INDEX.get(rid);
+      return ri !== undefined ? KB[ri].name : rid;
+    }).filter(Boolean);
+    if (relNames.length > 0) {
+      text += '\n\n' + pick(SEE_ALSO_PREFIXES) + relNames.join(', ') + '.';
+    }
+  }
   text += pick(CLOSERS);
 
   const meta = [{ text: `intent: ${intent}`, type: 'intent' }];
