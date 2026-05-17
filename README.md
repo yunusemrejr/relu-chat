@@ -52,7 +52,6 @@ npx serve .
 
 Deploy the contents of this repository to any static file server. The site requires:
 
-- A web server with PHP support (for `api/subscribe.php`)
 - HTTPS enabled
 - Proper MIME types for CSS, JS, and WASM files
 

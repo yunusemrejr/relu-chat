@@ -966,158 +966,6 @@ body {
   opacity: 0.5;
 }
 
-/* ============================================================
-   NEWSLETTER
-   ============================================================ */
-#newsletter { padding: 2rem 0 8rem; }
-
-.newsletter-card {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 4rem 2.5rem;
-  background: linear-gradient(180deg, rgba(13,15,18,0.9), rgba(13,15,18,0.6));
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-card), 0 0 80px -40px rgba(30,58,138,0.1);
-  transition: all 0.3s ease;
-}
-
-.newsletter-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(59,130,246,0.3), transparent 30%, transparent 70%, rgba(30,58,138,0.3));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.newsletter-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(30,58,138,0.4), transparent);
-}
-
-.newsletter-card:hover {
-  border-color: rgba(59,130,246,0.25);
-  box-shadow: 0 0 48px -12px rgba(30,58,138,0.2);
-}
-
-.newsletter-title {
-  font-size: 1.625rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.625rem;
-  letter-spacing: -0.02em;
-  background: linear-gradient(180deg, #ffffff 0%, #b0b8c8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.newsletter-desc {
-  font-size: 1rem;
-  color: var(--text-tertiary);
-  margin-bottom: 1.75rem;
-  line-height: 1.6;
-}
-
-.newsletter-form {
-  max-width: 460px;
-  margin: 0 auto;
-}
-
-.newsletter-form-row {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.newsletter-input {
-  flex: 1;
-  padding: 0.9375rem 1.125rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-family: var(--font);
-  font-size: 0.9375rem;
-  transition: all 0.2s ease;
-  outline: none;
-}
-
-.newsletter-input::placeholder { color: var(--text-tertiary); }
-
-.newsletter-input:focus {
-  border-color: var(--accent-light);
-  box-shadow: 0 0 0 3px var(--accent-glow);
-  background: var(--bg-card-hover);
-}
-
-.newsletter-btn {
-  padding: 0.9375rem 1.5rem;
-  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-md);
-  font-family: var(--font);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  box-shadow: var(--shadow-button), inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
-.newsletter-btn:hover {
-  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
-  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.35) 0px 4px 12px, inset 0 1px 0 rgba(255,255,255,0.08);
-}
-
-.newsletter-btn:active { transform: scale(0.97); }
-
-.newsletter-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.newsletter-message {
-  font-size: 0.8125rem;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-md);
-  display: none;
-  animation: fadeIn 0.3s ease;
-}
-
-.newsletter-message.success {
-  display: block;
-  background: rgba(39,174,96,0.08);
-  border: 1px solid rgba(39,174,96,0.25);
-  color: var(--success);
-}
-
-.newsletter-message.error {
-  display: block;
-  background: rgba(231,76,60,0.08);
-  border: 1px solid rgba(231,76,60,0.25);
-  color: var(--error);
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 
 /* ============================================================
    FOOTER
@@ -1238,8 +1086,6 @@ body {
   }
   .showcase-visual { order: -1; }
   .chat-mockup { max-width: 100%; }
-  .newsletter-card { padding: 2rem 1.5rem; }
-  .newsletter-form-row { flex-direction: column; }
   .site-footer {
     flex-direction: column;
     text-align: center;
@@ -1550,22 +1396,6 @@ body {
   </div>
 </section>
 
-<!-- ==================== NEWSLETTER ==================== -->
-<section id="newsletter">
-  <div class="section-wrap">
-    <div class="newsletter-card">
-      <h2 class="newsletter-title">Stay Updated</h2>
-      <p class="newsletter-desc">Be the first to know when new chatbots launch. No spam, unsubscribe anytime.</p>
-      <form class="newsletter-form" id="newsletter-form" action="api/subscribe.php" method="POST">
-        <div class="newsletter-form-row">
-          <input type="email" name="email" class="newsletter-input" placeholder="Enter your email" required autocomplete="email" aria-label="Email address">
-          <button type="submit" class="newsletter-btn" id="newsletter-btn">Notify Me</button>
-        </div>
-        <div id="newsletter-message" class="newsletter-message" role="alert" aria-live="polite"></div>
-      </form>
-    </div>
-  </div>
-</section>
 
 <!-- ==================== FOOTER ==================== -->
 <footer class="site-footer">
@@ -1640,53 +1470,6 @@ body {
     showcaseObserver2.observe(showcase2);
   }
 
-  /* Newsletter form */
-  var form = document.getElementById('newsletter-form');
-  var emailInput = form.querySelector('input[type="email"]');
-  var submitBtn = document.getElementById('newsletter-btn');
-  var messageEl = document.getElementById('newsletter-message');
-
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var email = emailInput.value.trim();
-    if (!email || email.indexOf('@') === -1) {
-      showMessage('Please enter a valid email address.', 'error');
-      return;
-    }
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending...';
-    var formData = new FormData();
-    formData.append('email', email);
-    fetch('api/subscribe.php', {
-      method: 'POST',
-      body: formData,
-      headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-      if (data.success) {
-        showMessage('You\'re on the list! We\'ll notify you when we launch.', 'success');
-        emailInput.value = '';
-      } else {
-        showMessage(data.error || 'Something went wrong. Please try again.', 'error');
-      }
-    })
-    .catch(function() {
-      showMessage('Connection error. Please try again.', 'error');
-    })
-    .finally(function() {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Notify Me';
-    });
-  });
-
-  function showMessage(text, type) {
-    messageEl.textContent = text;
-    messageEl.className = 'newsletter-message ' + type;
-    setTimeout(function() {
-      messageEl.className = 'newsletter-message';
-    }, 6000);
-  }
 
   /* Back to top */
   document.getElementById('back-to-top').addEventListener('click', function(e) {
