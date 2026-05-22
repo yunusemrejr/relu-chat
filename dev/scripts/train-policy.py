@@ -581,16 +581,24 @@ def load_kb(bot_name: str, data_dir: str = "data/bots") -> list:
     """
     Load knowledge base entries for a given bot.
 
-    Expects: {data_dir}/{bot_name}-chat/knowledge.js
-    This is a JS module; in production we'd parse it or use a JSON version.
-    For the skeleton, we return a synthetic KB.
+    Searches in order:
+      1. {data_dir}/{bot_name}-chat/knowledge.js  (re-export shim)
+      2. chat/{bot_name}-chat/js/knowledge-base.js (canonical KB)
+    Falls back to synthetic KB for skeleton training.
     """
-    kb_path = Path(data_dir) / f"{bot_name}-chat" / "knowledge.js"
-    if kb_path.exists():
-        # Stub: real implementation would parse the JS file or load a companion JSON
+    paths_to_try = [
+        Path(data_dir) / f"{bot_name}-chat" / "knowledge.js",
+        Path("chat") / f"{bot_name}-chat" / "js" / "knowledge-base.js",
+    ]
+    kb_path = None
+    for p in paths_to_try:
+        if p.exists():
+            kb_path = p
+            break
+    if kb_path:
         print(f"[kb] Found knowledge file: {kb_path} (parsing not yet implemented)")
     else:
-        print(f"[kb] No knowledge file at {kb_path} — using synthetic entries")
+        print(f"[kb] No knowledge file found for '{bot_name}' — using synthetic entries")
 
     # Synthetic KB entries for training
     return [

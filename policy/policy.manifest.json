@@ -4,7 +4,7 @@
   "inputBytes": 76,
   "outputSchema": "AnswerPlan.v1",
   "fragmentMetaVersion": "1.0.0",
-  "model": "linear_q_table",
+  "model": "mlp_policy",
   "weightsSize": 4096,
   "botProfiles": ["game-theory", "golden-age", "data-science"],
   "trained": "2026-05-23",

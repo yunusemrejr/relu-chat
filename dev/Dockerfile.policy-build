@@ -1,0 +1,25 @@
+FROM python:3.11-slim AS train
+
+WORKDIR /app
+COPY scripts/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /app
+
+FROM emscripten/emsdk:3.1.58 AS wasm
+
+WORKDIR /build
+COPY --from=train /app /app
+
+RUN apt-get update && apt-get install -y wget && \
+    wget https://github.com/WebAssembly/binaryen/releases/download/version_116/binaryen-version_116-x86_64-linux.tar.gz && \
+    tar xzf binaryen-version_116-x86_64-linux.tar.gz && \
+    cp binaryen-*/bin/wasm-opt /usr/local/bin/ && \
+    rm -rf binaryen-*
+
+RUN cd /app && python scripts/train-policy.py --export-only \
+    --onnx-path /build/out/policy.onnx --output /build/out/models/policy
+
+RUN wasm-opt /build/out/models/policy.wasm -O3 -o /build/out/models/policy.wasm
+
+CMD ["cp", "-r", "/build/out/models/policy", "/output"]
