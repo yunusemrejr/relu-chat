@@ -20,6 +20,13 @@
 
 <link rel="stylesheet" href="assets/fonts/inter.css">
 
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ReLU.chat">
+<link rel="apple-touch-icon" href="assets/logo.png">
+
 <link rel="icon" href="assets/logo.png" type="image/png">
 
 <style>
@@ -1012,7 +1019,7 @@ body {
       <li><a href="#showcase">Chat</a></li>
       <li><a href="#how-it-works">How It Works</a></li>
     </ul>
-    <a href="chat/game-theory-chat/" class="nav-cta">Try Chat</a>
+    <a href="#showcase" class="nav-cta">Try Chat</a>
     <label for="nav-toggle-input" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span>
       <span></span>
@@ -1045,6 +1052,7 @@ body {
       <div class="hero-ctas">
         <a href="chat/game-theory-chat/" class="btn btn-primary">Try Game Theory Chat</a>
         <a href="chat/golden-age-inquiry/" class="btn btn-primary">Try Golden Age Inquiry</a>
+        <a href="chat/data-science-chat/" class="btn btn-primary">Try Data Science Chat</a>
         <a href="https://github.com/yunusemrejr/relu-chat" class="btn btn-ghost" target="_blank" rel="noopener noreferrer">View Source</a>
       </div>
       <div class="hero-badges">
@@ -1080,7 +1088,7 @@ body {
       <div class="step-card reveal" style="--i:0">
         <div class="step-number">01</div>
         <div class="step-title">Load</div>
-        <div class="step-desc">Transformer model downloads once and caches in your browser. Parallel encoding of 55+ concepts — a one-time warm-up, then it's yours forever.</div>
+        <div class="step-desc">Transformer model downloads once and caches in your browser. Bot-specific knowledge base encodes on load — a one-time warm-up, then it's yours forever.</div>
       </div>
       <div class="step-card reveal" style="--i:1">
         <div class="step-number">02</div>
@@ -1126,7 +1134,7 @@ body {
 
       <div class="feature-card reveal" style="--i:4">
         <div class="feature-title">LaTeX Support</div>
-        <div class="feature-desc">Mathematical notation rendered beautifully with KaTeX. Perfect for game theory formulas.</div>
+        <div class="feature-desc">Mathematical notation rendered beautifully with KaTeX. Perfect for formulas in game theory, statistics, and ML.</div>
       </div>
 
       <div class="feature-card reveal" style="--i:5">
@@ -1210,6 +1218,48 @@ body {
             <div class="chat-bubble bot">Al-Khwarizmi (c. 780–850) founded algebra and introduced algorithms. His name gave us "algorithm" and his book "Al-Kitab al-Mukhtasar..." gave us "algebra."</div>
             <div class="chat-bubble bot">He worked at the House of Wisdom in Baghdad, synthesizing Greek, Indian, and Persian mathematics.</div>
             <div class="chat-bubble user">What is the Tusi couple?</div>
+          </div>
+          <div class="chat-mockup-input">
+            <div class="chat-mockup-input-bar"></div>
+            <div class="chat-mockup-send"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SHOWCASE 3 ==================== -->
+<section id="showcase">
+  <div class="section-wrap">
+    <div class="showcase-card" id="showcase-card-3">
+      <div class="showcase-content">
+        <h3 class="showcase-title">Data Science Chat</h3>
+        <p class="showcase-desc">On-device NLU assistant for data science and machine learning. Ask about pandas, NumPy, statistics, classification, regression, clustering, feature engineering, model evaluation, and more — all running locally in your browser.</p>
+        <div class="showcase-tags">
+          <span class="showcase-tag">Data Science</span>
+          <span class="showcase-tag">On-device AI</span>
+          <span class="showcase-tag">Statistics</span>
+          <span class="showcase-tag">Machine Learning</span>
+        </div>
+        <a href="chat/data-science-chat/" class="showcase-cta">
+          Launch Chat
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="showcase-visual">
+        <div class="chat-mockup">
+          <div class="chat-mockup-header">
+            <div class="chat-mockup-dot"></div>
+            <div class="chat-mockup-dot"></div>
+            <div class="chat-mockup-dot"></div>
+            <span class="chat-mockup-title">Data Science Chat</span>
+          </div>
+          <div class="chat-mockup-body">
+            <div class="chat-bubble user">What is logistic regression?</div>
+            <div class="chat-bubble bot">Logistic regression models the probability of a binary outcome using the logistic function $\sigma(z)=1/(1+e^{-z})$, where $z=\beta_0+\beta_1x_1+\cdots+\beta_px_p$.</div>
+            <div class="chat-bubble bot">It's a linear model for classification — despite the name, it's used for predicting classes, not continuous values.</div>
+            <div class="chat-bubble user">Explain cross-validation</div>
           </div>
           <div class="chat-mockup-input">
             <div class="chat-mockup-input-bar"></div>
@@ -1311,6 +1361,19 @@ body {
     showcaseObserver2.observe(showcase2);
   }
 
+  var showcase3 = document.getElementById('showcase-card-3');
+  if (showcase3) {
+    var showcaseObserver3 = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          showcaseObserver3.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    showcaseObserver3.observe(showcase3);
+  }
+
   /* Newsletter form */
   var form = document.getElementById('newsletter-form');
   var emailInput = form.querySelector('input[type="email"]');
@@ -1379,6 +1442,50 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+</script>
+
+<!-- Install banner -->
+<div id="install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg-elevated);border-top:1px solid var(--border);padding:0.875rem 1.25rem;display:none;align-items:center;justify-content:space-between;gap:0.75rem;animation:fadeIn 0.3s ease;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);">
+  <span style="font-size:0.8125rem;color:var(--text-secondary);line-height:1.4;flex:1;">Install ReLU.chat for offline access and faster loading.</span>
+  <div style="display:flex;gap:0.5rem;flex-shrink:0;">
+    <button id="install-dismiss" style="padding:0.5rem 0.875rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-size:0.75rem;font-weight:500;cursor:pointer;font-family:var(--font);">Dismiss</button>
+    <button id="install-btn" style="padding:0.5rem 0.875rem;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:var(--font);">Install</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(function() {});
+  }
+  var banner = document.getElementById('install-banner');
+  var installBtn = document.getElementById('install-btn');
+  var dismissBtn = document.getElementById('install-dismiss');
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (!localStorage.getItem('install-dismissed')) {
+      banner.style.display = 'flex';
+    }
+  });
+  if (installBtn) {
+    installBtn.addEventListener('click', function() {
+      banner.style.display = 'none';
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function() { deferredPrompt = null; });
+      }
+    });
+  }
+  if (dismissBtn) {
+    dismissBtn.addEventListener('click', function() {
+      banner.style.display = 'none';
+      localStorage.setItem('install-dismissed', '1');
+    });
+  }
+})();
 </script>
 
 </body>

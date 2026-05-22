@@ -1,0 +1,26 @@
+{
+  "name": "ReLU.chat",
+  "short_name": "ReLU.chat",
+  "description": "Browser-based, privacy-first on-device chatbots",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070809",
+  "theme_color": "#1d4ed8",
+  "categories": ["education", "utilities"],
+  "icons": [
+    {
+      "src": "/assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
