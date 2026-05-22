@@ -130,6 +130,9 @@ export async function selectFragment(entry, cat, qEmb, embedCached, config) {
   return weightedChoice(frags, w);
 }
 
+// ============================================================
+// compose() — legacy fallback (unchanged behavior when policy unavailable)
+// ============================================================
 export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, config, overrides) {
   const OPENERS = overrides?.openers || DEFAULT_OPENERS;
   const CONNECTORS = overrides?.connectors || DEFAULT_CONNECTORS;
@@ -236,6 +239,124 @@ export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, las
   for (const idx of topEntries) meta.push({ text: KB[idx].name, type: '' });
   meta.push({ text: `sim ${(ranked[0]?.s || 0).toFixed(2)}`, type: 'score' });
   if (entities.length > 0) meta.push({ text: `${entities.length} entit${entities.length > 1 ? 'ies' : 'y'}`, type: 'score' });
+
+  return { text, meta };
+}
+
+// ============================================================
+// composeV2() — policy-driven pure renderer (receives AnswerPlan)
+// ============================================================
+export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, config, overrides, plan) {
+  // plan is an AnswerPlan from the policy runtime
+  // This function is intentionally pure: plan dictates all decisions.
+
+  const OPENERS = overrides?.openers || DEFAULT_OPENERS;
+  const CONNECTORS = overrides?.connectors || DEFAULT_CONNECTORS;
+  const CLOSERS = overrides?.closers || DEFAULT_CLOSERS;
+  const SEE_ALSO_PREFIXES = overrides?.seeAlsoPrefixes || DEFAULT_SEE_ALSO_PREFIXES;
+  const COMPARISON_OPENERS = overrides?.comparisonOpeners || DEFAULT_COMPARISON_OPENERS;
+  const TRANSITIONS = overrides?.transitions || DEFAULT_TRANSITIONS;
+  const INTENTS = overrides?.intents || DEFAULT_INTENTS;
+  const compositionConfig = config?.COMPOSITION || {};
+
+  if (!plan || plan.mode === 'off-topic') {
+    return {
+      text: overrides?.offTopicResponse || "That didn't map to anything I know well. Try asking about a topic I'm trained on.",
+      meta: [{ text: 'off-topic', type: 'warn' }]
+    };
+  }
+
+  if (plan.mode === 'greeting') {
+    return {
+      text: overrides?.greetingResponse || (pick(OPENERS) + "Hi! I'm an on-device assistant. All processing runs in your browser."),
+      meta: [{ text: 'intent: greeting', type: 'intent' }]
+    };
+  }
+
+  if (plan.mode === 'help') {
+    return {
+      text: overrides?.helpResponse || "I can discuss topics entirely on your device. Try a question or choose a suggestion below.",
+      meta: [{ text: 'intent: help', type: 'intent' }]
+    };
+  }
+
+  // KB mode (normal) or comparison mode
+  const topEntries = Array.isArray(plan.topics) && plan.topics.length > 0
+    ? plan.topics.slice(0, compositionConfig.MAX_ENTRIES || 3)
+    : [0];
+
+  const intent = plan.intent || 'definition';
+  const order = INTENTS[intent]?.order || ['def', 'int', 'ex'];
+  const creativity = typeof plan.creativity === 'number' ? plan.creativity : 0.2;
+
+  let parts = [];
+
+  if (plan.mode === 'comparison' && topEntries.length >= 2) {
+    const eA = KB[topEntries[0]], eB = KB[topEntries[1]];
+    const openerKey = creativity < 0.33 ? 'similarity' : (creativity < 0.66 ? 'contrast' : 'both');
+    const openerText = (COMPARISON_OPENERS[openerKey] || '').replace(/\{A\}/g, eA.name).replace(/\{B\}/g, eB.name);
+    parts.push(openerText);
+  }
+
+  for (let ei = 0; ei < topEntries.length; ei++) {
+    const entry = KB[topEntries[ei]];
+    const pieces = [];
+    const cats = (plan.mode === 'comparison' && topEntries.length >= 2) ? order : (ei === 0 ? order : [order[0]]);
+    let prev = null;
+
+    for (let ci = 0; ci < cats.length; ci++) {
+      const cat = cats[ci];
+      // Respect fragmentPlan counts from policy (simple 0/1 gate here)
+      const wantFrag = plan.fragmentPlan && plan.fragmentPlan[cat] !== 0;
+      if (!wantFrag) continue;
+
+      const frag = await selectFragment(entry, cat, qEmb, embedCached, config);
+      if (!frag) continue;
+
+      let connector = "";
+      if (prev) {
+        const key = `${prev}_to_${cat}`;
+        const pool = CONNECTORS[key];
+        if (pool) connector = pick(pool);
+      } else if (plan.mode === 'comparison' && topEntries.length >= 2 && ei === 0) {
+        connector = "";
+      } else if (ei === 0 && plan.mode !== 'comparison') {
+        connector = Math.random() < (0.5 + creativity * 0.2) ? `**${entry.name}** — ` : "";
+      } else {
+        connector = pick(TRANSITIONS).replace(/\\n/g, '\n') + `**${entry.name}**: `;
+      }
+      pieces.push(connector + frag);
+      prev = cat;
+    }
+    if (pieces.length > 0) parts.push(pieces.join(' '));
+  }
+
+  // Template indices from plan (simple deterministic pick for now)
+  const openerIdx = plan.template?.opener ?? 0;
+  const closerIdx = plan.template?.closer ?? 0;
+  const opener = OPENERS[openerIdx % OPENERS.length] || '';
+  const closer = CLOSERS[closerIdx % CLOSERS.length] || '';
+
+  let text = (plan.mode !== 'comparison' || topEntries.length < 2 ? opener : '') + (parts[0] || '');
+  for (let i = 1; i < parts.length; i++) text += parts[i];
+
+  // Related topics (respect guardrails)
+  const lastEntry = KB[topEntries[topEntries.length - 1]];
+  if (lastEntry?.related && lastEntry.related.length > 0 && plan.guardrails?.requireCite !== true) {
+    const relNames = lastEntry.related.slice(0, 3).map(rid => {
+      const found = KB.findIndex(e => e.id === rid);
+      return found >= 0 ? KB[found].name : rid;
+    }).filter(Boolean);
+    if (relNames.length > 0) {
+      text += '\n\n' + pick(SEE_ALSO_PREFIXES) + relNames.join(', ') + '.';
+    }
+  }
+
+  text += closer;
+
+  const meta = [{ text: `intent: ${intent}`, type: 'intent' }];
+  for (const idx of topEntries) meta.push({ text: KB[idx].name, type: '' });
+  meta.push({ text: `plan:${plan.mode}`, type: 'score' });
 
   return { text, meta };
 }

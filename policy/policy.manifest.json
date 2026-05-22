@@ -1,0 +1,14 @@
+{
+  "version": "0.1.0",
+  "inputFeatures": 18,
+  "inputBytes": 76,
+  "outputSchema": "AnswerPlan.v1",
+  "fragmentMetaVersion": "1.0.0",
+  "model": "linear_q_table",
+  "weightsSize": 4096,
+  "botProfiles": ["game-theory", "golden-age", "data-science"],
+  "trained": "2026-05-23",
+  "wasmHash": "sha256-04c2c5c65bdd1ed360ff957ebd9b275b9a55c44d1bcb2c52f605009536f57bd8",
+  "weightsHash": "sha256-7196bbce50ee49ce0b10cd3f40f86fbb2aeaf366232fd540c0c30fcfc905c00f",
+  "notes": "Initial heuristic stub. Replace with RL-trained policy after running train-policy.py in /dev/scripts/."
+}

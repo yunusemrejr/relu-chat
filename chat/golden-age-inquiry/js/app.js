@@ -19,6 +19,15 @@ const SUGGESTIONS = [
 const welcomeMessage =
   '<span style="font-size:1.125rem;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;">Golden Age Inquiry</span><br><br>Hi! I\'m an <strong>on-device</strong> assistant specialized in the <strong>scientific and philosophical discoveries</strong> of the Islamic Golden Age (8th–14th centuries). I understand your question with a transformer running entirely in your browser and compose responses from weighted concept fragments — nothing is sent to a server.<br><br>The first query will warm up the model (a one-time download). Try a suggestion below, or ask your own question.';
 
+const botProfile = {
+  id: "golden-age-inquiry",
+  name: "Golden Age Inquiry",
+  allowedIntents: Object.keys(INTENTS),
+  tone: "neutral",
+  maxTopics: 3,
+  creativityCeiling: 0.35
+};
+
 createChatbot({
   KB,
   entryText,
@@ -27,4 +36,5 @@ createChatbot({
   overrides,
   suggestions: SUGGESTIONS,
   welcomeMessage,
+  botProfile
 });

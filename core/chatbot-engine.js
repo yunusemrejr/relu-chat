@@ -1,7 +1,8 @@
 import { pipeline, env } from '/assets/transformers/transformers.js';
 import { LRUCache } from './cache.js';
-import { compose, tokens, bowVec, compileAliasRegex } from './nlp.js';
+import { compose, composeV2, tokens, bowVec, compileAliasRegex } from './nlp.js';
 import { pushMessage, setStatus, escapeHTML, md } from './ui.js';
+import { loadPolicyRuntime, planAnswer, isPolicyLoaded } from '../policy/policy-runtime.js';
 
 env.allowLocalModels = true;
 env.allowRemoteModels = false;
@@ -13,7 +14,8 @@ export async function createChatbot(config) {
   const {
     KB, entryText, CONFIG, INTENTS, overrides,
     suggestions, welcomeMessage,
-    onReady
+    onReady,
+    botProfile
   } = config;
 
   const bar = document.getElementById('bar');
@@ -67,6 +69,27 @@ export async function createChatbot(config) {
         intentEmb[k] = [];
         for (const p of INTENTS[k].prototypes) intentEmb[k].push(await embed(p));
       }
+
+      // NEW: Load policy runtime (blocks readiness)
+      setStatus('loading policy…');
+      await loadPolicyRuntime({
+        wasmPath: '/assets/models/policy/policy.wasm',
+        weightsPath: '/assets/models/policy/policy.weights.bin',
+        manifestPath: '/assets/models/policy/policy.manifest.json',
+        botProfile: botProfile || {
+          id: 'default',
+          allowedIntents: Object.keys(INTENTS),
+          tone: 'neutral',
+          maxTopics: 3,
+          creativityCeiling: 0.35
+        }
+      });
+
+      if (!isPolicyLoaded()) {
+        setStatus('policy load failed — please reload', false);
+        return; // do NOT set ready=true
+      }
+
       bar.style.width = '100%';
       setTimeout(() => bar.style.width = '0%', 500);
       setStatus('ready', true);
@@ -81,6 +104,8 @@ export async function createChatbot(config) {
       entryEmb = KB.map(e => bowVec(entryText(e), bowVocab));
       for (const k of Object.keys(INTENTS)) intentEmb[k] = INTENTS[k].prototypes.map(p => bowVec(p, bowVocab));
       setStatus('offline mode', true);
+      // Note: in offline/BOW mode we still allow fallback without policy
+      // but production policy path requires successful load
     }
     ready = true;
     sendBtn.disabled = false;
@@ -95,7 +120,25 @@ export async function createChatbot(config) {
     const typingEl = pushMessage('bot', '<div class="typing"><span></span><span></span><span></span></div>');
     try {
       const qEmb = await embed(query);
-      const { text, meta } = await compose(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, CONFIG, overrides);
+      let text, meta;
+
+      if (isPolicyLoaded()) {
+        // Policy-driven path
+        const plan = await planAnswer(query, {
+          entities: [], // populated by caller if needed
+          intent: null,
+          lastTopic
+        });
+        const result = await composeV2(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, CONFIG, overrides, plan);
+        text = result.text;
+        meta = result.meta;
+      } else {
+        // Legacy fallback (only when policy unavailable)
+        const result = await compose(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, CONFIG, overrides);
+        text = result.text;
+        meta = result.meta;
+      }
+
       typingEl.remove();
       pushMessage('bot', md(text), meta);
       if (meta) {

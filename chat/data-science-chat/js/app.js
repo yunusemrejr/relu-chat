@@ -17,6 +17,15 @@ const SUGGESTIONS = [
 
 const WELCOME = '<span style="font-size:1.125rem;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;">Data Science Chat</span><br><br>Hi! I\'m an <strong>on-device</strong> assistant specialized in <strong>data science</strong>. I understand your question with a transformer running entirely in your browser and compose responses from weighted concept fragments — nothing is sent to a server.<br><br>The first query will warm up the model (a one-time download). Try a suggestion below, or ask your own question.';
 
+const botProfile = {
+  id: "data-science",
+  name: "Data Science Chat",
+  allowedIntents: Object.keys(INTENTS),
+  tone: "neutral",
+  maxTopics: 3,
+  creativityCeiling: 0.35
+};
+
 createChatbot({
   KB,
   entryText,
@@ -25,4 +34,5 @@ createChatbot({
   overrides,
   suggestions: SUGGESTIONS,
   welcomeMessage: WELCOME,
+  botProfile
 });
