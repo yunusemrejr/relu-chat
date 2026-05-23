@@ -44,6 +44,7 @@ internal-notes.md
 
 # Agent system files
 .agent-imperative.json
+dev/.agent_memory/
 
 # API
 api/subscribe.php
