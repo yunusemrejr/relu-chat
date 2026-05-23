@@ -1,11 +1,11 @@
 /**
  * feature-extractor.js — ReLU.chat WASM Policy Runtime
  *
- * Extracts a compact 24-feature vector from the current query context.
+ * Extracts a compact 25-feature vector from the current query context.
  * These features are the input to the WASM/MLP policy model.
  *
  * Design Version: 1.0.0 (wasm-policy-architecture.json §2)
- * Feature count:   24 (20 f32 + 4 discrete packed into Uint8Array)
+ * Feature count:   25 (21 f32 + 4 discrete packed into Uint8Array)
  *
  * FEATURE LAYOUT (index → name → type):
  *   0:  qSimTop1         f32  [0,1]   cosine sim of query to top-1 KB entry
@@ -32,9 +32,10 @@
  *  21:  avgSourceConf    f32  [0,1]   average source_confidence of available fragments (0 if unknown)
  *  22:  minDifficulty    u8   [0,4]   minimum difficulty across available fragments
  *  23:  fragDiversity    u8   [0,5]   count of distinct fragment styles available
+ *  24:  avoidWithCount   f32  [0,1]   fraction of top-ranked entries with compatibility constraints
  *
  * Serialization:
- *   packFeatures(features) → { float32: Float32Array(24), uint8: Uint8Array(7) }
+ *   packFeatures(features) → { float32: Float32Array(25), uint8: Uint8Array(7) }
  *   The float32 array stores all 24 features (u8/bool cast to f32);
  *   the uint8 array stores the 7 discrete features in compact form.
  */
@@ -190,6 +191,18 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
   if (minDifficulty === 4) minDifficulty = 0; // default when no annotated fragments
   fragDiversity = Math.min(styleSet.size, 5);
 
+  // ---- Aggregate compatibility constraints (avoid_with) from top entries ----
+  let avoidWithCount = 0;
+  for (let ri = 0; ri < Math.min(ranked.length, 10); ri++) {
+    const entry = KB[ranked[ri].i];
+    if (entry && (entry.avoid_with || entry.avoidWith)) {
+      avoidWithCount++;
+    }
+  }
+  const avoidWithRatio = Math.min(ranked.length, 10) > 0
+    ? avoidWithCount / Math.min(ranked.length, 10)
+    : 0;
+
   // ---- Build final feature object ----
   const features = {
     // F32 features (indices 0-1)
@@ -226,11 +239,12 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
     followUpType,
     wasAmbiguous: ambigFlag,
 
-    // Fragment metadata (indices 20-23)
+    // Fragment metadata (indices 20-24)
     avgTruthConf,
     avgSourceConf,
     minDifficulty,
     fragDiversity,
+    avoidWithCount: avoidWithRatio,
   };
 
   // Freeze to prevent accidental mutation downstream
@@ -245,10 +259,10 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
  * Serialize features into the flat binary layout expected by WASM.
  *
  * The WASM module expects a single buffer with:
- *   - Float32Array(24) at offset 0  (all features as f32)
- *   - Uint8Array(7)    at offset 96 (discrete features in compact form)
+ *   - Float32Array(25) at offset 0  (all features as f32)
+ *   - Uint8Array(7)    at offset 100 (discrete features in compact form)
  *
- * Total buffer size: 24 * 4 + 7 = 103 bytes (rounded to 104 for alignment).
+ * Total buffer size: 25 * 4 + 7 = 107 bytes.
  *
  * Uint8Array layout:
  *   [0] = entityCount          (u8, 0-3)
@@ -265,9 +279,9 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
  * @returns {{ float32: Float32Array, uint8: Uint8Array, buffer: ArrayBuffer }}
  */
 export function packFeatures(features) {
-  const buffer = new ArrayBuffer(24 * 4 + 7); // 103 bytes
-  const f32 = new Float32Array(buffer, 0, 24);
-  const u8  = new Uint8Array(buffer, 96, 7);
+  const buffer = new ArrayBuffer(25 * 4 + 7); // 107 bytes
+  const f32 = new Float32Array(buffer, 0, 25);
+  const u8  = new Uint8Array(buffer, 100, 7);
 
   // Fill Float32Array in index order
   f32[0]  = clampf(features.qSimTop1);
@@ -294,6 +308,7 @@ export function packFeatures(features) {
   f32[21] = clampf(features.avgSourceConf);
   f32[22] = features.minDifficulty;            // cast to f32
   f32[23] = features.fragDiversity;            // cast to f32
+  f32[24] = clampf(features.avoidWithCount);
 
   // Fill Uint8Array with compact discrete values
   u8[0] = clampu(features.entityCount, 0, 3);
@@ -347,6 +362,7 @@ export function unpackFeatures({ float32, uint8 }) {
     avgSourceConf:    float32[21],
     minDifficulty:    uint8[5],
     fragDiversity:    uint8[6],
+    avoidWithCount:   float32[24],
   });
 }
 

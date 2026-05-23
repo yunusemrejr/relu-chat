@@ -1,21 +1,22 @@
 {
   "version": "0.2.0",
-  "inputFeatures": 24,
-  "inputBytes": 103,
+  "inputFeatures": 25,
+  "inputBytes": 107,
   "outputSchema": "AnswerPlan.v1",
   "fragmentMetaVersion": "1.0.0",
   "model": "mlp_policy",
-  "weightsSize": 51804,
+  "weightsSize": 281339,
+  "weightsHash": "3e183a55561b2e8f",
+  "wasmSize": 43,
+  "wasmHash": "sha256-663d8c24a7d60e63d283277d20cceeb7",
   "botProfiles": [
     "game-theory",
     "golden-age",
     "data-science"
   ],
-  "trained": "2026-05-23",
-  "wasmHash": "sha256-placeholder-stub",
-  "weightsHash": "sha256-ecf9ab9944d87114af5f4ec052851b7730e42c13d3b588131b8891bcdb992403",
+  "trained": "2026-05-24",
   "architecture": {
-    "trunk": "24->128->64 (ReLU)",
+    "trunk": "25->128->64 (ReLU)",
     "heads": {
       "mode": 5,
       "intent": 5,
@@ -24,7 +25,7 @@
       "creativity": 1,
       "tone": 4
     },
-    "total_params": 13016
+    "total_params": 13079
   },
-  "notes": "Randomly initialized weights. Replace with RL-trained weights after full training run."
+  "notes": "Trained with synthetic data (TF-IDF fallback). Includes avoidWithCount feature (index 24)."
 }

@@ -34,3 +34,28 @@ M policy/policy-runtime.js
 ```
 
 All changes are uncommitted. Commit before deploy.
+
+---
+
+## Backup: checklist-verification-20260524
+
+- **Date**: 2026-05-24
+- **Source paths**:
+  - core/nlp.js
+  - core/session.js
+  - core/chatbot-engine.js
+  - policy/ (directory)
+  - dev/scripts/ (directory)
+  - dev/Dockerfile.policy-build
+  - dev/audits/ (directory)
+  - dev/benchmarks/ (directory)
+  - assets/models/policy/ (directory)
+- **Destination**: /home/area51/Desktop/FTP/relu.chat/_backups/2026-05-24_checklist-verification/
+- **Size**: 868K
+- **Files**: 11 items (3 files, 8 subdirectories)
+- **Reason**: Pre-checklist-verification safety backup
+- **Restore Command**:
+
+```bash
+rsync -a _backups/2026-05-24_checklist-verification/ /home/area51/Desktop/FTP/relu.chat/
+```

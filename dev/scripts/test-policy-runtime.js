@@ -300,7 +300,7 @@ function runFeatureTests() {
       KB, config
     );
     const keys = Object.keys(features);
-    assert(keys.length === 24, `Feature object has 24 keys (got ${keys.length})`);
+    assert(keys.length === 25, `Feature object has 25 keys (got ${keys.length})`);
 
     // Check expected keys
     const expectedKeys = [
@@ -311,6 +311,7 @@ function runFeatureTests() {
       'botCreativity', 'domainMatch',
       'followUpType', 'wasAmbiguous',
       'avgTruthConf', 'avgSourceConf', 'minDifficulty', 'fragDiversity',
+      'avoidWithCount',
     ];
     for (const k of expectedKeys) {
       assert(keys.includes(k), `Feature key "${k}" is present`);
@@ -456,10 +457,10 @@ function runFeatureTests() {
     const packed = packFeatures(features);
 
     assert(packed.float32 instanceof Float32Array, 'float32 is Float32Array');
-    assert(packed.float32.length === 24, 'float32 has 24 elements');
+    assert(packed.float32.length === 25, 'float32 has 25 elements');
     assert(packed.uint8 instanceof Uint8Array, 'uint8 is Uint8Array');
     assert(packed.uint8.length === 7, 'uint8 has 7 elements');
-    assert(packed.buffer.byteLength === 103, 'buffer is 103 bytes (24*4 + 7)');
+    assert(packed.buffer.byteLength === 107, 'buffer is 107 bytes (25*4 + 7)');
   }
 
   // 2.9 Feature unpacking (round-trip)
@@ -746,7 +747,7 @@ function makeSyntheticWeights(version = 2) {
   const w = { _version: version };
   // fc1: [128, 24], fc1.bias: [128]
   w['fc1.weight'] = Array.from({ length: 128 }, () =>
-    Array.from({ length: 24 }, () => Math.random() * 2 - 1));
+    Array.from({ length: 25 }, () => Math.random() * 2 - 1));
   w['fc1.bias'] = Array.from({ length: 128 }, () => Math.random() * 0.5);
   // fc2: [64, 128], fc2.bias: [64]
   w['fc2.weight'] = Array.from({ length: 64 }, () =>
@@ -802,7 +803,7 @@ function runMLPTests() {
   {
     const weights = makeSyntheticWeights();
     const policy = new MLPPolicy(weights);
-    const features = new Float32Array(24).fill(0.5);
+    const features = new Float32Array(25).fill(0.5);
     const out = policy.forward(features);
     assert(out.modeProbs.length === 5, 'modeProbs length is 5');
     assert(out.intentProbs.length === 5, 'intentProbs length is 5');
@@ -816,7 +817,7 @@ function runMLPTests() {
   {
     const weights = makeSyntheticWeights();
     const policy = new MLPPolicy(weights);
-    const features = new Float32Array(24).fill(0.5);
+    const features = new Float32Array(25).fill(0.5);
     const out1 = policy.forward(features);
     const out2 = policy.forward(features);
     assert(out1.modeProbs.every((v, i) => v === out2.modeProbs[i]), 'forward pass is deterministic');
@@ -826,7 +827,7 @@ function runMLPTests() {
   {
     const weights = makeSyntheticWeights();
     const policy = new MLPPolicy(weights);
-    const features = new Float32Array(24).fill(0.5);
+    const features = new Float32Array(25).fill(0.5);
     const out = policy.forward(features);
     const sumMode = [...out.modeProbs].reduce((a, b) => a + b, 0);
     assert(Math.abs(sumMode - 1) < 0.001, 'modeProbs sum to 1');
@@ -847,6 +848,7 @@ function runMLPTests() {
       botCreativity: 0.4, domainMatch: 0.5,
       followUpType: 0, wasAmbiguous: false,
       avgTruthConf: 0.8, avgSourceConf: 0.7, minDifficulty: 1, fragDiversity: 3,
+      avoidWithCount: 0.2,
     };
     const context = {
       ranked: [{ i: 0, s: 0.7 }, { i: 1, s: 0.4 }],

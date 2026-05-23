@@ -24,12 +24,17 @@ RUN cd /app && if [ -f checkpoints/final.pt ]; then \
         python scripts/train-policy.py --bot game-theory --skip-train --output /build/out/models/policy; \
     fi
 
-RUN wasm-opt /build/out/models/policy.wasm -O3 -o /build/out/models/policy.wasm || true
+RUN if [ -f /build/out/models/policy/policy.wasm ]; then \
+        wasm-opt /build/out/models/policy/policy.wasm -O3 -o /build/out/models/policy/policy.wasm || true; \
+    else \
+        wasm-opt /build/out/models/policy/policy/policy.wasm -O3 -o /build/out/models/policy/policy/policy.wasm || true; \
+    fi
 
 # If no WASM was produced, create placeholder for dev testing
-RUN if [ ! -f /build/out/models/policy/policy.wasm ]; then \
-        touch /build/out/models/policy/policy.wasm; \
-        echo '{"weights": {"fc1": [[0]]}}' > /build/out/models/policy/policy.weights.json; \
+RUN if [ ! -f /build/out/models/policy/policy.wasm ] && [ ! -f /build/out/models/policy/policy/policy.wasm ]; then \
+        mkdir -p /build/out/models/policy/policy && \
+        touch /build/out/models/policy/policy/policy.wasm; \
+        echo '{"weights": {"fc1": [[0]]}}' > /build/out/models/policy/policy/policy.weights.json; \
     fi
 
 CMD ["cp", "-r", "/build/out/models/policy", "/output"]

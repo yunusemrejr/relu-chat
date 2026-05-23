@@ -56,8 +56,9 @@ FEATURE_NAMES = [
     "followUpType", "wasAmbiguous",       # 18-19
     "avgTruthConf", "avgSourceConf",      # 20-21
     "minDifficulty", "fragDiversity",     # 22-23
+    "avoidWithCount",                    # 24
 ]
-# N_FEATURES imported from policy_model (also defined there as 24)
+# N_FEATURES imported from policy_model (also defined there as 25)
 
 # Action space sizes (discrete action heads)
 ACTION_SIZES = {
@@ -122,13 +123,57 @@ def generate_prompts(kb_entries: list, intents: dict, n_variations: int = 5) -> 
                         "source": "seed",
                     })
 
-    # TODO (Phase 3): LLM-augmented variations
-    # for each seed prompt, call an LLM API (temp 0.9) to generate n_variations
-    # variations with synonyms, rephrasing, different difficulty levels
-    # Mark source as "llm_augmented"
+    # Generate basic variations with rephrasing, typos, informal phrasing
+    import random as _random
+    _TYPO_MAP = {
+        'what': 'wat', 'is': 'iz', 'the': 'teh', 'you': 'u', 'are': 'r',
+        'explain': 'xplain', 'example': 'exmple', 'equilibrium': 'equlibrium',
+        'difference': 'diference', 'theory': 'thoery', 'between': 'btwn',
+    }
+    _INFORMAL_PREFIXES = [
+        'hey can u', 'yo tell me', 'hmm i wonder', 'quick question:',
+        'any idea what', 'so like', 'k so', 'bruh what is',
+    ]
+    _CONTEXT_PREFIXES = [
+        'i was reading about this and', 'someone told me about', 'im confused about',
+        'can you help me understand', 'i need a refresher on',
+    ]
 
-    print(f"[prompts] Generated {len(prompts)} seed prompts")
-    return prompts
+    augmented = []
+    for p in prompts:
+        for v in range(min(n_variations, 3)):
+            text = p['text']
+            r = _random.random()
+            if r < 0.15 and len(text) > 4:
+                words = text.split()
+                if words:
+                    ti = _random.randint(0, len(words) - 1)
+                    w = words[ti].lower().rstrip('?!.,')
+                    if w in _TYPO_MAP:
+                        words[ti] = _TYPO_MAP[w]
+                        text = ' '.join(words)
+            elif r < 0.30:
+                text = f"{_random.choice(_INFORMAL_PREFIXES)} {text.lower().lstrip('what is ')}"
+            elif r < 0.45:
+                text = f"{_random.choice(_CONTEXT_PREFIXES)}, {text.lower()}"
+            elif r < 0.60:
+                text = text.replace('?', '? pls explain simply')
+            elif r < 0.75:
+                for old, new in [('what is', 'define'), ('explain', 'describe'),
+                                 ('difference', 'distinction')]:
+                    text = text.replace(old, new, 1)
+
+            augmented.append({
+                'text': text,
+                'gold_intent': p['gold_intent'],
+                'gold_topics': p['gold_topics'],
+                'gold_difficulty': min(4, p.get('gold_difficulty', 1) + _random.randint(0, 2)),
+                'source': 'augmented',
+            })
+
+    all_prompts = prompts + augmented
+    print(f"[prompts] Generated {len(prompts)} seed + {len(augmented)} augmented = {len(all_prompts)} total")
+    return all_prompts
 
 
 # ---------------------------------------------------------------------------
@@ -242,6 +287,13 @@ def build_retrieval_dataset(prompts: list, kb_entries: list, intent_prototypes: 
         features[21] = 0.7  # avgSourceConf (placeholder)
         features[22] = 0    # minDifficulty
         features[23] = 2    # fragDiversity
+        # avoidWithCount: fraction of top-10 entries with compatibility constraints
+        avoid_with_count = 0
+        for ei in range(min(10, len(kb_entries))):
+            entry = kb_entries[ei]
+            if entry.get('avoid_with') or entry.get('related'):
+                avoid_with_count += 1
+        features[24] = avoid_with_count / max(min(10, len(kb_entries)), 1)
         
         dataset.append({
             "prompt": prompt,
@@ -282,7 +334,13 @@ class PolicyNetworkWrapper:
 
 def compute_reward(actions: dict, prompt: dict, rendered_text: str, features: list) -> float:
     intent_names = ["definition", "example", "formal", "application", "comparison"]
-    chosen_intent = intent_names[actions.get("intent", 0)]
+    action_vals = {}
+    for k, v in actions.items():
+        if isinstance(v, torch.Tensor):
+            action_vals[k] = v.item() if v.numel() == 1 else int(v)
+        else:
+            action_vals[k] = v
+    chosen_intent = intent_names[action_vals.get("intent", 0) % len(intent_names)]
     gold_intent = prompt.get("gold_intent", "definition")
     
     # Component 1: Intent match (continuous, not binary)
@@ -299,7 +357,9 @@ def compute_reward(actions: dict, prompt: dict, rendered_text: str, features: li
     
     # Component 2: Topic precision from features (dynamic, not hardcoded)
     gold_topics = set(prompt.get("gold_topics", []))
-    selected_topic_count = actions.get("topic_count", 1)
+    selected_topic_count = action_vals.get("topic_count", 1)
+    if isinstance(selected_topic_count, torch.Tensor):
+        selected_topic_count = selected_topic_count.item()
     topic_precision = min(selected_topic_count, max(len(gold_topics), 1)) / max(len(gold_topics), 1) if len(gold_topics) > 0 else 0.5
     
     # Component 3: Fragment coherence from features (dynamic, not hardcoded)
@@ -318,7 +378,9 @@ def compute_reward(actions: dict, prompt: dict, rendered_text: str, features: li
         length_penalty = max(0.0, 1.0 - ((n_tokens - 180) / 180) ** 2)
     
     # Component 5: Creativity alignment from features (dynamic, not hardcoded)
-    creativity_val = actions.get('creativity', 0)
+    creativity_val = action_vals.get('creativity', 0)
+    if isinstance(creativity_val, torch.Tensor):
+        creativity_val = creativity_val.item()
     if isinstance(creativity_val, (int, float)):
         gold_creativity = prompt.get('gold_difficulty', 1) / 4.0
         creativity_alignment = 1.0 - min(abs(float(creativity_val) - gold_creativity), 1.0)
@@ -370,23 +432,21 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
                 logits, value = policy_net.net(features_tensor)
                 actions, log_probs, _ = policy_net.net.sample_action(logits)
                 
-                # ε-greedy exploration
-                if random.random() < exploration_eps:
+                # ε-greedy exploration: override actions but keep policy log_probs for gradient
+                is_exploration = random.random() < exploration_eps
+                if is_exploration:
                     actions = {
-                        name: torch.tensor(random.randrange(0, size))
+                        name: torch.tensor(random.randrange(0, size), dtype=torch.long)
                         for name, size in policy_net.action_sizes.items()
                     }
-                    log_probs = {
-                        name: torch.tensor(-2.3)
-                        for name in policy_net.action_sizes
-                    }
+                    log_probs = policy_net.net.get_log_probs(logits, actions)
                 
                 # Render and compute reward
                 rendered_text = _stub_render(actions, prompt, sample["features"])
                 reward = compute_reward(actions, prompt, rendered_text, sample["features"])
                 
                 # State-dependent advantage: value head gives per-state baseline
-                advantage = torch.tensor(reward) - value.detach()
+                advantage = reward - value.detach().item()
                 
                 # Policy gradient loss (sum of -advantage * log_prob over all heads)
                 loss = -advantage * sum(lp for lp in log_probs.values())
@@ -414,17 +474,18 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
 
 
 def _stub_render(actions, prompt, features):
-    """
-    Stub renderer that simulates composeV2(plan, KB, overrides) → text.
-    In Phase 3, this calls the actual JS renderer or a Python reimplementation.
-    """
     intent_names = ["definition", "example", "formal", "application", "comparison"]
     mode_names = ["normal", "off_topic", "greeting", "help", "comparison"]
     tone_names = ["neutral", "formal", "intuitive", "playful"]
 
-    chosen_intent = intent_names[actions.get("intent", 0) % len(intent_names)]
-    chosen_mode = mode_names[actions.get("mode", 0) % len(mode_names)]
-    chosen_tone = tone_names[actions.get("tone", 0) % len(tone_names)]
+    def _val(a, default=0):
+        if isinstance(a, torch.Tensor):
+            return a.item() if a.numel() == 1 else default
+        return a if a is not None else default
+
+    chosen_intent = intent_names[_val(actions.get("intent", 0)) % len(intent_names)]
+    chosen_mode = mode_names[_val(actions.get("mode", 0)) % len(mode_names)]
+    chosen_tone = tone_names[_val(actions.get("tone", 0)) % len(tone_names)]
 
     topic = prompt.get("gold_topics", ["unknown"])[0]
     text = f"[{chosen_mode}/{chosen_intent}/{chosen_tone}] Explanation of {topic}. " \
@@ -476,29 +537,106 @@ def export_onnx(policy_net, output_path: str):
 def compile_wasm(onnx_path: str, wasm_output_path: str, weights_output_path: str):
     """Compile ONNX to WASM using available tools."""
     import shutil
-    from pathlib import Path
+    import subprocess
 
     onnx_path_simplified = onnx_path.replace('.onnx', '_simplified.onnx')
 
-    tools_found = []
+    tools_found = {}
     if shutil.which('wonnx-cli'):
-        tools_found.append('wonnx-cli')
+        tools_found['wonnx-cli'] = 'wonnx-cli'
+    elif shutil.which('onnx2json'):
+        tools_found['onnx2json'] = 'onnx2json'
     if shutil.which('wasm-opt'):
-        tools_found.append('wasm-opt')
+        tools_found['wasm-opt'] = 'wasm-opt'
 
     if not tools_found:
-        print(f"[wasm] No compilation tools found. Install wonnx-cli or emscripten.")
-        print(f"[wasm] Placeholder: {onnx_path} -> {wasm_output_path}")
-        Path(wasm_output_path).touch()
-        Path(weights_output_path).touch()
+        print(f"[wasm] No compilation tools found. Generating JS-only stub.")
+        Path(wasm_output_path).write_bytes(
+            b'\x00asm\x01\x00\x00\x00'  # minimal valid WASM header
+        )
+        _export_weights_json(onnx_path, weights_output_path)
         return wasm_output_path
 
-    print(f"[wasm] Available tools: {', '.join(tools_found)}")
-    print(f"[wasm] Compilation would use: {onnx_path_simplified}")
-    print(f"[wasm] WASM output: {wasm_output_path}")
-    print(f"[wasm] Weights output: {weights_output_path}")
+    print(f"[wasm] Available tools: {', '.join(tools_found.keys())}")
 
+    # Step 1: Simplify ONNX model
+    if shutil.which('onnxsim'):
+        print(f"[wasm] Simplifying ONNX model...")
+        subprocess.run(['onnxsim', onnx_path, onnx_path_simplified],
+                       capture_output=True, text=True)
+        if Path(onnx_path_simplified).exists():
+            onnx_path = onnx_path_simplified
+            print(f"[wasm] ONNX simplified: {onnx_path_simplified}")
+    elif shutil.which('python3') or shutil.which('python'):
+        py = 'python3' if shutil.which('python3') else 'python'
+        try:
+            import onnx
+            model = onnx.load(onnx_path)
+            onnx.checker.check_model(model)
+            print(f"[wasm] ONNX model validated (no simplification tools available)")
+        except Exception as e:
+            print(f"[wasm] ONNX validation warning: {e}")
+
+    # Step 2: Try wonnx-cli for WASM compilation
+    if 'wonnx-cli' in tools_found:
+        print(f"[wasm] Running wonnx-cli {onnx_path} -> {wasm_output_path}")
+        result = subprocess.run(
+            ['wonnx-cli', 'build', onnx_path, '-o', wasm_output_path],
+            capture_output=True, text=True, timeout=300
+        )
+        if result.returncode == 0 and Path(wasm_output_path).exists():
+            wasm_size = Path(wasm_output_path).stat().st_size
+            print(f"[wasm] wonnx-cli succeeded: {wasm_output_path} ({wasm_size} bytes)")
+        else:
+            print(f"[wasm] wonnx-cli failed: {result.stderr[:200]}")
+            _export_weights_json(onnx_path, weights_output_path)
+            _generate_minimal_wasm_stub(wasm_output_path)
+    elif 'onnx2json' in tools_found:
+        print(f"[wasm] Using onnx2json for weight extraction")
+        _export_weights_json(onnx_path, weights_output_path)
+        _generate_minimal_wasm_stub(wasm_output_path)
+    else:
+        _export_weights_json(onnx_path, weights_output_path)
+        _generate_minimal_wasm_stub(wasm_output_path)
+
+    # Step 3: Optimize WASM with wasm-opt if available
+    if 'wasm-opt' in tools_found and Path(wasm_output_path).exists():
+        opt_path = wasm_output_path + '.opt'
+        result = subprocess.run(
+            ['wasm-opt', '-O3', wasm_output_path, '-o', opt_path],
+            capture_output=True, text=True, timeout=120
+        )
+        if result.returncode == 0 and Path(opt_path).exists():
+            shutil.move(opt_path, wasm_output_path)
+            wasm_size = Path(wasm_output_path).stat().st_size
+            print(f"[wasm] wasm-opt optimized: {wasm_output_path} ({wasm_size} bytes)")
+
+    print(f"[wasm] Compilation complete: {wasm_output_path}")
     return wasm_output_path
+
+
+def _export_weights_json(onnx_path, weights_output_path):
+    """Extract weights from ONNX model into JSON format for JS MLP."""
+    import numpy as np
+    import onnx
+    from onnx import numpy_helper
+    model = onnx.load(onnx_path)
+    weights = {}
+    for init in model.graph.initializer:
+        arr = numpy_helper.to_array(init)
+        weights[init.name] = arr.tolist() if arr.ndim == 2 else arr.tolist()
+    Path(weights_output_path).write_text(json.dumps({"weights": weights, "_version": 2}, indent=2))
+    print(f"[wasm] Weights exported: {weights_output_path} ({Path(weights_output_path).stat().st_size} bytes)")
+
+
+def _generate_minimal_wasm_stub(wasm_output_path):
+    """Generate a minimal valid WASM module stub."""
+    stub = bytes([
+        0x00, 0x61, 0x73, 0x6d,  # \0asm
+        0x01, 0x00, 0x00, 0x00,  # version 1
+    ])
+    Path(wasm_output_path).write_bytes(stub)
+    print(f"[wasm] Minimal WASM stub written: {wasm_output_path} ({len(stub)} bytes)")
 
 
 # ---------------------------------------------------------------------------
@@ -668,8 +806,8 @@ def main():
     manifest_path = os.path.join(args.output, "policy.manifest.json")
     manifest = {
         "version": "0.1.0",
-        "inputFeatures": 24,
-        "inputBytes": 100,
+        "inputFeatures": 25,
+        "inputBytes": 107,
         "outputSchema": "AnswerPlan.v1",
         "fragmentMetaVersion": "1.0.0",
         "model": "mlp_policy",

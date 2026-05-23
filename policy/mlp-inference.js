@@ -4,8 +4,8 @@
  * Pure-JavaScript MLP inference for the ReLU.chat policy model.
  * No external dependencies — direct array math on Float32.
  *
- * Architecture:  24 inputs → 128 hidden → 64 hidden → 6 action heads
- * Parameters:    4439 total (fc1: 1600, fc2: 2080, heads: 759)
+ * Architecture:  25 inputs → 128 hidden → 64 hidden → 6 action heads
+ * Parameters:    ~4.5K total (fc1: 3.2K, fc2: 8.3K, heads: 1.6K)
  * Weights form:  PyTorch Linear convention — weight @ input.T + bias
  *
  * Design Version: 1.0.0 (mlp-inference)
@@ -38,7 +38,7 @@ const INTENT_CAT_ORDERS = {
 // ---------------------------------------------------------------------------
 
 const WEIGHT_SHAPES = Object.freeze([
-  ['fc1.weight',              [128, 24]],
+  ['fc1.weight',              [128, 25]],
   ['fc1.bias',                [128]],
   ['fc2.weight',              [64, 128]],
   ['fc2.bias',                [64]],
@@ -185,7 +185,7 @@ function clamp01(v) {
 
 /**
  * Convert the feature object from extractPolicyFeatures() into the
- * Float32Array(24) that the MLP expects.
+ * Float32Array(25) that the MLP expects.
  *
  * Index layout (must match packFeatures() in feature-extractor.js):
  *   0:  qSimTop1         f32  [0,1]
@@ -212,12 +212,13 @@ function clamp01(v) {
  *  21:  avgSourceConf    f32  [0,1]
  *  22:  minDifficulty    u8→f32 [0,4]
  *  23:  fragDiversity    u8→f32 [0,5]
+ *  24:  avoidWithCount   f32  [0,1]
  *
  * @param {object} features - from extractPolicyFeatures() (frozen object)
- * @returns {Float32Array} - 24-element array
+ * @returns {Float32Array} - 25-element array
  */
 function featuresToF32(features, version = 2) {
-  const f = new Float32Array(24);
+  const f = new Float32Array(25);
   f[0]  = clamp01(features.qSimTop1);
   f[1]  = clamp01(features.qSimTop2);
   // Version >= 2 expects normalized discrete features
@@ -249,6 +250,7 @@ function featuresToF32(features, version = 2) {
   f[21] = clamp01(features.avgSourceConf);
   f[22] = features.minDifficulty / 4;  // normalize [0,4] -> [0,1]
   f[23] = features.fragDiversity / 5;  // normalize [0,5] -> [0,1]
+  f[24] = clamp01(features.avoidWithCount);
   return f;
 }
 
@@ -292,7 +294,7 @@ export class MLPPolicy {
   /**
    * Run the full MLP forward pass.
    *
-   * Input:  Float32Array(24) — raw feature vector
+   * Input:  Float32Array(25) — raw feature vector
    * Output: probability distributions over all action heads
    *
    * Graph:
@@ -306,7 +308,7 @@ export class MLPPolicy {
    *         → creativity_head  (1-sigmoid)  → creativity
    *         → tone_head        (4-softmax)  → toneProbs
    *
-   * @param {Float32Array} features - 24-element feature vector
+   * @param {Float32Array} features - 25-element feature vector
    * @returns {{
    *   modeProbs: Float32Array,       // [5] → ['normal','off_topic','greeting','help','comparison']
    *   intentProbs: Float32Array,     // [5] → ['definition','example','formal','application','comparison']

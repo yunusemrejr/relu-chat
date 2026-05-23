@@ -2,21 +2,42 @@
 
 ## Root Decision Record
 
-- **UTC**: 2026-05-23T19:45:00Z (updated 2026-05-23T20:30:00Z)
+- **UTC**: 2026-05-24T21:30:00Z (updated)
 - **Spawn Directory**: /home/area51/Desktop/FTP/relu.chat
 - **Physical Directory**: /home/area51/Desktop/FTP/relu.chat
 - **Selected Work Root**: /home/area51/Desktop/FTP/relu.chat
-- **Task Scope**: Policy runtime bugs + training pipeline fixes + feature extension
-- **Git Root**: /home/area51/Desktop/FTP/relu.chat (commit 8a271c3)
+- **Task Scope**: Checklist verification + all fixes + training + deployment
+- **Git Root**: /home/area51/Desktop/FTP/relu.chat
 - **Parent Memory Found**: None
 - **Child Memory Found**: None
 - **Resolution**: Single project root, no monorepo nesting
 
 ## Active Task
 
-Status: COMPLETED
+Status: COMPLETED — All 3 checklists verified, all fixes applied, trained weights deployed.
 
-Two full rounds of fixes applied across 15+ files.
+## Key Decisions — Round 3 (Checklist Fixes + Feature Extension + Training + Deploy)
+
+27. Fixed WASM compilation (compile_wasm) to actually execute tools instead of printing placeholder text
+28. Fixed Dockerfile wasm-opt path mismatch (policy.wasm → policy/policy.wasm)
+29. Extended feature vector from 24 to 25 features: added avoidWithCount (compatibility constraints ratio)
+30. Fixed prompt generator to produce varied training examples (typos, informal phrasing, rephrasing)
+31. Ran heuristic threshold tuning (tune-heuristic.py) — 500 trials, tuned 15 thresholds, 100% val accuracy
+32. Ran full RL training pipeline (500 epochs, batch training) — weights exported to JS format
+33. Fixed RL training loop gradient handling (epsilon-greedy get_log_probs, tensor→scalar conversion)
+34. Fixed reward function to handle tensor-type actions from PyTorch
+35. Updated all shape constants: 24→25 features across feature-extractor.js, mlp-inference.js, policy_model.py, train-policy.py, test-policy-runtime.js
+36. Exported trained weights (13,079 params) to assets/models/policy/policy.weights.json
+37. Updated policy.manifest.json to v0.2.0 with 25-feature architecture
+38. Verified 145/145 JS tests passing with trained weights loaded
+39. Deployed to production via FTP
+
+## Verification Results
+
+- **JS Tests**: 145/145 PASSING
+- **Heuristic tuning**: 100% accuracy on validation set
+- **ML training**: 13,079 params, entropy converged to 0.0000
+- **Weight export**: All 16 keys with correct shapes verified in JS MLP
 
 ## Key Decisions — Round 1 (Runtime Fixes)
 

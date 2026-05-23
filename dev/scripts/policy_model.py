@@ -18,7 +18,7 @@ ACTION_SIZES_ORDERED = [
     ("tone", 4),
 ]
 
-N_FEATURES = 24
+N_FEATURES = 25
 
 
 class PolicyNetwork(nn.Module):
