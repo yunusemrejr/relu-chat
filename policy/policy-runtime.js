@@ -249,16 +249,24 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
   if (!plan) {
     console.warn('[policy-runtime] Falling back to heuristic planAnswer');
     plan = planAnswerHeuristic(features, KB, config, context.overrides || {});
-    if (plan.topics.length === 0 && context.ranked && context.ranked.length > 0) {
-      const maxTopics = plan.guardrails?.maxTopics || 3;
-      const minSim = plan.guardrails?.minSim || 0.15;
-      const seen = new Set();
-      for (const r of context.ranked) {
-        if (seen.has(r.i)) continue;
-        if (r.s < minSim) break;
-        plan.topics.push(r.i);
-        seen.add(r.i);
-        if (plan.topics.length >= maxTopics) break;
+  }
+
+  // ---- Post-processing: enrich empty topics from context.ranked for ALL plans ----
+  if (plan.topics.length === 0 && context.ranked && context.ranked.length > 0) {
+    const maxTopics = plan.guardrails?.maxTopics || 3;
+    const minSim = plan.guardrails?.minSim || 0.15;
+    const seen = new Set();
+    for (const r of context.ranked) {
+      if (seen.has(r.i)) continue;
+      if (r.s < minSim) break;
+      plan.topics.push(r.i);
+      seen.add(r.i);
+      if (plan.topics.length >= maxTopics) break;
+    }
+    if (plan.topics.length > 0 && plan.mode === 'off_topic') {
+      plan.mode = 'normal';
+      if (plan.meta?.decisionPath) {
+        plan.meta.decisionPath.push('mode:normal(enriched-from-ranked)');
       }
     }
   }

@@ -263,16 +263,7 @@ Uint8Array layout:
 <h2>8. Heuristic Threshold Tuning</h2>
 <p>The heuristic fallback path uses 15 parameterized thresholds (greeting similarity, off-topic detection, comparison fallback, entity boost, creativity defaults, etc.). <code>tune-heuristic.py</code> performs random search over the 15-dimensional threshold space against a human-rated validation set (5 examples covering greeting, off_topic, normal, comparison-fallback modes). The best thresholds are saved to <code>dev/exports/best_thresholds.json</code>.</p>
 
-<h2>9. GitHub Actions CI/CD</h2>
-<p>A nightly pipeline (<code>.github/workflows/train-policy.yml</code>) runs at midnight UTC:</p>
-<ol style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
-  <li>Node.js 22 + Python 3.11 environment</li>
-  <li>Runs <code>test-policy-runtime.js</code> (145+ tests: validation, features, heuristic, MLP inference)</li>
-  <li>Runs <code>train-policy.py --skip-train</code> to validate the pipeline</li>
-  <li>Uploads dataset and export artifacts</li>
-</ol>
-
-<h2>10. Open Source</h2>
+<h2>9. Open Source</h2>
 <p>The full codebase is available at <a href="https://github.com/yunusemrejr/relu-chat" style="color:var(--accent-light)">github.com/yunusemrejr/relu-chat</a> under the MIT license. This includes:</p>
 <ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
   <li><code>core/</code> — NLP engine, chatbot engine, session memory</li>
