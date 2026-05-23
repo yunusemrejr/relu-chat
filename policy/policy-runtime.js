@@ -265,10 +265,39 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
     }
     if (plan.topics.length > 0 && plan.mode === 'off_topic') {
       plan.mode = 'normal';
+      plan.intent = 'definition';
       if (plan.meta?.decisionPath) {
         plan.meta.decisionPath.push('mode:normal(enriched-from-ranked)');
       }
     }
+    // Rebuild fragmentPlan to match the new topics
+    const INTENT_CAT_ORDERS = {
+      definition: ['def', 'int', 'ex'],
+      example: ['ex', 'int', 'def'],
+      formal: ['form', 'def', 'ex'],
+      application: ['app', 'ex', 'int'],
+      comparison: ['def', 'int', 'ex'],
+    };
+    const catOrder = INTENT_CAT_ORDERS[plan.intent] || ['def', 'int', 'ex'];
+    const fragsPerTopic = Math.min(2, catOrder.length);
+    plan.fragmentPlan = [];
+    for (let ti = 0; ti < plan.topics.length; ti++) {
+      const cats = (plan.intent === 'comparison' && ti > 0)
+        ? [catOrder[0]]
+        : catOrder.slice(0, fragsPerTopic);
+      plan.fragmentPlan.push({ topicIdx: ti, cats: [...cats], fragIndices: cats.map(() => 0) });
+    }
+    // Rebuild template connectorKeys
+    const connectorKeys = new Set();
+    for (const fp of plan.fragmentPlan) {
+      let prev = null;
+      for (const cat of fp.cats) {
+        if (prev) connectorKeys.add(`${prev}_to_${cat}`);
+        prev = cat;
+      }
+    }
+    plan.template.connectorKeys = [...connectorKeys];
+    plan.guardrails.maxTopics = maxTopics;
   }
 
   // 4. Validate before returning

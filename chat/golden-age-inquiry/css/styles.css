@@ -279,13 +279,15 @@ body {
 }
 
 .msg.bot .msg-body {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 1rem 0.5rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
   position: relative;
   overflow: visible;
-  box-shadow: none;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.02);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .msg.bot .msg-body p {
@@ -625,14 +627,7 @@ pre code {
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
-/* Glass Message Bubbles */
-.msg.bot .msg-body {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: inset 0 1px 1px rgba(255,255,255,0.03);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
+/* Glass Message Bubbles — consolidated with main rule above */
 
 /* Glass Input Bar */
 #form {
