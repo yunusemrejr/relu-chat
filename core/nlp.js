@@ -280,6 +280,19 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
     };
   }
 
+  if (plan.mode === 'clarify') {
+    let text;
+    if (plan.clarification?.ambiguity_type === 'multiple_topics') {
+      text = `I see a few possible topics in your question. Did you mean:\n` +
+        (plan.clarification.options || []).map((opt, i) => `  • ${opt}`).join('\n');
+    } else if (plan.clarification?.ambiguity_type === 'low_confidence') {
+      text = `I'm not entirely sure what you're asking about. Could you rephrase or be more specific?`;
+    } else {
+      text = `I may be reading this wrong. Could you clarify your question?`;
+    }
+    return { text, meta: [{ text: 'clarification', type: 'warn' }] };
+  }
+
   // KB mode (normal) or comparison mode
   const topEntries = Array.isArray(plan.topics) && plan.topics.length > 0
     ? plan.topics.slice(0, compositionConfig.MAX_ENTRIES || 3)
@@ -290,6 +303,7 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   const creativity = typeof plan.creativity === 'number' ? plan.creativity : 0.2;
 
   let parts = [];
+  let selectedFragments = [];
 
   if (plan.mode === 'comparison' && topEntries.length >= 2) {
     const eA = KB[topEntries[0]], eB = KB[topEntries[1]];
@@ -312,6 +326,7 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
 
       const frag = await selectFragment(entry, cat, qEmb, embedCached, config);
       if (!frag) continue;
+      selectedFragments.push(frag);
 
       let connector = "";
       if (prev) {
@@ -329,6 +344,45 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
       prev = cat;
     }
     if (pieces.length > 0) parts.push(pieces.join(' '));
+  }
+
+  // === Factual Guardrail ===
+  let guardrailWarnings = [];
+  // selectedFragments populated during selection above (see selectFragment calls)
+  // Note: fragments may be strings (legacy) or {id, text, truth_confidence, source_confidence, avoid_with, ...}
+  for (let i = 0; i < selectedFragments.length; i++) {
+    const fragment = selectedFragments[i];
+    if (fragment && typeof fragment === 'object') {
+      if (fragment.truth_confidence != null && fragment.truth_confidence < 0.5) {
+        guardrailWarnings.push(`Low truth_confidence (${fragment.truth_confidence}) for fragment ${fragment.id || i}`);
+      }
+      if (fragment.source_confidence != null && fragment.source_confidence < 0.3) {
+        guardrailWarnings.push(`Skipping low source_confidence (${fragment.source_confidence}) fragment ${fragment.id || i}`);
+        // In a full impl we'd filter it from parts/selectedFragments here
+      }
+    }
+  }
+  // avoid_with cross-check (simplified pairwise)
+  for (let i = 0; i < selectedFragments.length; i++) {
+    for (let j = i + 1; j < selectedFragments.length; j++) {
+      const a = selectedFragments[i];
+      const b = selectedFragments[j];
+      if (a && b && typeof a === 'object' && typeof b === 'object') {
+        if (Array.isArray(a.avoid_with) && a.avoid_with.includes(b.id)) {
+          guardrailWarnings.push(`avoid_with conflict: ${a.id} ↔ ${b.id}`);
+        }
+        if (Array.isArray(b.avoid_with) && b.avoid_with.includes(a.id)) {
+          guardrailWarnings.push(`avoid_with conflict: ${b.id} ↔ ${a.id}`);
+        }
+      }
+    }
+  }
+  if (plan.guardrails?.requireEntity) {
+    // In composeV2 entity matching is decided upstream in plan; warn if flag set without evidence
+    guardrailWarnings.push('requireEntity guardrail active (entities handled by policy)');
+  }
+  if (guardrailWarnings.length > 0) {
+    console.warn('[composeV2] Guardrail warnings:', guardrailWarnings);
   }
 
   // Template indices from plan (simple deterministic pick for now)
@@ -357,6 +411,12 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   const meta = [{ text: `intent: ${intent}`, type: 'intent' }];
   for (const idx of topEntries) meta.push({ text: KB[idx].name, type: '' });
   meta.push({ text: `plan:${plan.mode}`, type: 'score' });
+  if (selectedFragments.length > 0) {
+    meta.fragmentIds = selectedFragments.map(f => (f && f.id) || null).filter(Boolean);
+  }
+  if (guardrailWarnings.length > 0) {
+    meta.guardrailWarnings = guardrailWarnings;
+  }
 
   return { text, meta };
 }

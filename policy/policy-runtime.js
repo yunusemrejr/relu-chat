@@ -1,24 +1,25 @@
 /**
- * policy-runtime.js — ReLU.chat WASM Policy Runtime
+ * policy-runtime.js — ReLU.chat Policy Runtime (Multi-Engine)
  *
- * The main entry point for the WASM policy engine.
+ * The main entry point for the policy decision engine.
  *
  * Responsibilities:
  *   1. Load and validate policy.manifest.json
- *   2. Instantiate policy.wasm via WebAssembly.instantiateStreaming
- *   3. Load policy.weights.bin into WASM linear memory
- *   4. Call wasm._initialize() to set up the inference graph
- *   5. Expose planAnswer(query, features, KB, config) for nlp.js
- *   6. Fall back to planAnswerHeuristic() when WASM is unavailable
+ *   2. Try WASM (WebAssembly) instantiation and inference
+ *   3. Try MLP (pure-JS MLP) via mlp-inference.js
+ *   4. Expose planAnswer(query, features, KB, config) for nlp.js
+ *   5. Fall back to planAnswerHeuristic() when neither engine is available
  *
- * Design Version: 1.0.0 (wasm-policy-architecture.json §5)
- * Loading Sequence:  init() → fetch manifest → instantiate WASM →
- *                    load weights → _initialize → ready=true
- * Fallback:          if any step fails, ready=false, planAnswer=heuristic
+ * Inference priority:  MLP (primary) → WASM (secondary) → Heuristic (last resort)
+ *
+ * Design Version:  2.0.0 (multi-engine)
+ * Loading Sequence: init() → fetch manifest → try WASM → try MLP → ready=true
+ * Fallback:         planAnswerHeuristic() if all engines fail
  */
 
 import { extractPolicyFeatures, packFeatures } from './feature-extractor.js';
 import { validatePlan, DEFAULT_PLAN } from './action-schema.js';
+import { MLPPolicy } from './mlp-inference.js';
 
 // ---------------------------------------------------------------------------
 // Module-level state
@@ -42,8 +43,22 @@ let activeConfig = null;
 /** @type {string|null} */
 let loadError = null;
 
+/** @type {MLPPolicy|null} */
+let mlpInstance = null;
+
 /** @type {Promise<object>|null} */
 let loadPromise = null;
+
+export function isPolicyLoaded() { return ready; }
+
+export function getPolicyStatus() {
+  return {
+    ready,
+    error: loadError,
+    version: cachedManifest?.version || null,
+    engine: mlpInstance ? 'mlp' : (wasmInstance ? 'wasm' : 'heuristic'),
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Public API — loadPolicyRuntime
@@ -62,7 +77,6 @@ let loadPromise = null;
  * @param {string} [config.manifestPath]  - URL to policy.manifest.json (default: /assets/models/policy/policy.manifest.json)
  * @param {object} [config.botProfile]    - bot profile object (id, allowedIntents, tone, etc.)
  * @param {number} [config.timeoutMs]     - max wait time in ms (default: 4000)
- * @param {boolean} [config.skipWasm]     - if true, skip WASM entirely and use heuristic (for dev/testing)
  * @returns {Promise<{ ready: boolean, planAnswer: Function, manifest: object|null, error: string|null }>}
  */
 export async function loadPolicyRuntime(config = {}) {
@@ -83,10 +97,10 @@ async function _doLoad(config) {
     manifestPath = '/assets/models/policy/policy.manifest.json',
     botProfile   = null,
     timeoutMs    = 4000,
-    skipWasm     = false,
+    mlpWeightsPath = config.mlpWeightsPath || weightsPath.replace(/\.bin$/i, '.json'),
   } = config;
 
-  // ---- Step 1: Load and validate manifest ----
+  // ---- Step 1: Load and validate manifest (required) ----
   let manifest;
   try {
     manifest = await fetchWithTimeout(manifestPath, timeoutMs).then(r => {
@@ -94,70 +108,70 @@ async function _doLoad(config) {
       return r.json();
     });
   } catch (err) {
-    console.warn('[policy-runtime] Manifest load failed:', err.message, '– falling back to heuristic');
-    return _fallbackResult(`manifest: ${err.message}`);
+    console.error('[policy-runtime] CRITICAL: Manifest load failed:', err.message);
+    return _rejectResult(`Policy manifest load failed: ${err.message}. Please reload and clear browser cache.`);
   }
 
   const manifestErr = validateManifest(manifest);
   if (manifestErr) {
-    console.warn('[policy-runtime] Manifest validation failed:', manifestErr, '– falling back to heuristic');
-    return _fallbackResult(manifestErr);
+    console.error('[policy-runtime] CRITICAL: Manifest validation failed:', manifestErr);
+    return _rejectResult(`Policy manifest invalid: ${manifestErr}. Please reload and clear browser cache.`);
   }
   cachedManifest = manifest;
 
-  // ---- Step 2: Determine if WASM should be attempted ----
-  if (skipWasm) {
-    console.info('[policy-runtime] skipWasm=true – using heuristic planAnswer');
-    return _succeedResult();
-  }
+  // ---- Step 2: Try WASM (non-fatal — controlled degradation) ----
+  let wasmOk = false;
+  if (typeof WebAssembly !== 'undefined') {
+    try {
+      const instance = await _instantiateWasm(wasmPath, timeoutMs, manifest);
+      wasmInstance = instance;
+      await _loadWeights(instance, weightsPath, timeoutMs, manifest);
 
-  if (typeof WebAssembly === 'undefined') {
-    console.warn('[policy-runtime] WebAssembly not available in this environment – using heuristic');
-    return _fallbackResult('WebAssembly unavailable');
-  }
-
-  // ---- Step 3: Instantiate WASM ----
-  let instance;
-  try {
-    instance = await _instantiateWasm(wasmPath, timeoutMs, manifest);
-  } catch (err) {
-    console.warn('[policy-runtime] WASM instantiation failed:', err.message, '– falling back to heuristic');
-    return _fallbackResult(`wasm: ${err.message}`);
-  }
-  wasmInstance = instance;
-
-  // ---- Step 4: Load weights into WASM memory ----
-  try {
-    await _loadWeights(instance, weightsPath, timeoutMs, manifest);
-  } catch (err) {
-    console.warn('[policy-runtime] Weights load failed:', err.message, '– falling back to heuristic');
-    wasmInstance = null; // release WASM resources
-    return _fallbackResult(`weights: ${err.message}`);
-  }
-
-  // ---- Step 5: Call _initialize ----
-  try {
-    if (typeof instance.exports._initialize === 'function') {
-      const botProfileJson = botProfile ? JSON.stringify(botProfile) : '{}';
-      // Allocate string in WASM memory and pass pointer + length
-      const { ptr, len } = _allocString(instance, botProfileJson);
-      const manifestJson = JSON.stringify(manifest);
-      const { ptr: mptr, len: mlen } = _allocString(instance, manifestJson);
-      const result = instance.exports._initialize(ptr, len, mptr, mlen);
-      if (result !== 0) {
-        console.warn(`[policy-runtime] _initialize returned ${result} – may be degraded`);
+      // Call _initialize
+      if (typeof instance.exports._initialize === 'function') {
+        const botProfileJson = botProfile ? JSON.stringify(botProfile) : '{}';
+        const { ptr, len } = _allocString(instance, botProfileJson);
+        const manifestJson = JSON.stringify(manifest);
+        const { ptr: mptr, len: mlen } = _allocString(instance, manifestJson);
+        const result = instance.exports._initialize(ptr, len, mptr, mlen);
+        if (result !== 0) {
+          console.warn(`[policy-runtime] _initialize returned ${result} – may be degraded`);
+        }
+      } else {
+        console.warn('[policy-runtime] _initialize export not found in WASM – module may be incomplete');
       }
-    } else {
-      console.warn('[policy-runtime] _initialize export not found in WASM – module may be incomplete');
+
+      wasmOk = true;
+      console.info(`[policy-runtime] WASM policy loaded. Version: ${manifest.version}`);
+    } catch (err) {
+      console.warn('[policy-runtime] WASM failed, will try MLP:', err.message);
+      wasmInstance = null;
     }
-  } catch (err) {
-    console.warn('[policy-runtime] _initialize call failed:', err.message, '– falling back to heuristic');
-    wasmInstance = null;
-    return _fallbackResult(`initialize: ${err.message}`);
+  } else {
+    console.warn('[policy-runtime] WebAssembly not available — skipping WASM');
   }
 
-  // ---- Success ----
-  console.info(`[policy-runtime] Ready. Policy version: ${manifest.version}, model: ${manifest.model}`);
+  // ---- Step 3: Try MLP (non-fatal) ----
+  try {
+    mlpInstance = await MLPPolicy.load(mlpWeightsPath);
+    console.info(`[policy-runtime] MLP policy loaded (v${mlpInstance._version})`);
+  } catch (err) {
+    console.warn('[policy-runtime] MLP failed:', err.message);
+    mlpInstance = null;
+  }
+
+  // ---- Step 4: Determine readiness ----
+  if (!wasmOk && !mlpInstance) {
+    console.warn('[policy-runtime] Neither WASM nor MLP available — using heuristic fallback');
+    // Still set ready=true; planAnswer will use planAnswerHeuristic
+  }
+
+  // ---- Success (even if only heuristic is available) ----
+  console.info(
+    `[policy-runtime] Policy runtime ready. ` +
+    `Engine: ${mlpInstance ? 'mlp' : (wasmOk ? 'wasm' : 'heuristic')}. ` +
+    `Version: ${manifest.version}`
+  );
   return _succeedResult();
 }
 
@@ -168,8 +182,10 @@ async function _doLoad(config) {
 /**
  * Generate an AnswerPlan from the current query context.
  *
- * If WASM is loaded and ready, this calls into the WASM inference graph.
- * Otherwise it falls back to the heuristic planAnswerHeuristic.
+ * Tries engines in priority order:
+ *   1. MLP (pure-JS neural network) — primary
+ *   2. WASM (WebAssembly) — secondary
+ *   3. Heuristic (rule-based) — last resort
  *
  * Expected to be called from nlp.js in place of the current compose() logic.
  *
@@ -193,27 +209,43 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
     config
   );
 
-  let plan;
+  let plan = null;
 
-  // 2. Try WASM inference path
-  if (ready && wasmInstance) {
+  // ---- Tier 1: MLP (primary JS engine) ----
+  if (mlpInstance) {
+    try {
+      plan = mlpInstance.planAnswer(
+        features,
+        context,
+        config.botProfile || {},
+        config.overrides || {}
+      );
+      if (!plan.meta) plan.meta = {};
+      plan.meta.policyVersion = `mlp-v${mlpInstance._version}`;
+      plan.meta.policyHash = 'mlp-js';
+    } catch (err) {
+      console.error('[policy-runtime] MLP inference failed:', err.message);
+      plan = null;
+    }
+  }
+
+  // ---- Tier 2: WASM (if loaded and MLP not available) ----
+  if (!plan && wasmInstance) {
     try {
       plan = await _wasmPlanAnswer(wasmInstance, features, config);
-        // Tag with WASM version info
-        if (!plan.meta) plan.meta = {};
-        plan.meta.policyVersion = cachedManifest?.version || 'unknown';
-        plan.meta.policyHash = cachedManifest?.notes || 'wasm';
+      if (!plan.meta) plan.meta = {};
+      plan.meta.policyVersion = cachedManifest?.version || 'unknown';
+      plan.meta.policyHash = cachedManifest?.wasmHash || 'wasm';
     } catch (err) {
-      console.warn('[policy-runtime] WASM planAnswer failed:', err.message, '– falling back to heuristic');
-      plan = planAnswerHeuristic(features, KB, config, context.overrides);
-      plan.meta = plan.meta || {};
-      plan.meta.decisionPath = ['wasm-error-fallback', ...(plan.meta.decisionPath || [])];
+      console.error('[policy-runtime] WASM inference failed:', err.message);
+      plan = null;
     }
-  } else {
-    // 3. Heuristic fallback
-    plan = planAnswerHeuristic(features, KB, config, context.overrides);
-    plan.meta = plan.meta || {};
-    plan.meta.decisionPath = ['heuristic', ...(plan.meta.decisionPath || [])];
+  }
+
+  // ---- Tier 3: Heuristic (last resort) ----
+  if (!plan) {
+    console.warn('[policy-runtime] Falling back to heuristic planAnswer');
+    plan = planAnswerHeuristic(features, KB, config, config.overrides || {});
   }
 
   // 4. Validate before returning
@@ -753,28 +785,10 @@ function _succeedResult() {
   };
 }
 
-/** Return the fallback result object (WASM unavailable). */
-function _fallbackResult(errorMsg) {
+/** Return a rejection result (WASM mandatory but unavailable). */
+function _rejectResult(errorMsg) {
   ready = false;
   wasmInstance = null;
   loadError = errorMsg;
-  return {
-    ready: false,
-    planAnswer: async function fallbackPlan(query, qEmb, KB, context, config) {
-      const features = extractPolicyFeatures(
-        query, qEmb,
-        context?.ranked || [],
-        context?.entities || [],
-        context?.intentScores || {},
-        context?.lastTopic ?? null,
-        context?.lastTopicAge ?? null,
-        KB,
-        config || {}
-      );
-      const plan = planAnswerHeuristic(features, KB, config, context?.overrides);
-      return plan;
-    },
-    manifest: cachedManifest,
-    error: errorMsg,
-  };
+  throw new Error(errorMsg);
 }

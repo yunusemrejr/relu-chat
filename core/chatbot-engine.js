@@ -1,6 +1,7 @@
 import { pipeline, env } from '/assets/transformers/transformers.js';
 import { LRUCache } from './cache.js';
-import { compose, composeV2, tokens, bowVec, compileAliasRegex } from './nlp.js';
+import { SessionMemory } from './session.js';
+import { compose, composeV2, tokens, bowVec, compileAliasRegex, extractEntities, classifyIntent, rankEntries } from './nlp.js';
 import { pushMessage, setStatus, escapeHTML, md } from './ui.js';
 import { loadPolicyRuntime, planAnswer, isPolicyLoaded } from '../policy/policy-runtime.js';
 
@@ -24,7 +25,8 @@ export async function createChatbot(config) {
   const form = document.getElementById('form');
   let extractor = null, entryEmb = [], intentEmb = {};
   let ready = false, busy = false;
-  let lastTopic = null;
+  // Session memory: replaces single `lastTopic` with full turn-based tracking
+  const session = new SessionMemory(CONFIG?.SESSION?.maxHistory || 20);
   const fragEmbCache = new LRUCache(CONFIG?.CACHE?.MAX_SIZE || 500);
   let bowVocab = null;
 
@@ -69,30 +71,6 @@ export async function createChatbot(config) {
         intentEmb[k] = [];
         for (const p of INTENTS[k].prototypes) intentEmb[k].push(await embed(p));
       }
-
-      // NEW: Load policy runtime (blocks readiness)
-      setStatus('loading policy…');
-      await loadPolicyRuntime({
-        wasmPath: '/assets/models/policy/policy.wasm',
-        weightsPath: '/assets/models/policy/policy.weights.bin',
-        manifestPath: '/assets/models/policy/policy.manifest.json',
-        botProfile: botProfile || {
-          id: 'default',
-          allowedIntents: Object.keys(INTENTS),
-          tone: 'neutral',
-          maxTopics: 3,
-          creativityCeiling: 0.35
-        }
-      });
-
-      if (!isPolicyLoaded()) {
-        setStatus('policy load failed — please reload', false);
-        return; // do NOT set ready=true
-      }
-
-      bar.style.width = '100%';
-      setTimeout(() => bar.style.width = '0%', 500);
-      setStatus('ready', true);
     } catch (err) {
       console.error('Model load failed, using BOW fallback:', err);
       const voc = new Set();
@@ -104,9 +82,38 @@ export async function createChatbot(config) {
       entryEmb = KB.map(e => bowVec(entryText(e), bowVocab));
       for (const k of Object.keys(INTENTS)) intentEmb[k] = INTENTS[k].prototypes.map(p => bowVec(p, bowVocab));
       setStatus('offline mode', true);
-      // Note: in offline/BOW mode we still allow fallback without policy
-      // but production policy path requires successful load
     }
+
+    // Load policy runtime (blocks readiness — mandatory)
+    setStatus('loading policy…');
+    try {
+      const policyBotProfile = botProfile || {
+        id: 'default',
+        allowedIntents: Object.keys(INTENTS),
+        tone: 'neutral',
+        maxTopics: 3,
+        creativityCeiling: 0.35
+      };
+      await loadPolicyRuntime({
+        wasmPath: '/assets/models/policy/policy.wasm',
+        weightsPath: '/assets/models/policy/policy.weights.bin',
+        manifestPath: '/assets/models/policy/policy.manifest.json',
+        botProfile: policyBotProfile
+      });
+    } catch (policyErr) {
+      console.error('Policy load failed:', policyErr.message);
+      setStatus('policy error — please reload and clear browser cache', false);
+      return; // block readiness — policy is mandatory
+    }
+
+    if (!isPolicyLoaded()) {
+      setStatus('policy not ready — please reload', false);
+      return;
+    }
+
+    bar.style.width = '100%';
+    setTimeout(() => bar.style.width = '0%', 500);
+    setStatus('ready', true);
     ready = true;
     sendBtn.disabled = false;
     if (onReady) onReady();
@@ -117,36 +124,93 @@ export async function createChatbot(config) {
     pushMessage('user', md(escapeHTML(query)));
     busy = true;
     sendBtn.disabled = true;
+
+    // ---- Session: detect follow-up before any pipeline work ----
+    const followUp = session.detectFollowUp(query);
+
     const typingEl = pushMessage('bot', '<div class="typing"><span></span><span></span><span></span></div>');
+    let text, meta;
     try {
       const qEmb = await embed(query);
-      let text, meta;
 
-      if (isPolicyLoaded()) {
-        // Policy-driven path
-        const plan = await planAnswer(query, {
-          entities: [], // populated by caller if needed
-          intent: null,
-          lastTopic
-        });
-        const result = await composeV2(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, CONFIG, overrides, plan);
-        text = result.text;
-        meta = result.meta;
-      } else {
-        // Legacy fallback (only when policy unavailable)
-        const result = await compose(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, CONFIG, overrides);
-        text = result.text;
-        meta = result.meta;
+      // Pre-policy pipeline: extract entities and classify intent
+      compileAliasRegex(KB);
+      let entities = extractEntities(query, KB);
+
+      // ---- Session: enrich entities with recent conversation context ----
+      const recentEntities = session.getRecentEntities();
+      if (recentEntities.length > 0) {
+        const entitySet = new Set(entities);
+        for (const re of recentEntities) {
+          if (!entitySet.has(re)) {
+            entities.push(re);
+            entitySet.add(re);
+          }
+        }
       }
+
+      const { intent, scores: intentScores } = await classifyIntent(qEmb, intentEmb, INTENTS, CONFIG.THRESHOLDS);
+      const ranked = rankEntries(qEmb, entryEmb);
+
+      // ---- Session: ambiguity detection ----
+      // Ambiguous when: multiple entities with no clear best, very short
+      // query with low similarity, or multiple unrelated high-sim topics
+      const queryTokens = tokens(query);
+      const isShortQuery = queryTokens.length < 3;
+      const hasMultipleEntities = entities.length > 1;
+      const lowConfidence = ranked.length === 0 || ranked[0].s < 0.25;
+      // Check if top-2 scores are close (within 0.1) — multiple viable interpretations
+      const scoresClose = ranked.length >= 2 && Math.abs(ranked[0].s - ranked[1].s) < 0.1;
+
+      const isAmbiguous =
+        (hasMultipleEntities && scoresClose) ||
+        (isShortQuery && lowConfidence) ||
+        (scoresClose && ranked[0].s > 0.15 && ranked[0].s < 0.35);
+
+      if (isAmbiguous) {
+        session.setAmbiguous(query);
+      }
+
+      // Policy-driven path (mandatory) — pass session-aware context
+      const context = {
+        entities,
+        intent,
+        intentScores,
+        ranked,
+        lastTopic: session.lastTopic,
+        lastTopicAge: session.lastTopicAge,
+        followUp,
+        wasPreviousAmbiguous: session.wasPreviousQueryAmbiguous(),
+        overrides,
+      };
+      const plan = await planAnswer(query, qEmb, KB, context, { EMBEDDING: CONFIG.EMBEDDING, botProfile, _domainPrototypeEmbs: intentEmb });
+      const result = await composeV2(query, qEmb, embedCached, entryEmb, intentEmb, session.lastTopic, KB, CONFIG, overrides, plan);
+
+      text = result.text;
+      meta = result.meta;
 
       typingEl.remove();
       pushMessage('bot', md(text), meta);
-      if (meta) {
-        const topicEntries = meta.filter(m => m.type === '');
-        if (topicEntries.length > 0) {
-          lastTopic = KB.findIndex(e => e.name === topicEntries[0].text);
+
+      // ---- Session: record turn and track fragment usage ----
+      const presentedTopics = (plan && Array.isArray(plan.topics)) ? plan.topics : [];
+      const fragmentsUsed = [];
+
+      if (plan && plan.fragmentPlan) {
+        for (const fp of plan.fragmentPlan) {
+          const topicIdx = presentedTopics[fp.topicIdx];
+          if (topicIdx !== undefined && KB[topicIdx]) {
+            const entry = KB[topicIdx];
+            for (const cat of (fp.cats || [])) {
+              const fragId = `${entry.id}:${cat}`;
+              fragmentsUsed.push(fragId);
+              session.markFragmentUsed(fragId);
+            }
+          }
         }
       }
+
+      session.addTurn(query, text, entities, presentedTopics, fragmentsUsed);
     } catch (err) {
       console.error(err);
       typingEl.remove();

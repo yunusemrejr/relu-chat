@@ -1,0 +1,26 @@
+{
+  "version": "0.1.0",
+  "inputFeatures": 18,
+  "inputBytes": 76,
+  "outputSchema": "AnswerPlan.v1",
+  "fragmentMetaVersion": "1.0.0",
+  "model": "mlp_policy",
+  "weightsSize": 4096,
+  "botProfiles": [
+    "game-theory"
+  ],
+  "trained": "2026-05-23",
+  "architecture": {
+    "trunk": "18\u219264\u219232 (ReLU)",
+    "heads": {
+      "mode": 5,
+      "topic_count": 4,
+      "intent": 5,
+      "tone": 4,
+      "creativity_bucket": 10,
+      "opener_idx": 6,
+      "closer_idx": 4
+    },
+    "total_params": "~5K"
+  }
+}

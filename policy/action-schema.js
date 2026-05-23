@@ -18,7 +18,7 @@
 export const PLAN_SCHEMA = Object.freeze({
   mode: {
     type: 'string',
-    enum: ['normal', 'off_topic', 'greeting', 'help', 'comparison'],
+    enum: ['normal', 'off_topic', 'greeting', 'help', 'comparison', 'clarify'],
     default: 'normal',
     desc: 'Top-level control flow. Determines which render path to use.'
   },
@@ -92,6 +92,31 @@ export const PLAN_SCHEMA = Object.freeze({
     },
     desc: 'Safety constraints applied during plan validation.'
   },
+  clarification: {
+    type: 'object',
+    nullable: true,
+    default: null,
+    itemSchema: {
+      ambiguity_type: {
+        type: 'string',
+        enum: ['multiple_topics', 'low_confidence', 'ambiguous_reference'],
+        default: 'low_confidence',
+        desc: 'Type of ambiguity detected.'
+      },
+      options: {
+        type: 'array',
+        elementType: 'string',
+        default: [],
+        desc: 'Suggested options when ambiguity_type is multiple_topics.'
+      },
+      original_query: {
+        type: 'string',
+        default: '',
+        desc: 'The original user query that triggered clarification.'
+      }
+    },
+    desc: 'Clarification request details when mode === "clarify".'
+  },
   meta: {
     type: 'object',
     default: {
@@ -135,6 +160,7 @@ export const DEFAULT_PLAN = Object.freeze({
     minSim: 0.15,
     allowOffTopic: true
   },
+  clarification: null,
   meta: {
     policyVersion: '0.1.0',
     policyHash: 'default-plan',
@@ -154,7 +180,10 @@ export const DEFAULT_PLAN = Object.freeze({
  * @returns {string|null}  - error string or null if valid
  */
 function checkField(val, schema, path) {
-  if (val === undefined || val === null) return `${path}: required field is missing`;
+  if (val === undefined || val === null) {
+    if (schema.nullable) return null;
+    return `${path}: required field is missing`;
+  }
 
   switch (schema.type) {
     case 'string': {

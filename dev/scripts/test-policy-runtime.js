@@ -152,6 +152,7 @@ function runValidationTests() {
         minSim: 0.15,
         allowOffTopic: false,
       },
+      clarification: null,
       meta: {
         policyVersion: '0.1.0',
         policyHash: 'test-hash',
