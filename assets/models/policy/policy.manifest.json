@@ -1,26 +1,30 @@
 {
-  "version": "0.1.0",
-  "inputFeatures": 18,
-  "inputBytes": 76,
+  "version": "0.2.0",
+  "inputFeatures": 24,
+  "inputBytes": 103,
   "outputSchema": "AnswerPlan.v1",
   "fragmentMetaVersion": "1.0.0",
   "model": "mlp_policy",
-  "weightsSize": 4096,
+  "weightsSize": 51804,
   "botProfiles": [
-    "game-theory"
+    "game-theory",
+    "golden-age",
+    "data-science"
   ],
   "trained": "2026-05-23",
+  "wasmHash": "sha256-placeholder-stub",
+  "weightsHash": "sha256-ecf9ab9944d87114af5f4ec052851b7730e42c13d3b588131b8891bcdb992403",
   "architecture": {
-    "trunk": "18\u219264\u219232 (ReLU)",
+    "trunk": "24->128->64 (ReLU)",
     "heads": {
       "mode": 5,
-      "topic_count": 4,
       "intent": 5,
-      "tone": 4,
-      "creativity_bucket": 10,
-      "opener_idx": 6,
-      "closer_idx": 4
+      "topic_count": 4,
+      "frag_count": 4,
+      "creativity": 1,
+      "tone": 4
     },
-    "total_params": "~5K"
-  }
+    "total_params": 13016
+  },
+  "notes": "Randomly initialized weights. Replace with RL-trained weights after full training run."
 }
