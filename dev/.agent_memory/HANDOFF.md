@@ -2,10 +2,12 @@
 
 ## State at Handoff
 
-**Date**: 2026-05-23T20:15:00Z  
-**Test Status**: 116/116 passing  
-**Git Status**: 10 modified files + 1 untracked (policy_model.py)  
-**Backup**: _backups/pre-fix-20260523/ (66MB, restorable)
+**Date**: 2026-05-23T20:45:00Z  
+**Test Status**: 144/144 passing  
+**Git Status**: Clean — 7 commits pushed to github.com:yunusemrejr/relu-chat.git  
+**Backup**: _backups/pre-fix-20260523/ (66MB) + _backups/diff-20260523-234231/ (90KB diff patch)  
+**GitHub**: Pushed successfully (7 new commits)  
+**Production**: Not deployed — FTP server unreachable at deploy time
 
 ## What Was Accomplished
 
@@ -70,6 +72,8 @@ The Python training pipeline now matches the JS inference engine:
 12. Implement backup retention policy
 
 ## Precautions
-- All changes are uncommitted. The next agent should review git diff before committing.
-- The .env file contains FTP credentials that should NOT be committed.
-- Backup exists at _backups/pre-fix-20260523/ for rollback.
+- All changes are committed and pushed to GitHub. No uncommitted work remains.
+- The .env file contains FTP credentials that must NOT be committed.
+- Production deployment pending: FTP server was unreachable. Run `./deploy.sh` when connectivity is restored.
+- Backup exists at _backups/pre-fix-20260523/ (full) and _backups/diff-20260523-234231/ (diff patch) for rollback.
+- To roll back: `git revert HEAD~7..HEAD` or restore from backup.
