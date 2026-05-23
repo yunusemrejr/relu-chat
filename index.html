@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ReLU.chat — Interactive On-Device Chatbots</title>
 <meta name="description" content="Free, browser-based, privacy-first open-source chatbots. Explore interactive visualizations and tools.">
 <meta name="robots" content="index, follow">
@@ -18,29 +18,36 @@
 <meta name="twitter:title" content="ReLU.chat — Interactive On-Device Chatbots">
 <meta name="twitter:description" content="Free, browser-based, privacy-first open-source chatbots and interactive tools.">
 
-<link rel="stylesheet" href="assets/fonts/inter.css">
-
-<link rel="manifest" href="/manifest.webmanifest">
-
+<!-- PWA -->
+<meta name="theme-color" content="#070809">
+<meta name="background_color" content="#070809">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ReLU.chat">
 <link rel="apple-touch-icon" href="assets/logo.png">
-
 <link rel="icon" href="assets/logo.png" type="image/png">
+<link rel="manifest" href="/manifest.webmanifest">
+
+<link rel="stylesheet" href="assets/fonts/inter.css">
 
 <style>
+/* ============================================================
+   RESET
+   ============================================================ */
 *, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
 :root {
   --bg: #070809;
   --bg-elevated: #0c0e10;
-  --bg-card: rgba(255,255,255,0.012);
-  --bg-card-hover: rgba(255,255,255,0.03);
+  --bg-card: rgba(255,255,255,0.015);
+  --bg-card-hover: rgba(255,255,255,0.035);
   --border: rgba(255,255,255,0.07);
   --border-hover: rgba(59,130,246,0.35);
   --text-primary: #f5f6f7;
@@ -69,11 +76,17 @@
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-xl: 20px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
 }
 
+/* ============================================================
+   BASE
+   ============================================================ */
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -86,25 +99,58 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "cv01", "ss03";
+  padding-bottom: var(--safe-bottom);
 }
 
 /* ============================================================
-   NAVIGATION
+   KEYFRAMES
    ============================================================ */
+@keyframes floatGlow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  50% { transform: translate(-48%, -52%) scale(1.08); opacity: 1; }
+}
+
+@keyframes blurFadeUp {
+  from { opacity: 0; filter: blur(10px); transform: translateY(20px); }
+  to   { opacity: 1; filter: blur(0);    transform: translateY(0); }
+}
+
+@keyframes bubblePop {
+  from { opacity: 0; transform: scale(0.94) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   LIQUID GLASS UTILITY
+   ============================================================ */
+.liquid-glass {
+  background: rgba(255,255,255,0.015);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.04);
+}
+
+/* ============================================================
+   NAVIGATION — GLASS
+   ============================================================ */
+.nav-glass {
+  background: rgba(7,8,9,0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
 .site-nav {
   position: sticky;
   top: 0;
   z-index: 100;
   width: 100%;
-  border-bottom: 1px solid transparent;
-  transition: background-color 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
-}
-
-.site-nav.scrolled {
-  background-color: rgba(7, 8, 9, 0.8);
-  border-color: var(--border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
 .nav-container {
@@ -114,6 +160,8 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0.875rem 1.5rem;
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
   gap: 1.5rem;
 }
 
@@ -124,9 +172,11 @@ body {
   text-decoration: none;
   color: var(--text-primary);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: clamp(0.9375rem, 1vw, 1rem);
   flex-shrink: 0;
   letter-spacing: -0.02em;
+  min-height: 44px;
+  padding: 0.25rem 0;
 }
 
 .nav-logo img {
@@ -145,10 +195,13 @@ body {
 .nav-links a {
   text-decoration: none;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
   font-weight: 500;
   transition: color 0.2s ease;
   letter-spacing: -0.01em;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-links a:hover {
@@ -159,25 +212,34 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1.125rem;
+  min-height: 44px;
+  padding: 0.5rem 1.25rem;
   border-radius: var(--radius-md);
   background: var(--accent);
   color: #ffffff;
   text-decoration: none;
-  font-size: 0.8125rem;
+  font-size: clamp(0.75rem, 0.82vw, 0.8125rem);
   font-weight: 600;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   flex-shrink: 0;
-  box-shadow: var(--shadow-button);
+  border: 1px solid rgba(59,130,246,0.3);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.15), 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .nav-cta:hover {
   background: var(--accent-hover);
-  box-shadow: var(--shadow-button), 0 0 20px var(--accent-glow);
+  border-color: rgba(59,130,246,0.5);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.25), 0 0 20px var(--accent-glow);
 }
 
+/* Checkbox hack — mobile toggle */
 .nav-toggle-input {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 .nav-toggle {
@@ -187,8 +249,13 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.625rem;
   z-index: 101;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
 }
 
 .nav-toggle span {
@@ -197,41 +264,54 @@ body {
   height: 2px;
   background-color: var(--text-primary);
   border-radius: 1px;
-  transition: transform 0.25s ease, opacity 0.25s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.nav-toggle-input:checked ~ .site-nav .nav-toggle span:nth-child(1) {
+.nav-toggle-input:checked ~ .nav-glass .nav-toggle span:nth-child(1) {
   transform: translateY(6px) rotate(45deg);
 }
-.nav-toggle-input:checked ~ .site-nav .nav-toggle span:nth-child(2) {
+.nav-toggle-input:checked ~ .nav-glass .nav-toggle span:nth-child(2) {
   opacity: 0;
 }
-.nav-toggle-input:checked ~ .site-nav .nav-toggle span:nth-child(3) {
+.nav-toggle-input:checked ~ .nav-glass .nav-toggle span:nth-child(3) {
   transform: translateY(-6px) rotate(-45deg);
 }
 
+/* ============================================================
+   MOBILE OVERLAY NAV — GLASS
+   ============================================================ */
 .mobile-nav {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(7,8,9,0.97);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   z-index: 99;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 2.25rem;
   padding: 2rem;
+  padding-top: calc(2rem + var(--safe-top));
+  padding-bottom: calc(2rem + var(--safe-bottom));
+  background: rgba(7,8,9,0.85);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+}
+
+.nav-toggle-input:checked ~ .mobile-nav {
+  display: flex;
 }
 
 .mobile-nav a {
   color: var(--text-primary);
   text-decoration: none;
-  font-size: 1.25rem;
+  font-size: clamp(1.125rem, 4vw, 1.375rem);
   font-weight: 600;
   letter-spacing: -0.02em;
   transition: color 0.2s ease;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mobile-nav a:hover {
@@ -239,17 +319,26 @@ body {
 }
 
 .mobile-nav .mobile-cta {
-  margin-top: 1rem;
-  padding: 0.875rem 2rem;
+  margin-top: 1.25rem;
+  min-height: 48px;
+  padding: 0.875rem 2.25rem;
   background: var(--accent);
   color: #fff;
   border-radius: var(--radius-md);
-  font-size: 0.9375rem;
+  font-size: clamp(0.875rem, 3vw, 0.9375rem);
   font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(59,130,246,0.3);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.15), 0 1px 2px rgba(0,0,0,0.2);
+  transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 
-.nav-toggle-input:checked ~ .mobile-nav {
-  display: flex;
+.mobile-nav .mobile-cta:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.25), 0 0 20px var(--accent-glow);
 }
 
 /* ============================================================
@@ -257,12 +346,14 @@ body {
    ============================================================ */
 .hero {
   position: relative;
-  min-height: calc(100dvh - 60px);
+  min-height: calc(100dvh - 56px);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   padding: 4rem 1.5rem 6rem;
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
 }
 
 .hero-bg {
@@ -275,27 +366,24 @@ body {
 
 .hero-bg-glow {
   position: absolute;
-  top: 30%;
+  top: 35%;
   left: 50%;
-  width: 140%;
-  height: 140%;
+  width: 150%;
+  height: 150%;
   transform: translate(-50%, -50%);
   background:
-    radial-gradient(circle at 50% 50%, rgba(59,130,246,0.06) 0%, rgba(29,78,216,0.04) 25%, transparent 55%);
-  animation: floatGlow 18s ease-in-out infinite;
+    radial-gradient(ellipse at 50% 45%, rgba(59,130,246,0.08) 0%, rgba(29,78,216,0.05) 30%, transparent 60%),
+    radial-gradient(circle at 30% 60%, rgba(59,130,246,0.04) 0%, transparent 40%),
+    radial-gradient(circle at 70% 40%, rgba(59,130,246,0.04) 0%, transparent 40%);
+  animation: floatGlow 20s ease-in-out infinite;
 }
 
 .hero-bg-grain {
   position: absolute;
   inset: 0;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   pointer-events: none;
-}
-
-@keyframes floatGlow {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-48%, -52%) scale(1.06); }
 }
 
 .hero-container {
@@ -311,35 +399,45 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 1.75rem;
-  animation: fadeUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
+
+/* Staggered blur-fade-up for hero children */
+.hero-stagger:nth-child(1) { animation: blurFadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 0s both; }
+.hero-stagger:nth-child(2) { animation: blurFadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 0.1s both; }
+.hero-stagger:nth-child(3) { animation: blurFadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 0.2s both; }
+.hero-stagger:nth-child(4) { animation: blurFadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 0.3s both; }
+.hero-stagger:nth-child(5) { animation: blurFadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 0.4s both; }
 
 .hero-logo {
   display: flex;
   justify-content: center;
-  animation: fadeUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.05s both;
 }
 
 .hero-logo img {
-  width: 72px;
-  height: 72px;
+  width: clamp(64px, 9vw, 80px);
+  height: clamp(64px, 9vw, 80px);
   object-fit: contain;
+  filter: drop-shadow(0 0 24px rgba(59,130,246,0.2));
 }
 
 .hero h1 {
-  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  font-size: clamp(2rem, 6vw, 3.75rem);
   font-weight: 700;
   line-height: 1.1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   color: var(--text-primary);
   max-width: 720px;
 }
 
+.hero h1 .accent-word {
+  color: var(--accent-light);
+}
+
 .hero-subhead {
-  font-size: clamp(1rem, 1.8vw, 1.1875rem);
+  font-size: clamp(0.9375rem, 1.8vw, 1.1875rem);
   line-height: 1.7;
   color: var(--text-secondary);
-  max-width: 520px;
+  max-width: 560px;
   font-weight: 400;
   letter-spacing: -0.005em;
 }
@@ -349,79 +447,96 @@ body {
   flex-wrap: wrap;
   gap: 0.75rem;
   justify-content: center;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
 }
 
+/* ============================================================
+   BUTTONS — GLASS-STROKE
+   ============================================================ */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
+  min-height: 44px;
+  padding: 0.75rem 1.625rem;
   border-radius: var(--radius-md);
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   cursor: pointer;
-  border: 1px solid transparent;
   letter-spacing: -0.01em;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn:hover { transform: translateY(-1px); }
 
 .btn-primary {
-  background: var(--accent);
+  background: rgba(29,78,216,0.85);
   color: #ffffff;
-  border-color: var(--accent);
-  box-shadow: var(--shadow-button);
+  border: 1px solid rgba(59,130,246,0.35);
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,0.15),
+    0 1px 2px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 .btn-primary:hover {
   background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  box-shadow: var(--shadow-button), 0 0 20px var(--accent-glow);
+  border-color: rgba(59,130,246,0.55);
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,0.25),
+    0 0 24px var(--accent-glow),
+    inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .btn-ghost {
-  background-color: transparent;
+  background: rgba(255,255,255,0.02);
   color: var(--text-primary);
-  border-color: var(--border);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
 .btn-ghost:hover {
-  background-color: var(--bg-card);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.18);
   box-shadow: var(--shadow-card);
 }
 
+/* ============================================================
+   HERO BADGES — LIQUID-GLASS PILLS
+   ============================================================ */
 .hero-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: center;
-  margin-top: 0.5rem;
-  animation: fadeUp 0.7s 0.12s cubic-bezier(0.4, 0, 0.2, 1) both;
+  margin-top: 0.25rem;
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
+  padding: 0.4375rem 0.875rem;
   border-radius: 9999px;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.015);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.04);
   color: var(--text-tertiary);
-  font-size: 0.75rem;
+  font-size: clamp(0.6875rem, 0.75vw, 0.75rem);
   font-weight: 500;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
+  min-height: 32px;
 }
 
 .badge:hover {
   border-color: var(--border-hover);
-  background: var(--bg-card-hover);
   color: var(--text-secondary);
+  background: rgba(255,255,255,0.025);
 }
 
 .badge svg {
@@ -429,11 +544,11 @@ body {
   height: 13px;
   stroke: var(--text-tertiary);
   flex-shrink: 0;
+  transition: stroke 0.25s ease;
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
+.badge:hover svg {
+  stroke: var(--text-secondary);
 }
 
 /* ============================================================
@@ -443,73 +558,134 @@ body {
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 1.5rem;
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
 }
 
 .section-header {
-  margin-bottom: 3.5rem;
+  margin-bottom: 3rem;
+  text-align: center;
 }
 
 .section-header h2 {
-  font-size: 0.75rem;
+  font-size: clamp(0.6875rem, 0.75vw, 0.75rem);
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-tertiary);
 }
 
 /* ============================================================
-   HOW IT WORKS
+   HOW IT WORKS — 5 TECHNICAL STEPS
    ============================================================ */
-#how-it-works { padding: 7rem 0 5rem; }
+#how-it-works { padding: 6rem 0 4rem; }
 
 .steps-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .step-card {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 2rem;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1.75rem;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(ellipse at 0% 0%, rgba(59,130,246,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.step-card:hover::before {
+  opacity: 1;
 }
 
 .step-card:hover {
-  background: rgba(12, 14, 16, 0.85);
-  border-color: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.12);
   transform: translateY(-2px);
   box-shadow: var(--shadow-card);
 }
 
 .step-number {
-  font-size: 0.75rem;
+  font-size: clamp(0.6875rem, 0.72vw, 0.75rem);
   font-weight: 700;
   color: var(--accent-light);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .step-title {
-  font-size: 1.25rem;
+  font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 0.625rem;
+  margin-bottom: 0.5rem;
   letter-spacing: -0.015em;
 }
 
 .step-desc {
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
   line-height: 1.7;
   color: var(--text-secondary);
 }
 
+.step-desc code {
+  font-family: 'Inter', monospace;
+  font-size: 0.85em;
+  background: rgba(59,130,246,0.1);
+  color: var(--accent-light);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  border: 1px solid rgba(59,130,246,0.15);
+}
+
+.how-it-works-footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.how-it-works-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
+  font-weight: 500;
+  min-height: 44px;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.how-it-works-link:hover {
+  color: var(--accent-light);
+}
+
+.how-it-works-link svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.2s ease;
+}
+
+.how-it-works-link:hover svg {
+  transform: translateX(2px);
+}
+
 /* ============================================================
-   FEATURES
+   FEATURES — LIQUID-GLASS CARDS
    ============================================================ */
-#features { padding: 3rem 0 7rem; }
+#features { padding: 2rem 0 6rem; }
 
 .features-grid {
   display: grid;
@@ -518,23 +694,38 @@ body {
 }
 
 .feature-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.75rem;
-  box-shadow: var(--shadow-card);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.04) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.feature-card:hover::after {
+  opacity: 1;
 }
 
 .feature-card:hover {
-  background: var(--bg-card-hover);
-  border-color: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.14);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-card-hover);
+  box-shadow:
+    var(--shadow-card-hover),
+    0 0 0 1px rgba(59,130,246,0.08);
 }
 
 .feature-title {
-  font-size: 1rem;
+  font-size: clamp(0.9375rem, 1vw, 1rem);
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
@@ -542,27 +733,31 @@ body {
 }
 
 .feature-desc {
-  font-size: 0.8125rem;
-  line-height: 1.65;
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  line-height: 1.7;
   color: var(--text-secondary);
 }
 
 /* ============================================================
-   SHOWCASE
+   SHOWCASE — GLASS CARDS WITH ACCENT BORDERS
    ============================================================ */
-#showcase { padding: 2rem 0 5rem; }
+#showcase { padding: 1rem 0 5rem; }
+
+.showcase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
 
 .showcase-card {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
+  padding: 2.5rem;
   border-radius: var(--radius-xl);
-  padding: 3rem;
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .showcase-card.visible {
@@ -571,7 +766,31 @@ body {
 }
 
 .showcase-card:hover {
-  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.06), 0 4px 24px rgba(0,0,0,0.15);
+}
+
+.showcase-card--blue {
+  border-color: rgba(59,130,246,0.12);
+}
+
+.showcase-card--amber {
+  border-color: rgba(245,158,11,0.12);
+}
+
+.showcase-card--green {
+  border-color: rgba(34,197,94,0.12);
+}
+
+.showcase-card:hover.showcase-card--blue {
+  border-color: rgba(59,130,246,0.25);
+}
+
+.showcase-card:hover.showcase-card--amber {
+  border-color: rgba(245,158,11,0.25);
+}
+
+.showcase-card:hover.showcase-card--green {
+  border-color: rgba(34,197,94,0.25);
 }
 
 .showcase-content {
@@ -581,7 +800,7 @@ body {
 }
 
 .showcase-title {
-  font-size: 1.625rem;
+  font-size: clamp(1.375rem, 1.8vw, 1.625rem);
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 0.75rem;
@@ -590,7 +809,7 @@ body {
 }
 
 .showcase-desc {
-  font-size: 0.9375rem;
+  font-size: clamp(0.875rem, 0.9vw, 0.9375rem);
   color: var(--text-secondary);
   line-height: 1.7;
   margin-bottom: 1.25rem;
@@ -604,18 +823,18 @@ body {
 }
 
 .showcase-tag {
-  font-size: 0.6875rem;
-  padding: 0.25rem 0.625rem;
-  background: var(--bg-card);
+  font-size: clamp(0.625rem, 0.7vw, 0.6875rem);
+  padding: 0.3125rem 0.6875rem;
+  background: rgba(255,255,255,0.025);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 9999px;
   color: var(--text-tertiary);
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .showcase-card:hover .showcase-tag {
-  border-color: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.14);
   color: var(--text-secondary);
 }
 
@@ -623,25 +842,27 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 44px;
   padding: 0.75rem 1.5rem;
   background: var(--accent);
   color: #fff;
-  border: none;
+  border: 1px solid rgba(59,130,246,0.3);
   border-radius: var(--radius-md);
   font-family: var(--font);
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-button);
+  transition: all 0.25s ease;
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.15), 0 1px 2px rgba(0,0,0,0.2);
   width: fit-content;
   letter-spacing: -0.01em;
 }
 
 .showcase-cta:hover {
   background: var(--accent-hover);
-  box-shadow: var(--shadow-button), 0 0 20px var(--accent-glow);
+  border-color: rgba(59,130,246,0.5);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.25), 0 0 20px var(--accent-glow);
   transform: translateY(-1px);
 }
 
@@ -659,11 +880,14 @@ body {
   justify-content: center;
 }
 
+/* Chat mockup */
 .chat-mockup {
   width: 100%;
   max-width: 320px;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: rgba(7,8,9,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-card);
@@ -713,11 +937,6 @@ body {
   animation: bubblePop 0.35s ease backwards;
 }
 
-@keyframes bubblePop {
-  from { opacity: 0; transform: scale(0.94) translateY(4px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
 .chat-bubble.bot {
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border);
@@ -751,7 +970,7 @@ body {
   height: 28px;
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 9999px;
 }
 
 .chat-mockup-send {
@@ -765,26 +984,24 @@ body {
 /* ============================================================
    NEWSLETTER
    ============================================================ */
-#newsletter { padding: 2rem 0 6rem; }
+#newsletter { padding: 2rem 0 7rem; }
 
 .newsletter-card {
   max-width: 900px;
   margin: 0 auto;
   padding: 3rem 2rem;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   text-align: center;
-  box-shadow: var(--shadow-card);
-  transition: border-color 0.25s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .newsletter-card:hover {
-  border-color: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.06), 0 4px 24px rgba(0,0,0,0.15);
 }
 
 .newsletter-title {
-  font-size: 1.375rem;
+  font-size: clamp(1.125rem, 1.5vw, 1.375rem);
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
@@ -792,7 +1009,7 @@ body {
 }
 
 .newsletter-desc {
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
   color: var(--text-tertiary);
   margin-bottom: 1.5rem;
   line-height: 1.6;
@@ -806,20 +1023,22 @@ body {
 .newsletter-form-row {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 0.625rem;
+  margin-bottom: 0.75rem;
 }
 
 .newsletter-input {
   flex: 1;
-  padding: 0.8125rem 1rem;
-  background: var(--bg-card);
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.02);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: var(--font);
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
   transition: all 0.2s ease;
   outline: none;
+  -webkit-appearance: none;
 }
 
 .newsletter-input::placeholder { color: var(--text-tertiary); }
@@ -827,27 +1046,30 @@ body {
 .newsletter-input:focus {
   border-color: var(--accent-light);
   box-shadow: 0 0 0 3px var(--accent-glow);
-  background: var(--bg-card-hover);
+  background: rgba(255,255,255,0.03);
 }
 
 .newsletter-btn {
-  padding: 0.8125rem 1.25rem;
+  min-height: 44px;
+  padding: 0.75rem 1.5rem;
   background: var(--accent);
   color: #fff;
-  border: none;
+  border: 1px solid rgba(59,130,246,0.3);
   border-radius: var(--radius-md);
   font-family: var(--font);
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  box-shadow: var(--shadow-button);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.15), 0 1px 2px rgba(0,0,0,0.2);
+  -webkit-appearance: none;
 }
 
 .newsletter-btn:hover {
   background: var(--accent-hover);
-  box-shadow: var(--shadow-button), 0 0 16px var(--accent-glow);
+  border-color: rgba(59,130,246,0.5);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.25), 0 0 16px var(--accent-glow);
 }
 
 .newsletter-btn:active { transform: scale(0.97); }
@@ -856,10 +1078,11 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 .newsletter-message {
-  font-size: 0.8125rem;
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
   padding: 0.625rem 1rem;
   border-radius: var(--radius-md);
   display: none;
@@ -880,11 +1103,6 @@ body {
   color: var(--error);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 /* ============================================================
    FOOTER
    ============================================================ */
@@ -892,6 +1110,8 @@ body {
   max-width: 1000px;
   margin: 0 auto;
   padding: 2.5rem 1.5rem 2rem;
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -901,7 +1121,7 @@ body {
 }
 
 .footer-left {
-  font-size: 0.75rem;
+  font-size: clamp(0.6875rem, 0.75vw, 0.75rem);
   color: var(--text-tertiary);
 }
 
@@ -915,19 +1135,97 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  font-size: 0.75rem;
+  font-size: clamp(0.6875rem, 0.75vw, 0.75rem);
   color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.2s ease;
   font-weight: 500;
+  min-height: 44px;
 }
 
 .footer-link:hover { color: var(--accent-light); }
 
 .footer-link svg {
-  width: 13px;
-  height: 13px;
+  width: 14px;
+  height: 14px;
   stroke: currentColor;
+}
+
+/* ============================================================
+   INSTALL BANNER — GLASS
+   ============================================================ */
+.install-banner {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  padding: 0.875rem 1.25rem;
+  padding-bottom: calc(0.875rem + var(--safe-bottom));
+  background: rgba(7,8,9,0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.install-banner.visible {
+  display: flex;
+}
+
+.install-banner-text {
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  color: var(--text-secondary);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.install-banner-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.install-btn-dismiss {
+  min-height: 44px;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: clamp(0.6875rem, 0.75vw, 0.75rem);
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.install-btn-dismiss:hover {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.14);
+}
+
+.install-btn-install {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(59,130,246,0.3);
+  background: var(--accent);
+  color: #fff;
+  font-size: clamp(0.6875rem, 0.75vw, 0.75rem);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.install-btn-install:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.25), 0 0 16px var(--accent-glow);
 }
 
 /* ============================================================
@@ -954,22 +1252,47 @@ body {
 @media (min-width: 768px) {
   .steps-grid {
     flex-direction: row;
-    gap: 1.25rem;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
-  .step-card { flex: 1; }
+  .step-card {
+    flex: 1 1 calc(33.333% - 0.667rem);
+    min-width: 220px;
+  }
 }
 
 @media (min-width: 900px) {
+  .steps-grid {
+    flex-wrap: nowrap;
+  }
+  .step-card {
+    flex: 1 1 0;
+    min-width: 0;
+  }
   .features-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (min-width: 1024px) {
   .nav-container { padding: 0.875rem 2rem; }
+  .steps-grid { flex-wrap: nowrap; }
+}
+
+@media (max-width: 899px) {
+  .steps-grid .step-card:last-child {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 768px) {
-  .nav-links, .nav-cta { display: none; }
+  .nav-links,
+  .nav-cta.desktop-only { display: none; }
   .nav-toggle { display: flex; }
+
+  .hero {
+    padding: 3rem 1.25rem 5rem;
+    min-height: calc(100dvh - 56px);
+  }
+
   .showcase-card {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -977,21 +1300,61 @@ body {
   }
   .showcase-visual { order: -1; }
   .chat-mockup { max-width: 100%; }
+
+  .showcase-list { gap: 2rem; }
+
   .newsletter-card { padding: 2rem 1.25rem; }
   .newsletter-form-row { flex-direction: column; }
+
   .site-footer {
     flex-direction: column;
     text-align: center;
     gap: 0.625rem;
   }
-  .hero { padding: 3rem 1.25rem 5rem; }
+
+  .install-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .install-banner-actions {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
+@media (max-width: 480px) {
+  .hero-ctas {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .hero-ctas .btn {
+    width: 100%;
+  }
+  .hero-badges {
+    gap: 0.375rem;
+  }
+  .showcase-card {
+    padding: 1.25rem;
+  }
+}
+
+/* Prevent horizontal overflow at any size */
+body, section, .section-wrap, .nav-container, .hero-container, .newsletter-form {
+  max-width: 100vw;
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .hero-bg-glow { animation: none; }
-  .hero-content, .hero-badges { animation: none; opacity: 1; }
-  .btn, .nav-links a, .nav-cta, .site-nav, .reveal, .step-card, .feature-card, .showcase-card {
+  .hero-stagger { animation: none !important; opacity: 1; }
+  .btn, .nav-links a, .nav-cta, .site-nav, .nav-toggle span,
+  .reveal, .step-card, .feature-card, .showcase-card,
+  .newsletter-btn, .showcase-cta, .mobile-cta,
+  .install-btn-install, .install-btn-dismiss {
     transition: none !important;
     animation: none !important;
   }
@@ -1008,7 +1371,7 @@ body {
 <input type="checkbox" id="nav-toggle-input" class="nav-toggle-input" aria-hidden="true">
 
 <!-- ==================== NAVIGATION ==================== -->
-<nav class="site-nav" id="navbar">
+<nav class="site-nav nav-glass" id="navbar">
   <div class="nav-container">
     <a href="/" class="nav-logo">
       <img src="assets/logo.png" alt="ReLU.chat" width="28" height="28">
@@ -1017,9 +1380,9 @@ body {
     <ul class="nav-links">
       <li><a href="#features">Features</a></li>
       <li><a href="#showcase">Chat</a></li>
-      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
     </ul>
-    <a href="#showcase" class="nav-cta">Try Chat</a>
+    <a href="#showcase" class="nav-cta desktop-only">Try Chat</a>
     <label for="nav-toggle-input" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span>
       <span></span>
@@ -1032,7 +1395,7 @@ body {
 <div class="mobile-nav" aria-hidden="true">
   <a href="#features" onclick="document.getElementById('nav-toggle-input').checked=false">Features</a>
   <a href="#showcase" onclick="document.getElementById('nav-toggle-input').checked=false">Chat</a>
-  <a href="#how-it-works" onclick="document.getElementById('nav-toggle-input').checked=false">How It Works</a>
+  <a href="/how-it-works.html" onclick="document.getElementById('nav-toggle-input').checked=false">How It Works</a>
   <a href="chat/game-theory-chat/" class="mobile-cta" onclick="document.getElementById('nav-toggle-input').checked=false">Get Started</a>
 </div>
 
@@ -1044,18 +1407,18 @@ body {
   </div>
   <div class="hero-container">
     <div class="hero-content">
-      <div class="hero-logo">
-        <img src="assets/logo.png" alt="ReLU.chat" width="72" height="72">
+      <div class="hero-logo hero-stagger">
+        <img src="assets/logo.png" alt="ReLU.chat" width="80" height="80">
       </div>
-      <h1>Interactive AI.<br>Zero Privacy Compromise.</h1>
-      <p class="hero-subhead">On-device, browser-based, open-source chatbots. Your conversations never leave your computer — no servers, no tracking, no LLMs.</p>
-      <div class="hero-ctas">
+      <h1 class="hero-stagger">Interactive AI.<br>Zero Privacy Compromise.</h1>
+      <p class="hero-subhead hero-stagger">On-device, browser-based, open-source chatbots. Your conversations never leave your computer — no servers, no tracking, no LLMs.</p>
+      <div class="hero-ctas hero-stagger">
         <a href="chat/game-theory-chat/" class="btn btn-primary">Try Game Theory Chat</a>
         <a href="chat/golden-age-inquiry/" class="btn btn-primary">Try Golden Age Inquiry</a>
         <a href="chat/data-science-chat/" class="btn btn-primary">Try Data Science Chat</a>
         <a href="https://github.com/yunusemrejr/relu-chat" class="btn btn-ghost" target="_blank" rel="noopener noreferrer">View Source</a>
       </div>
-      <div class="hero-badges">
+      <div class="hero-badges hero-stagger">
         <span class="badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           Privacy-first
@@ -1085,21 +1448,42 @@ body {
     </div>
 
     <div class="steps-grid">
-      <div class="step-card reveal" style="--i:0">
-        <div class="step-number">01</div>
-        <div class="step-title">Load</div>
-        <div class="step-desc">Transformer model downloads once and caches in your browser. Bot-specific knowledge base encodes on load — a one-time warm-up, then it's yours forever.</div>
+      <div class="step-card reveal">
+        <div class="step-number">01 Embed</div>
+        <div class="step-title">Sentence Embedding</div>
+        <div class="step-desc"><code>sentence-transformer</code> (MiniLM-L6-v2) downloads once, caches in your browser, and runs fully on-device. A one-time warm-up — then it's yours forever.</div>
       </div>
-      <div class="step-card reveal" style="--i:1">
-        <div class="step-number">02</div>
-        <div class="step-title">Understand</div>
-        <div class="step-desc">On-device NLP classifies your intent, extracts entities via pre-compiled patterns, and retrieves concepts using embeddings — entirely locally.</div>
+
+      <div class="step-card reveal">
+        <div class="step-number">02 Extract</div>
+        <div class="step-title">Feature Extraction</div>
+        <div class="step-desc">A <code>25-feature vector</code> is computed: cosine similarity, entity presence, intent scores, domain match confidence, and ambiguity signals — all locally.</div>
       </div>
-      <div class="step-card reveal" style="--i:2">
-        <div class="step-number">03</div>
-        <div class="step-title">Respond</div>
-        <div class="step-desc">Weighted fragment composition with linguistic connectors builds precise, diverse answers — rendered with beautiful LaTeX notation.</div>
+
+      <div class="step-card reveal">
+        <div class="step-number">03 Decide</div>
+        <div class="step-title">Policy Network</div>
+        <div class="step-desc">An <code>MLP policy network</code> (13K parameters, RL-trained) determines mode, intent, topic count, creativity, and tone from your extracted features.</div>
       </div>
+
+      <div class="step-card reveal">
+        <div class="step-number">04 Compose</div>
+        <div class="step-title">Fragment Composition</div>
+        <div class="step-desc">Fragment-based assembly with linguistic connectors, comparison openers, and tone modulation produces precise, varied, natural-sounding answers.</div>
+      </div>
+
+      <div class="step-card reveal">
+        <div class="step-number">05 Render</div>
+        <div class="step-title">KaTeX &amp; Session Memory</div>
+        <div class="step-desc">Responses render with KaTeX math, formatted text, and session memory for follow-up context — all without a server round-trip.</div>
+      </div>
+    </div>
+
+    <div class="how-it-works-footer">
+      <a href="/how-it-works.html" class="how-it-works-link">
+        Full Architecture Details
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
   </div>
 </section>
@@ -1112,32 +1496,32 @@ body {
     </div>
 
     <div class="features-grid">
-      <div class="feature-card reveal" style="--i:0">
+      <div class="feature-card liquid-glass reveal">
         <div class="feature-title">On-Device AI</div>
         <div class="feature-desc">Transformer runs entirely in your browser. No data leaves your machine.</div>
       </div>
 
-      <div class="feature-card reveal" style="--i:1">
+      <div class="feature-card liquid-glass reveal">
         <div class="feature-title">Privacy-First</div>
         <div class="feature-desc">No accounts, no tracking, no server-side processing. Just you and your browser.</div>
       </div>
 
-      <div class="feature-card reveal" style="--i:2">
+      <div class="feature-card liquid-glass reveal">
         <div class="feature-title">Open Source</div>
         <div class="feature-desc">Fully transparent. Inspect the code, fork it, extend it. Built for the community.</div>
       </div>
 
-      <div class="feature-card reveal" style="--i:3">
+      <div class="feature-card liquid-glass reveal">
         <div class="feature-title">No LLMs</div>
         <div class="feature-desc">Deterministic, explainable responses. No hallucinations, no API costs, no vendor lock-in.</div>
       </div>
 
-      <div class="feature-card reveal" style="--i:4">
+      <div class="feature-card liquid-glass reveal">
         <div class="feature-title">LaTeX Support</div>
         <div class="feature-desc">Mathematical notation rendered beautifully with KaTeX. Perfect for formulas in game theory, statistics, and ML.</div>
       </div>
 
-      <div class="feature-card reveal" style="--i:5">
+      <div class="feature-card liquid-glass reveal">
         <div class="feature-title">Browser-Based</div>
         <div class="feature-desc">Works anywhere. No installs, no dependencies, just a URL. Desktop, tablet, or mobile.</div>
       </div>
@@ -1148,125 +1532,122 @@ body {
 <!-- ==================== SHOWCASE ==================== -->
 <section id="showcase">
   <div class="section-wrap">
-    <div class="showcase-card" id="showcase-card">
-      <div class="showcase-content">
-        <h3 class="showcase-title">Game Theory Chat</h3>
-        <p class="showcase-desc">On-device NLU assistant for Nash equilibrium, Shapley value, auctions, prisoner's dilemma, and more. Ask in natural language — get precise, mathematical answers with LaTeX rendering.</p>
-        <div class="showcase-tags">
-          <span class="showcase-tag">Strategy</span>
-          <span class="showcase-tag">On-device AI</span>
-          <span class="showcase-tag">LaTeX</span>
-          <span class="showcase-tag">Mathematics</span>
-        </div>
-        <a href="chat/game-theory-chat/" class="showcase-cta">
-          Launch Chat
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-      <div class="showcase-visual">
-        <div class="chat-mockup">
-          <div class="chat-mockup-header">
-            <div class="chat-mockup-dot"></div>
-            <div class="chat-mockup-dot"></div>
-            <div class="chat-mockup-dot"></div>
-            <span class="chat-mockup-title">Game Theory Chat</span>
-          </div>
-          <div class="chat-mockup-body">
-            <div class="chat-bubble user">How do I find the Nash equilibrium?</div>
-            <div class="chat-bubble bot">For a 2x2 game, check each player's best response. If both play best responses to each other, that's a Nash equilibrium.</div>
-            <div class="chat-bubble bot latex">$u_i(s_i^*, s_{-i}^*) \ge u_i(s_i, s_{-i}^*)$</div>
-            <div class="chat-bubble user">Can you compute the Shapley value?</div>
-          </div>
-          <div class="chat-mockup-input">
-            <div class="chat-mockup-input-bar"></div>
-            <div class="chat-mockup-send"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="showcase-list">
 
-<!-- ==================== SHOWCASE 2 ==================== -->
-<section id="showcase">
-  <div class="section-wrap">
-    <div class="showcase-card" id="showcase-card-2">
-      <div class="showcase-content">
-        <h3 class="showcase-title">Golden Age Inquiry</h3>
-        <p class="showcase-desc">Explore the scientific and philosophical discoveries of the Islamic Golden Age. Ask about Al-Khwarizmi's algebra, Ibn al-Haytham's optics, the House of Wisdom, and the scholars who shaped modern science.</p>
-        <div class="showcase-tags">
-          <span class="showcase-tag">History of Science</span>
-          <span class="showcase-tag">Philosophy</span>
-          <span class="showcase-tag">On-device AI</span>
-          <span class="showcase-tag">Mathematics</span>
+      <!-- Game Theory Chat -->
+      <div class="showcase-card showcase-card--blue liquid-glass" id="showcase-card">
+        <div class="showcase-content">
+          <h3 class="showcase-title">Game Theory Chat</h3>
+          <p class="showcase-desc">On-device NLU assistant for Nash equilibrium, Shapley value, auctions, prisoner's dilemma, and more. Ask in natural language — get precise, mathematical answers with LaTeX rendering.</p>
+          <div class="showcase-tags">
+            <span class="showcase-tag">Strategy</span>
+            <span class="showcase-tag">On-device AI</span>
+            <span class="showcase-tag">LaTeX</span>
+            <span class="showcase-tag">Mathematics</span>
+          </div>
+          <a href="chat/game-theory-chat/" class="showcase-cta">
+            Launch Chat
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
-        <a href="chat/golden-age-inquiry/" class="showcase-cta">
-          Launch Chat
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-      <div class="showcase-visual">
-        <div class="chat-mockup">
-          <div class="chat-mockup-header">
-            <div class="chat-mockup-dot"></div>
-            <div class="chat-mockup-dot"></div>
-            <div class="chat-mockup-dot"></div>
-            <span class="chat-mockup-title">Golden Age Inquiry</span>
-          </div>
-          <div class="chat-mockup-body">
-            <div class="chat-bubble user">Who was Al-Khwarizmi?</div>
-            <div class="chat-bubble bot">Al-Khwarizmi (c. 780–850) founded algebra and introduced algorithms. His name gave us "algorithm" and his book "Al-Kitab al-Mukhtasar..." gave us "algebra."</div>
-            <div class="chat-bubble bot">He worked at the House of Wisdom in Baghdad, synthesizing Greek, Indian, and Persian mathematics.</div>
-            <div class="chat-bubble user">What is the Tusi couple?</div>
-          </div>
-          <div class="chat-mockup-input">
-            <div class="chat-mockup-input-bar"></div>
-            <div class="chat-mockup-send"></div>
+        <div class="showcase-visual">
+          <div class="chat-mockup">
+            <div class="chat-mockup-header">
+              <div class="chat-mockup-dot"></div>
+              <div class="chat-mockup-dot"></div>
+              <div class="chat-mockup-dot"></div>
+              <span class="chat-mockup-title">Game Theory Chat</span>
+            </div>
+            <div class="chat-mockup-body">
+              <div class="chat-bubble user">How do I find the Nash equilibrium?</div>
+              <div class="chat-bubble bot">For a 2x2 game, check each player's best response. If both play best responses to each other, that's a Nash equilibrium.</div>
+              <div class="chat-bubble bot latex">$u_i(s_i^*, s_{-i}^*) \ge u_i(s_i, s_{-i}^*)$</div>
+              <div class="chat-bubble user">Can you compute the Shapley value?</div>
+            </div>
+            <div class="chat-mockup-input">
+              <div class="chat-mockup-input-bar"></div>
+              <div class="chat-mockup-send"></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ==================== SHOWCASE 3 ==================== -->
-<section id="showcase">
-  <div class="section-wrap">
-    <div class="showcase-card" id="showcase-card-3">
-      <div class="showcase-content">
-        <h3 class="showcase-title">Data Science Chat</h3>
-        <p class="showcase-desc">On-device NLU assistant for data science and machine learning. Ask about pandas, NumPy, statistics, classification, regression, clustering, feature engineering, model evaluation, and more — all running locally in your browser.</p>
-        <div class="showcase-tags">
-          <span class="showcase-tag">Data Science</span>
-          <span class="showcase-tag">On-device AI</span>
-          <span class="showcase-tag">Statistics</span>
-          <span class="showcase-tag">Machine Learning</span>
+      <!-- Golden Age Inquiry -->
+      <div class="showcase-card showcase-card--amber liquid-glass" id="showcase-card-2">
+        <div class="showcase-content">
+          <h3 class="showcase-title">Golden Age Inquiry</h3>
+          <p class="showcase-desc">Explore the scientific and philosophical discoveries of the Islamic Golden Age. Ask about Al-Khwarizmi's algebra, Ibn al-Haytham's optics, the House of Wisdom, and the scholars who shaped modern science.</p>
+          <div class="showcase-tags">
+            <span class="showcase-tag">History of Science</span>
+            <span class="showcase-tag">Philosophy</span>
+            <span class="showcase-tag">On-device AI</span>
+            <span class="showcase-tag">Mathematics</span>
+          </div>
+          <a href="chat/golden-age-inquiry/" class="showcase-cta">
+            Launch Chat
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
-        <a href="chat/data-science-chat/" class="showcase-cta">
-          Launch Chat
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-      <div class="showcase-visual">
-        <div class="chat-mockup">
-          <div class="chat-mockup-header">
-            <div class="chat-mockup-dot"></div>
-            <div class="chat-mockup-dot"></div>
-            <div class="chat-mockup-dot"></div>
-            <span class="chat-mockup-title">Data Science Chat</span>
-          </div>
-          <div class="chat-mockup-body">
-            <div class="chat-bubble user">What is logistic regression?</div>
-            <div class="chat-bubble bot">Logistic regression models the probability of a binary outcome using the logistic function $\sigma(z)=1/(1+e^{-z})$, where $z=\beta_0+\beta_1x_1+\cdots+\beta_px_p$.</div>
-            <div class="chat-bubble bot">It's a linear model for classification — despite the name, it's used for predicting classes, not continuous values.</div>
-            <div class="chat-bubble user">Explain cross-validation</div>
-          </div>
-          <div class="chat-mockup-input">
-            <div class="chat-mockup-input-bar"></div>
-            <div class="chat-mockup-send"></div>
+        <div class="showcase-visual">
+          <div class="chat-mockup">
+            <div class="chat-mockup-header">
+              <div class="chat-mockup-dot"></div>
+              <div class="chat-mockup-dot"></div>
+              <div class="chat-mockup-dot"></div>
+              <span class="chat-mockup-title">Golden Age Inquiry</span>
+            </div>
+            <div class="chat-mockup-body">
+              <div class="chat-bubble user">Who was Al-Khwarizmi?</div>
+              <div class="chat-bubble bot">Al-Khwarizmi (c. 780–850) founded algebra and introduced algorithms. His name gave us "algorithm" and his book "Al-Kitab al-Mukhtasar..." gave us "algebra."</div>
+              <div class="chat-bubble bot">He worked at the House of Wisdom in Baghdad, synthesizing Greek, Indian, and Persian mathematics.</div>
+              <div class="chat-bubble user">What is the Tusi couple?</div>
+            </div>
+            <div class="chat-mockup-input">
+              <div class="chat-mockup-input-bar"></div>
+              <div class="chat-mockup-send"></div>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- Data Science Chat -->
+      <div class="showcase-card showcase-card--green liquid-glass" id="showcase-card-3">
+        <div class="showcase-content">
+          <h3 class="showcase-title">Data Science Chat</h3>
+          <p class="showcase-desc">On-device NLU assistant for data science and machine learning. Ask about pandas, NumPy, statistics, classification, regression, clustering, feature engineering, model evaluation, and more — all running locally in your browser.</p>
+          <div class="showcase-tags">
+            <span class="showcase-tag">Data Science</span>
+            <span class="showcase-tag">On-device AI</span>
+            <span class="showcase-tag">Statistics</span>
+            <span class="showcase-tag">Machine Learning</span>
+          </div>
+          <a href="chat/data-science-chat/" class="showcase-cta">
+            Launch Chat
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="showcase-visual">
+          <div class="chat-mockup">
+            <div class="chat-mockup-header">
+              <div class="chat-mockup-dot"></div>
+              <div class="chat-mockup-dot"></div>
+              <div class="chat-mockup-dot"></div>
+              <span class="chat-mockup-title">Data Science Chat</span>
+            </div>
+            <div class="chat-mockup-body">
+              <div class="chat-bubble user">What is logistic regression?</div>
+              <div class="chat-bubble bot">Logistic regression models the probability of a binary outcome using the logistic function $\sigma(z)=1/(1+e^{-z})$, where $z=\beta_0+\beta_1x_1+\cdots+\beta_px_p$.</div>
+              <div class="chat-bubble bot">It's a linear model for classification — despite the name, it's used for predicting classes, not continuous values.</div>
+              <div class="chat-bubble user">Explain cross-validation</div>
+            </div>
+            <div class="chat-mockup-input">
+              <div class="chat-mockup-input-bar"></div>
+              <div class="chat-mockup-send"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1274,7 +1655,7 @@ body {
 <!-- ==================== NEWSLETTER ==================== -->
 <section id="newsletter">
   <div class="section-wrap">
-    <div class="newsletter-card">
+    <div class="newsletter-card liquid-glass">
       <h2 class="newsletter-title">Stay Updated</h2>
       <p class="newsletter-desc">Be the first to know when new chatbots launch. No spam, unsubscribe anytime.</p>
       <form class="newsletter-form" id="newsletter-form" action="api/subscribe.php" method="POST">
@@ -1303,22 +1684,19 @@ body {
   </div>
 </footer>
 
+<!-- ==================== INSTALL BANNER ==================== -->
+<div class="install-banner" id="install-banner">
+  <span class="install-banner-text">Install ReLU.chat for offline access and faster loading.</span>
+  <div class="install-banner-actions">
+    <button class="install-btn-dismiss" id="install-dismiss">Dismiss</button>
+    <button class="install-btn-install" id="install-btn">Install</button>
+  </div>
+</div>
+
 <!-- ==================== SCRIPTS ==================== -->
 <script>
 (function() {
   'use strict';
-
-  /* Nav scroll effect */
-  var navbar = document.getElementById('navbar');
-  function onScroll() {
-    if (window.scrollY > 10) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
 
   /* Reveal on scroll */
   var revealObserver = new IntersectionObserver(function(entries) {
@@ -1334,45 +1712,21 @@ body {
     revealObserver.observe(el);
   });
 
-  /* Showcase card reveal */
-  var showcase = document.getElementById('showcase-card');
-  if (showcase) {
-    var showcaseObserver = new IntersectionObserver(function(entries) {
+  /* Showcase cards reveal */
+  var showcaseIds = ['showcase-card', 'showcase-card-2', 'showcase-card-3'];
+  showcaseIds.forEach(function(id) {
+    var card = document.getElementById(id);
+    if (!card) return;
+    var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          showcaseObserver.unobserve(entry.target);
+          obs.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.15 });
-    showcaseObserver.observe(showcase);
-  }
-
-  var showcase2 = document.getElementById('showcase-card-2');
-  if (showcase2) {
-    var showcaseObserver2 = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          showcaseObserver2.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-    showcaseObserver2.observe(showcase2);
-  }
-
-  var showcase3 = document.getElementById('showcase-card-3');
-  if (showcase3) {
-    var showcaseObserver3 = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          showcaseObserver3.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-    showcaseObserver3.observe(showcase3);
-  }
+    }, { threshold: 0.12 });
+    obs.observe(card);
+  });
 
   /* Newsletter form */
   var form = document.getElementById('newsletter-form');
@@ -1399,7 +1753,7 @@ body {
     .then(function(res) { return res.json(); })
     .then(function(data) {
       if (data.success) {
-        showMessage('You\'re on the list! We\'ll notify you when we launch.', 'success');
+        showMessage("You're on the list! We'll notify you when we launch.", 'success');
         emailInput.value = '';
       } else {
         showMessage(data.error || 'Something went wrong. Please try again.', 'error');
@@ -1434,7 +1788,7 @@ body {
 <script src="assets/katex/auto-render.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const latexEl = document.querySelector('.chat-bubble.latex');
+  var latexEl = document.querySelector('.chat-bubble.latex');
   if (latexEl && window.renderMathInElement) {
     renderMathInElement(latexEl, {
       delimiters: [{ left: '$', right: '$', display: false }],
@@ -1444,15 +1798,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- Install banner -->
-<div id="install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg-elevated);border-top:1px solid var(--border);padding:0.875rem 1.25rem;display:none;align-items:center;justify-content:space-between;gap:0.75rem;animation:fadeIn 0.3s ease;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);">
-  <span style="font-size:0.8125rem;color:var(--text-secondary);line-height:1.4;flex:1;">Install ReLU.chat for offline access and faster loading.</span>
-  <div style="display:flex;gap:0.5rem;flex-shrink:0;">
-    <button id="install-dismiss" style="padding:0.5rem 0.875rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-size:0.75rem;font-weight:500;cursor:pointer;font-family:var(--font);">Dismiss</button>
-    <button id="install-btn" style="padding:0.5rem 0.875rem;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:var(--font);">Install</button>
-  </div>
-</div>
-
+<!-- ==================== PWA INSTALL ==================== -->
 <script>
 (function() {
   'use strict';
@@ -1467,12 +1813,12 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     deferredPrompt = e;
     if (!localStorage.getItem('install-dismissed')) {
-      banner.style.display = 'flex';
+      banner.classList.add('visible');
     }
   });
   if (installBtn) {
     installBtn.addEventListener('click', function() {
-      banner.style.display = 'none';
+      banner.classList.remove('visible');
       if (deferredPrompt) {
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then(function() { deferredPrompt = null; });
@@ -1481,7 +1827,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   if (dismissBtn) {
     dismissBtn.addEventListener('click', function() {
-      banner.style.display = 'none';
+      banner.classList.remove('visible');
       localStorage.setItem('install-dismissed', '1');
     });
   }

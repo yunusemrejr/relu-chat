@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How It Works — ReLU.chat Architecture</title>
+<meta name="description" content="Complete technical architecture of ReLU.chat: 25-feature MLP policy network, RL training pipeline, ONNX/WASM compilation, browser-based transformer inference, and fragment-based response composition.">
+<link rel="stylesheet" href="assets/fonts/inter.css">
+<link rel="canonical" href="https://relu.chat/how-it-works.html">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#070809;--bg-elevated:#0c0e10;--bg-card:rgba(255,255,255,0.012);
+  --bg-card-hover:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);
+  --border-hover:rgba(59,130,246,0.35);--text-primary:#f5f6f7;
+  --text-secondary:#888d96;--text-tertiary:#565b64;
+  --accent:#1d4ed8;--accent-light:#3b82f6;--accent-glow:rgba(59,130,246,0.15);
+  --accent-hover:#2563eb;--success:#22c55e;--error:#ef4444;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-xl:20px;
+  --shadow-card:rgba(0,0,0,0.12)0 0 0 1px,rgba(0,0,0,0.06)0 2px 4px,rgba(0,0,0,0.06)0 8px 16px -8px;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100dvh;line-height:1.7;-webkit-font-smoothing:antialiased;font-feature-settings:"cv01","ss03"}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(7,8,9,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:600;font-size:16px}
+.nav-logo img{width:24px;height:24px}
+.nav-links{display:flex;align-items:center;gap:16px;list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .15s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-cta{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:500;transition:background .15s}
+.nav-cta:hover{background:var(--accent-hover)}
+
+.container{max-width:900px;margin:0 auto;padding:48px 24px 80px}
+.hero{margin-bottom:64px}
+.hero h1{font-size:clamp(28px,5vw,44px);font-weight:700;letter-spacing:-0.03em;line-height:1.15;margin-bottom:12px}
+.hero p{color:var(--text-secondary);font-size:17px;max-width:640px}
+
+h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:56px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:17px;font-weight:600;margin:28px 0 10px;color:var(--text-primary)}
+h2:first-of-type{margin-top:0}
+
+p{color:var(--text-secondary);font-size:15px;margin-bottom:16px}
+
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:13px;background:rgba(59,130,246,0.08);color:var(--accent-light);padding:2px 6px;border-radius:4px}
+pre{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 20px;overflow-x:auto;margin-bottom:20px;font-size:13px;line-height:1.55}
+pre code{background:transparent;color:var(--text-secondary);padding:0}
+
+.arch-diagram{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin:28px 0}
+.arch-flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.arch-block{background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.18);border-radius:var(--radius-md);padding:12px 18px;text-align:center;min-width:100px}
+.arch-block strong{display:block;font-size:13px;color:var(--text-primary);margin-bottom:4px}
+.arch-block span{font-size:11px;color:var(--text-tertiary)}
+.arch-arrow{color:var(--accent-light);font-size:18px;font-weight:700}
+
+.table-wrap{overflow-x:auto;margin-bottom:24px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--text-secondary);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+td{color:var(--text-primary)}
+td code{font-size:12px}
+
+.step-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;margin-bottom:16px}
+.step-card .num{display:inline-block;background:rgba(59,130,246,0.1);color:var(--accent-light);font-size:13px;font-weight:700;padding:2px 10px;border-radius:var(--radius-sm);margin-bottom:8px}
+.step-card h3{margin-top:0}
+.step-card p{font-size:14px;margin-bottom:0}
+
+footer{border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-tertiary);font-size:13px}
+footer a{color:var(--text-secondary);text-decoration:underline}
+
+@media(max-width:640px){
+  .container{padding:32px 16px 48px}
+  .arch-flow{flex-direction:column}
+  .arch-arrow{transform:rotate(90deg)}
+  .nav-cta span.nav-label{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="assets/logo.png" alt="">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#showcase">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<div class="container">
+
+<div class="hero">
+  <h1>How ReLU.chat Works</h1>
+  <p>An open-source, browser-based chatbot platform with a 25-feature reinforcement-learning-trained policy network, transformer embeddings, and fragment-based response composition — all running on-device with zero server calls.</p>
+</div>
+
+<h2>1. Overview</h2>
+<p>ReLU.chat processes every message entirely in your browser. No API keys, no cloud LLMs, no telemetry. The system uses a <strong>sentence-transformer</strong> (<code>all-MiniLM-L6-v2</code>, quantized ONNX, ~22 MB) to embed queries and knowledge-base entries into 384-dimensional vectors. A <strong>reinforcement-learning-trained MLP policy network</strong> (25 inputs → 128 → 64 → 6 action heads) decides <em>how</em> to respond, and a fragment-based composition engine renders the final answer with linguistic connectors.</p>
+
+<div class="arch-diagram">
+  <div class="arch-flow">
+    <div class="arch-block"><strong>Query</strong><span>User types</span></div>
+    <span class="arch-arrow">→</span>
+    <div class="arch-block"><strong>Embedding</strong><span>MiniLM-L6-v2<br>384-dim ONNX</span></div>
+    <span class="arch-arrow">→</span>
+    <div class="arch-block"><strong>Features</strong><span>25-dim vector<br>extraction</span></div>
+    <span class="arch-arrow">→</span>
+    <div class="arch-block"><strong>Policy</strong><span>MLP 25→128→64<br>6 action heads</span></div>
+    <span class="arch-arrow">→</span>
+    <div class="arch-block"><strong>Compose</strong><span>Fragment engine<br>+ connectors</span></div>
+    <span class="arch-arrow">→</span>
+    <div class="arch-block"><strong>Response</strong><span>Rendered text</span></div>
+  </div>
+</div>
+
+<h2>2. Feature Extraction</h2>
+<p>For every query, a <strong>25-feature vector</strong> is extracted from the embedding context. This vector feeds both the heuristic fallback and the MLP policy network.</p>
+
+<h3>25-Feature Layout</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Idx</th><th>Name</th><th>Type</th><th>Range</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>0</td><td><code>qSimTop1</code></td><td>f32</td><td>[0,1]</td><td>Cosine similarity to top-1 KB entry</td></tr>
+<tr><td>1</td><td><code>qSimTop2</code></td><td>f32</td><td>[0,1]</td><td>Cosine similarity to top-2 KB entry</td></tr>
+<tr><td>2</td><td><code>entityCount</code></td><td>u8</td><td>[0,3]</td><td>Named entities extracted (capped)</td></tr>
+<tr><td>3</td><td><code>entityBoostHit</code></td><td>bool</td><td>{0,1}</td><td>Top-5 ranked entry matches an entity</td></tr>
+<tr><td>4–8</td><td><code>intent*Score</code></td><td>f32</td><td>[0,1]</td><td>Cosine scores vs definition, example, formal, application, comparison prototypes</td></tr>
+<tr><td>9</td><td><code>lastTopicSim</code></td><td>f32</td><td>[0,1]</td><td>Cosine of query to last topic embedding</td></tr>
+<tr><td>10</td><td><code>lastTopicAge</code></td><td>u8</td><td>[0,8]</td><td>Turns since last topic change (capped)</td></tr>
+<tr><td>11</td><td><code>kbCoverage</code></td><td>f32</td><td>[0,1]</td><td>Fraction of KB entries with sim &gt; 0.25</td></tr>
+<tr><td>12</td><td><code>queryLenTokens</code></td><td>u8</td><td>[1,32]</td><td>Token count after stop-word removal</td></tr>
+<tr><td>13</td><td><code>hasComparisonCue</code></td><td>bool</td><td>{0,1}</td><td>"vs", "compare", "difference" detected</td></tr>
+<tr><td>14</td><td><code>hasFormalCue</code></td><td>bool</td><td>{0,1}</td><td>"prove", "theorem", "formal" detected</td></tr>
+<tr><td>15</td><td><code>hasExampleCue</code></td><td>bool</td><td>{0,1}</td><td>"example", "illustrate", "case" detected</td></tr>
+<tr><td>16</td><td><code>botCreativity</code></td><td>f32</td><td>[0,1]</td><td>Bot profile creativity ceiling</td></tr>
+<tr><td>17</td><td><code>domainMatch</code></td><td>f32</td><td>[0,1]</td><td>Max cosine to domain prototype embeddings</td></tr>
+<tr><td>18</td><td><code>followUpType</code></td><td>u8</td><td>[0,7]</td><td>Session follow-up type (simplify, elaborate, etc.)</td></tr>
+<tr><td>19</td><td><code>wasAmbiguous</code></td><td>bool</td><td>{0,1}</td><td>Previous turn flagged as ambiguous</td></tr>
+<tr><td>20</td><td><code>avgTruthConf</code></td><td>f32</td><td>[0,1]</td><td>Average truth confidence of fragments</td></tr>
+<tr><td>21</td><td><code>avgSourceConf</code></td><td>f32</td><td>[0,1]</td><td>Average source confidence of fragments</td></tr>
+<tr><td>22</td><td><code>minDifficulty</code></td><td>u8</td><td>[0,4]</td><td>Minimum difficulty across fragments</td></tr>
+<tr><td>23</td><td><code>fragDiversity</code></td><td>u8</td><td>[0,5]</td><td>Distinct fragment styles available</td></tr>
+<tr><td>24</td><td><code>avoidWithCount</code></td><td>f32</td><td>[0,1]</td><td>Fraction of top entries with compatibility constraints</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>3. Policy Network (MLP)</h2>
+<p>The policy is a <strong>multilayer perceptron</strong> trained via reinforcement learning to select the optimal response parameters given the 25-dim feature context.</p>
+
+<h3>Architecture</h3>
+<pre><code>Input:     Float32Array(25) — 25 normalized features
+  ↓
+fc1:       Linear(25, 128) + ReLU       (3,328 params)
+  ↓
+fc2:       Linear(128, 64) + ReLU       (8,256 params)
+  ↓
+Heads (all share fc2 output, 64 dims):
+  mode_head:        Linear(64, 5)   → softmax → [normal, off_topic, greeting, help, comparison]
+  intent_head:      Linear(64, 5)   → softmax → [definition, example, formal, application, comparison]
+  topic_count_head: Linear(64, 4)   → softmax → [1, 2, 3, 4]
+  frag_count_head:  Linear(64, 4)   → softmax → [1, 2, 3, 4]
+  creativity_head:  Linear(64, 1)   → sigmoid → [0, 1]
+  tone_head:        Linear(64, 4)   → softmax → [neutral, formal, intuitive, playful]
+
+Total:  ~13,079 parameters (trained, exportable)
+Version: 0.2.0 (25-feature input, includes avoidWithCount)</code></pre>
+
+<h3>Dual-Engine Inference</h3>
+<p>The policy runtime (<code>policy/policy-runtime.js</code>) attempts engines in priority order:</p>
+<ol style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+  <li><strong>WASM Engine</strong> — Compiled ONNX model via WebAssembly. Fastest path when available. <code>_wasmPlanAnswer()</code> in <code>policy-runtime.js</code>.</li>
+  <li><strong>MLP Engine</strong> — Pure-JS float32 math (<code>policy/mlp-inference.js</code>). No dependencies. Same architecture and weights as the PyTorch-trained model. Always available.</li>
+  <li><strong>Heuristic Fallback</strong> — 15 parameterized decision thresholds. Used when neither WASM nor MLP weights are loaded. Tuned via random search (<code>tune-heuristic.py</code>, 500 trials, 100% validation accuracy).</li>
+</ol>
+
+<h2>4. Training Pipeline</h2>
+<p>The MLP policy network is trained offline using PyTorch, then exported as JSON weights for the browser-based JS engine.</p>
+
+<h3>Pipeline Stages</h3>
+<div class="step-card">
+  <div class="num">Step 1</div>
+  <h3>Prompt Generation</h3>
+  <p><code>train-policy.py:generate_prompts()</code> creates seed prompts from KB entries and intent prototypes, then applies automatic augmentation: synonym substitution, typos, informal phrasing, conversational context, and rephrasing. Target: 5000+ per bot. Optional LLM augmentation via <code>augment_prompts.py</code> for additional diversity.</p>
+</div>
+
+<div class="step-card">
+  <div class="num">Step 2</div>
+  <h3>Retrieval Dataset</h3>
+  <p><code>build_retrieval_dataset()</code> embeds all KB entries and queries using <code>sentence-transformers/all-MiniLM-L6-v2</code> (real embeddings) or a TF-IDF fallback when the library is unavailable. Computes per-sample cosine rankings, entity extractions, intent scores, and the full 25-feature vector.</p>
+</div>
+
+<div class="step-card">
+  <div class="num">Step 3</div>
+  <h3>RL Training (REINFORCE)</h3>
+  <p>The <code>PolicyNetwork</code> (<code>policy_model.py</code>) is trained with a state-dependent value baseline (not exponential moving average). Each step: forward pass → sample actions → ε-greedy exploration → compute reward → policy gradient update with gradient clipping. The reward function has 6 dynamic components: intent match, topic precision, fragment coherence, length penalty, creativity alignment, and guardrail compliance.</p>
+</div>
+
+<div class="step-card">
+  <div class="num">Step 4</div>
+  <h3>Weight Export</h3>
+  <p>Trained PyTorch parameters are remapped to JS-compatible keys (<code>fc1.weight</code>, <code>mode_head.bias</code>, etc.) and exported to <code>assets/models/policy/policy.weights.json</code>. The JS <code>MLPPolicy</code> class validates all 16 weight tensor shapes at construction time (fail-fast).</p>
+</div>
+
+<div class="step-card">
+  <div class="num">Step 5</div>
+  <h3>ONNX &amp; WASM</h3>
+  <p><code>export_onnx()</code> freezes the PyTorch graph and exports to <code>policy.onnx</code> (opset 17, constant folding, validated). <code>compile_wasm()</code> compiles to WASM via available toolchains (<code>wonnx-cli</code> or <code>onnx2json</code>), with <code>wasm-opt -O3</code> optimization. When no compilation tools are available, the JS MLP engine serves as the primary runtime.</p>
+</div>
+
+<h2>5. Fragment-Based Response Composition</h2>
+<p>Each knowledge-base entry contains categorized fragments (<code>def</code>, <code>int</code>, <code>ex</code>, <code>form</code>, <code>app</code>) with metadata fields: <code>truth_confidence</code>, <code>source_confidence</code>, <code>difficulty</code>, <code>style</code>, <code>avoid_with</code>.</p>
+
+<p>The policy produces an <code>AnswerPlan</code> specifying:</p>
+<ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+  <li><strong>Mode</strong> — normal, comparison, greeting, help, off_topic</li>
+  <li><strong>Intent</strong> — definition, example, formal, application, comparison</li>
+  <li><strong>Topics</strong> — which KB entries to include</li>
+  <li><strong>Fragment Plan</strong> — which categories and indices per topic</li>
+  <li><strong>Template</strong> — opener/closer indices, comparison opener key, connector keys</li>
+  <li><strong>Creativity</strong> — scalar [0,1] controlling response variation</li>
+  <li><strong>Tone</strong> — neutral, formal, intuitive, playful</li>
+</ul>
+
+<p><code>composeV2()</code> in <code>core/nlp.js</code> reads the <code>AnswerPlan</code> and assembles the final text by selecting fragments, applying linguistic connectors ("For instance,", "More formally,", etc.), prefixed by openers and suffixed by closers — all indexed from the plan with modulo-safety.</p>
+
+<h3>Comparison Mode</h3>
+<p>When <code>mode === 'comparison'</code>, the policy selects a <code>comparisonOpenerKey</code> (<code>both</code>, <code>contrast</code>, or <code>similarity</code>) from the template. The renderer uses patterned openers like <em>"Both A and B are important concepts here."</em> and distributes categories across multiple topics.</p>
+
+<h2>6. Action Schema &amp; Validation</h2>
+<p>Every <code>AnswerPlan</code> passes through <code>validatePlan()</code> (<code>policy/action-schema.js</code>) which enforces:</p>
+<ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+  <li>Type checking on all 10 top-level fields</li>
+  <li>Enum membership (mode, intent, tone)</li>
+  <li>Range validation (creativity ∈ [0,1], topics ≤ maxTopics)</li>
+  <li>Cross-field consistency (fragmentPlan length matches topics; comparison with &lt;2 topics falls back to normal)</li>
+  <li>Sanitization with schema defaults for missing/invalid fields</li>
+</ul>
+
+<h2>7. Feature Serialization</h2>
+<p>For the WASM boundary, features are packed into a 107-byte buffer:</p>
+<pre><code>packFeatures(features) → {
+  float32: Float32Array(25),     // offset 0,  100 bytes
+  uint8:   Uint8Array(7),       // offset 100, 7 bytes
+  buffer:  ArrayBuffer(107)      // total
+}
+
+Uint8Array layout:
+  [0] = entityCount         (u8, 0-3)
+  [1] = packed booleans     (bits: entityBoostHit|hasComparisonCue|hasFormalCue|hasExampleCue|wasAmbiguous)
+  [2] = lastTopicAge        (u8, 0-8)
+  [3] = queryLenTokens      (u8, 1-32)
+  [4] = followUpType        (u8, 0-7)
+  [5] = minDifficulty       (u8, 0-4)
+  [6] = fragDiversity       (u8, 0-5)</code></pre>
+
+<h2>8. Heuristic Threshold Tuning</h2>
+<p>The heuristic fallback path uses 15 parameterized thresholds (greeting similarity, off-topic detection, comparison fallback, entity boost, creativity defaults, etc.). <code>tune-heuristic.py</code> performs random search over the 15-dimensional threshold space against a human-rated validation set (5 examples covering greeting, off_topic, normal, comparison-fallback modes). The best thresholds are saved to <code>dev/exports/best_thresholds.json</code>.</p>
+
+<h2>9. GitHub Actions CI/CD</h2>
+<p>A nightly pipeline (<code>.github/workflows/train-policy.yml</code>) runs at midnight UTC:</p>
+<ol style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+  <li>Node.js 22 + Python 3.11 environment</li>
+  <li>Runs <code>test-policy-runtime.js</code> (145+ tests: validation, features, heuristic, MLP inference)</li>
+  <li>Runs <code>train-policy.py --skip-train</code> to validate the pipeline</li>
+  <li>Uploads dataset and export artifacts</li>
+</ol>
+
+<h2>10. Deployment &amp; Safety</h2>
+<p>Production deployment uses <code>deploy.sh</code> — an lftp-based script with built-in guardrails:</p>
+<ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+  <li>Remote data snapshot pulled before any sync</li>
+  <li>Local backup created (rsync)</li>
+  <li>NEVER-DELETE regex patterns protect <code>.db</code>, <code>.sqlite</code>, <code>.backup</code>, <code>.log</code>, <code>.env</code> files</li>
+  <li><code>--force-delete</code> flag required for remote file removal; shows audit list before confirming</li>
+  <li>Git clean-tree check; no uncommitted changes</li>
+  <li>Automatic retry with longer timeouts on failure</li>
+</ul>
+
+<h2>11. Open Source</h2>
+<p>The full codebase is available at <a href="https://github.com/yunusemrejr/relu-chat" style="color:var(--accent-light)">github.com/yunusemrejr/relu-chat</a> under the MIT license. This includes:</p>
+<ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+  <li><code>core/</code> — NLP engine, chatbot engine, session memory</li>
+  <li><code>policy/</code> — Feature extractor, MLP inference, action schema, runtime</li>
+  <li><code>dev/scripts/</code> — PyTorch training, weight export, heuristic tuning, prompt augmentation</li>
+  <li><code>dev/Dockerfile.policy-build</code> — Containerized training + WASM build</li>
+  <li><code>.github/workflows/train-policy.yml</code> — Nightly CI</li>
+</ul>
+
+</div>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
+</footer>
+
+</body>
+</html>

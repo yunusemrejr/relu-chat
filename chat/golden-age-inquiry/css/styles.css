@@ -616,3 +616,88 @@ pre code {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Liquid Glass Nav */
+.site-nav {
+  background: rgba(7,8,9,0.65) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Glass Message Bubbles */
+.msg.bot .msg-body {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.03);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Glass Input Bar */
+#form {
+  background: rgba(7,8,9,0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+#input {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 10px 16px;
+  transition: border-color 0.2s;
+}
+#input:focus {
+  border-color: rgba(59,130,246,0.4);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.08);
+  outline: none;
+}
+
+/* Glass Suggestions */
+.suggestion {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.suggestion:hover {
+  background: rgba(59,130,246,0.1);
+  border-color: rgba(59,130,246,0.25);
+  color: var(--text-primary);
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+  .chat-layout { padding: 0; }
+  .msg { padding: 6px 12px; }
+  .message.bot .bubble, .message.user .bubble { 
+    max-width: 92%;
+    font-size: 14px; 
+  }
+  #input { font-size: 16px; }
+  .suggestion { font-size: 12px; padding: 6px 10px; }
+  .nav-container { padding: 0 12px; }
+  .nav-logo span { font-size: 14px; }
+}
+/* Notched phones */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .site-nav { padding-top: env(safe-area-inset-top); }
+  #form { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+}
+
+/* Status indicator */
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  transition: background 0.3s;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.06);
+}
+.status-dot.ready { background: var(--success); box-shadow: 0 0 8px var(--success-glow); }

@@ -1,0 +1,24 @@
+# .deployguard — Data-loss prevention rules
+# These patterns must NEVER be deleted from production under any circumstance.
+# Checked by deploy.sh audit step before any --force-delete operation.
+
+# Database and data files
+.*\.db$
+.*\.sqlite$
+.*\.sqlite3$
+.*\.sql$
+
+# Backup files (production may create its own)
+.*\.backup$
+.*\.bak$
+
+# Configuration files that may differ from local
+.*/\.env$
+.*/error_log$
+
+# User-uploaded content
+.*/uploads/.*
+.*/media/.*
+
+# Logs (production logs are never local)
+.*\.log$

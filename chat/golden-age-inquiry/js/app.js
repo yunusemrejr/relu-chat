@@ -17,7 +17,7 @@ const SUGGESTIONS = [
 ];
 
 const welcomeMessage =
-  '<span style="font-size:1.125rem;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;">Golden Age Inquiry</span><br><br>Hi! I\'m an <strong>on-device</strong> assistant specialized in the <strong>scientific and philosophical discoveries</strong> of the Islamic Golden Age (8th–14th centuries). I understand your question with a transformer running entirely in your browser and compose responses from weighted concept fragments — nothing is sent to a server.<br><br>The first query will warm up the model (a one-time download). Try a suggestion below, or ask your own question.';
+  '<span style="font-size:1.125rem;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;">Golden Age Inquiry</span><br><br>Hi! I run <strong>entirely on-device</strong> — no servers, no API calls, no tracking. <br><br><strong>How it works:</strong> Your question is embedded with a transformer, analyzed by a 25-feature extractor, then routed through an <strong>RL-trained MLP policy network</strong> (13K params) that decides mode, intent, tone, and topic composition. Responses are assembled from knowledge fragments with linguistic connectors — all in your browser.<br><br>First query warms up the model (~22 MB, cached). <a href="/how-it-works.html" style="color:var(--accent-light)">Read the architecture →</a>';
 
 const botProfile = {
   id: "golden-age-inquiry",
