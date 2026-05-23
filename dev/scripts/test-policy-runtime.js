@@ -16,6 +16,7 @@
 import { validatePlan, DEFAULT_PLAN, PLAN_SCHEMA, isAnswerPlanLike } from '../../policy/action-schema.js';
 import { extractPolicyFeatures, packFeatures, unpackFeatures } from '../../policy/feature-extractor.js';
 import { planAnswerHeuristic } from '../../policy/policy-runtime.js';
+import { MLPPolicy } from '../../policy/mlp-inference.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -205,8 +206,8 @@ function runValidationTests() {
     const result3 = validatePlan({ topics: [0, 1, 2, 3, 4, 5, 6] });
     assert(result3.valid === false, 'topics with 7 items exceeds maxItems 3');
 
-    const result4 = validatePlan({ lastTopicAge: 99 });
-    assert(result4.valid === false, '{ lastTopicAge: 99 } exceeds max 8 (in guardrails)');
+    // Removed: lastTopicAge is not a top-level schema field, so validatePlan ignores it.
+    // See guardrails sub-schema for maxTopics/minSim validation.
   }
 
   // 1.6 Invalid enum values → rejects
@@ -231,8 +232,8 @@ function runValidationTests() {
       topics: [0, 1, 2],
       fragmentPlan: [{ topicIdx: 0, cats: ['def'], fragIndices: [0] }],
     });
-    // fragmentPlan has 1 entry, topics has 3. slice(0,3) on a 1-element array returns that 1 element.
-    assert(result1.sanitized.fragmentPlan.length === 1, 'fragmentPlan truncated (topics=3, fragPlan had only 1 entry)');
+    // fragmentPlan has 1 entry, topics has 3. New code pads fragmentPlan to match topics length.
+    assert(result1.sanitized.fragmentPlan.length === 3, 'fragmentPlan padded to match topics (topics=3, fragPlan had 1 entry)');
     assert(result1.errors.some(e => e.includes('fragmentPlan')), 'Error logged for length mismatch');
 
     // Also test: fragmentPlan has 3, topics has 1 — should truncate
@@ -299,7 +300,7 @@ function runFeatureTests() {
       KB, config
     );
     const keys = Object.keys(features);
-    assert(keys.length === 18, `Feature object has 18 keys (got ${keys.length})`);
+    assert(keys.length === 24, `Feature object has 24 keys (got ${keys.length})`);
 
     // Check expected keys
     const expectedKeys = [
@@ -307,7 +308,9 @@ function runFeatureTests() {
       'intentDefScore', 'intentExScore', 'intentFormScore', 'intentAppScore', 'intentCompScore',
       'lastTopicSim', 'lastTopicAge', 'kbCoverage', 'queryLenTokens',
       'hasComparisonCue', 'hasFormalCue', 'hasExampleCue',
-      'botCreativity', 'domainMatch'
+      'botCreativity', 'domainMatch',
+      'followUpType', 'wasAmbiguous',
+      'avgTruthConf', 'avgSourceConf', 'minDifficulty', 'fragDiversity',
     ];
     for (const k of expectedKeys) {
       assert(keys.includes(k), `Feature key "${k}" is present`);
@@ -453,10 +456,10 @@ function runFeatureTests() {
     const packed = packFeatures(features);
 
     assert(packed.float32 instanceof Float32Array, 'float32 is Float32Array');
-    assert(packed.float32.length === 18, 'float32 has 18 elements');
+    assert(packed.float32.length === 24, 'float32 has 24 elements');
     assert(packed.uint8 instanceof Uint8Array, 'uint8 is Uint8Array');
-    assert(packed.uint8.length === 4, 'uint8 has 4 elements');
-    assert(packed.buffer.byteLength === 76, 'buffer is 76 bytes (18*4 + 4)');
+    assert(packed.uint8.length === 7, 'uint8 has 7 elements');
+    assert(packed.buffer.byteLength === 103, 'buffer is 103 bytes (24*4 + 7)');
   }
 
   // 2.9 Feature unpacking (round-trip)
@@ -475,15 +478,19 @@ function runFeatureTests() {
     assert(unpacked.entityCount === features.entityCount, 'entityCount round-trips exactly');
     assert(unpacked.lastTopicAge === features.lastTopicAge, 'lastTopicAge round-trips exactly');
     assert(unpacked.queryLenTokens === features.queryLenTokens, 'queryLenTokens round-trips exactly');
+    assert(unpacked.followUpType === features.followUpType, 'followUpType round-trips exactly');
+    assert(unpacked.minDifficulty === features.minDifficulty, 'minDifficulty round-trips exactly');
+    assert(unpacked.fragDiversity === features.fragDiversity, 'fragDiversity round-trips exactly');
 
     // Check booleans round-trip
     assert(unpacked.entityBoostHit === features.entityBoostHit, 'entityBoostHit round-trips exactly');
     assert(unpacked.hasComparisonCue === features.hasComparisonCue, 'hasComparisonCue round-trips exactly');
     assert(unpacked.hasFormalCue === features.hasFormalCue, 'hasFormalCue round-trips exactly');
     assert(unpacked.hasExampleCue === features.hasExampleCue, 'hasExampleCue round-trips exactly');
+    assert(unpacked.wasAmbiguous === features.wasAmbiguous, 'wasAmbiguous round-trips exactly');
 
     // Check float values within tolerance
-    for (const key of ['qSimTop1', 'qSimTop2', 'intentDefScore', 'kbCoverage', 'botCreativity', 'domainMatch']) {
+    for (const key of ['qSimTop1', 'qSimTop2', 'intentDefScore', 'kbCoverage', 'botCreativity', 'domainMatch', 'avgTruthConf', 'avgSourceConf']) {
       const diff = Math.abs(unpacked[key] - features[key]);
       assert(diff < 0.001, `${key} round-trips within 0.001 (diff=${diff.toFixed(6)})`);
     }
@@ -732,6 +739,129 @@ function runRuntimeTests() {
 }
 
 // ---------------------------------------------------------------------------
+// 4. MLP Inference Tests
+// ---------------------------------------------------------------------------
+
+function makeSyntheticWeights(version = 2) {
+  const w = { _version: version };
+  // fc1: [128, 24], fc1.bias: [128]
+  w['fc1.weight'] = Array.from({ length: 128 }, () =>
+    Array.from({ length: 24 }, () => Math.random() * 2 - 1));
+  w['fc1.bias'] = Array.from({ length: 128 }, () => Math.random() * 0.5);
+  // fc2: [64, 128], fc2.bias: [64]
+  w['fc2.weight'] = Array.from({ length: 64 }, () =>
+    Array.from({ length: 128 }, () => Math.random() * 2 - 1));
+  w['fc2.bias'] = Array.from({ length: 64 }, () => Math.random() * 0.5);
+  // mode_head: [5, 64], mode_head.bias: [5]
+  w['mode_head.weight'] = Array.from({ length: 5 }, () =>
+    Array.from({ length: 64 }, () => Math.random()));
+  w['mode_head.bias'] = Array.from({ length: 5 }, () => 0);
+  // intent_head: [5, 64], intent_head.bias: [5]
+  w['intent_head.weight'] = Array.from({ length: 5 }, () =>
+    Array.from({ length: 64 }, () => Math.random()));
+  w['intent_head.bias'] = Array.from({ length: 5 }, () => 0);
+  // topic_count_head: [4, 64], bias: [4]
+  w['topic_count_head.weight'] = Array.from({ length: 4 }, () =>
+    Array.from({ length: 64 }, () => Math.random()));
+  w['topic_count_head.bias'] = Array.from({ length: 4 }, () => 0);
+  // frag_count_head: [4, 64], bias: [4]
+  w['frag_count_head.weight'] = Array.from({ length: 4 }, () =>
+    Array.from({ length: 64 }, () => Math.random()));
+  w['frag_count_head.bias'] = Array.from({ length: 4 }, () => 0);
+  // creativity_head: [1, 64], bias: [1]
+  w['creativity_head.weight'] = [Array.from({ length: 64 }, () => Math.random() * 2 - 1)];
+  w['creativity_head.bias'] = [0];
+  // tone_head: [4, 64], bias: [4]
+  w['tone_head.weight'] = Array.from({ length: 4 }, () =>
+    Array.from({ length: 64 }, () => Math.random()));
+  w['tone_head.bias'] = Array.from({ length: 4 }, () => 0);
+  return w;
+}
+
+function runMLPTests() {
+  section('4. MLPPolicy — Inference Tests');
+
+  // 4.1 Construction from valid weights
+  {
+    const weights = makeSyntheticWeights();
+    const policy = new MLPPolicy(weights);
+    assert(policy instanceof MLPPolicy, 'MLPPolicy constructed from valid weights');
+    assert(policy._version === 2, 'version preserved from weights');
+  }
+
+  // 4.2 Missing weight key throws
+  {
+    const badWeights = makeSyntheticWeights();
+    delete badWeights['fc1.weight'];
+    let threw = false;
+    try { new MLPPolicy(badWeights); } catch (e) { threw = true; }
+    assert(threw, 'Missing fc1.weight throws');
+  }
+
+  // 4.3 Forward pass produces correct output shapes
+  {
+    const weights = makeSyntheticWeights();
+    const policy = new MLPPolicy(weights);
+    const features = new Float32Array(24).fill(0.5);
+    const out = policy.forward(features);
+    assert(out.modeProbs.length === 5, 'modeProbs length is 5');
+    assert(out.intentProbs.length === 5, 'intentProbs length is 5');
+    assert(out.topicCountProbs.length === 4, 'topicCountProbs length is 4');
+    assert(out.fragCountProbs.length === 4, 'fragCountProbs length is 4');
+    assert(typeof out.creativity === 'number', 'creativity is a number');
+    assert(out.toneProbs.length === 4, 'toneProbs length is 4');
+  }
+
+  // 4.4 Forward pass is deterministic
+  {
+    const weights = makeSyntheticWeights();
+    const policy = new MLPPolicy(weights);
+    const features = new Float32Array(24).fill(0.5);
+    const out1 = policy.forward(features);
+    const out2 = policy.forward(features);
+    assert(out1.modeProbs.every((v, i) => v === out2.modeProbs[i]), 'forward pass is deterministic');
+  }
+
+  // 4.5 Softmax outputs sum to 1
+  {
+    const weights = makeSyntheticWeights();
+    const policy = new MLPPolicy(weights);
+    const features = new Float32Array(24).fill(0.5);
+    const out = policy.forward(features);
+    const sumMode = [...out.modeProbs].reduce((a, b) => a + b, 0);
+    assert(Math.abs(sumMode - 1) < 0.001, 'modeProbs sum to 1');
+    const sumIntent = [...out.intentProbs].reduce((a, b) => a + b, 0);
+    assert(Math.abs(sumIntent - 1) < 0.001, 'intentProbs sum to 1');
+  }
+
+  // 4.6 planAnswer generates valid AnswerPlan
+  {
+    const weights = makeSyntheticWeights();
+    const policy = new MLPPolicy(weights);
+    const features = {
+      qSimTop1: 0.7, qSimTop2: 0.4, entityCount: 1, entityBoostHit: true,
+      intentDefScore: 0.6, intentExScore: 0.4, intentFormScore: 0.3,
+      intentAppScore: 0.35, intentCompScore: 0.5,
+      lastTopicSim: 0, lastTopicAge: 2, kbCoverage: 0.5, queryLenTokens: 5,
+      hasComparisonCue: false, hasFormalCue: false, hasExampleCue: false,
+      botCreativity: 0.4, domainMatch: 0.5,
+      followUpType: 0, wasAmbiguous: false,
+      avgTruthConf: 0.8, avgSourceConf: 0.7, minDifficulty: 1, fragDiversity: 3,
+    };
+    const context = {
+      ranked: [{ i: 0, s: 0.7 }, { i: 1, s: 0.4 }],
+      entities: [0],
+    };
+    const plan = policy.planAnswer(features, context, { maxTopics: 3, creativityCeiling: 0.5 });
+    const { valid, errors } = validatePlan(plan);
+    assert(valid === true, `MLP planAnswer generates valid plan (errors: ${errors.join(', ')})`);
+    assert(Array.isArray(plan.topics), 'topics is an array');
+    assert(typeof plan.mode === 'string', 'mode is string');
+    assert(typeof plan.intent === 'string', 'intent is string');
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -752,6 +882,9 @@ function main() {
     }
     if (targetSection === 'all' || targetSection === 'runtime') {
       runRuntimeTests();
+    }
+    if (targetSection === 'all' || targetSection === 'mlp') {
+      runMLPTests();
     }
   } catch (err) {
     console.error(`\n${RED}Test suite crashed:${RESET}`, err.message);
