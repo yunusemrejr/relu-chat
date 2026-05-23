@@ -770,7 +770,7 @@ async function fetchWithTimeout(url, ms) {
 function validateManifest(m) {
   if (!m || typeof m !== 'object') return 'manifest is not an object';
   if (typeof m.version !== 'string') return 'manifest.version must be a string';
-  if (typeof m.inputFeatures !== 'number' || m.inputFeatures !== 24) return 'manifest.inputFeatures must be 24';
+  if (typeof m.inputFeatures !== 'number' || m.inputFeatures !== 25) return 'manifest.inputFeatures must be 25';
   if (typeof m.weightsSize !== 'number') return 'manifest.weightsSize must be a number';
   if (!Array.isArray(m.botProfiles)) return 'manifest.botProfiles must be an array';
   return null;
