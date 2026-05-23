@@ -272,18 +272,7 @@ Uint8Array layout:
   <li>Uploads dataset and export artifacts</li>
 </ol>
 
-<h2>10. Deployment &amp; Safety</h2>
-<p>Production deployment uses <code>deploy.sh</code> — an lftp-based script with built-in guardrails:</p>
-<ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
-  <li>Remote data snapshot pulled before any sync</li>
-  <li>Local backup created (rsync)</li>
-  <li>NEVER-DELETE regex patterns protect <code>.db</code>, <code>.sqlite</code>, <code>.backup</code>, <code>.log</code>, <code>.env</code> files</li>
-  <li><code>--force-delete</code> flag required for remote file removal; shows audit list before confirming</li>
-  <li>Git clean-tree check; no uncommitted changes</li>
-  <li>Automatic retry with longer timeouts on failure</li>
-</ul>
-
-<h2>11. Open Source</h2>
+<h2>10. Open Source</h2>
 <p>The full codebase is available at <a href="https://github.com/yunusemrejr/relu-chat" style="color:var(--accent-light)">github.com/yunusemrejr/relu-chat</a> under the MIT license. This includes:</p>
 <ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
   <li><code>core/</code> — NLP engine, chatbot engine, session memory</li>
