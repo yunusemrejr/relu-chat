@@ -4,8 +4,8 @@
  * Pure-JavaScript MLP inference for the ReLU.chat policy model.
  * No external dependencies — direct array math on Float32.
  *
- * Architecture:  18 inputs → 64 hidden → 32 hidden → 6 action heads
- * Parameters:    4055 total (fc1: 1216, fc2: 2080, heads: 759)
+ * Architecture:  24 inputs → 128 hidden → 64 hidden → 6 action heads
+ * Parameters:    4439 total (fc1: 1600, fc2: 2080, heads: 759)
  * Weights form:  PyTorch Linear convention — weight @ input.T + bias
  *
  * Design Version: 1.0.0 (mlp-inference)
@@ -38,21 +38,21 @@ const INTENT_CAT_ORDERS = {
 // ---------------------------------------------------------------------------
 
 const WEIGHT_SHAPES = Object.freeze([
-  ['fc1.weight',              [64, 18]],
-  ['fc1.bias',                [64]],
-  ['fc2.weight',              [32, 64]],
-  ['fc2.bias',                [32]],
-  ['mode_head.weight',        [5, 32]],
+  ['fc1.weight',              [128, 24]],
+  ['fc1.bias',                [128]],
+  ['fc2.weight',              [64, 128]],
+  ['fc2.bias',                [64]],
+  ['mode_head.weight',        [5, 64]],
   ['mode_head.bias',          [5]],
-  ['intent_head.weight',      [5, 32]],
+  ['intent_head.weight',      [5, 64]],
   ['intent_head.bias',        [5]],
-  ['topic_count_head.weight', [4, 32]],
+  ['topic_count_head.weight', [4, 64]],
   ['topic_count_head.bias',   [4]],
-  ['frag_count_head.weight',  [4, 32]],
+  ['frag_count_head.weight',  [4, 64]],
   ['frag_count_head.bias',    [4]],
-  ['creativity_head.weight',  [1, 32]],
+  ['creativity_head.weight',  [1, 64]],
   ['creativity_head.bias',    [1]],
-  ['tone_head.weight',        [4, 32]],
+  ['tone_head.weight',        [4, 64]],
   ['tone_head.bias',          [4]],
 ]);
 
@@ -185,7 +185,7 @@ function clamp01(v) {
 
 /**
  * Convert the feature object from extractPolicyFeatures() into the
- * Float32Array(18) that the MLP expects.
+ * Float32Array(24) that the MLP expects.
  *
  * Index layout (must match packFeatures() in feature-extractor.js):
  *   0:  qSimTop1         f32  [0,1]
@@ -206,15 +206,30 @@ function clamp01(v) {
  *  15:  hasExampleCue    bool→f32 {0,1}
  *  16:  botCreativity    f32  [0,1]
  *  17:  domainMatch      f32  [0,1]
+ *  18:  followUpType     u8→f32 [0,7]
+ *  19:  wasAmbiguous     bool→f32 {0,1}
+ *  20:  avgTruthConf     f32  [0,1]
+ *  21:  avgSourceConf    f32  [0,1]
+ *  22:  minDifficulty    u8→f32 [0,4]
+ *  23:  fragDiversity    u8→f32 [0,5]
  *
  * @param {object} features - from extractPolicyFeatures() (frozen object)
- * @returns {Float32Array} - 18-element array
+ * @returns {Float32Array} - 24-element array
  */
-function featuresToF32(features) {
-  const f = new Float32Array(18);
+function featuresToF32(features, version = 2) {
+  const f = new Float32Array(24);
   f[0]  = clamp01(features.qSimTop1);
   f[1]  = clamp01(features.qSimTop2);
-  f[2]  = features.entityCount;
+  // Version >= 2 expects normalized discrete features
+  if (version >= 2) {
+    f[2]  = features.entityCount / 3;
+    f[10] = features.lastTopicAge / 8;
+    f[12] = features.queryLenTokens > 1 ? (features.queryLenTokens - 1) / 31 : 0;
+  } else {
+    f[2]  = features.entityCount;
+    f[10] = features.lastTopicAge;
+    f[12] = features.queryLenTokens;
+  }
   f[3]  = features.entityBoostHit ? 1 : 0;
   f[4]  = clamp01(features.intentDefScore);
   f[5]  = clamp01(features.intentExScore);
@@ -222,14 +237,18 @@ function featuresToF32(features) {
   f[7]  = clamp01(features.intentAppScore);
   f[8]  = clamp01(features.intentCompScore);
   f[9]  = clamp01(features.lastTopicSim);
-  f[10] = features.lastTopicAge;
   f[11] = clamp01(features.kbCoverage);
-  f[12] = features.queryLenTokens;
   f[13] = features.hasComparisonCue ? 1 : 0;
   f[14] = features.hasFormalCue ? 1 : 0;
   f[15] = features.hasExampleCue ? 1 : 0;
   f[16] = clamp01(features.botCreativity);
   f[17] = clamp01(features.domainMatch);
+  f[18] = features.followUpType;
+  f[19] = features.wasAmbiguous ? 1 : 0;
+  f[20] = clamp01(features.avgTruthConf);
+  f[21] = clamp01(features.avgSourceConf);
+  f[22] = features.minDifficulty / 4;  // normalize [0,4] -> [0,1]
+  f[23] = features.fragDiversity / 5;  // normalize [0,5] -> [0,1]
   return f;
 }
 
@@ -273,13 +292,13 @@ export class MLPPolicy {
   /**
    * Run the full MLP forward pass.
    *
-   * Input:  Float32Array(18) — raw feature vector
+   * Input:  Float32Array(24) — raw feature vector
    * Output: probability distributions over all action heads
    *
    * Graph:
-   *   features [18]
-   *     → fc1 (64, ReLU)
-   *       → fc2 (32, ReLU)
+   *   features [24]
+   *     → fc1 (128, ReLU)
+   *       → fc2 (64, ReLU)
    *         → mode_head       (5-softmax)   → modeProbs
    *         → intent_head     (5-softmax)   → intentProbs
    *         → topic_count_head (4-softmax)  → topicCountProbs
@@ -287,7 +306,7 @@ export class MLPPolicy {
    *         → creativity_head  (1-sigmoid)  → creativity
    *         → tone_head        (4-softmax)  → toneProbs
    *
-   * @param {Float32Array} features - 18-element feature vector
+   * @param {Float32Array} features - 24-element feature vector
    * @returns {{
    *   modeProbs: Float32Array,       // [5] → ['normal','off_topic','greeting','help','comparison']
    *   intentProbs: Float32Array,     // [5] → ['definition','example','formal','application','comparison']
@@ -300,15 +319,15 @@ export class MLPPolicy {
   forward(features) {
     const w = this.weights;
 
-    // ---- Layer 1: fc1 (64, ReLU) ----
+    // ---- Layer 1: fc1 (128, ReLU) ----
     const z1 = matMul(features, w['fc1.weight']);
     addBiasInPlace(z1, w['fc1.bias']);
-    const h1 = relu(z1);                                // [64]
+    const h1 = relu(z1);                                // [128]
 
-    // ---- Layer 2: fc2 (32, ReLU) ----
+    // ---- Layer 2: fc2 (64, ReLU) ----
     const z2 = matMul(h1, w['fc2.weight']);
     addBiasInPlace(z2, w['fc2.bias']);
-    const h2 = relu(z2);                                // [32]
+    const h2 = relu(z2);                                // [64]
 
     // ---- Action heads (all share h2 as input) ----
 
@@ -362,7 +381,7 @@ export class MLPPolicy {
    * @returns {object}          - AnswerPlan ready for validatePlan()
    */
   planAnswer(features, context = {}, botProfile = {}, overrides = {}) {
-    const f32 = featuresToF32(features);
+    const f32 = featuresToF32(features, this._version);
     const probs = this.forward(f32);
     const decisionPath = ['mlp'];
 

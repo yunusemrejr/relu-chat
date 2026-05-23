@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
-  "inputFeatures": 18,
-  "inputBytes": 76,
+  "inputFeatures": 24,
+  "inputBytes": 100,
   "outputSchema": "AnswerPlan.v1",
   "fragmentMetaVersion": "1.0.0",
   "model": "mlp_policy",

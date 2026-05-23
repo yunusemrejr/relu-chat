@@ -1,11 +1,11 @@
 /**
  * feature-extractor.js — ReLU.chat WASM Policy Runtime
  *
- * Extracts a compact 18-feature vector from the current query context.
- * These features are the input to the WASM policy model.
+ * Extracts a compact 24-feature vector from the current query context.
+ * These features are the input to the WASM/MLP policy model.
  *
  * Design Version: 1.0.0 (wasm-policy-architecture.json §2)
- * Feature count:   18 (14 f32 + 4 discrete packed into Uint8Array)
+ * Feature count:   24 (20 f32 + 4 discrete packed into Uint8Array)
  *
  * FEATURE LAYOUT (index → name → type):
  *   0:  qSimTop1         f32  [0,1]   cosine sim of query to top-1 KB entry
@@ -26,14 +26,20 @@
  *  15:  hasExampleCue    bool [0,1]   query contains 'example', 'illustrate', 'case'
  *  16:  botCreativity    f32  [0,1]   botProfile.creativityCeiling
  *  17:  domainMatch      f32  [0,1]   max similarity to botProfile.domainPrototypes
+ *  18:  followUpType     u8   [0,7]   0=none, 1=simplify, 2=compare_previous, 3=example, 4=elaborate, 5=reference_index, 6=another_example, 7=specific
+ *  19:  wasAmbiguous     bool [0,1]   previous turn was flagged as ambiguous
+ *  20:  avgTruthConf     f32  [0,1]   average truth_confidence of available fragments (0 if unknown)
+ *  21:  avgSourceConf    f32  [0,1]   average source_confidence of available fragments (0 if unknown)
+ *  22:  minDifficulty    u8   [0,4]   minimum difficulty across available fragments
+ *  23:  fragDiversity    u8   [0,5]   count of distinct fragment styles available
  *
  * Serialization:
- *   packFeatures(features) → { float32: Float32Array(18), uint8: Uint8Array(4) }
- *   The float32 array stores all 18 features (u8/bool cast to f32);
- *   the uint8 array stores the 4 discrete features in compact form.
+ *   packFeatures(features) → { float32: Float32Array(24), uint8: Uint8Array(7) }
+ *   The float32 array stores all 24 features (u8/bool cast to f32);
+ *   the uint8 array stores the 7 discrete features in compact form.
  */
 
-import { cosine } from '../core/nlp.js';
+import { cosine, tokens } from '../core/nlp.js';
 
 // ---------------------------------------------------------------------------
 // Cue-word detection — simple regex sets for lexical features
@@ -57,7 +63,7 @@ const KB_COVERAGE_MIN_SIM = 0.25;
 // ---------------------------------------------------------------------------
 
 /**
- * Extract the 18-feature policy vector from query context.
+ * Extract the 24-feature policy vector from query context.
  *
  * Call this inside nlp.js:compose() (or its replacement) right after
  * embedding, ranking, entity extraction, and intent classification.
@@ -71,9 +77,12 @@ const KB_COVERAGE_MIN_SIM = 0.25;
  * @param {number|null} lastTopicAge - turns since last topic change (or null)
  * @param {object[]} KB           - knowledge base array
  * @param {object}   config       - { EMBEDDING, botProfile } from chat config
- * @returns {object}              - features object (with getters for lazy evaluation)
+ * @param {number[]}  [entryEmb]   - optional pre-computed entry embeddings array
+ * @param {object|null}  [followUp]       - session follow-up object (or null)
+ * @param {boolean}     [wasAmbiguous=false] - whether previous turn was ambiguous
+ * @returns {object}              - features object (frozen)
  */
-export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScores, lastTopic, lastTopicAge, KB, config) {
+export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScores, lastTopic, lastTopicAge, KB, config, entryEmb = null, followUp = null, wasAmbiguous = false) {
   // ---- Compute capped entity features ----
   const entityCount = Math.min(entities.length, MAX_ENTITY_COUNT);
 
@@ -91,12 +100,11 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
 
   // ---- Compute last-topic features ----
   let lastTopicSim = 0;
-  if (lastTopic !== null && lastTopic >= 0 && lastTopic < KB.length && qEmb) {
-    // We need the embedding of the last topic entry. Since we don't have
-    // easy access to entryEmb here, we leave it to the caller to provide
-    // lastTopicSim if possible. If not, it stays 0.
-    // The caller (nlp.js) can set this after calling us.
-    lastTopicSim = 0; // caller must set post-hoc or pass in
+  if (lastTopic !== null && lastTopic >= 0 && lastTopic < KB.length && qEmb && entryEmb) {
+    const lastEmb = entryEmb[lastTopic];
+    if (lastEmb) {
+      lastTopicSim = cosine(qEmb, lastEmb);
+    }
   }
   const lastTopicAgeVal = Math.min(
     lastTopicAge !== null && lastTopicAge !== undefined ? lastTopicAge : MAX_LAST_TOPIC_AGE,
@@ -111,11 +119,11 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
     for (const r of ranked) {
       if (r.s > threshold) covered++;
     }
-    kbCoverage = covered / ranked.length;
+    kbCoverage = covered / Math.max(KB.length, 1);
   }
 
   // ---- Query length in tokens (after STOP-word filtering) ----
-  const queryLenTokens = computeQueryLen(query);
+  const queryLenTokens = Math.max(1, Math.min(tokens(query).length, 32));
 
   // ---- Lexical cue features ----
   const hasComparisonCue = COMPARISON_CUES.test(query);
@@ -142,6 +150,45 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
       }
     }
   }
+
+  // ---- Follow-up type (from session memory) ----
+  const FOLLOWUP_TYPE_MAP = {
+    'simplify': 1, 'compare_previous': 2, 'example': 3, 'elaborate': 4,
+    'reference_index': 5, 'another_example': 6, 'specific': 7,
+  };
+  const followUpType = (followUp && followUp.isFollowUp)
+    ? (FOLLOWUP_TYPE_MAP[followUp.type] || 0)
+    : 0;
+
+  // ---- Previous ambiguity flag ----
+  const ambigFlag = !!wasAmbiguous;
+
+  // ---- Aggregate fragment metadata from ranked KB entries ----
+  let avgTruthConf = 0;
+  let avgSourceConf = 0;
+  let minDifficulty = 4;
+  let fragDiversity = 0;
+  const styleSet = new Set();
+  let fragCount = 0;
+  for (const r of ranked) {
+    const entry = KB[r.i];
+    if (!entry || !entry.f) continue;
+    for (const cat of ['def', 'int', 'ex', 'form', 'app']) {
+      const frags = entry.f[cat];
+      if (!frags || !frags.length) continue;
+      for (const frag of frags) {
+        if (typeof frag === 'object' && frag !== null) {
+          if (frag.truth_confidence != null) { avgTruthConf += frag.truth_confidence; fragCount++; }
+          if (frag.source_confidence != null) { avgSourceConf += frag.source_confidence; }
+          if (frag.difficulty != null) { minDifficulty = Math.min(minDifficulty, frag.difficulty); }
+          if (frag.style) { styleSet.add(frag.style); }
+        }
+      }
+    }
+  }
+  if (fragCount > 0) { avgTruthConf /= fragCount; avgSourceConf /= fragCount; }
+  if (minDifficulty === 4) minDifficulty = 0; // default when no annotated fragments
+  fragDiversity = Math.min(styleSet.size, 5);
 
   // ---- Build final feature object ----
   const features = {
@@ -174,6 +221,16 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
     // F32 profile features (indices 16, 17)
     botCreativity,
     domainMatch,
+
+    // Session memory features (indices 18-19)
+    followUpType,
+    wasAmbiguous: ambigFlag,
+
+    // Fragment metadata (indices 20-23)
+    avgTruthConf,
+    avgSourceConf,
+    minDifficulty,
+    fragDiversity,
   };
 
   // Freeze to prevent accidental mutation downstream
@@ -188,25 +245,29 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
  * Serialize features into the flat binary layout expected by WASM.
  *
  * The WASM module expects a single buffer with:
- *   - Float32Array(18) at offset 0  (all features as f32)
- *   - Uint8Array(4)   at offset 72 (discrete features in compact form)
+ *   - Float32Array(24) at offset 0  (all features as f32)
+ *   - Uint8Array(7)    at offset 96 (discrete features in compact form)
  *
- * Total buffer size: 18 * 4 + 4 = 76 bytes.
+ * Total buffer size: 24 * 4 + 7 = 103 bytes (rounded to 104 for alignment).
  *
  * Uint8Array layout:
- *   [0] = entityCount        (u8, 0-3)
- *   [1] = packed booleans    (bit 0: entityBoostHit, bit 1: hasComparisonCue,
- *                              bit 2: hasFormalCue, bit 3: hasExampleCue)
- *   [2] = lastTopicAge       (u8, 0-8)
- *   [3] = queryLenTokens     (u8, 1-32)
+ *   [0] = entityCount          (u8, 0-3)
+ *   [1] = packed booleans      (bit 0: entityBoostHit, bit 1: hasComparisonCue,
+ *                                bit 2: hasFormalCue, bit 3: hasExampleCue,
+ *                                bit 4: wasAmbiguous)
+ *   [2] = lastTopicAge         (u8, 0-8)
+ *   [3] = queryLenTokens       (u8, 1-32)
+ *   [4] = followUpType         (u8, 0-7)
+ *   [5] = minDifficulty        (u8, 0-4)
+ *   [6] = fragDiversity        (u8, 0-5)
  *
  * @param {object} features - the object returned by extractPolicyFeatures()
  * @returns {{ float32: Float32Array, uint8: Uint8Array, buffer: ArrayBuffer }}
  */
 export function packFeatures(features) {
-  const buffer = new ArrayBuffer(18 * 4 + 4); // 76 bytes
-  const f32 = new Float32Array(buffer, 0, 18);
-  const u8  = new Uint8Array(buffer, 72, 4);
+  const buffer = new ArrayBuffer(24 * 4 + 7); // 103 bytes
+  const f32 = new Float32Array(buffer, 0, 24);
+  const u8  = new Uint8Array(buffer, 96, 7);
 
   // Fill Float32Array in index order
   f32[0]  = clampf(features.qSimTop1);
@@ -227,6 +288,12 @@ export function packFeatures(features) {
   f32[15] = features.hasExampleCue ? 1.0 : 0.0;
   f32[16] = clampf(features.botCreativity);
   f32[17] = clampf(features.domainMatch);
+  f32[18] = features.followUpType;             // cast to f32
+  f32[19] = features.wasAmbiguous ? 1.0 : 0.0;
+  f32[20] = clampf(features.avgTruthConf);
+  f32[21] = clampf(features.avgSourceConf);
+  f32[22] = features.minDifficulty;            // cast to f32
+  f32[23] = features.fragDiversity;            // cast to f32
 
   // Fill Uint8Array with compact discrete values
   u8[0] = clampu(features.entityCount, 0, 3);
@@ -234,10 +301,14 @@ export function packFeatures(features) {
     features.entityBoostHit,
     features.hasComparisonCue,
     features.hasFormalCue,
-    features.hasExampleCue
+    features.hasExampleCue,
+    features.wasAmbiguous
   );
   u8[2] = clampu(features.lastTopicAge, 0, 8);
   u8[3] = clampu(features.queryLenTokens, 1, 32);
+  u8[4] = clampu(features.followUpType, 0, 7);
+  u8[5] = clampu(features.minDifficulty, 0, 4);
+  u8[6] = clampu(features.fragDiversity, 0, 5);
 
   return { float32: f32, uint8: u8, buffer };
 }
@@ -270,31 +341,18 @@ export function unpackFeatures({ float32, uint8 }) {
     hasExampleCue:    bools[3],
     botCreativity:    float32[16],
     domainMatch:      float32[17],
+    followUpType:     uint8[4],
+    wasAmbiguous:     bools[4],
+    avgTruthConf:     float32[20],
+    avgSourceConf:    float32[21],
+    minDifficulty:    uint8[5],
+    fragDiversity:    uint8[6],
   });
 }
 
 // ---------------------------------------------------------------------------
 // Internal helpers
 // ---------------------------------------------------------------------------
-
-/**
- * Count tokens after STOP-word filtering (mirrors nlp.js:tokens logic but
- * operates on the raw string without exposing the full token list).
- */
-function computeQueryLen(query) {
-  const STOP = new Set(
-    'a an the of in on at for to with and or is are was were be been being ' +
-    'what which who whom whose this that these those i you he she it we they ' +
-    'them us my your his her its our their me do does did can could should ' +
-    'would will might may has have had'.split(' ')
-  );
-  const tokens = query
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, ' ')
-    .split(/\s+/)
-    .filter(w => w && !STOP.has(w));
-  return Math.max(1, Math.min(tokens.length, MAX_QUERY_TOKENS));
-}
 
 /** Clamp float to [0, 1] (and force NaN → 0). */
 function clampf(v) {
@@ -309,17 +367,18 @@ function clampu(v, lo, hi) {
   return Math.min(Math.max(x, lo), hi);
 }
 
-/** Pack 4 booleans into a single u8 (little-endian bit order). */
-function packBools(b0, b1, b2, b3) {
-  return (b0 ? 1 : 0) | (b1 ? 2 : 0) | (b2 ? 4 : 0) | (b3 ? 8 : 0);
+/** Pack 5 booleans into a single u8 (little-endian bit order). */
+function packBools(b0, b1, b2, b3, b4) {
+  return (b0 ? 1 : 0) | (b1 ? 2 : 0) | (b2 ? 4 : 0) | (b3 ? 8 : 0) | (b4 ? 16 : 0);
 }
 
-/** Unpack a single u8 into 4 booleans. */
+/** Unpack a single u8 into 5 booleans. */
 function unpackBools(byte) {
   return [
     !!(byte & 1),
     !!(byte & 2),
     !!(byte & 4),
     !!(byte & 8),
+    !!(byte & 16),
   ];
 }
