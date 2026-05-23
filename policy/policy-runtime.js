@@ -206,7 +206,10 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
     context.lastTopic ?? null,
     context.lastTopicAge ?? null,
     KB,
-    config
+    config,
+    context.entryEmb || null,
+    context.followUp || null,
+    context.wasPreviousAmbiguous || false
   );
 
   let plan = null;
@@ -245,7 +248,19 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
   // ---- Tier 3: Heuristic (last resort) ----
   if (!plan) {
     console.warn('[policy-runtime] Falling back to heuristic planAnswer');
-    plan = planAnswerHeuristic(features, KB, config, config.overrides || {});
+    plan = planAnswerHeuristic(features, KB, config, context.overrides || {});
+    if (plan.topics.length === 0 && context.ranked && context.ranked.length > 0) {
+      const maxTopics = plan.guardrails?.maxTopics || 3;
+      const minSim = plan.guardrails?.minSim || 0.15;
+      const seen = new Set();
+      for (const r of context.ranked) {
+        if (seen.has(r.i)) continue;
+        if (r.s < minSim) break;
+        plan.topics.push(r.i);
+        seen.add(r.i);
+        if (plan.topics.length >= maxTopics) break;
+      }
+    }
   }
 
   // 4. Validate before returning
@@ -287,12 +302,9 @@ export function planAnswerHeuristic(features, KB, config, overrides) {
 
   // Greeting / help detection: very low sim + no entities
   if (features.entityCount === 0 && features.qSimTop1 < 0.25) {
-    // Check if query looks like greeting (very short, casual words)
-    const shortQuery = features.queryLenTokens <= 3;
-    const greeterPattern = /\b(hi|hello|hey|greet|morning|evening|afternoon|howdy|sup)\b/i;
-
-    // We don't have access to the raw query here, but we can use signal from features
-    // In practice the caller sets mode via context; here we use feature signals
+    // Note: we don't have access to the raw query here for regex matching.
+    // Greeting detection relies on feature signals: short query + no intent scores.
+    // Caller can override mode by passing context.mode explicitly.
     if (features.entityCount === 0 && features.qSimTop1 < 0.15) {
       if (features.hasExampleCue || features.hasFormalCue) {
         // Has content cues but very low sim → off-topic, not greeting
@@ -375,17 +387,8 @@ export function planAnswerHeuristic(features, KB, config, overrides) {
     // we use the feature scores as proxies.
 
     if (features.entityCount > 0) {
-      // Entity-matched entries are preferred; we add up to maxTopics
-      // but we don't have exact indices here. The caller (planAnswer)
-      // should enrich the plan after we return.
-      topics.push(features); // placeholder — caller fills in real indices
       decisionPath.push(`topics:entity-boosted(${features.entityCount} entities)`);
     } else if (features.qSimTop1 >= guardrails.minSim) {
-      // Top-1 KB entry
-      topics.push(features); // placeholder
-      if (features.qSimTop2 >= 0.35 && topics.length < guardrails.maxTopics) {
-        topics.push(features); // placeholder
-      }
       decisionPath.push(`topics:sim-ranked(${features.qSimTop1.toFixed(3)})`);
     }
   }
@@ -767,7 +770,7 @@ async function fetchWithTimeout(url, ms) {
 function validateManifest(m) {
   if (!m || typeof m !== 'object') return 'manifest is not an object';
   if (typeof m.version !== 'string') return 'manifest.version must be a string';
-  if (typeof m.inputFeatures !== 'number' || m.inputFeatures !== 18) return 'manifest.inputFeatures must be 18';
+  if (typeof m.inputFeatures !== 'number' || m.inputFeatures !== 24) return 'manifest.inputFeatures must be 24';
   if (typeof m.weightsSize !== 'number') return 'manifest.weightsSize must be a number';
   if (!Array.isArray(m.botProfiles)) return 'manifest.botProfiles must be an array';
   return null;

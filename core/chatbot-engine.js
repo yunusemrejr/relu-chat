@@ -1,7 +1,7 @@
 import { pipeline, env } from '/assets/transformers/transformers.js';
 import { LRUCache } from './cache.js';
 import { SessionMemory } from './session.js';
-import { compose, composeV2, tokens, bowVec, compileAliasRegex, extractEntities, classifyIntent, rankEntries } from './nlp.js';
+import { composeV2, tokens, bowVec, compileAliasRegex, extractEntities, classifyIntent, rankEntries } from './nlp.js';
 import { pushMessage, setStatus, escapeHTML, md } from './ui.js';
 import { loadPolicyRuntime, planAnswer, isPolicyLoaded } from '../policy/policy-runtime.js';
 
@@ -23,7 +23,7 @@ export async function createChatbot(config) {
   const input = document.getElementById('input');
   const sendBtn = document.getElementById('send');
   const form = document.getElementById('form');
-  let extractor = null, entryEmb = [], intentEmb = {};
+  let extractor = null, entryEmb = [], intentEmb = {}, domainPrototypeEmbs = [];
   let ready = false, busy = false;
   // Session memory: replaces single `lastTopic` with full turn-based tracking
   const session = new SessionMemory(CONFIG?.SESSION?.maxHistory || 20);
@@ -71,10 +71,15 @@ export async function createChatbot(config) {
         intentEmb[k] = [];
         for (const p of INTENTS[k].prototypes) intentEmb[k].push(await embed(p));
       }
+      // Pre-embed domain prototypes for domainMatch feature
+      if (botProfile?.domainPrototypes && botProfile.domainPrototypes.length > 0) {
+        for (const dp of botProfile.domainPrototypes) {
+          domainPrototypeEmbs.push(await embed(dp));
+        }
+      }
     } catch (err) {
       console.error('Model load failed, using BOW fallback:', err);
       const voc = new Set();
-      compileAliasRegex(KB);
       for (const e of KB) for (const t of tokens(entryText(e))) voc.add(t);
       for (const k of Object.keys(INTENTS)) for (const p of INTENTS[k].prototypes) for (const t of tokens(p)) voc.add(t);
       bowVocab = new Map();
@@ -177,13 +182,14 @@ export async function createChatbot(config) {
         intent,
         intentScores,
         ranked,
+        entryEmb,
         lastTopic: session.lastTopic,
         lastTopicAge: session.lastTopicAge,
         followUp,
         wasPreviousAmbiguous: session.wasPreviousQueryAmbiguous(),
         overrides,
       };
-      const plan = await planAnswer(query, qEmb, KB, context, { EMBEDDING: CONFIG.EMBEDDING, botProfile, _domainPrototypeEmbs: intentEmb });
+      const plan = await planAnswer(query, qEmb, KB, context, { EMBEDDING: CONFIG.EMBEDDING, botProfile, _domainPrototypeEmbs: domainPrototypeEmbs.length > 0 ? domainPrototypeEmbs : intentEmb });
       const result = await composeV2(query, qEmb, embedCached, entryEmb, intentEmb, session.lastTopic, KB, CONFIG, overrides, plan);
 
       text = result.text;

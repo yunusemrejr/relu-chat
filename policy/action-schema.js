@@ -283,11 +283,21 @@ export function validatePlan(plan) {
 
   // Cross-field validation: topics length must equal fragmentPlan length
   if (sanitized.topics.length !== sanitized.fragmentPlan.length) {
-    errors.push(
-      `topics.length (${sanitized.topics.length}) != fragmentPlan.length ` +
-      `(${sanitized.fragmentPlan.length}) – truncating fragmentPlan`
-    );
-    sanitized.fragmentPlan = sanitized.fragmentPlan.slice(0, sanitized.topics.length);
+    if (sanitized.topics.length > sanitized.fragmentPlan.length) {
+      errors.push(
+        `topics.length (${sanitized.topics.length}) > fragmentPlan.length ` +
+        `(${sanitized.fragmentPlan.length}) – padding fragmentPlan`
+      );
+      while (sanitized.fragmentPlan.length < sanitized.topics.length) {
+        sanitized.fragmentPlan.push({ topicIdx: sanitized.fragmentPlan.length, cats: [], fragIndices: [] });
+      }
+    } else {
+      errors.push(
+        `topics.length (${sanitized.topics.length}) < fragmentPlan.length ` +
+        `(${sanitized.fragmentPlan.length}) – truncating fragmentPlan`
+      );
+      sanitized.fragmentPlan = sanitized.fragmentPlan.slice(0, sanitized.topics.length);
+    }
   }
 
   // Cross-field validation: fragmentPlan topicIdx must be valid

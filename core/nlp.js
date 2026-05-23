@@ -296,7 +296,7 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   // KB mode (normal) or comparison mode
   const topEntries = Array.isArray(plan.topics) && plan.topics.length > 0
     ? plan.topics.slice(0, compositionConfig.MAX_ENTRIES || 3)
-    : [0];
+    : (console.warn('[composeV2] plan.topics empty, falling back to KB[0]'), [0]);
 
   const intent = plan.intent || 'definition';
   const order = INTENTS[intent]?.order || ['def', 'int', 'ex'];
@@ -307,7 +307,7 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
 
   if (plan.mode === 'comparison' && topEntries.length >= 2) {
     const eA = KB[topEntries[0]], eB = KB[topEntries[1]];
-    const openerKey = creativity < 0.33 ? 'similarity' : (creativity < 0.66 ? 'contrast' : 'both');
+    const openerKey = plan.template?.comparisonOpenerKey || (creativity < 0.33 ? 'similarity' : (creativity < 0.66 ? 'contrast' : 'both'));
     const openerText = (COMPARISON_OPENERS[openerKey] || '').replace(/\{A\}/g, eA.name).replace(/\{B\}/g, eB.name);
     parts.push(openerText);
   }
@@ -315,13 +315,15 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   for (let ei = 0; ei < topEntries.length; ei++) {
     const entry = KB[topEntries[ei]];
     const pieces = [];
-    const cats = (plan.mode === 'comparison' && topEntries.length >= 2) ? order : (ei === 0 ? order : [order[0]]);
+    const cats = (plan.fragmentPlan && plan.fragmentPlan[ei] && plan.fragmentPlan[ei].cats)
+      ? plan.fragmentPlan[ei].cats
+      : ((plan.mode === 'comparison' && topEntries.length >= 2) ? order : (ei === 0 ? order : [order[0]]));
     let prev = null;
 
     for (let ci = 0; ci < cats.length; ci++) {
       const cat = cats[ci];
       // Respect fragmentPlan counts from policy (simple 0/1 gate here)
-      const wantFrag = plan.fragmentPlan && plan.fragmentPlan[cat] !== 0;
+      const wantFrag = plan.fragmentPlan && plan.fragmentPlan[ei] && plan.fragmentPlan[ei].cats && plan.fragmentPlan[ei].cats.includes(cat);
       if (!wantFrag) continue;
 
       const frag = await selectFragment(entry, cat, qEmb, embedCached, config);
@@ -386,8 +388,8 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   }
 
   // Template indices from plan (simple deterministic pick for now)
-  const openerIdx = plan.template?.opener ?? 0;
-  const closerIdx = plan.template?.closer ?? 0;
+  const openerIdx = plan.template?.openerIdx ?? 0;
+  const closerIdx = plan.template?.closerIdx ?? 0;
   const opener = OPENERS[openerIdx % OPENERS.length] || '';
   const closer = CLOSERS[closerIdx % CLOSERS.length] || '';
 
