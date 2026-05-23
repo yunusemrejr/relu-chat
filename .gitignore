@@ -47,3 +47,8 @@ internal-notes.md
 
 # API
 api/subscribe.php
+
+# Python cache
+__pycache__/
+*.pyc
+
