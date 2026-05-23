@@ -1,0 +1,24 @@
+{
+  "thresholds": {
+    "greeting_sim_threshold": 0.2799859636629479,
+    "greeting_max_intent": 0.15871044173437474,
+    "greeting_max_tokens": 5,
+    "off_topic_sim_threshold": 0.13903514323606364,
+    "help_sim_threshold": 0.07503735434981185,
+    "help_second_sim_threshold": 0.06002988347984948,
+    "comparison_second_sim_min": 0.3034316236679548,
+    "entity_boost_threshold": 0.46420953825294453,
+    "secondary_entry_threshold": 0.38748012450887154,
+    "min_sim_for_topic": 0.12864397400271083,
+    "greeting_fallback_threshold": 0.17773662718753308,
+    "comparison_similarity_weight": 0.41607459074908015,
+    "comparison_contrast_weight": 0.4436256586312375,
+    "default_creativity": 0.8425766671488845,
+    "default_domain_match": 0.2693341187792372
+  },
+  "metrics": {
+    "mode_accuracy": 1.0,
+    "intent_accuracy": 1.0,
+    "combined_score": 1.0
+  }
+}
