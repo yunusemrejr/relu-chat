@@ -65,8 +65,13 @@ Options -Indexes
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 
-    # CSP — allow self, jsdelivr CDN for KaTeX/Transformers, Cloudflare Insights, Google Fonts, HuggingFace for model downloads, and data: for images
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'self'"
+    # CSP — allow self only. Cloudflare injections are disabled via data-cfasync=false
+    # on all script tags and the cf-rl=off header below.
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs-us-1.hf.co https://cdn-lfs-eu-1.hf.co; frame-ancestors 'self'"
+
+    # Disable Cloudflare Rocket Loader and Auto Minify (they break ES module scripts)
+    Header always set CF-Rocket-Loader "Off"
+    Header always set CF-Minify "Off"
 
     # Remove server signature
     Header always unset Server

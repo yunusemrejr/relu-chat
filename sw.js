@@ -1,4 +1,4 @@
-const CACHE = 'relu-chat-v1';
+const CACHE = 'relu-chat-v2';
 const ASSETS = [
   '/',
   '/assets/logo.png',
@@ -13,7 +13,7 @@ const ASSETS = [
   '/manifest.webmanifest'
 ];
 
-const MODEL_CACHE = 'relu-chat-models-v1';
+const MODEL_CACHE = 'relu-chat-models-v2';
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -33,16 +33,32 @@ self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (url.pathname.startsWith('/assets/models/') || url.pathname.startsWith('/assets/transformers/')) {
     e.respondWith(
-      caches.open(MODEL_CACHE).then(c => c.match(e.request).then(r => r || fetch(e.request).then(res => { c.put(e.request, res.clone()); return res; })))
+      caches.open(MODEL_CACHE).then(c =>
+        c.match(e.request).then(r =>
+          r || fetch(e.request).then(res => {
+            if (res.ok) c.put(e.request, res.clone());
+            return res;
+          }).catch(() => new Response('', { status: 503 }))
+        )
+      )
     );
     return;
   }
   e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-      if (res.ok && (url.pathname.startsWith('/core/') || url.pathname.startsWith('/data/') || url.pathname.startsWith('/assets/'))) {
-        return caches.open(CACHE).then(c => { c.put(e.request, res.clone()); return res; });
-      }
-      return res;
-    }))
+    caches.match(e.request).then(r =>
+      r || fetch(e.request).then(res => {
+        if (res.ok && url.origin === self.location.origin &&
+            (url.pathname.startsWith('/core/') || url.pathname.startsWith('/data/') ||
+             url.pathname.startsWith('/assets/') || url.pathname.startsWith('/chat/'))) {
+          return caches.open(CACHE).then(c => { c.put(e.request, res.clone()); return res; });
+        }
+        return res;
+      }).catch(() => {
+        if (e.request.mode === 'navigate') {
+          return caches.match('/');
+        }
+        return new Response('', { status: 503 });
+      })
+    )
   );
 });
