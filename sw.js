@@ -1,4 +1,4 @@
-const CACHE = 'relu-chat-v2';
+const CACHE = 'relu-chat-v3';
 const ASSETS = [
   '/',
   '/assets/logo.png',
@@ -9,6 +9,8 @@ const ASSETS = [
   '/core/ui.js',
   '/core/cache.js',
   '/core/nlp.js',
+  '/core/bm25.js',
+  '/core/signal-layer.js',
   '/core/chatbot-engine.js',
   '/manifest.webmanifest'
 ];
@@ -36,7 +38,7 @@ self.addEventListener('fetch', e => {
       caches.open(MODEL_CACHE).then(c =>
         c.match(e.request).then(r =>
           r || fetch(e.request).then(res => {
-            if (res.ok) c.put(e.request, res.clone());
+            if (res.ok && res.status !== 206) c.put(e.request, res.clone());
             return res;
           }).catch(() => new Response('', { status: 503 }))
         )
@@ -50,7 +52,8 @@ self.addEventListener('fetch', e => {
         if (res.ok && url.origin === self.location.origin &&
             (url.pathname.startsWith('/core/') || url.pathname.startsWith('/data/') ||
              url.pathname.startsWith('/assets/') || url.pathname.startsWith('/chat/'))) {
-          return caches.open(CACHE).then(c => { c.put(e.request, res.clone()); return res; });
+          if (res.status !== 206) { caches.open(CACHE).then(c => { c.put(e.request, res.clone()); }); }
+          return res;
         }
         return res;
       }).catch(() => {

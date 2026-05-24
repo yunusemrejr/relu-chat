@@ -226,6 +226,29 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
       if (!plan.meta) plan.meta = {};
       plan.meta.policyVersion = `mlp-v${mlpInstance._version}`;
       plan.meta.policyHash = 'mlp-js';
+
+      // ---- Mode-collapse detection: if MLP returns greeting/off_topic
+      //      despite strong matching signals, assume collapsed and fall back ----
+      if (plan.mode === 'greeting' || plan.mode === 'off_topic') {
+        const hasStrongSignal =
+          features.qSimTop1 > 0.3 ||
+          features.entityCount > 0 ||
+          features.qSimTop2 > 0.25;
+        const hasReasonableIntent =
+          features.intentDefScore > 0.2 ||
+          features.intentExScore > 0.2 ||
+          features.intentFormScore > 0.2 ||
+          features.intentAppScore > 0.2 ||
+          features.intentCompScore > 0.2;
+        if (hasStrongSignal || hasReasonableIntent) {
+          console.warn(
+            '[policy-runtime] MLP mode-collapse suspected:',
+            `mode=${plan.mode}, qSimTop1=${features.qSimTop1.toFixed(3)},`,
+            `entityCount=${features.entityCount}, falling back to heuristic`
+          );
+          plan = null;
+        }
+      }
     } catch (err) {
       console.error('[policy-runtime] MLP inference failed:', err.message);
       plan = null;
