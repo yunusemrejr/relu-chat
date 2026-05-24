@@ -274,8 +274,8 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
     plan = planAnswerHeuristic(features, KB, config, context.overrides || {});
   }
 
-  // ---- Post-processing: enrich topics ONLY for off_topic plans that have ranked hits ----
-  if (plan.mode === 'off_topic' && plan.topics.length === 0 && context.ranked && context.ranked.length > 0) {
+  // ---- Post-processing: enrich topics when plan has no topics but ranked hits exist ----
+  if (plan.topics.length === 0 && context.ranked && context.ranked.length > 0) {
     const maxTopics = plan.guardrails?.maxTopics || 3;
     const minSim = plan.guardrails?.minSim || 0.15;
     const seen = new Set();

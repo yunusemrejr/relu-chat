@@ -1,35 +1,36 @@
 /* ============================================================
-   ReLU.chat — Shared Design System v3
-   Warm amber + muted teal palette, derived from
-   abstract_particle_flow.mp4 video assets
+   ReLU.chat — Shared Design System v4
+   Muted amber + deep neutral palette
    ============================================================ */
 
 /* ----- DESIGN TOKENS ----- */
 :root {
-  /* Palette derived from video: warm darks + golden amber + teal */
-  --bg: #0c0b09;
-  --bg-elevated: #141210;
-  --bg-surface: rgba(255,248,235,0.02);
-  --bg-surface-hover: rgba(255,248,235,0.04);
+  --bg: #050506;
+  --bg-elevated: #0b0b0d;
+  --bg-surface: rgba(243,239,231,0.02);
+  --bg-surface-hover: rgba(243,239,231,0.05);
   --bg-input: rgba(255,255,255,0.025);
   --border: rgba(255,255,255,0.055);
   --border-medium: rgba(255,255,255,0.09);
   --border-strong: rgba(255,255,255,0.14);
-  --border-accent: rgba(228,174,93,0.25);
-  --border-accent-strong: rgba(228,174,93,0.45);
+  --border-soft: rgba(255,255,255,0.14);
+  --border-accent: rgba(201,133,58,0.3);
+  --border-accent-strong: rgba(201,133,58,0.5);
 
   /* Warm text hierarchy */
-  --text-primary: #f0ede8;
-  --text-secondary: #a09888;
-  --text-tertiary: #5a5248;
-  --text-muted: #3a352e;
+  --text-main: #f3efe7;
+  --text-primary: #f3efe7;
+  --text-secondary: rgba(243,239,231,0.72);
+  --text-muted: rgba(243,239,231,0.52);
+  --text-tertiary: rgba(243,239,231,0.44);
 
-  /* Golden amber accent (from video) */
-  --accent: #b07030;
-  --accent-light: #e4ae5d;
-  --accent-hover: #c4823f;
-  --accent-glow: rgba(228,174,93,0.18);
-  --accent-glow-soft: rgba(228,174,93,0.08);
+  /* Muted amber accent */
+  --accent: #c9853a;
+  --accent-hover: #d49346;
+  --accent-light: #dfa154;
+  --accent-soft: rgba(201,133,58,0.16);
+  --accent-glow: rgba(201,133,58,0.18);
+  --accent-glow-soft: rgba(201,133,58,0.08);
 
   /* Muted teal secondary */
   --teal: #417d97;
@@ -157,10 +158,10 @@ p { color: var(--text-secondary); line-height: 1.7; }
   top: 0;
   z-index: 100;
   width: 100%;
-  background: rgba(12,11,9,0.65);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(5,5,6,0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .nav-container {
@@ -201,7 +202,7 @@ p { color: var(--text-secondary); line-height: 1.7; }
 
 .nav-links a, .nav-link {
   text-decoration: none;
-  color: var(--text-secondary);
+  color: rgba(243,239,231,0.68);
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -209,7 +210,7 @@ p { color: var(--text-secondary); line-height: 1.7; }
 }
 
 .nav-links a:hover, .nav-link:hover {
-  color: var(--accent-light);
+  color: var(--text-main);
 }
 
 /* ----- BUTTONS ----- */
@@ -218,17 +219,17 @@ p { color: var(--text-secondary); line-height: 1.7; }
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 44px;
-  padding: 0.625rem 1.375rem;
-  border-radius: var(--radius-md);
+  height: 46px;
+  padding: 0 24px;
+  border-radius: 10px;
   font-family: var(--font);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 650;
   letter-spacing: -0.01em;
   text-decoration: none;
   cursor: pointer;
   border: none;
-  transition: transform 0.15s var(--ease-out), box-shadow 0.2s var(--ease-out), background 0.2s var(--ease-out);
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
@@ -236,36 +237,53 @@ p { color: var(--text-secondary); line-height: 1.7; }
 .btn:active { transform: scale(0.97); }
 
 .btn-primary {
-  background: var(--accent);
-  color: #fff;
-  border: 1px solid rgba(228,174,93,0.25);
-  box-shadow: 0 0 0 1px rgba(228,174,93,0.1), 0 1px 2px rgba(0,0,0,0.25);
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+  color: #fff7ed;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 12px 34px rgba(0,0,0,0.32), 0 0 0 1px rgba(255,255,255,0.05) inset;
 }
 
 .btn-primary:hover {
-  background: var(--accent-hover);
-  border-color: rgba(228,174,93,0.4);
-  box-shadow: 0 0 0 1px rgba(228,174,93,0.18), 0 0 24px var(--accent-glow);
+  background: linear-gradient(180deg, #dfa154, var(--accent));
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.38), 0 0 0 1px rgba(255,255,255,0.08) inset;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.055);
+  color: rgba(243,239,231,0.86);
+  border: 1px solid var(--border-soft);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.09);
+  color: var(--text-main);
   transform: translateY(-1px);
 }
 
 .btn-ghost {
-  background: rgba(255,248,235,0.02);
-  color: var(--text-primary);
-  border: 1px solid var(--border-medium);
+  background: rgba(255,255,255,0.055);
+  color: rgba(243,239,231,0.86);
+  border: 1px solid var(--border-soft);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .btn-ghost:hover {
-  background: rgba(255,248,235,0.05);
-  border-color: var(--border-strong);
+  background: rgba(255,255,255,0.09);
+  color: var(--text-main);
   transform: translateY(-1px);
 }
 
 .btn-sm {
   min-height: 36px;
-  padding: 0.4375rem 0.875rem;
+  padding: 0 14px;
+  height: 36px;
   font-size: 0.75rem;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
 }
 
 /* ----- BADGES / CHIPS ----- */
@@ -275,23 +293,23 @@ p { color: var(--text-secondary); line-height: 1.7; }
   gap: 0.375rem;
   padding: 0.375rem 0.75rem;
   border-radius: var(--radius-full);
-  background: rgba(255,248,235,0.02);
-  border: 1px solid var(--border);
-  color: var(--text-tertiary);
-  font-size: 0.6875rem;
+  background: rgba(243,239,231,0.04);
+  border: 1px solid rgba(243,239,231,0.1);
+  color: rgba(243,239,231,0.5);
+  font-size: 0.84rem;
   font-weight: 500;
   white-space: nowrap;
   transition: border-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
 }
 
 .badge:hover {
-  border-color: var(--border-medium);
-  color: var(--text-secondary);
+  border-color: rgba(243,239,231,0.18);
+  color: rgba(243,239,231,0.7);
 }
 
 .badge svg {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   stroke: currentColor;
   flex-shrink: 0;
 }

@@ -52,7 +52,10 @@ self.addEventListener('fetch', e => {
         if (res.ok && url.origin === self.location.origin &&
             (url.pathname.startsWith('/core/') || url.pathname.startsWith('/data/') ||
              url.pathname.startsWith('/assets/') || url.pathname.startsWith('/chat/'))) {
-          if (res.status !== 206) { caches.open(CACHE).then(c => { c.put(e.request, res.clone()); }); }
+          if (res.status !== 206) {
+            const cloned = res.clone();
+            caches.open(CACHE).then(c => { c.put(e.request, cloned); });
+          }
           return res;
         }
         return res;
