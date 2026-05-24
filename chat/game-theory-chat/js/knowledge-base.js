@@ -149,7 +149,7 @@ export const KB = [
         'Any $n$-player finite game can be listed as an $n$-dimensional payoff tensor.'],
     form:['Nash equilibria in the normal form always exist in mixed strategies (Nash, 1950).',
           'The normal form captures strategic equivalence classes coarser than extensive-form equivalence.'],
-    app:['The default representation for matrix/bimatrix algorithms and LP-based equilibrium computation.','Ubiquitous in AI, IO, and introductory game theory.']},
+    app:['The normal form is the default representation for computing Nash equilibria algorithmically: the Lemke-Howson algorithm operates directly on bimatrix payoff tables. Most introductory game theory textbooks use normal-form analysis as their starting point.','In mechanism design, the designer first specifies the normal form — strategy spaces and payoff functions — before analyzing what equilibrium emerges. This abstraction underlies auction design, voting rule analysis, and contract theory.']},
    ['extensive_form','nash_eq','bimatrix']),
 
   kb('bayesian_game','Bayesian Game',['games of incomplete information','bayes nash','type space'],
@@ -162,7 +162,7 @@ export const KB = [
         'Signaling models of labor markets (Spence) and insurance (Rothschild-Stiglitz) are Bayesian.'],
     form:['Harsanyi (1967-68) showed any game of incomplete information has a Bayesian equivalent via the type-space transformation.',
           'Common-prior assumption links beliefs consistently through Bayesian updating.'],
-    app:['Foundation of auction theory, contract theory, and information economics.','Pervasive in online advertising and recommender systems.']},
+    app:['Online advertising platforms run Bayesian auctions daily: each advertiser has a private value for a click, drawn from a distribution the platform estimates. The generalized second-price auction is analyzed as a Bayesian game of incomplete information.','In insurance markets, adverse selection creates a Bayesian game: buyers know their own risk type but insurers only know the population distribution. Rothschild-Stiglitz screening models analyze equilibrium contract menus under this information asymmetry.']},
    ['pbe','harsanyi','signaling','screening','auction_theory']),
 
   kb('repeated_game','Repeated Game',['iterated game','supergame'],
@@ -240,7 +240,7 @@ export const KB = [
         'Two firms with these parameters earn $\\pi=a^2/9$ each.'],
     form:['Best response $q_i^*(q_{-i})=\\tfrac{1}{2}(a-\\sum_{j\\ne i}q_j)$ in the linear case; intersection gives the Nash equilibrium.',
           'As $n\\to\\infty$, the Cournot equilibrium converges to the competitive outcome (Walras).'],
-    app:['Benchmark model for quantity-setting oligopolies and merger analysis.','Used to bound deadweight loss from imperfect competition.']},
+    app:['The OPEC oil cartel\'s production decisions approximate Cournot competition among member nations. Each country chooses its output quantity knowing that aggregate supply affects the world oil price, and the model predicts how production quotas affect prices.','In the global semiconductor industry, major manufacturers like TSMC, Samsung, and Intel engage in quantity competition: each decides fab capacity independently, and the total installed capacity determines chip prices in downstream markets worldwide.']},
    ['stackelberg','bertrand','nash_eq','poa']),
 
   kb('bertrand','Bertrand Competition',['bertrand','price competition'],
@@ -435,7 +435,7 @@ export const KB = [
         'Mixed equilibrium has player 1 choose $O$ with probability $2/3$ and player 2 choose $O$ with probability $1/3$.'],
     form:['Payoff-dominance selects $(O,O)$ for player 1 and $(F,F)$ for player 2 — they disagree. Risk-dominance and communication can break the tie.',
           'Correlated equilibrium expands the set of welfare-improving outcomes.'],
-    app:['Standards battles (VHS vs Betamax), meeting coordination, and platform choice.','Workhorse example in equilibrium selection and cheap-talk analysis.']},
+    app:['The VHS versus Betamax format war of the 1980s was a Battle of the Sexes: both Sony (Betamax) and JVC (VHS) preferred different standards, but consumers desperately needed a single coordinated outcome. VHS won despite Betamax\'s technical superiority.','The choice between iOS and Android for app developers is a Battle of the Sexes: developers prefer the platform with more users, and users prefer the platform with more apps. Network effects lock in coordination on whichever platform gains initial momentum.']},
    ['stag_hunt','chicken','nash_eq','corr_eq']),
 
   kb('hawk_dove','Hawk-Dove Game',['hawk dove','chicken in biology'],
@@ -461,7 +461,7 @@ export const KB = [
         'International environmental agreements where only joint effort protects a common resource.'],
     form:['Harsanyi-Selten: $(S,S)$ is payoff-dominant, $(H,H)$ is risk-dominant. Experimentally, risk-dominance often prevails.',
           'Infinitely repeated play can select $(S,S)$ under sufficient patience.'],
-    app:['Models trust and assurance in coalitions, currency unions, and network standards.','Rousseau\'s original parable of cooperation.']},
+    app:['The European Union\'s common currency is a Stag Hunt: all member states benefit from a stable euro (hunting the stag), but during crises, individual countries are tempted to pursue independent monetary policies (hunting the hare), risking currency union collapse.','Rousseau\'s original parable of cooperation.']},
    ['battle_of_sexes','nash_eq','coordination','repeated_game']),
 
   kb('chicken','Chicken Game',['chicken','hawk-dove economic'],
@@ -474,7 +474,7 @@ export const KB = [
         'Legislative budget standoffs exhibit chicken-style brinkmanship.'],
     form:['Schelling (1960): visible commitment — such as throwing away your steering wheel — is a rational move that shifts the equilibrium in your favor.',
           'Correlated equilibrium strictly improves average welfare over all Nash equilibria.'],
-    app:['Crisis bargaining, union-management strikes, and military deterrence.','Classic teaching example for commitment devices.']},
+    app:['The 1962 Cuban Missile Crisis is the definitive Chicken game: the US and USSR each preferred the other to back down, but mutual escalation meant nuclear war. Kennedy\'s naval blockade was a calibrated move short of full, irreversible commitment.','In labor disputes, both union and management may threaten a strike or lockout — each hoping the other will concede first. The risk is that both hold firm and the resulting work stoppage hurts everyone, just like a crash in Chicken.']},
    ['hawk_dove','battle_of_sexes','nash_eq','corr_eq']),
 
   kb('matching_pennies','Matching Pennies',['matching pennies','odd-even'],
@@ -526,7 +526,7 @@ export const KB = [
         'Punishment opportunities sustain cooperation (Fehr-G\\"achter).'],
     form:['Socially optimal contribution: $\\sum c_i^*=nw$; Nash: $c_i=0$. The efficiency gap scales with $\\alpha$ and $n$.',
           'Linter-Samuelson condition characterizes optimal public-good provision: sum of MRS equals MRT.'],
-    app:['Climate-change cooperation, open-source software, and team production.','Motivates institutions for monitoring and sanctioning free-riders.']},
+    app:['Climate change mitigation is the canonical public-goods problem: each country benefits from global emission reductions but has incentives to free-ride on others\' efforts. International agreements like the Paris Accord attempt to coordinate contributions.','Open-source software development exemplifies voluntary public-goods provision: developers contribute code that everyone can use, facing a temptation to free-ride while hoping others will maintain the project.']},
    ['prisoners_dilemma','tragedy_commons','nash_eq','poa']),
 
   kb('tragedy_commons','Tragedy of the Commons',['commons','common pool'],
@@ -539,7 +539,7 @@ export const KB = [
         'Traffic congestion is a commons-like equilibrium with excessive driving.'],
     form:['Equivalent to a public-bad game; Pigouvian taxation internalizes the externality to implement the social optimum.',
           'Ostrom (1990) documented real-world governance institutions that sustain cooperation without privatization.'],
-    app:['Environmental policy, congestion pricing, and spectrum management.','Foundational concept in environmental economics.']},
+    app:['Global fisheries exemplify the tragedy of the commons: each fishing nation maximizes its own catch, but the aggregate harvest depletes fish stocks below sustainable levels. The UN Law of the Sea and catch-share systems attempt to internalize this externality.','Groundwater extraction by farmers illustrates the commons dilemma: each farmer drills deeper to secure water, but collective overpumping lowers the water table for all. California\'s Sustainable Groundwater Management Act mandates coordinated usage plans.']},
    ['public_goods','prisoners_dilemma','nash_eq','poa']),
 
   kb('signaling','Signaling Games',['signaling','spence'],
@@ -669,7 +669,7 @@ export const KB = [
         'Coordination games on graphs are (weighted) potential games.'],
     form:['Monderer-Shapley (1996): every finite potential game has a pure Nash equilibrium — the maximizer of $\\Phi$.',
           'Better-response and fictitious-play dynamics converge to Nash in potential games.'],
-    app:['Routing, load balancing, distributed optimization, and multi-agent learning.','Bridge to convex optimization via $\\Phi$.']},
+    app:['Distributed sensor networks use potential-game formulations to coordinate channel selection: each sensor\'s local decision to switch channels corresponds to climbing the potential function, guaranteeing convergence to interference-minimizing configurations.','Bridge to convex optimization via $\\Phi$.']},
    ['congestion','poa','nash_eq']),
 
   kb('congestion','Congestion Games',['congestion','rosenthal','routing games'],
@@ -695,7 +695,7 @@ export const KB = [
         'For atomic congestion games with linear costs, PoA $=5/2$ (Awerbuch-Azar-Epstein; Christodoulou-Koutsoupias).'],
     form:['Roughgarden\'s smoothness framework yields robust PoA bounds across many solution concepts (mixed, correlated, coarse-correlated).',
           'Tight bounds often stem from Pigou-like example graphs.'],
-    app:['Network routing, auctions (GSP has PoA bounded), scheduling, and facility-location games.','Key metric in algorithmic game theory.']},
+    app:['Internet routing protocols like BGP let autonomous systems choose paths selfishly. The Price of Anarchy quantifies how much slower traffic becomes compared to an optimally coordinated routing scheme, guiding network design and traffic engineering.','In electricity markets, generators bid independently to maximize profit. The Price of Anarchy measures the efficiency loss from decentralized bidding relative to a centrally planned dispatch, informing market regulation and capacity planning.']},
    ['nash_eq','congestion','corr_eq']),
 
   kb('zermelo','Zermelo\'s Theorem',['zermelo'],

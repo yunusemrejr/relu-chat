@@ -3,7 +3,6 @@ import { INTENTS } from '../../../data/bots/golden-age-inquiry/intents.js';
 import { CONFIG } from './config.js';
 import { overrides } from '../../../data/bots/golden-age-inquiry/overrides.js';
 import { createChatbot } from '../../../core/chatbot-engine.js';
-import { pushMessage } from '../../../core/ui.js';
 
 const SUGGESTIONS = [
   "Who was Al-Khwarizmi?",

@@ -300,6 +300,127 @@ export class SessionMemory {
     return { isFollowUp: false };
   }
 
+  /**
+   * Enhanced follow-up detection that first tries pattern-based detection,
+   * then falls back to heuristic short-query / single-word detection.
+   *
+   * Handles queries like "how?", "why?", "explain", "example",
+   * "simpler please", "i dont get it", "what do you mean", etc.
+   *
+   * @param {string} query - raw user query
+   * @returns {{ isFollowUp: boolean, type?: string, target?: string|number }}
+   */
+  detectSimpleFollowUp(query) {
+    if (!query || typeof query !== 'string') {
+      return { isFollowUp: false };
+    }
+
+    // First try pattern-based detection
+    const patternResult = this.detectFollowUp(query);
+    if (patternResult.isFollowUp) {
+      return patternResult;
+    }
+
+    // No history = can't be a meaningful follow-up
+    if (this.history.length === 0) {
+      return { isFollowUp: false };
+    }
+
+    const q = query.trim().replace(/[.!?]+$/, '').trim().toLowerCase();
+
+    // Single-word follow-up mapping
+    const singleWordMap = {
+      'how': 'elaborate',
+      'why': 'elaborate',
+      'what': 'elaborate',
+      'explain': 'simplify',
+      'example': 'example',
+      'simplify': 'simplify',
+      'simpler': 'simplify',
+      'elaborate': 'elaborate',
+      'more': 'elaborate',
+    };
+
+    if (/^[a-z]+$/.test(q) && q in singleWordMap) {
+      return { isFollowUp: true, type: singleWordMap[q], target: 'last' };
+    }
+
+    // Very short queries (< 15 chars)
+    if (q.length < 15 && q.length > 1) {
+      const shortPhraseMap = [
+        {
+          patterns: [/simpl/i, /dumb/i, /eli5/, /easier/, /i dont get/, /don't get/, /unclear/, /confus/, /what do you mean/, /not understand/],
+          type: 'simplify'
+        },
+        {
+          patterns: [/example/, /show me/, /sample/],
+          type: 'example'
+        },
+        {
+          patterns: [/more/, /detail/, /deeper/, /continue/, /go on/, /tell me more/, /expand/],
+          type: 'elaborate'
+        },
+        {
+          patterns: [/another/, /other/, /one more/, /different/],
+          type: 'another_example'
+        },
+      ];
+      for (const entry of shortPhraseMap) {
+        for (const pat of entry.patterns) {
+          if (pat.test(q)) {
+            return { isFollowUp: true, type: entry.type, target: 'last' };
+          }
+        }
+      }
+    }
+
+    return { isFollowUp: false };
+  }
+
+  /**
+   * Build a rich follow-up context object for the current query.
+   * Combines enhanced follow-up detection with session history state.
+   *
+   * @param {string} query - raw user query
+   * @returns {{
+   *   isFollowUp: boolean,
+   *   type: string|null,
+   *   target: string|number|null,
+   *   targetIndex: number|null,
+   *   lastTopics: number[],
+   *   lastEntities: number[],
+   *   lastFragments: string[],
+   *   turnCount: number
+   * }}
+   */
+  getFollowUpContext(query) {
+    const followUp = this.detectSimpleFollowUp(query);
+
+    const lastTurn = this.history.length > 0
+      ? this.history[this.history.length - 1]
+      : null;
+
+    // For reference_index, translate the ordinal target into the actual KB index
+    let targetIndex = null;
+    if (followUp.isFollowUp && followUp.type === 'reference_index' && typeof followUp.target === 'number' && lastTurn) {
+      const topics = lastTurn.topics || [];
+      if (followUp.target >= 0 && followUp.target < topics.length) {
+        targetIndex = topics[followUp.target];
+      }
+    }
+
+    return {
+      isFollowUp: followUp.isFollowUp || false,
+      type: followUp.type || null,
+      target: followUp.target ?? null,
+      targetIndex,
+      lastTopics: lastTurn ? (lastTurn.topics || []) : [],
+      lastEntities: lastTurn ? (lastTurn.entities || []) : [],
+      lastFragments: lastTurn ? (lastTurn.fragments || []) : [],
+      turnCount: this._turnCount,
+    };
+  }
+
   // -------------------------------------------------------------------------
   // Ambiguity tracking
   // -------------------------------------------------------------------------

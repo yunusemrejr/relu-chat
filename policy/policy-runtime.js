@@ -251,8 +251,8 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
     plan = planAnswerHeuristic(features, KB, config, context.overrides || {});
   }
 
-  // ---- Post-processing: enrich empty topics from context.ranked for ALL plans ----
-  if (plan.topics.length === 0 && context.ranked && context.ranked.length > 0) {
+  // ---- Post-processing: enrich topics ONLY for off_topic plans that have ranked hits ----
+  if (plan.mode === 'off_topic' && plan.topics.length === 0 && context.ranked && context.ranked.length > 0) {
     const maxTopics = plan.guardrails?.maxTopics || 3;
     const minSim = plan.guardrails?.minSim || 0.15;
     const seen = new Set();
@@ -263,7 +263,7 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
       seen.add(r.i);
       if (plan.topics.length >= maxTopics) break;
     }
-    if (plan.topics.length > 0 && plan.mode === 'off_topic') {
+    if (plan.topics.length > 0) {
       plan.mode = 'normal';
       plan.intent = 'definition';
       if (plan.meta?.decisionPath) {
@@ -583,6 +583,12 @@ async function _instantiateWasm(wasmPath, timeoutMs, manifest) {
       // Re-instantiate from the buffered data
       const result = await WebAssembly.instantiate(wasmBuffer, importObject);
       instance = result.instance;
+      // Store memory reference so _allocString / _loadWeights work before the return
+      if (instance.exports.memory) {
+        wasmMemory = instance.exports.memory.buffer;
+      } else if (importObject.env.memory) {
+        wasmMemory = importObject.env.memory.buffer;
+      }
       return instance;
     }
   }
@@ -665,7 +671,7 @@ async function _loadWeights(instance, weightsPath, timeoutMs, manifest) {
   }
 
   // Copy weights into WASM linear memory
-  const mem = wasmMemory || (instance.exports.memory && instance.exports.memory.buffer);
+  const mem = (instance.exports.memory && instance.exports.memory.buffer) || wasmMemory;
   if (!mem) throw new Error('No WASM memory available for weights');
 
   const dest = new Uint8Array(mem, destPtr, weightsBuffer.byteLength);
@@ -690,7 +696,7 @@ async function _wasmPlanAnswer(instance, features, config) {
   const packed = packFeatures(features);
 
   // Copy the packed feature buffer into WASM memory
-  const mem = wasmMemory || instance.exports.memory?.buffer;
+  const mem = instance.exports.memory?.buffer || wasmMemory;
   if (!mem) throw new Error('No WASM memory');
 
   const packedLen = packed.buffer.byteLength; // 76 bytes
@@ -749,7 +755,7 @@ async function _wasmPlanAnswer(instance, features, config) {
 function _allocString(instance, str) {
   const encoded = new TextEncoder().encode(str);
   const ptr = _allocBuffer(instance, encoded.length);
-  const mem = wasmMemory || instance.exports.memory?.buffer;
+  const mem = instance.exports.memory?.buffer || wasmMemory;
   if (mem) {
     new Uint8Array(mem, ptr, encoded.length).set(encoded);
   }

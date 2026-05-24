@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from policy_model import PolicyNetwork, ACTION_SIZES_ORDERED, N_FEATURES
 
 WEIGHT_SHAPES = [
-    ('fc1.weight',              [128, 24]),
+    ('fc1.weight',              [128, 25]),
     ('fc1.bias',                [128]),
     ('fc2.weight',              [64, 128]),
     ('fc2.bias',                [64]),

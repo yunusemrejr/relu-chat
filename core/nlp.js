@@ -259,7 +259,7 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   const INTENTS = overrides?.intents || DEFAULT_INTENTS;
   const compositionConfig = config?.COMPOSITION || {};
 
-  if (!plan || plan.mode === 'off-topic') {
+  if (!plan || plan.mode === 'off_topic') {
     return {
       text: overrides?.offTopicResponse || "That didn't map to anything I know well. Try asking about a topic I'm trained on.",
       meta: [{ text: 'off-topic', type: 'warn' }]

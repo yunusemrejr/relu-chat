@@ -131,7 +131,7 @@ export async function createChatbot(config) {
     sendBtn.disabled = true;
 
     // ---- Session: detect follow-up before any pipeline work ----
-    const followUp = session.detectFollowUp(query);
+    const followUpContext = session.getFollowUpContext(query);
 
     const typingEl = pushMessage('bot', '<div class="typing"><span></span><span></span><span></span></div>');
     let text, meta;
@@ -185,8 +185,9 @@ export async function createChatbot(config) {
         entryEmb,
         lastTopic: session.lastTopic,
         lastTopicAge: session.lastTopicAge,
-        followUp,
+        followUp: followUpContext,
         wasPreviousAmbiguous: session.wasPreviousQueryAmbiguous(),
+        recentFragments: session.getRecentlyUsedFragments(),
         overrides,
       };
       const plan = await planAnswer(query, qEmb, KB, context, { EMBEDDING: CONFIG.EMBEDDING, botProfile, _domainPrototypeEmbs: domainPrototypeEmbs.length > 0 ? domainPrototypeEmbs : intentEmb });

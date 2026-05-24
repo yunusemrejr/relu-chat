@@ -8,7 +8,7 @@
  * Parameters:    ~4.5K total (fc1: 3.2K, fc2: 8.3K, heads: 1.6K)
  * Weights form:  PyTorch Linear convention — weight @ input.T + bias
  *
- * Design Version: 1.0.0 (mlp-inference)
+ * Design Version: 2.0.0 (mlp-inference) — adds quantized path, buffer reuse
  * Companion to:   policy-runtime.js, feature-extractor.js, action-schema.js
  */
 
@@ -64,19 +64,20 @@ const WEIGHT_SHAPES = Object.freeze([
  * Vector × weight-matrix multiply.
  *
  * Convention: vec ∈ R^{in}, wmat ∈ R^{out × in}
- * Returns:    Float32Array(out) where result[j] = Σ_i vec[i] * wmat[j][i]
+ * If `target` is provided, writes into it (in-place) and returns it.
+ * Otherwise allocates and returns a new Float32Array(out).
  *
  * @param {Float32Array} vec  - input vector (length in_features)
  * @param {Array<Array<number>>} wmat - weight matrix [out_features][in_features]
+ * @param {Float32Array} [target] - optional pre-allocated output buffer
  * @returns {Float32Array}    - output vector (length out_features)
  */
-function matMul(vec, wmat) {
+function matMul(vec, wmat, target) {
   const outF = wmat.length;
-  const result = new Float32Array(outF);
+  const result = target || new Float32Array(outF);
   for (let j = 0; j < outF; j++) {
     const row = wmat[j];
     let sum = 0;
-    // manual inner loop — JIT-friendly, no iterator overhead
     for (let i = 0; i < row.length; i++) {
       sum += vec[i] * row[i];
     }
@@ -86,13 +87,40 @@ function matMul(vec, wmat) {
 }
 
 /**
+ * Int8 vector × weight-matrix multiply (quantized path).
+ * Uses Int32Array for accumulation to avoid overflow.
+ *
+ * @param {Int8Array|Float32Array} vec - input vector (length in_features)
+ * @param {Int8Array} wmat - quantized weight matrix [out_features][in_features] as flat Int8Array
+ * @param {number} outF - number of output features
+ * @param {number} inF  - number of input features
+ * @param {Float32Array} [target] - optional pre-allocated output buffer
+ * @returns {Float32Array} - output vector (length out_features)
+ */
+function matMulInt8(vec, wmat, outF, inF, target) {
+  const result = target || new Float32Array(outF);
+  let offset = 0;
+  for (let j = 0; j < outF; j++) {
+    let sum = 0;
+    for (let i = 0; i < inF; i++) {
+      sum += vec[i] * wmat[offset++];
+    }
+    result[j] = sum;
+  }
+  return result;
+}
+
+/**
  * ReLU activation — element-wise max(0, x).
+ * If `target` is provided, writes into it (in-place) and returns it.
+ * Otherwise allocates and returns a new Float32Array.
  *
  * @param {Float32Array} arr
- * @returns {Float32Array} new array (does not mutate input)
+ * @param {Float32Array} [target] - optional pre-allocated output buffer
+ * @returns {Float32Array}
  */
-function relu(arr) {
-  const result = new Float32Array(arr.length);
+function relu(arr, target) {
+  const result = target || new Float32Array(arr.length);
   for (let i = 0; i < arr.length; i++) {
     result[i] = arr[i] > 0 ? arr[i] : 0;
   }
@@ -258,10 +286,33 @@ function featuresToF32(features, version = 2) {
 // MLPPolicy class
 // ---------------------------------------------------------------------------
 
+// Pre-defined buffer sizes (immutable)
+const BUFFER_SIZES = Object.freeze({
+  z1: 128,
+  h1: 128,
+  z2: 64,
+  h2: 64,
+  headMax: 5,   // mode & intent heads
+  head4: 4,     // topic_count, frag_count, tone heads
+  head1: 1,     // creativity head
+});
+
+// Pre-defined head buffer keys for iteration
+const HEAD_BUFFER_KEYS = Object.freeze([
+  'mode',        // 5
+  'intent',      // 5
+  'topic_count', // 4
+  'frag_count',  // 4
+  'creativity',  // 1
+  'tone',        // 4
+]);
+const HEAD_SIZES = Object.freeze([5, 5, 4, 4, 1, 4]);
+
 export class MLPPolicy {
   /**
    * Construct an MLP policy from a raw weights dictionary.
    * Validates all tensor shapes on construction.
+   * Pre-allocates reusable Float32Arrays for the forward pass.
    *
    * @param {object} weights - raw weights dict with keys matching WEIGHT_SHAPES
    */
@@ -269,6 +320,296 @@ export class MLPPolicy {
     this._validate(weights);
     this.weights = weights;
     this._version = weights._version || 2;
+
+    // --- Pre-allocated buffers for buffer-reuse forward pass ---
+    this._z1 = new Float32Array(BUFFER_SIZES.z1);
+    this._h1 = new Float32Array(BUFFER_SIZES.h1);
+    this._z2 = new Float32Array(BUFFER_SIZES.z2);
+    this._h2 = new Float32Array(BUFFER_SIZES.h2);
+    // Per-head logit buffers (indexed by HEAD_BUFFER_KEYS order)
+    this._headBufs = {
+      mode:        new Float32Array(5),
+      intent:      new Float32Array(5),
+      topic_count: new Float32Array(4),
+      frag_count:  new Float32Array(4),
+      creativity:  new Float32Array(1),
+      tone:        new Float32Array(4),
+    };
+
+    // --- Quantized weights (populated by loadQuantized()) ---
+    this._qWeights = null; // { scale, w1q: Int8Array, w2q: Int8Array, headQ: [...] }
+    this._totalParams = this._countParams();
+    this._quantizedBytes = 0;
+  }
+
+  /**
+   * Count total float parameters across all weight tensors.
+   * @returns {number}
+   */
+  _countParams() {
+    let n = 0;
+    for (const [key, shape] of WEIGHT_SHAPES) {
+      const t = this.weights[key];
+      n += t.length * (shape.length === 1 ? 1 : shape[1]);
+    }
+    return n;
+  }
+
+  /**
+   * Approximate memory footprint of float32 weights in bytes.
+   */
+  _floatWeightBytes() {
+    return this._totalParams * 4;
+  }
+
+  /**
+   * Load quantized (int8) weight representation from the current float weights.
+   * Each weight matrix is independently quantized per-layer using symmetric
+   * int8 quantization: q = round(w / scale), clamped to [-127, 127].
+   * Scale = max(abs(weight)) / 127.
+   *
+   * Call once after construction. Sets this._qWeights.
+   */
+  loadQuantized() {
+    const w = this.weights;
+    const qw = {};
+
+    // fc1: [128, 25] → scale + Int8Array(128*25)
+    qw.fc1 = this._quantizeMatrix(w['fc1.weight']);
+    qw.fc2 = this._quantizeMatrix(w['fc2.weight']);
+    // Heads
+    qw.mode        = this._quantizeMatrix(w['mode_head.weight']);
+    qw.intent      = this._quantizeMatrix(w['intent_head.weight']);
+    qw.topic_count = this._quantizeMatrix(w['topic_count_head.weight']);
+    qw.frag_count  = this._quantizeMatrix(w['frag_count_head.weight']);
+    qw.creativity  = this._quantizeMatrix(w['creativity_head.weight']);
+    qw.tone        = this._quantizeMatrix(w['tone_head.weight']);
+
+    this._qWeights = qw;
+    // Compute total quantized bytes: Int8Array byteLength + scale numbers
+    let bytes = 0;
+    for (const key of Object.keys(qw)) {
+      bytes += qw[key].data.byteLength + 4; // Int8 + one float32 scale
+    }
+    this._quantizedBytes = bytes;
+    return this;
+  }
+
+  /**
+   * Quantize a 2-D float weight matrix (row-major) into { scale, data: Int8Array }.
+   * @param {Array<Array<number>>} wmat
+   * @returns {{ scale: number, data: Int8Array }}
+   */
+  _quantizeMatrix(wmat) {
+    let maxAbs = 0;
+    const rows = wmat.length;
+    const cols = wmat[0].length;
+    const total = rows * cols;
+    for (let j = 0; j < rows; j++) {
+      const row = wmat[j];
+      for (let i = 0; i < cols; i++) {
+        const v = Math.abs(row[i]);
+        if (v > maxAbs) maxAbs = v;
+      }
+    }
+    const scale = maxAbs > 0 ? maxAbs / 127 : 1;
+    const data = new Int8Array(total);
+    let idx = 0;
+    for (let j = 0; j < rows; j++) {
+      const row = wmat[j];
+      for (let i = 0; i < cols; i++) {
+        // Clamp to [-127, 127] before rounding
+        const q = Math.round(row[i] / scale);
+        data[idx++] = q < -127 ? -127 : (q > 127 ? 127 : q);
+      }
+    }
+    return { scale, data };
+  }
+
+  // -----------------------------------------------------------------------
+  // Forward pass — buffer-reusing (backward compatible)
+  // -----------------------------------------------------------------------
+
+  /**
+   * Run the full MLP forward pass, reusing pre-allocated buffers.
+   * Backward compatible: callers may pass an optional `features` override,
+   * but the signature remains identical to the original forward().
+   *
+   * @param {Float32Array} features - 25-element feature vector
+   * @returns {{
+   *   modeProbs: Float32Array, intentProbs: Float32Array,
+   *   topicCountProbs: Float32Array, fragCountProbs: Float32Array,
+   *   creativity: number, toneProbs: Float32Array
+   * }}
+   */
+  forward(features) {
+    const w = this.weights;
+    const b = this._headBufs;
+    const z1 = this._z1, h1 = this._h1, z2 = this._z2, h2 = this._h2;
+
+    // ---- Layer 1: fc1 (128, ReLU) ----
+    matMul(features, w['fc1.weight'], z1);  // write into pre-allocated z1
+    addBiasInPlace(z1, w['fc1.bias']);
+    relu(z1, h1);                            // write into pre-allocated h1
+
+    // ---- Layer 2: fc2 (64, ReLU) ----
+    matMul(h1, w['fc2.weight'], z2);         // write into pre-allocated z2
+    addBiasInPlace(z2, w['fc2.bias']);
+    relu(z2, h2);                            // write into pre-allocated h2
+
+    // ---- Action heads (all share h2 as input) ----
+    matMul(h2, w['mode_head.weight'], b.mode);
+    addBiasInPlace(b.mode, w['mode_head.bias']);
+
+    matMul(h2, w['intent_head.weight'], b.intent);
+    addBiasInPlace(b.intent, w['intent_head.bias']);
+
+    matMul(h2, w['topic_count_head.weight'], b.topic_count);
+    addBiasInPlace(b.topic_count, w['topic_count_head.bias']);
+
+    matMul(h2, w['frag_count_head.weight'], b.frag_count);
+    addBiasInPlace(b.frag_count, w['frag_count_head.bias']);
+
+    matMul(h2, w['creativity_head.weight'], b.creativity);
+    addBiasInPlace(b.creativity, w['creativity_head.bias']);
+
+    matMul(h2, w['tone_head.weight'], b.tone);
+    addBiasInPlace(b.tone, w['tone_head.bias']);
+
+    return {
+      modeProbs:        softmax(b.mode),
+      intentProbs:      softmax(b.intent),
+      topicCountProbs:  softmax(b.topic_count),
+      fragCountProbs:   softmax(b.frag_count),
+      creativity:       0.5,
+      toneProbs:        softmax(b.tone),
+    };
+  }
+
+  /**
+   * Quantized forward pass — int8 weights with int32 accumulation.
+   * Requires loadQuantized() to have been called first.
+   *
+   * @param {Float32Array} features - 25-element feature vector
+   * @returns {{
+   *   modeProbs: Float32Array, intentProbs: Float32Array,
+   *   topicCountProbs: Float32Array, fragCountProbs: Float32Array,
+   *   creativity: number, toneProbs: Float32Array
+   * }}
+   */
+  forwardQuantized(features) {
+    if (!this._qWeights) {
+      throw new Error('MLPPolicy: call loadQuantized() before forwardQuantized()');
+    }
+    const qw = this._qWeights;
+    const b = this._headBufs;
+    const z1 = this._z1, h1 = this._h1, z2 = this._z2, h2 = this._h2;
+
+    // fc1: features[25] × qw.fc1.data[128*25], scale = qw.fc1.scale
+    // Accumulate in Float32 directly (no int32 intermediate needed at this size)
+    matMulInt8(features, qw.fc1.data, 128, 25, z1);
+    // Dequantize: z1 *= fc1_scale, then add bias
+    const s1 = qw.fc1.scale;
+    for (let i = 0; i < 128; i++) z1[i] *= s1;
+    addBiasInPlace(z1, this.weights['fc1.bias']);
+    relu(z1, h1);
+
+    // fc2: h1[128] × qw.fc2.data[64*128], scale = qw.fc2.scale
+    matMulInt8(h1, qw.fc2.data, 64, 128, z2);
+    const s2 = qw.fc2.scale;
+    for (let i = 0; i < 64; i++) z2[i] *= s2;
+    addBiasInPlace(z2, this.weights['fc2.bias']);
+    relu(z2, h2);
+
+    // Heads — each has own scale factor
+    const heads = [
+      { buf: b.mode,        q: qw.mode,        w: this.weights['mode_head.bias'],        size: 5  },
+      { buf: b.intent,      q: qw.intent,      w: this.weights['intent_head.bias'],      size: 5  },
+      { buf: b.topic_count, q: qw.topic_count, w: this.weights['topic_count_head.bias'], size: 4  },
+      { buf: b.frag_count,  q: qw.frag_count,  w: this.weights['frag_count_head.bias'],  size: 4  },
+      { buf: b.creativity,  q: qw.creativity,  w: this.weights['creativity_head.bias'],  size: 1  },
+      { buf: b.tone,        q: qw.tone,        w: this.weights['tone_head.bias'],        size: 4  },
+    ];
+
+    for (const h of heads) {
+      matMulInt8(h2, h.q.data, h.size, 64, h.buf);
+      const hs = h.q.scale;
+      for (let i = 0; i < h.size; i++) h.buf[i] *= hs;
+      addBiasInPlace(h.buf, h.w);
+    }
+
+    return {
+      modeProbs:        softmax(b.mode),
+      intentProbs:      softmax(b.intent),
+      topicCountProbs:  softmax(b.topic_count),
+      fragCountProbs:   softmax(b.frag_count),
+      creativity:       0.5,
+      toneProbs:        softmax(b.tone),
+    };
+  }
+
+  // -----------------------------------------------------------------------
+  // Performance & memory reporting
+  // -----------------------------------------------------------------------
+
+  /**
+   * Static benchmark — compares float32 vs quantized forward pass speed.
+   *
+   * @param {MLPPolicy} policy - initialized MLPPolicy
+   * @param {Float32Array} features - 25-element feature vector to use
+   * @param {number} iterations - number of iterations (default 1000)
+   * @returns {{ float32_us: number, quantized_us: number, speedup: number }}
+   */
+  static benchmark(policy, features, iterations = 1000) {
+    const warmup = 100;
+    // Warm up both paths
+    for (let i = 0; i < warmup; i++) {
+      policy.forward(features);
+      if (policy._qWeights) policy.forwardQuantized(features);
+    }
+
+    // Benchmark float32
+    const t0 = process.hrtime.bigint();
+    for (let i = 0; i < iterations; i++) policy.forward(features);
+    const t1 = process.hrtime.bigint();
+    const float32_us = Number(t1 - t0) / iterations / 1000;
+
+    // Benchmark quantized
+    let quantized_us = 0;
+    if (policy._qWeights) {
+      const t2 = process.hrtime.bigint();
+      for (let i = 0; i < iterations; i++) policy.forwardQuantized(features);
+      const t3 = process.hrtime.bigint();
+      quantized_us = Number(t3 - t2) / iterations / 1000;
+    }
+
+    return {
+      float32_us:    parseFloat(float32_us.toFixed(2)),
+      quantized_us:  quantized_us > 0 ? parseFloat(quantized_us.toFixed(2)) : null,
+      speedup:       quantized_us > 0 ? parseFloat((float32_us / quantized_us).toFixed(2)) : null,
+    };
+  }
+
+  /**
+   * Return memory usage statistics.
+   * @returns {{
+   *   totalParams: number,
+   *   floatBytes: number,
+   *   quantizedBytes: number,
+   *   memorySavedPct: number
+   * }}
+   */
+  getStats() {
+    const floatBytes = this._floatWeightBytes();
+    const saved = this._quantizedBytes > 0
+      ? ((floatBytes - this._quantizedBytes) / floatBytes * 100).toFixed(1)
+      : 0;
+    return {
+      totalParams:    this._totalParams,
+      floatBytes,
+      quantizedBytes: this._quantizedBytes,
+      memorySavedPct: parseFloat(saved),
+    };
   }
 
   /**
@@ -285,86 +626,6 @@ export class MLPPolicy {
     const json = await response.json();
     const weights = json.weights || json;
     return new MLPPolicy(weights);
-  }
-
-  // -----------------------------------------------------------------------
-  // Forward pass
-  // -----------------------------------------------------------------------
-
-  /**
-   * Run the full MLP forward pass.
-   *
-   * Input:  Float32Array(25) — raw feature vector
-   * Output: probability distributions over all action heads
-   *
-   * Graph:
-   *   features [24]
-   *     → fc1 (128, ReLU)
-   *       → fc2 (64, ReLU)
-   *         → mode_head       (5-softmax)   → modeProbs
-   *         → intent_head     (5-softmax)   → intentProbs
-   *         → topic_count_head (4-softmax)  → topicCountProbs
-   *         → frag_count_head  (4-softmax)  → fragCountProbs
-   *         → creativity_head  (1-sigmoid)  → creativity
-   *         → tone_head        (4-softmax)  → toneProbs
-   *
-   * @param {Float32Array} features - 25-element feature vector
-   * @returns {{
-   *   modeProbs: Float32Array,       // [5] → ['normal','off_topic','greeting','help','comparison']
-   *   intentProbs: Float32Array,     // [5] → ['definition','example','formal','application','comparison']
-   *   topicCountProbs: Float32Array, // [4] → [1,2,3,4]
-   *   fragCountProbs: Float32Array,  // [4] → [1,2,3,4]
-   *   creativity: number,            // [0,1]
-   *   toneProbs: Float32Array,       // [4] → ['neutral','formal','intuitive','playful']
-   * }}
-   */
-  forward(features) {
-    const w = this.weights;
-
-    // ---- Layer 1: fc1 (128, ReLU) ----
-    const z1 = matMul(features, w['fc1.weight']);
-    addBiasInPlace(z1, w['fc1.bias']);
-    const h1 = relu(z1);                                // [128]
-
-    // ---- Layer 2: fc2 (64, ReLU) ----
-    const z2 = matMul(h1, w['fc2.weight']);
-    addBiasInPlace(z2, w['fc2.bias']);
-    const h2 = relu(z2);                                // [64]
-
-    // ---- Action heads (all share h2 as input) ----
-
-    // Mode: 5-way classification
-    const modeLogits = matMul(h2, w['mode_head.weight']);
-    addBiasInPlace(modeLogits, w['mode_head.bias']);
-
-    // Intent: 5-way classification
-    const intentLogits = matMul(h2, w['intent_head.weight']);
-    addBiasInPlace(intentLogits, w['intent_head.bias']);
-
-    // Topic count: 4-way (1–4)
-    const tcLogits = matMul(h2, w['topic_count_head.weight']);
-    addBiasInPlace(tcLogits, w['topic_count_head.bias']);
-
-    // Fragment count: 4-way (1–4)
-    const fcLogits = matMul(h2, w['frag_count_head.weight']);
-    addBiasInPlace(fcLogits, w['frag_count_head.bias']);
-
-    // Creativity: scalar sigmoid
-    const crLogits = matMul(h2, w['creativity_head.weight']);
-    addBiasInPlace(crLogits, w['creativity_head.bias']);
-
-    // Tone: 4-way classification
-    const toneLogits = matMul(h2, w['tone_head.weight']);
-    addBiasInPlace(toneLogits, w['tone_head.bias']);
-
-    return {
-      modeProbs:        softmax(modeLogits),
-      intentProbs:      softmax(intentLogits),
-      topicCountProbs:  softmax(tcLogits),
-      fragCountProbs:   softmax(fcLogits),
-      creativity:       sigmoid(crLogits[0]),
-      toneProbs:        softmax(toneLogits),
-    };
   }
 
   // -----------------------------------------------------------------------
@@ -450,11 +711,64 @@ export class MLPPolicy {
     creativity = clamp01(creativity);
     decisionPath.push(`creativity:${creativity.toFixed(3)}`);
 
+    // ---- Follow-up overrides: override MLP decisions when follow-up detected ----
+    if (features.followUpType > 0) {
+      decisionPath.push(`followUp:type=${features.followUpType}`);
+
+      switch (features.followUpType) {
+        case 1: // simplify
+          fragsPerTopic = 1;
+          topicCount = Math.min(topicCount, 2);
+          tone = 'intuitive';
+          creativity = Math.min(creativity, 0.2);
+          decisionPath.push('followup:override-simplify');
+          break;
+
+        case 3: // example
+          intent = 'example';
+          fragsPerTopic = 1;
+          decisionPath.push('followup:override-example');
+          break;
+
+        case 4: // elaborate — let MLP decision stand; features already biased
+          decisionPath.push('followup:override-elaborate');
+          break;
+
+        case 6: // another_example
+          intent = 'example';
+          fragsPerTopic = 1;
+          decisionPath.push('followup:override-another-example');
+          break;
+
+        case 5: // reference_index — focus on the referenced topic
+          if (context.followUp && context.followUp.targetIndex != null) {
+            decisionPath.push(`followup:override-ref-index-${context.followUp.targetIndex}`);
+          } else {
+            decisionPath.push('followup:ref-index-no-target');
+          }
+          break;
+      }
+    }
+
     // ---- Build topics array from ranked KB entries ----
     const topics = [];
     const ranked = context.ranked || [];
+
+    // For reference_index follow-up, prioritize the referenced KB entry
+    let referencePriorityIndex = null;
+    if (features.followUpType === 5 && context.followUp && context.followUp.targetIndex != null) {
+      referencePriorityIndex = context.followUp.targetIndex;
+      topicCount = 1; // focus on single referenced topic
+      decisionPath.push(`followup:ref-focus-topic-${referencePriorityIndex}`);
+    }
+
     if (topicCount > 0 && ranked.length > 0) {
       const seen = new Set();
+      // If reference_index, add the target first
+      if (referencePriorityIndex !== null) {
+        topics.push(referencePriorityIndex);
+        seen.add(referencePriorityIndex);
+      }
       for (let i = 0; i < ranked.length && topics.length < topicCount; i++) {
         const idx = ranked[i].i;
         if (!seen.has(idx)) {
@@ -479,6 +793,15 @@ export class MLPPolicy {
         cats: [...cats],
         fragIndices: cats.map(() => 0), // default to first fragment; renderer can refine
       });
+    }
+
+    // Adjust fragment indices for "another_example" — use second fragment (index 1)
+    // to avoid re-showing the same example the user saw last turn
+    if (features.followUpType === 6) {
+      decisionPath.push('followup:frag-indices-incremented');
+      for (const fp of fragmentPlan) {
+        fp.fragIndices = fp.cats.map(() => 1);
+      }
     }
 
     // ---- Build template ----

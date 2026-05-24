@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /**
  * benchmark-policy.js — ReLU.chat Policy Runtime Benchmarks
- * 
- * Measures latency of feature extraction, heuristic fallback, and MLP inference.
+ *
+ * Measures latency of feature extraction, heuristic fallback, MLP inference
+ * (float32 and quantized int8), and plan validation.
  * Run: node dev/benchmarks/benchmark-policy.js
  */
 
@@ -31,7 +32,7 @@ const intentScores = { definition: 0.65, example: 0.42, formal: 0.21, applicatio
 
 function makeSyntheticWeights(version = 2) {
   const w = { _version: version };
-  w['fc1.weight'] = Array.from({ length: 128 }, () => Array.from({ length: 24 }, () => Math.random() * 2 - 1));
+  w['fc1.weight'] = Array.from({ length: 128 }, () => Array.from({ length: 25 }, () => Math.random() * 2 - 1));
   w['fc1.bias'] = Array.from({ length: 128 }, () => Math.random() * 0.5);
   w['fc2.weight'] = Array.from({ length: 64 }, () => Array.from({ length: 128 }, () => Math.random() * 2 - 1));
   w['fc2.bias'] = Array.from({ length: 64 }, () => Math.random() * 0.5);
@@ -92,8 +93,32 @@ function main() {
   console.log('\n3. MLP Inference (synthetic weights):');
   const weights = makeSyntheticWeights();
   const mlp = new MLPPolicy(weights);
-  const features24 = new Float32Array(24).fill(0.5);
-  bench('MLPPolicy.forward()', () => mlp.forward(features24));
+
+  // Load quantized weights (once, up-front)
+  mlp.loadQuantized();
+
+  // Memory stats
+  const stats = mlp.getStats();
+  console.log(`   Params:        ${stats.totalParams.toLocaleString()}`);
+  console.log(`   Float32 bytes: ${stats.floatBytes.toLocaleString()}`);
+  console.log(`   Quant bytes:   ${stats.quantizedBytes.toLocaleString()} (${stats.memorySavedPct}% reduction)`);
+
+  const features24 = new Float32Array(25).fill(0.5);
+
+  // Float32 forward pass
+  bench('MLPPolicy.forward() (float32)', () => mlp.forward(features24));
+
+  // Quantized forward pass
+  bench('MLPPolicy.forwardQuantized() (int8)', () => mlp.forwardQuantized(features24));
+
+  // Static benchmark with speedup ratio
+  const bm = MLPPolicy.benchmark(mlp, features24, 5000);
+  console.log(`   MLPPolicy.benchmark():`);
+  console.log(`     float32:    ${bm.float32_us} µs`);
+  if (bm.quantized_us !== null) {
+    console.log(`     quantized:  ${bm.quantized_us} µs  (${bm.speedup}x speedup)`);
+  }
+
   bench('MLPPolicy.planAnswer()', () => mlp.planAnswer(normalFeatures, { ranked }, {}));
 
   // 4. Validation

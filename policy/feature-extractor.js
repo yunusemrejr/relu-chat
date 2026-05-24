@@ -161,6 +161,45 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
     ? (FOLLOWUP_TYPE_MAP[followUp.type] || 0)
     : 0;
 
+  // ---- Follow-up: aggressively modify intent scores and other features ----
+  let modifiedIntentDefScore = intentScores?.definition ?? 0;
+  let modifiedIntentExScore = intentScores?.example ?? 0;
+  let modifiedIntentFormScore = intentScores?.formal ?? 0;
+  let modifiedIntentAppScore = intentScores?.application ?? 0;
+  let modifiedIntentCompScore = intentScores?.comparison ?? 0;
+  let modifiedHasExampleCue = hasExampleCue;
+  let modifiedBotCreativity = botCreativity;
+
+  if (followUpType > 0 && followUp && followUp.isFollowUp) {
+    switch (followUp.type) {
+      case 'simplify':
+        // Boost definition to bias toward simpler explanations; lower creativity
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.65);
+        modifiedBotCreativity = Math.min(modifiedBotCreativity, 0.15);
+        break;
+
+      case 'example':
+        // Strongly bias toward example intent
+        modifiedIntentExScore = Math.max(modifiedIntentExScore, 0.75);
+        modifiedHasExampleCue = true;
+        break;
+
+      case 'elaborate':
+        // Boost formal + application scores to get deeper/richer content
+        modifiedIntentFormScore = Math.max(modifiedIntentFormScore, 0.50);
+        modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.50);
+        break;
+
+      case 'another_example':
+        // Re-bias toward example to get another illustrative fragment
+        modifiedIntentExScore = Math.max(modifiedIntentExScore, 0.70);
+        break;
+
+      // reference_index — handled downstream in mlp-inference.js via targetIndex
+      // compare_previous, specific — handled by existing pipeline logic
+    }
+  }
+
   // ---- Previous ambiguity flag ----
   const ambigFlag = !!wasAmbiguous;
 
@@ -218,21 +257,21 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
     entityBoostHit,
     hasComparisonCue,
     hasFormalCue,
-    hasExampleCue,
+    hasExampleCue: modifiedHasExampleCue,
 
-    // F32 intent scores (indices 4-8)
-    intentDefScore:  (intentScores?.definition  ?? 0),
-    intentExScore:   (intentScores?.example     ?? 0),
-    intentFormScore: (intentScores?.formal      ?? 0),
-    intentAppScore:  (intentScores?.application ?? 0),
-    intentCompScore: (intentScores?.comparison  ?? 0),
+    // F32 intent scores (indices 4-8) — modified by follow-up when detected
+    intentDefScore:  modifiedIntentDefScore,
+    intentExScore:   modifiedIntentExScore,
+    intentFormScore: modifiedIntentFormScore,
+    intentAppScore:  modifiedIntentAppScore,
+    intentCompScore: modifiedIntentCompScore,
 
     // F32 topic features (indices 9, 11)
     lastTopicSim,
     kbCoverage,
 
     // F32 profile features (indices 16, 17)
-    botCreativity,
+    botCreativity: modifiedBotCreativity,
     domainMatch,
 
     // Session memory features (indices 18-19)

@@ -83,3 +83,69 @@ class PolicyNetwork(nn.Module):
             else:
                 total += dist.entropy()
         return total if total is not None else torch.tensor(0.0)
+
+    # -----------------------------------------------------------------------
+    # Export methods — produce dict matching MLPPolicy._validate expectations
+    # -----------------------------------------------------------------------
+
+    EXPORT_LAYER_MAP = [
+        ('fc1.weight',              'fc1.weight'),
+        ('fc1.bias',                'fc1.bias'),
+        ('fc2.weight',              'fc2.weight'),
+        ('fc2.bias',                'fc2.bias'),
+        ('heads.mode.weight',       'mode_head.weight'),
+        ('heads.mode.bias',         'mode_head.bias'),
+        ('heads.intent.weight',     'intent_head.weight'),
+        ('heads.intent.bias',       'intent_head.bias'),
+        ('heads.topic_count.weight','topic_count_head.weight'),
+        ('heads.topic_count.bias',  'topic_count_head.bias'),
+        ('heads.frag_count.weight', 'frag_count_head.weight'),
+        ('heads.frag_count.bias',   'frag_count_head.bias'),
+        ('heads.creativity.weight', 'creativity_head.weight'),
+        ('heads.creativity.bias',   'creativity_head.bias'),
+        ('heads.tone.weight',       'tone_head.weight'),
+        ('heads.tone.bias',         'tone_head.bias'),
+    ]
+
+    def export_weights_dict(self):
+        """
+        Return a dict mapping JS-weight keys to Python lists of the
+        correct shapes expected by MLPPolicy._validate() in mlp-inference.js.
+
+        Keys produced:
+          fc1.weight [128,25], fc1.bias [128],
+          fc2.weight [64,128], fc2.bias [64],
+          mode_head.weight [5,64], mode_head.bias [5],
+          intent_head.weight [5,64], intent_head.bias [5],
+          topic_count_head.weight [4,64], topic_count_head.bias [4],
+          frag_count_head.weight [4,64], frag_count_head.bias [4],
+          creativity_head.weight [1,64], creativity_head.bias [1],
+          tone_head.weight [4,64], tone_head.bias [4]
+        """
+        state = self.state_dict()
+        weights = {}
+        for pt_key, js_key in self.EXPORT_LAYER_MAP:
+            weights[js_key] = state[pt_key].cpu().numpy().tolist()
+        weights['_version'] = 2
+        weights['_n_features'] = N_FEATURES
+        return weights
+
+    def save_weights_json(self, path):
+        """
+        Save weights to a JSON file matching the format expected by
+        MLPPolicy.load() / MLPPolicy._validate().
+
+        The file is written flat — weight arrays sit at the top level
+        alongside metadata keys (_version, _n_features).  MLPPolicy.load()
+        handles both flat and { "weights": ... } wrappers via
+        `json.weights || json`.
+        """
+        import json, os
+        weights = self.export_weights_dict()
+        # Write flat (no 'weights' wrapper) for compatibility with
+        # existing assets/models/policy/policy.weights.json format.
+        os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
+        with open(path, 'w') as f:
+            json.dump(weights, f, indent=2)
+        size_kb = os.path.getsize(path) / 1024
+        print(f"[export] Weights saved to {path} ({size_kb:.1f} KiB)")
