@@ -2,36 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>500 — Server Error | ReLU.chat</title>
 <link rel="stylesheet" href="../assets/fonts/inter.css">
+<link rel="stylesheet" href="../assets/shared-design.css">
 <link rel="icon" href="../assets/logo.png" type="image/png">
 <style>
-:root {
-  --bg: #08090a;
-  --bg-card: rgba(255,255,255,0.008);
-  --border: rgba(255,255,255,0.06);
-  --text-primary: #f7f8f8;
-  --text-secondary: #8a8f98;
-  --text-tertiary: #5a5f68;
-  --accent: #1e3a8a;
-  --accent-light: #3b82f6;
-  --accent-glow: rgba(30,58,138,0.3);
-  --accent-hover: #2563eb;
-  --warning: #e67e22;
-  --warning-glow: rgba(230,126,34,0.3);
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-}
-
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
+/* Error page overrides — layout tokens from shared-design.css */
+:root { --warning: #e67e22; --warning-glow: rgba(230,126,34,0.3); }
 body {
-  font-family: var(--font);
   background:
-    radial-gradient(1200px 800px at 70% -10%, rgba(30,58,138,0.15), var(--bg));
+    radial-gradient(1200px 800px at 70% -10%, var(--accent-glow), var(--bg));
   color: var(--text-primary);
   min-height: 100dvh;
   display: flex;
@@ -40,21 +21,18 @@ body {
   justify-content: center;
   text-align: center;
   padding: 2rem;
-  font-feature-settings: "cv01", "ss03";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .error-card {
   max-width: 480px;
   width: 100%;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   padding: 3.5rem 2.5rem;
   position: relative;
   overflow: hidden;
-  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 4px, rgba(0,0,0,0.04) 0px 8px 16px -8px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04), 0 8px 16px -8px rgba(0,0,0,0.04);
 }
 
 .error-card::before {
@@ -119,14 +97,15 @@ p {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.875rem 1.75rem;
-  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  background: var(--accent);
   color: #ffffff;
   text-decoration: none;
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.9375rem;
-  transition: all 0.2s ease;
-  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.35) 0px 4px 16px, inset 0 1px 0 rgba(255,255,255,0.06);
+  border: 1px solid var(--border-accent);
+  transition: background 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), transform 0.15s var(--ease-out);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 4px 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.06);
   border: none;
   cursor: pointer;
   font-family: var(--font);
@@ -134,14 +113,14 @@ p {
 }
 
 .btn:hover {
-  box-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(30,58,138,0.45) 0px 8px 24px, inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 8px 24px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.08);
   transform: translateY(-2px);
 }
 
 .btn svg {
   width: 16px;
   height: 16px;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s var(--ease-out);
 }
 
 .btn:hover svg {
