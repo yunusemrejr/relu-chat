@@ -16,7 +16,7 @@ const SUGGESTIONS = [
 ];
 
 const welcomeMessage =
-  '<span style="font-size:1.125rem;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;">Golden Age Inquiry</span><br><br>Hi! I run <strong>entirely on-device</strong> — no servers, no API calls, no tracking. <br><br><strong>How it works:</strong> Your question is embedded with a transformer, analyzed by a 25-feature extractor, then routed through an <strong>RL-trained MLP policy network</strong> (13K params) that decides mode, intent, tone, and topic composition. Responses are assembled from knowledge fragments with linguistic connectors — all in your browser.<br><br>First query warms up the model (~22 MB, cached). <a href="/how-it-works.html" style="color:var(--accent-light)">Read the architecture →</a>';
+  '<span style="font-size:1.125rem;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;">Golden Age Inquiry</span><br><br>Hi! I run <strong>entirely on-device</strong> — no servers, no API calls, no tracking. <br><br><strong>How it works:</strong> Your question is embedded with a transformer, then a signal layer combines BM25 sparse retrieval, entity extraction, and ensemble dense-sparse ranking into a calibrated decision packet. An <strong>RL-trained MLP policy network</strong> (13K params) decides mode, intent, tone, and topic composition. Responses are assembled from knowledge fragments with linguistic connectors — all in your browser.<br><br>First query warms up the model (~22 MB, cached). <a href="/how-it-works.html" style="color:var(--accent-light)">Read the architecture →</a>';
 
 const botProfile = {
   id: "golden-age-inquiry",

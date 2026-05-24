@@ -120,29 +120,9 @@ p { color: var(--text-secondary); line-height: 1.7; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-@keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 0 0 rgba(228,174,93,0.2); }
   50%      { box-shadow: 0 0 0 5px rgba(228,174,93,0.06); }
-}
-
-@keyframes dotPulse {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50%      { opacity: 1;   transform: scale(1.2); }
 }
 
 @keyframes typing {
@@ -177,10 +157,10 @@ p { color: var(--text-secondary); line-height: 1.7; }
   top: 0;
   z-index: 100;
   width: 100%;
-  background: rgba(12,11,9,0.72);
+  background: rgba(12,11,9,0.65);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 .nav-container {
@@ -743,10 +723,10 @@ pre code {
 #form {
   flex-shrink: 0;
   padding: 0.875rem 1.25rem calc(0.875rem + var(--safe-bottom));
-  background: rgba(12,11,9,0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid var(--border);
+  background: rgba(12,11,9,0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 .input-container {
@@ -856,19 +836,13 @@ pre code {
 }
 
 .status-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px; height: 8px;
   border-radius: 50%;
-  background: var(--accent-light);
+  background: var(--text-tertiary);
   transition: background 0.3s;
-  animation: dotPulse 2s ease-in-out infinite;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.06);
 }
-
-.status-dot.ready {
-  background: var(--success);
-  box-shadow: 0 0 8px var(--success-glow);
-  animation: none;
-}
+.status-dot.ready { background: var(--success); box-shadow: 0 0 8px var(--success-glow); }
 
 /* Desktop refinements */
 @media (min-width: 720px) {

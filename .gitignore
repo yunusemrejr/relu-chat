@@ -46,6 +46,10 @@ internal-notes.md
 .agent-imperative.json
 dev/.agent_memory/
 
+# Session exports (agent logs, not for public)
+session-*.md
+session-ses_*.md
+
 # Python cache
 __pycache__/
 *.pyc

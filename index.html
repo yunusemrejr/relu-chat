@@ -869,7 +869,7 @@
         <img src="assets/logo.png" alt="ReLU.chat" width="72" height="72">
       </div>
       <h1 class="hero-stagger">Intelligence that stays <span class="accent-word">on-device</span></h1>
-      <p class="hero-subhead hero-stagger">Open-source chatbots that run entirely in your browser. A transformer embedding model, a 13K-parameter RL-trained policy network, and fragment-based composition — zero servers, zero LLMs, zero telemetry.</p>
+      <p class="hero-subhead hero-stagger">Open-source chatbots that run entirely in your browser. A transformer embedding model, BM25 sparse retrieval, dense-sparse ensemble ranking, a 25-feature MLP policy network, and fragment-based composition — zero servers, zero LLMs, zero telemetry.</p>
       <div class="hero-ctas hero-stagger">
         <a href="chat/game-theory-chat/" class="btn btn-primary">Game Theory Chat</a>
         <a href="chat/golden-age-inquiry/" class="btn btn-primary">Golden Age Inquiry</a>
@@ -916,9 +916,9 @@
       </div>
 
       <div class="step-card reveal">
-        <span class="step-number">02 Extract</span>
-        <div class="step-title">Feature Extraction</div>
-        <div class="step-desc">A <code>25-feature vector</code> is computed: cosine similarity, entity presence, intent scores, domain match confidence, and ambiguity signals — all locally.</div>
+        <span class="step-number">02 Signal Layer</span>
+        <div class="step-title">Multi-Signal Extraction</div>
+        <div class="step-desc">BM25 sparse retrieval, entity extraction, ensemble dense-sparse ranking, and temperature-calibrated intent scores are fused into a structured <code>DecisionPacket</code> — all locally.</div>
       </div>
 
       <div class="step-card reveal">

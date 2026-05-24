@@ -1,9 +1,10 @@
 import { pipeline, env } from '/assets/transformers/transformers.js';
 import { LRUCache } from './cache.js';
 import { SessionMemory } from './session.js';
-import { composeV2, tokens, bowVec, compileAliasRegex, extractEntities, classifyIntent, rankEntries } from './nlp.js';
+import { composeV2, tokens, bowVec, compileAliasRegex } from './nlp.js';
 import { pushMessage, setStatus, escapeHTML, md } from './ui.js';
 import { loadPolicyRuntime, planAnswer, isPolicyLoaded } from '../policy/policy-runtime.js';
+import { SignalLayer } from './signal-layer.js';
 
 env.allowLocalModels = true;
 env.allowRemoteModels = false;
@@ -28,6 +29,7 @@ export async function createChatbot(config) {
   // Session memory: replaces single `lastTopic` with full turn-based tracking
   const session = new SessionMemory(CONFIG?.SESSION?.maxHistory || 20);
   const fragEmbCache = new LRUCache(CONFIG?.CACHE?.MAX_SIZE || 500);
+  const signalLayer = new SignalLayer();
   let bowVocab = null;
 
   async function embed(text) {
@@ -67,6 +69,9 @@ export async function createChatbot(config) {
         entryEmb.push(...await Promise.all(batch));
         bar.style.width = (Math.min(i + BATCH, KB.length) / KB.length * 100) + '%';
       }
+      // Initialize BM25 sparse retrieval via SignalLayer
+      try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed:', e); }
+
       for (const k of Object.keys(INTENTS)) {
         intentEmb[k] = [];
         for (const p of INTENTS[k].prototypes) intentEmb[k].push(await embed(p));
@@ -82,6 +87,7 @@ export async function createChatbot(config) {
       const voc = new Set();
       for (const e of KB) for (const t of tokens(entryText(e))) voc.add(t);
       for (const k of Object.keys(INTENTS)) for (const p of INTENTS[k].prototypes) for (const t of tokens(p)) voc.add(t);
+      try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed in fallback:', e); }
       bowVocab = new Map();
       [...voc].forEach((w, i) => bowVocab.set(w, i));
       entryEmb = KB.map(e => bowVec(entryText(e), bowVocab));
@@ -130,63 +136,32 @@ export async function createChatbot(config) {
     busy = true;
     sendBtn.disabled = true;
 
-    // ---- Session: detect follow-up before any pipeline work ----
-    const followUpContext = session.getFollowUpContext(query);
-
     const typingEl = pushMessage('bot', '<div class="typing"><span></span><span></span><span></span></div>');
     let text, meta;
     try {
       const qEmb = await embed(query);
 
-      // Pre-policy pipeline: extract entities and classify intent
-      compileAliasRegex(KB);
-      let entities = extractEntities(query, KB);
+      // ---- Lightweight frontend ML signal layer — bundles BM25, entity extraction,
+      //      intent classification, dense/sparse ensemble ranking, neural reranking,
+      //      confidence calibration, and policy features into a DecisionPacket ----
+      const signalConfig = { INTENTS, THRESHOLDS: CONFIG.THRESHOLDS, botProfile, _domainPrototypeEmbs: domainPrototypeEmbs.length > 0 ? domainPrototypeEmbs : intentEmb };
+      const dp = await signalLayer.process(query, qEmb, entryEmb, intentEmb, KB, signalConfig, session);
 
-      // ---- Session: enrich entities with recent conversation context ----
-      const recentEntities = session.getRecentEntities();
-      if (recentEntities.length > 0) {
-        const entitySet = new Set(entities);
-        for (const re of recentEntities) {
-          if (!entitySet.has(re)) {
-            entities.push(re);
-            entitySet.add(re);
-          }
-        }
-      }
-
-      const { intent, scores: intentScores } = await classifyIntent(qEmb, intentEmb, INTENTS, CONFIG.THRESHOLDS);
-      const ranked = rankEntries(qEmb, entryEmb);
-
-      // ---- Session: ambiguity detection ----
-      // Ambiguous when: multiple entities with no clear best, very short
-      // query with low similarity, or multiple unrelated high-sim topics
-      const queryTokens = tokens(query);
-      const isShortQuery = queryTokens.length < 3;
-      const hasMultipleEntities = entities.length > 1;
-      const lowConfidence = ranked.length === 0 || ranked[0].s < 0.25;
-      // Check if top-2 scores are close (within 0.1) — multiple viable interpretations
-      const scoresClose = ranked.length >= 2 && Math.abs(ranked[0].s - ranked[1].s) < 0.1;
-
-      const isAmbiguous =
-        (hasMultipleEntities && scoresClose) ||
-        (isShortQuery && lowConfidence) ||
-        (scoresClose && ranked[0].s > 0.15 && ranked[0].s < 0.35);
-
-      if (isAmbiguous) {
+      if (dp.isAmbiguous) {
         session.setAmbiguous(query);
       }
 
-      // Policy-driven path (mandatory) — pass session-aware context
+      // Policy-driven path (mandatory) — pass session-aware context from DecisionPacket
       const context = {
-        entities,
-        intent,
-        intentScores,
-        ranked,
+        entities: dp.entities,
+        intent: dp.intent.name,
+        intentScores: dp.intent.rawScores,
+        ranked: dp.rankings.reranked,
         entryEmb,
         lastTopic: session.lastTopic,
         lastTopicAge: session.lastTopicAge,
-        followUp: followUpContext,
-        wasPreviousAmbiguous: session.wasPreviousQueryAmbiguous(),
+        followUp: dp.session.followUp,
+        wasPreviousAmbiguous: dp.session.wasAmbiguous,
         recentFragments: session.getRecentlyUsedFragments(),
         overrides,
       };
@@ -217,7 +192,7 @@ export async function createChatbot(config) {
         }
       }
 
-      session.addTurn(query, text, entities, presentedTopics, fragmentsUsed);
+      session.addTurn(query, text, dp.entities, presentedTopics, fragmentsUsed);
     } catch (err) {
       console.error(err);
       typingEl.remove();

@@ -20,20 +20,23 @@
 
 ## How It Works
 
-1. **Load** — The transformer model downloads once and caches in your browser. Parallel encoding of 55+ concepts.
-2. **Understand** — On-device NLP classifies your intent, extracts entities via pre-compiled patterns, and retrieves concepts using embeddings.
-3. **Respond** — Weighted fragment composition with linguistic connectors builds precise, diverse answers.
-4. **Render** — Mathematical notation is typeset with KaTeX.
+1. **Load** — The transformer model downloads once and caches in your browser. KB entries are encoded and BM25 IDF is pre-computed.
+2. **Embed** — Your query is embedded into a 384-dimensional vector using a quantized MiniLM model running in-browser.
+3. **Signal Layer** — BM25 sparse retrieval, entity extraction, dense cosine ranking, and intent classification are fused into a structured decision packet.
+4. **Policy** — A 13K-parameter RL-trained MLP policy network selects mode, intent, topics, fragment order, tone, and creativity.
+5. **Compose** — Knowledge fragments are assembled with linguistic connectors into a natural response.
+6. **Render** — Mathematical notation is typeset with KaTeX.
 
 Everything runs entirely on your device. Nothing is sent to any server.
 
 ## Tech Stack
 
-- **Transformers.js** — In-browser ML with `@xenova/transformers`
+- **Transformers.js** — In-browser ML with `@xenova/transformers` (MiniLM-L6-v2, quantized ONNX)
+- **BM25** — Sparse retrieval with IDF pre-computation (k1=1.5, b=0.75)
+- **MLP** — 13K-parameter policy network (25 inputs, 6 action heads)
 - **KaTeX** — Fast LaTeX math rendering
 - **Vanilla JS** — No framework dependencies
 - **CSS** — Custom design system with CSS variables
-- **Config** — Centralized thresholds in `config.js`
 
 ## Development
 
