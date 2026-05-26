@@ -31,6 +31,10 @@ Improvements (2026-05-26):
   - Gradient clipping and advantage normalization
   - Multi-turn training data generation (follow-up query pairs)
   - Rich training metrics: reward, entropy, loss, value loss, learning rate
+  - Deterministic seeds for reproducible training (--seed)
+  - Train/validation split with val metrics tracking (--val-split)
+  - Per-component reward breakdown in metrics (intent_match, topic_precision, etc.)
+  - Policy metadata export (model version, heads, reward weights, training config)
 
 Usage:
   python3 train-policy.py --bot game-theory --epochs 1000 --output ../assets/models/policy/
@@ -38,16 +42,35 @@ Usage:
 
 import argparse
 import json
+import re
 import os
 import random
 import sys
+import time
 import torch
 import torch.nn.functional as F
 import numpy as np
 from pathlib import Path
+from datetime import datetime, timezone
 from collections import defaultdict, deque
 
 from policy_model import PolicyNetwork, ACTION_SIZES_ORDERED, N_FEATURES
+
+# ---------------------------------------------------------------------------
+# Deterministic seed for reproducible training
+# ---------------------------------------------------------------------------
+
+def set_seed(seed: int):
+    """Set all random seeds for deterministic training."""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    print(f"[seed] Deterministic mode enabled (seed={seed})")
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -219,6 +242,28 @@ FOLLOW_UP_TEMPLATES = [
     ("give me more details", "expansion",    0.75),
 ]
 
+# Follow-up type string → numeric code mapping (must match feature-extractor.js FOLLOWUP_TYPE_MAP)
+FOLLOWUP_TYPE_TO_CODE = {
+    'simplify': 1, 'compare_previous': 2, 'example': 3, 'elaborate': 4,
+    'reference_index': 5, 'another_example': 6, 'specific': 7,
+    'continue': 8, 'how': 9, 'why': 10, 'challenge': 11,
+    'acknowledge': 12, 'clarify': 13, 'deep_dive': 14, 'relevance': 15,
+    'evidence': 16, 'comparison': 17, 'summarize': 18, 'affirm_continue': 19,
+    'what_else': 20,
+}
+
+# Follow-up type string → follow_up_type string mapping (for training data)
+FOLLOWUP_LABEL_TO_TYPE = {
+    'continuation':    'continue',
+    'expansion':       'elaborate',
+    'procedural':      'how',
+    'example':         'example',
+    'simplification':  'simplify',
+    'elaboration':     'elaborate',
+    'clarification':   'clarify',
+    'causal':          'why',
+}
+
 
 def generate_follow_up_pairs(prompts: list, n_pairs: int = 500) -> list:
     """
@@ -378,8 +423,14 @@ def build_retrieval_dataset(prompts: list, kb_entries: list, intent_prototypes: 
         features[17] = 0.6
 
         # Improved: set follow-up features for multi-turn training
+        # Use mapped numeric followUpType code (1-19) based on follow_up_type label
         is_follow_up = prompt.get('source') == 'follow_up'
-        features[18] = 1.0 if is_follow_up else 0  # followUpType
+        if is_follow_up:
+            type_label = prompt.get('follow_up_type', '')
+            fu_type = FOLLOWUP_LABEL_TO_TYPE.get(type_label, 'elaborate')
+            features[18] = FOLLOWUP_TYPE_TO_CODE.get(fu_type, 4)  # default to elaborate (4)
+        else:
+            features[18] = 0  # no follow-up
         features[19] = 0  # wasAmbiguous
         features[20] = 0.8  # avgTruthConf (placeholder)
         features[21] = 0.7  # avgSourceConf (placeholder)
@@ -550,7 +601,7 @@ def _get_diversity_bonus(mode_val, intent_val) -> float:
 # ---------------------------------------------------------------------------
 
 def compute_reward(actions: dict, prompt: dict, rendered_text: str,
-                   features: list, dataset_sample: dict = None) -> float:
+                   features: list, dataset_sample: dict = None) -> tuple:
     """
     Multi-component reward function. Components:
 
@@ -565,6 +616,9 @@ def compute_reward(actions: dict, prompt: dict, rendered_text: str,
     9. response_coherence  — (NEW) reward fragments matching query semantic intent
 
     All weights are configurable via the REWARD_WEIGHTS dict at the top of this file.
+
+    Returns:
+        (total_reward: float, components: dict) — total weighted sum and per-component breakdown
     """
     intent_names = ["definition", "example", "formal", "application", "comparison"]
 
@@ -643,23 +697,17 @@ def compute_reward(actions: dict, prompt: dict, rendered_text: str,
     # -------------------------------------------------------
     # Component 7 (NEW): Follow-up continuity reward
     # -------------------------------------------------------
-    # When the sample is a follow-up query, reward the policy for maintaining
-    # topic consistency. Non-follow-up samples get a neutral 0.5.
     is_follow_up = features[18] > 0 if len(features) > 18 else False
-    follow_up_continuity = 0.5  # Neutral default for non-follow-ups
+    follow_up_continuity = 0.5
 
     if is_follow_up:
-        # Use topic continuity from follow-up metadata if available
         topic_continuity = prompt.get('topic_continuity', 0.5)
-        # Also check lastTopicSim feature for reinforcement
         last_topic_sim = features[9] if len(features) > 9 else 0.5
         follow_up_continuity = 0.4 * topic_continuity + 0.6 * last_topic_sim
 
     # -------------------------------------------------------
     # Component 8 (NEW): Diversity reward
     # -------------------------------------------------------
-    # Penalize the policy for always choosing the same mode/intent combination.
-    # This encourages the policy to explore different response strategies.
     diversity = _get_diversity_bonus(
         action_vals.get("mode", 0),
         action_vals.get("intent", 0)
@@ -668,20 +716,30 @@ def compute_reward(actions: dict, prompt: dict, rendered_text: str,
     # -------------------------------------------------------
     # Component 9 (NEW): Response coherence reward
     # -------------------------------------------------------
-    # Reward when the selected intent aligns with the query's semantic intent
-    # scores (how well does the query actually match the chosen intent).
-    response_coherence = 0.5  # Neutral default
+    response_coherence = 0.5
     if dataset_sample:
         intent_raw_scores = dataset_sample.get('intent_raw_scores', {})
         chosen_intent_score = intent_raw_scores.get(chosen_intent, 0.5)
-        # Blend with the gold intent's semantic score
         gold_intent_score = intent_raw_scores.get(gold_intent, 0.5)
         response_coherence = 0.6 * chosen_intent_score + 0.4 * gold_intent_score
 
     # -------------------------------------------------------
-    # Weighted sum using configurable weights
+    # Build components dict for logging
     # -------------------------------------------------------
-    reward = (
+    components = {
+        'intent_match':          intent_match,
+        'topic_precision':       topic_precision,
+        'fragment_coherence':    fragment_coherence,
+        'length_penalty':        length_penalty,
+        'creativity_alignment':  creativity_alignment,
+        'guardrail_ok':          guardrail_ok,
+        'follow_up_continuity':  follow_up_continuity,
+        'diversity':             diversity,
+        'response_coherence':    response_coherence,
+    }
+
+    # Weighted sum
+    total = (
         REWARD_WEIGHTS['intent_match']          * intent_match
         + REWARD_WEIGHTS['topic_precision']     * topic_precision
         + REWARD_WEIGHTS['fragment_coherence']  * fragment_coherence
@@ -692,7 +750,7 @@ def compute_reward(actions: dict, prompt: dict, rendered_text: str,
         + REWARD_WEIGHTS['diversity']           * diversity
         + REWARD_WEIGHTS['response_coherence']  * response_coherence
     )
-    return reward
+    return total, components
 
 
 # ---------------------------------------------------------------------------
@@ -701,6 +759,7 @@ def compute_reward(actions: dict, prompt: dict, rendered_text: str,
 # ---------------------------------------------------------------------------
 
 def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
+          val_dataset=None,
           # Replay buffer settings
           replay_capacity=10000,
           replay_batch_size=64,
@@ -713,9 +772,7 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
           max_grad_norm=0.5,
           # Curriculum learning settings
           curriculum_warmup=200,
-          curriculum_step=200,
-          # Legacy param (kept for API compatibility, entropy replaces this)
-          exploration_eps=0.0):
+          curriculum_step=200):
     """
     Train the policy network using REINFORCE with baseline and experience replay.
 
@@ -727,39 +784,25 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
       - Advantage normalization: subtract mean, divide by std
       - Rich metrics: reward, loss, entropy, value loss, learning rate
       - Multi-turn support: follow-up queries train topic continuity
+      - Validation: periodic evaluation on held-out data (overfitting detection)
+      - Per-component reward: individual reward component tracking
 
     Args:
         policy_net: PolicyNetworkWrapper instance
-        dataset: list of dataset dicts (from build_retrieval_dataset)
-        epochs: number of training epochs
-        batch_size: number of samples per collection batch
-        lr: initial learning rate
-        replay_capacity: max size of replay buffer
-        replay_batch_size: mini-batch size for replay training
-        entropy_start: initial entropy coefficient (higher = more exploration)
-        entropy_end: final entropy coefficient (lower = more exploitation)
-        entropy_anneal_epochs: epochs over which entropy anneals linearly
-        value_loss_coeff: weight of value (baseline) loss term
-        max_grad_norm: gradient clipping threshold
-        curriculum_warmup: epochs to stay at difficulty level 1
-        curriculum_step: epochs per difficulty level increase
-
-    Returns:
-        (policy_net, metrics_history_dict)
+        dataset: list of dataset dicts (training set, from build_retrieval_dataset)
+        val_dataset: list of dataset dicts (validation set, optional)
+        ... (see function body for all params)
     """
     import torch.optim as optim
 
     optimizer = optim.Adam(policy_net.net.parameters(), lr=lr)
 
-    # Improved: Cosine annealing LR schedule for smooth convergence
     scheduler = optim.lr_scheduler.CosineAnnealingLR(
         optimizer, T_max=epochs, eta_min=lr * 0.01
     )
 
-    # Improved: Experience replay for off-policy training stability
     replay_buffer = ReplayBuffer(capacity=replay_capacity)
 
-    # Improved: Curriculum learning difficulty scheduler
     diff_scheduler = DifficultyScheduler(
         max_difficulty=4,
         warmup_epochs=curriculum_warmup,
@@ -778,15 +821,28 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
         'learning_rate': [],
         'difficulty_threshold': [],
         'buffer_size': [],
+        # Per-component reward breakdown
+        'reward_intent_match': [],
+        'reward_topic_precision': [],
+        'reward_fragment_coherence': [],
+        'reward_length_penalty': [],
+        'reward_creativity_alignment': [],
+        'reward_guardrail_ok': [],
+        'reward_follow_up_continuity': [],
+        'reward_diversity': [],
+        'reward_response_coherence': [],
+        # Validation metrics
+        'val_avg_reward': [],
+        'val_avg_entropy': [],
     }
 
     total_steps = 0
 
     for epoch in range(epochs):
-        policy_net.net.train()  # Enable dropout and layer norm training mode
+        policy_net.net.train()
 
         # ---------------------------------------------------------------
-        # Curriculum learning: filter samples by current difficulty cap
+        # Curriculum learning: filter training samples by current difficulty cap
         # ---------------------------------------------------------------
         diff_threshold = diff_scheduler.get_threshold(epoch)
         eligible_samples = [
@@ -794,7 +850,7 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
             if s['prompt'].get('gold_difficulty', 1) <= diff_threshold
         ]
         if not eligible_samples:
-            eligible_samples = dataset  # Fallback: use all if none eligible
+            eligible_samples = dataset
 
         random.shuffle(eligible_samples)
 
@@ -805,6 +861,9 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
         epoch_value_losses = []
         epoch_entropies = []
         epoch_advantages = []
+        # Per-component accumulators
+        epoch_comp_sums = {k: 0.0 for k in REWARD_WEIGHTS}
+        epoch_comp_counts = 0
 
         # ---------------------------------------------------------------
         # Phase 1: Collect experiences by running the policy
@@ -812,46 +871,41 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
         for batch_start in range(0, len(eligible_samples), batch_size):
             batch_samples = eligible_samples[batch_start:batch_start + batch_size]
 
-            # Prepare batch tensor
             batch_features = torch.tensor(
                 [s["features"] for s in batch_samples], dtype=torch.float32
             )
 
-            # Forward pass: get logits and value estimates
             logits, values = policy_net.net(batch_features)
-
-            # Sample actions from the policy
             actions, log_probs, entropies = policy_net.net.sample_action(logits)
 
-            # Compute per-sample rewards and store in replay buffer
             for j, sample in enumerate(batch_samples):
-                # Extract scalar actions for this sample
                 sample_actions = {
                     name: actions[name][j].item()
                     if actions[name].dim() > 0 else actions[name].item()
                     for name in actions
                 }
 
-                # Render and reward
                 rendered = _stub_render(sample_actions, sample["prompt"], sample["features"])
-                reward = compute_reward(
+                reward_total, reward_components = compute_reward(
                     sample_actions, sample["prompt"], rendered,
                     sample["features"], dataset_sample=sample
                 )
 
-                # Store in replay buffer for off-policy training
                 replay_buffer.store(
                     state=sample["features"],
                     actions={k: int(v) if isinstance(v, (int, float)) else v
                              for k, v in sample_actions.items()},
-                    reward=reward,
+                    reward=reward_total,
                     log_probs={k: log_probs[k][j].item()
                                if log_probs[k].dim() > 0 else log_probs[k].item()
                                for k in log_probs},
                     value=values[j].item() if values.dim() > 0 else values.item(),
                 )
 
-                epoch_rewards.append(reward)
+                epoch_rewards.append(reward_total)
+                for k, v in reward_components.items():
+                    epoch_comp_sums[k] += v
+                epoch_comp_counts += 1
 
             # ---------------------------------------------------------------
             # Phase 2: Train on replay buffer mini-batches
@@ -859,29 +913,19 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
             if len(replay_buffer) >= replay_batch_size:
                 replay_samples = replay_buffer.sample(replay_batch_size)
 
-                # Build replay batch tensors
                 rb_features = torch.tensor(
                     [s['state'] for s in replay_samples], dtype=torch.float32
                 )
                 rb_rewards = torch.tensor(
                     [s['reward'] for s in replay_samples], dtype=torch.float32
                 )
-                rb_old_values = torch.tensor(
-                    [s['value'] for s in replay_samples], dtype=torch.float32
-                )
 
-                # Forward pass on replay batch
                 rb_logits, rb_values = policy_net.net(rb_features)
 
-                # -------------------------------------------------------
-                # Improved: Normalized advantage estimation
-                # advantage = reward - value (baseline subtraction)
-                # Then normalize to zero mean, unit variance for stability
-                # -------------------------------------------------------
+                # Normalized advantage estimation
                 advantages = rb_rewards - rb_values.detach()
                 advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
 
-                # Get log probabilities of stored actions under current policy
                 rb_actions = {}
                 for name in policy_net.net.action_names:
                     rb_actions[name] = torch.tensor(
@@ -889,53 +933,31 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
                     )
                 rb_log_probs = policy_net.net.get_log_probs(rb_logits, rb_actions)
 
-                # -------------------------------------------------------
-                # Policy gradient loss (REINFORCE)
-                # L_policy = -E[ advantage * log_prob(action|state) ]
-                # -------------------------------------------------------
                 policy_loss = sum(
                     (-advantages * rb_log_probs[name]).mean()
                     for name in policy_net.net.action_names
                 )
 
-                # -------------------------------------------------------
-                # Value loss: MSE between predicted value and actual reward
-                # This trains the baseline for stable advantage estimation
-                # -------------------------------------------------------
                 value_loss = F.mse_loss(rb_values, rb_rewards)
 
-                # -------------------------------------------------------
-                # Improved: Entropy regularization with linear annealing
-                # High entropy early → explore diverse actions
-                # Low entropy later → exploit learned policy
-                # -------------------------------------------------------
                 progress = min(1.0, epoch / max(1, entropy_anneal_epochs))
                 entropy_coeff = entropy_start + (entropy_end - entropy_start) * progress
 
-                # Total entropy across all action heads (summed)
                 total_entropy = policy_net.net.entropy(rb_logits).mean()
 
-                # Combined loss: policy + value_baseline - entropy_bonus
                 loss = (
                     policy_loss
                     + value_loss_coeff * value_loss
                     - entropy_coeff * total_entropy
                 )
 
-                # -------------------------------------------------------
-                # Backward pass with gradient clipping for stability
-                # -------------------------------------------------------
                 optimizer.zero_grad()
                 loss.backward()
-
-                # Improved: Gradient clipping prevents exploding gradients
-                # from large advantages or outlier samples
                 torch.nn.utils.clip_grad_norm_(
                     policy_net.net.parameters(), max_grad_norm
                 )
                 optimizer.step()
 
-                # Track metrics
                 epoch_losses.append(loss.item())
                 epoch_policy_losses.append(policy_loss.item())
                 epoch_value_losses.append(value_loss.item())
@@ -950,7 +972,7 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
         scheduler.step()
 
         # ---------------------------------------------------------------
-        # Compute and log epoch metrics
+        # Compute epoch metrics
         # ---------------------------------------------------------------
         avg_reward = np.mean(epoch_rewards) if epoch_rewards else 0.0
         avg_loss = np.mean(epoch_losses) if epoch_losses else 0.0
@@ -971,8 +993,61 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
         metrics_history['difficulty_threshold'].append(int(diff_threshold))
         metrics_history['buffer_size'].append(len(replay_buffer))
 
+        # Per-component averages
+        for k in REWARD_WEIGHTS:
+            avg_comp = epoch_comp_sums[k] / max(epoch_comp_counts, 1)
+            metrics_history[f'reward_{k}'].append(float(avg_comp))
+
+        # ---------------------------------------------------------------
+        # Validation: evaluate on held-out data (all difficulty levels)
+        # ---------------------------------------------------------------
+        val_avg_reward = 0.0
+        val_avg_entropy = 0.0
+        if val_dataset:
+            policy_net.net.eval()
+            val_rewards = []
+            val_entropies = []
+            with torch.no_grad():
+                for batch_start in range(0, len(val_dataset), batch_size):
+                    batch_samples = val_dataset[batch_start:batch_start + batch_size]
+                    batch_features = torch.tensor(
+                        [s["features"] for s in batch_samples], dtype=torch.float32
+                    )
+                    logits, _ = policy_net.net(batch_features)
+                    actions, _, _entropies = policy_net.net.sample_action(logits, deterministic=True)
+
+                    for j, sample in enumerate(batch_samples):
+                        sample_actions = {
+                            name: actions[name][j].item()
+                            if actions[name].dim() > 0 else actions[name].item()
+                            for name in actions
+                        }
+                        rendered = _stub_render(sample_actions, sample["prompt"], sample["features"])
+                        reward_total, _ = compute_reward(
+                            sample_actions, sample["prompt"], rendered,
+                            sample["features"], dataset_sample=sample
+                        )
+                        val_rewards.append(reward_total)
+
+                    # Average entropy on val batch
+                    val_entropies.append(policy_net.net.entropy(logits).mean().item())
+
+            val_avg_reward = np.mean(val_rewards) if val_rewards else 0.0
+            val_avg_entropy = np.mean(val_entropies) if val_entropies else 0.0
+            policy_net.net.train()
+
+        metrics_history['val_avg_reward'].append(float(val_avg_reward))
+        metrics_history['val_avg_entropy'].append(float(val_avg_entropy))
+
+        # ---------------------------------------------------------------
         # Log at regular intervals
+        # ---------------------------------------------------------------
         if epoch % 100 == 0 or epoch == epochs - 1:
+            comp_str = " | ".join(
+                f"{k}={metrics_history[f'reward_{k}'][-1]:.3f}"
+                for k in ['intent_match', 'topic_precision', 'guardrail_ok']
+            )
+            val_str = f" val_r={val_avg_reward:.4f} val_H={val_avg_entropy:.4f}" if val_dataset else ""
             print(
                 f"[train] epoch {epoch:4d} | "
                 f"reward={avg_reward:.4f} | loss={avg_loss:.4f} "
@@ -980,8 +1055,10 @@ def train(policy_net, dataset, epochs=1000, batch_size=64, lr=1e-3,
                 f"entropy={avg_entropy:.4f} coeff={entropy_coeff:.4f} | "
                 f"adv={avg_advantage:.4f} | "
                 f"lr={current_lr:.6f} | diff≤{diff_threshold} | "
-                f"buf={len(replay_buffer)}"
+                f"buf={len(replay_buffer)}{val_str}"
             )
+            if epoch_comp_counts > 0:
+                print(f"[train]       components: {comp_str}")
 
     print(f"[train] Done. Total epochs: {epochs}, total gradient steps: {total_steps}")
     return policy_net, dict(metrics_history)
@@ -1162,45 +1239,324 @@ def _generate_minimal_wasm_stub(wasm_output_path):
 # Main entry point
 # ---------------------------------------------------------------------------
 
+def _parse_js_kb(content: str) -> list:
+    """
+    Parse a JavaScript knowledge-base.js file into Python dicts.
+    Handles the kb(id, name, aliases, summary, {def:[], int:[], ...}, related[]) pattern.
+    """
+    import ast
+
+    entries = []
+    # Find all kb( ... ) calls — match nested braces properly
+    i = 0
+    while i < len(content):
+        # Find next kb( call
+        match = re.search(r'\bkb\s*\(', content[i:])
+        if not match:
+            break
+        start = i + match.end()
+        # Find matching closing paren by counting parens/braces
+        depth = 1
+        j = start
+        in_string = False
+        escape = False
+        string_char = None
+        while j < len(content) and depth > 0:
+            c = content[j]
+            if escape:
+                escape = False
+                j += 1
+                continue
+            if c == '\\':
+                escape = True
+                j += 1
+                continue
+            if in_string:
+                if c == string_char:
+                    in_string = False
+                j += 1
+                continue
+            if c in ('"', "'"):
+                in_string = True
+                string_char = c
+                j += 1
+                continue
+            if c in ('(', '{'):
+                depth += 1
+            elif c in (')', '}'):
+                depth -= 1
+            j += 1
+        if depth != 0:
+            i = start
+            continue
+        raw = content[start:j-1].strip()
+        i = j
+
+        # Parse the arguments: id, name, aliases, summary, f_obj, related
+        # Strategy: split by top-level commas respecting brackets
+        args = _split_js_args(raw)
+        if len(args) < 5:
+            continue
+
+        def unquote(s):
+            s = s.strip()
+            if len(s) >= 2 and s[0] in ('"', "'") and s[-1] == s[0]:
+                return s[1:-1].replace("\\'", "'").replace('\\"', '"')
+            return s
+
+        entry_id = unquote(args[0])
+        name = unquote(args[1])
+
+        # Parse aliases array
+        aliases_raw = args[2].strip()
+        aliases = []
+        if aliases_raw.startswith('['):
+            inner = aliases_raw[1:-1].strip()
+            if inner:
+                aliases = [unquote(a) for a in _split_js_args(inner)]
+
+        summary = unquote(args[3])
+
+        # Parse f object {def:[], int:[], ex:[], form:[], app:[]}
+        f_obj = {}
+        f_raw = args[4].strip()
+        if f_raw.startswith('{'):
+            # Extract each category
+            for cat in ['def', 'int', 'ex', 'form', 'app']:
+                cat_match = re.search(rf'{cat}\s*:\s*\[', f_raw)
+                if cat_match:
+                    arr_start = cat_match.end() - 1
+                    # Find matching ]
+                    d = 1
+                    k = arr_start + 1
+                    while k < len(f_raw) and d > 0:
+                        if f_raw[k] == '[':
+                            d += 1
+                        elif f_raw[k] == ']':
+                            d -= 1
+                        k += 1
+                    arr_content = f_raw[arr_start+1:k-1].strip()
+                    if arr_content:
+                        frags = []
+                        for frag in _split_js_args(arr_content):
+                            frags.append(unquote(frag))
+                        f_obj[cat] = frags
+                    else:
+                        f_obj[cat] = []
+
+        # Parse related array
+        related = []
+        if len(args) > 5:
+            rel_raw = args[5].strip()
+            if rel_raw.startswith('['):
+                inner = rel_raw[1:-1].strip()
+                if inner:
+                    related = [unquote(r) for r in _split_js_args(inner)]
+
+        entries.append({
+            "id": entry_id,
+            "name": name,
+            "aliases": [name.lower()] + [a.lower() for a in aliases],
+            "summary": summary,
+            "f": f_obj,
+            "related": related,
+        })
+
+    return entries
+
+
+def _split_js_args(raw: str) -> list:
+    """Split a JS argument list by top-level commas, respecting brackets and strings."""
+    args = []
+    depth = 0
+    in_string = False
+    escape = False
+    string_char = None
+    current = []
+    for c in raw:
+        if escape:
+            current.append(c)
+            escape = False
+            continue
+        if c == '\\':
+            escape = True
+            current.append(c)
+            continue
+        if in_string:
+            current.append(c)
+            if c == string_char:
+                in_string = False
+            continue
+        if c in ('"', "'"):
+            in_string = True
+            string_char = c
+            current.append(c)
+            continue
+        if c in ('(', '[', '{'):
+            depth += 1
+            current.append(c)
+        elif c in (')', ']', '}'):
+            depth -= 1
+            current.append(c)
+        elif c == ',' and depth == 0:
+            args.append(''.join(current).strip())
+            current = []
+        else:
+            current.append(c)
+    if current:
+        args.append(''.join(current).strip())
+    return args
+
+
+def _parse_js_intents(content: str) -> dict:
+    """Parse INTENTS object from a JS intents.js file."""
+    intents = {}
+    # Find INTENTS = { ... }
+    match = re.search(r'INTENTS\s*=\s*\{', content)
+    if not match:
+        return intents
+    start = match.end() - 1
+    # Find matching brace
+    depth = 1
+    j = start + 1
+    while j < len(content) and depth > 0:
+        if content[j] == '{':
+            depth += 1
+        elif content[j] == '}':
+            depth -= 1
+        j += 1
+    obj_content = content[start+1:j-1].strip()
+
+    # Parse each intent: name: { prototypes: [...], order: [...] }
+    for intent_match in re.finditer(r"(\w+)\s*:\s*\{", obj_content):
+        intent_name = intent_match.group(1)
+        brace_start = intent_match.end() - 1
+        depth = 1
+        k = brace_start + 1
+        while k < len(obj_content) and depth > 0:
+            if obj_content[k] == '{':
+                depth += 1
+            elif obj_content[k] == '}':
+                depth -= 1
+            k += 1
+        inner = obj_content[brace_start+1:k-1].strip()
+
+        prototypes = []
+        order = None
+
+        # Extract prototypes array
+        proto_match = re.search(r'prototypes\s*:\s*\[', inner)
+        if proto_match:
+            arr_start = proto_match.end() - 1
+            d = 1
+            m = arr_start + 1
+            while m < len(inner) and d > 0:
+                if inner[m] == '[':
+                    d += 1
+                elif inner[m] == ']':
+                    d -= 1
+                m += 1
+            arr_content = inner[arr_start+1:m-1].strip()
+            if arr_content:
+                prototypes = [_strip_quotes(a) for a in _split_js_args(arr_content)]
+
+        # Extract order array
+        order_match = re.search(r'order\s*:\s*\[', inner)
+        if order_match:
+            arr_start = order_match.end() - 1
+            d = 1
+            m = arr_start + 1
+            while m < len(inner) and d > 0:
+                if inner[m] == '[':
+                    d += 1
+                elif inner[m] == ']':
+                    d -= 1
+                m += 1
+            arr_content = inner[arr_start+1:m-1].strip()
+            if arr_content and arr_content != 'null':
+                order = [_strip_quotes(a) for a in _split_js_args(arr_content)]
+
+        if prototypes:
+            intents[intent_name] = {
+                "prototypes": prototypes,
+                "order": order or ['def', 'int', 'ex'],
+            }
+
+    return intents
+
+
+def _strip_quotes(s: str) -> str:
+    s = s.strip()
+    if len(s) >= 2 and s[0] in ('"', "'") and s[-1] == s[0]:
+        return s[1:-1].replace("\\'", "'").replace('\\"', '"')
+    return s
+
+
 def load_kb(bot_name: str, data_dir: str = "data/bots") -> list:
     """
-    Load knowledge base entries for a given bot.
+    Load knowledge base entries for a given bot by parsing the JS source.
 
     Searches in order:
-      1. {data_dir}/{bot_name}-chat/knowledge.js  (re-export shim)
-      2. chat/{bot_name}-chat/js/knowledge-base.js (canonical KB)
-    Falls back to synthetic KB for skeleton training.
+      1. chat/{bot_name}-chat/js/knowledge-base.js (canonical KB)
+      2. ../../chat/{bot_name}-chat/js/knowledge-base.js (relative to dev/scripts)
+      3. {data_dir}/{bot_name}/knowledge-base.js
+    Falls back to synthetic KB if parsing fails.
     """
-    paths_to_try = [
-        Path(data_dir) / f"{bot_name}-chat" / "knowledge.js",
+    # Search multiple possible paths (handles running from different directories)
+    canonical_names = [
         Path("chat") / f"{bot_name}-chat" / "js" / "knowledge-base.js",
+        Path("../../chat") / f"{bot_name}-chat" / "js" / "knowledge-base.js",
+        Path("../..") / "chat" / f"{bot_name}-chat" / "js" / "knowledge-base.js",
+        Path(data_dir) / f"{bot_name}-chat" / "knowledge-base.js",
     ]
     kb_path = None
-    for p in paths_to_try:
+    for p in canonical_names:
         if p.exists():
             kb_path = p
             break
     if kb_path:
-        print(f"[kb] Found knowledge file: {kb_path} (parsing not yet implemented)")
-    else:
-        print(f"[kb] No knowledge file found for '{bot_name}' — using synthetic entries")
+        try:
+            content = kb_path.read_text(encoding='utf-8')
+            entries = _parse_js_kb(content)
+            if entries:
+                print(f"[kb] Parsed {len(entries)} entries from {kb_path}")
+                return entries
+            else:
+                print(f"[kb] WARNING: parsed 0 entries from {kb_path}, falling back")
+        except Exception as e:
+            print(f"[kb] Parse error for {kb_path}: {e}, falling back")
 
-    # Synthetic KB entries for training
+    # Fallback: synthetic
+    print(f"[kb] No parseable KB found for '{bot_name}' — using synthetic entries")
     return [
-        {"id": "topic_001", "name": "Nash Equilibrium", "aliases": ["Nash equilibrium", "Nash"], "difficulty": 2},
-        {"id": "topic_002", "name": "Prisoner's Dilemma", "aliases": ["Prisoner's dilemma", "PD"], "difficulty": 1},
-        {"id": "topic_003", "name": "Shapley Value", "aliases": ["Shapley value", "Shapley"], "difficulty": 3},
-        {"id": "topic_004", "name": "Zero-Sum Game", "aliases": ["Zero-sum game", "zero sum"], "difficulty": 1},
-        {"id": "topic_005", "name": "Dominant Strategy", "aliases": ["Dominant strategy", "dominance"], "difficulty": 1},
+        {"id": "topic_001", "name": "Nash Equilibrium", "aliases": ["nash equilibrium", "nash"], "difficulty": 2},
+        {"id": "topic_002", "name": "Prisoner's Dilemma", "aliases": ["prisoner's dilemma", "pd"], "difficulty": 1},
+        {"id": "topic_003", "name": "Shapley Value", "aliases": ["shapley value", "shapley"], "difficulty": 3},
+        {"id": "topic_004", "name": "Zero-Sum Game", "aliases": ["zero-sum game", "zero sum"], "difficulty": 1},
+        {"id": "topic_005", "name": "Dominant Strategy", "aliases": ["dominant strategy", "dominance"], "difficulty": 1},
     ]
 
 
 def load_intents(bot_name: str, data_dir: str = "data/bots") -> dict:
     """
-    Load intent definitions for a bot.
+    Load intent definitions for a bot by parsing the JS intents.js file.
     """
-    intents_path = Path(data_dir) / f"{bot_name}-chat" / "intents.js"
-    print(f"[intents] Looking for: {intents_path}")
+    intent_paths = [
+        Path(data_dir) / f"{bot_name}-chat" / "intents.js",
+        Path("../../data") / "bots" / f"{bot_name}-chat" / "intents.js",
+    ]
+    for intents_path in intent_paths:
+        if intents_path.exists():
+            try:
+                content = intents_path.read_text(encoding='utf-8')
+                intents = _parse_js_intents(content)
+                if intents:
+                    print(f"[intents] Parsed {len(intents)} intents from {intents_path}")
+                    return intents
+            except Exception as e:
+                print(f"[intents] Parse error: {e}, using defaults")
+
+    print(f"[intents] Using default intent prototypes")
 
     # Default intent prototypes (mirrors core/nlp.js DEFAULT_INTENTS)
     return {
@@ -1300,13 +1656,30 @@ def main():
         "--metrics-output", type=str, default=None,
         help="Save training metrics JSON to this path",
     )
+    parser.add_argument(
+        "--seed", type=int, default=42,
+        help="Random seed for deterministic training (default: 42)",
+    )
+    parser.add_argument(
+        "--val-split", type=float, default=0.15,
+        help="Fraction of dataset to reserve for validation (default: 0.15)",
+    )
+    parser.add_argument(
+        "--metadata-output", type=str, default=None,
+        help="Save training metadata JSON to this path (model info, reward weights, config)",
+    )
     args = parser.parse_args()
+
+    # Set deterministic seed for reproducibility
+    set_seed(args.seed)
 
     print("=" * 60)
     print("ReLU.chat WASM Policy Training Pipeline")
     print(f"  Bot:               {args.bot}")
     print(f"  Epochs:            {args.epochs}")
     print(f"  Output:            {args.output}")
+    print(f"  Seed:              {args.seed}")
+    print(f"  Val split:         {args.val_split}")
     print(f"  Replay capacity:   {args.replay_capacity}")
     print(f"  Replay batch size: {args.replay_batch_size}")
     print(f"  Entropy range:     {args.entropy_start} → {args.entropy_end}")
@@ -1347,6 +1720,18 @@ def main():
     dataset = build_retrieval_dataset(prompts, kb, intents)
     print(f"[dataset] Total samples: {len(dataset)}")
 
+    # Step 3b: Train/validation split
+    val_dataset = None
+    if args.val_split > 0 and args.val_split < 1:
+        random.shuffle(dataset)
+        split_idx = int(len(dataset) * (1 - args.val_split))
+        train_dataset = dataset[:split_idx]
+        val_dataset = dataset[split_idx:]
+        print(f"[dataset] Train: {len(train_dataset)}, Val: {len(val_dataset)}")
+    else:
+        train_dataset = dataset
+        print(f"[dataset] No validation split (val-split={args.val_split})")
+
     if args.skip_train:
         print("[skip] Training skipped (--skip-train)")
         return
@@ -1360,9 +1745,10 @@ def main():
         policy_net = PolicyNetworkWrapper()
 
         # Step 5: Train (improved with replay, entropy, curriculum, cosine LR)
-        print(f"[train] Starting {args.epochs} epochs on {len(dataset)} samples...")
+        print(f"[train] Starting {args.epochs} epochs on {len(train_dataset)} train / {len(val_dataset) if val_dataset else 0} val samples...")
         policy_net, metrics = train(
-            policy_net, dataset,
+            policy_net, train_dataset,
+            val_dataset=val_dataset,
             epochs=args.epochs,
             replay_capacity=args.replay_capacity,
             replay_batch_size=args.replay_batch_size,
@@ -1379,49 +1765,102 @@ def main():
                 json.dump(metrics, f, indent=2)
             print(f"[metrics] Saved to {args.metrics_output}")
 
-    # Step 6: Export ONNX
+        # Export rich training metadata
+        training_date = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        metadata = {
+            "model_version": "0.4.0",
+            "n_features": N_FEATURES,
+            "output_heads": {name: size for name, size in ACTION_SIZES_ORDERED},
+            "reward_weights": dict(REWARD_WEIGHTS),
+            "training_date": training_date,
+            "seed": args.seed,
+            "bot": args.bot,
+            "hyperparameters": {
+                "epochs": args.epochs,
+                "learning_rate": 1e-3,
+                "batch_size": 64,
+                "replay_capacity": args.replay_capacity,
+                "replay_batch_size": args.replay_batch_size,
+                "entropy_start": args.entropy_start,
+                "entropy_end": args.entropy_end,
+                "entropy_anneal_epochs": 500,
+                "value_loss_coeff": 0.5,
+                "max_grad_norm": 0.5,
+                "curriculum_warmup": args.curriculum_warmup,
+                "curriculum_step": 200,
+                "val_split": args.val_split,
+            },
+            "dataset": {
+                "total_prompts": len(prompts),
+                "train_samples": len(train_dataset),
+                "val_samples": len(val_dataset) if val_dataset else 0,
+                "follow_up_pairs": 0 if args.no_follow_ups else min(500, len(prompts)),
+            },
+            "architecture": {
+                "trunk": "25→128→64 (ReLU + LayerNorm + Dropout)",
+                "total_params": sum(p.numel() for p in policy_net.net.parameters()),
+            },
+            "metrics_summary": {
+                "final_train_reward": float(metrics['avg_reward'][-1]) if metrics['avg_reward'] else None,
+                "final_val_reward": float(metrics['val_avg_reward'][-1]) if metrics.get('val_avg_reward') and metrics['val_avg_reward'][-1] > 0 else None,
+                "final_entropy": float(metrics['avg_entropy'][-1]) if metrics['avg_entropy'] else None,
+                "total_gradient_steps": len(metrics['avg_loss']),
+            },
+        }
+        metadata_path = args.metadata_output or os.path.join(args.output, "policy.train_metadata.json")
+        os.makedirs(os.path.dirname(metadata_path) or '.', exist_ok=True)
+        with open(metadata_path, 'w') as f:
+            json.dump(metadata, f, indent=2)
+        print(f"[metadata] Training metadata saved to {metadata_path}")
+
+    # Step 6: Export weights directly to JSON (what JS MLP engine loads)
     os.makedirs(args.output, exist_ok=True)
-    onnx_path = os.path.join(args.output, "policy.onnx")
-    export_onnx(policy_net, onnx_path)
 
-    # Step 7: Compile to WASM
-    wasm_path = os.path.join(args.output, "policy.wasm")
-    weights_path = os.path.join(args.output, "policy.weights.bin")
-    compile_wasm(onnx_path, wasm_path, weights_path)
+    # Per-bot weights
+    bot_weights_path = os.path.join(args.output, args.bot, "policy.weights.json")
+    os.makedirs(os.path.dirname(bot_weights_path), exist_ok=True)
+    policy_net.net.save_weights_json(bot_weights_path)
 
-    # Step 8: Update manifest
+    # Also export to main weights path
+    main_weights_path = os.path.join(args.output, "policy.weights.json")
+    policy_net.net.save_weights_json(main_weights_path)
+
+    # Step 7: Update manifest
     manifest_path = os.path.join(args.output, "policy.manifest.json")
+    weights_size = os.path.getsize(main_weights_path)
+    training_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     manifest = {
-        "version": "0.1.0",
+        "version": "0.4.0",
         "inputFeatures": 25,
         "inputBytes": 107,
         "outputSchema": "AnswerPlan.v1",
         "fragmentMetaVersion": "1.0.0",
         "model": "mlp_policy",
-        "weightsSize": os.path.getsize(weights_path) if os.path.exists(weights_path) else 4096,
-        "botProfiles": [args.bot],
-        "trained": "2026-05-26",
+        "weightsSize": weights_size,
+        "wasmSize": 43,
+        "wasmHash": "sha256-stub",
+        "botProfiles": ["game-theory", "golden-age", "data-science"],
+        "trained": training_date,
+        "seed": args.seed,
+        "rewardWeights": dict(REWARD_WEIGHTS),
         "architecture": {
             "trunk": "25→128→64 (ReLU + LayerNorm + Dropout)",
-            "heads": {name: size for name, size in ACTION_SIZES.items()},
-            "total_params": "~6K",
+            "heads": {name: size for name, size in ACTION_SIZES_ORDERED},
+            "total_params": sum(p.numel() for p in policy_net.net.parameters()),
         },
     }
+    with open(manifest_path, "w") as f:
+        json.dump(manifest, f, indent=2)
+    print(f"[manifest] Updated {manifest_path}")
     with open(manifest_path, "w") as f:
         json.dump(manifest, f, indent=2)
     print(f"[manifest] Updated {manifest_path}")
 
     print()
     print("=" * 60)
-    print("Pipeline complete. Artifacts at:", args.output)
-    print()
-    print("Next steps:")
-    print("  1. Implement real embedding model (sentence-transformers)")
-    print("  2. Replace PolicyNetworkWrapper.forward() with PyTorch nn.Module")
-    print("  3. Implement composeV2 renderer in Python")
-    print("  4. Implement ONNX export (torch.onnx.export)")
-    print("  5. Set up GitHub Actions GPU runner for nightly training")
-    print("  6. Deploy artifacts to /assets/models/policy/ via FTP")
+    print(f"Pipeline complete for {args.bot}.")
+    print(f"  Weights: {main_weights_path} ({weights_size} bytes)")
+    print(f"  Per-bot: {bot_weights_path}")
     print("=" * 60)
 
 

@@ -26,7 +26,7 @@
  *  15:  hasExampleCue    bool [0,1]   query contains 'example', 'illustrate', 'case'
  *  16:  botCreativity    f32  [0,1]   botProfile.creativityCeiling
  *  17:  domainMatch      f32  [0,1]   max similarity to botProfile.domainPrototypes
- *  18:  followUpType     u8   [0,19]  0=none, 1=simplify, 2=compare_previous, 3=example, 4=elaborate, 5=reference_index, 6=another_example, 7=specific, 8=continue, 9=how, 10=why, 11=challenge, 12=acknowledge, 13=clarify, 14=deep_dive, 15=relevance, 16=evidence, 17=comparison, 18=summarize, 19=affirm_continue
+ *  18:  followUpType     u8   [0,20]  0=none, 1=simplify, 2=compare_previous, 3=example, 4=elaborate, 5=reference_index, 6=another_example, 7=specific, 8=continue, 9=how, 10=why, 11=challenge, 12=acknowledge, 13=clarify, 14=deep_dive, 15=relevance, 16=evidence, 17=comparison, 18=summarize, 19=affirm_continue, 20=what_else
  *  19:  wasAmbiguous     bool [0,1]   previous turn was flagged as ambiguous
  *  20:  avgTruthConf     f32  [0,1]   average truth_confidence of available fragments (0 if unknown)
  *  21:  avgSourceConf    f32  [0,1]   average source_confidence of available fragments (0 if unknown)
@@ -172,6 +172,7 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
     'comparison': 17,
     'summarize': 18,
     'affirm_continue': 19,
+    'what_else': 20,
   };
   const followUpType = (followUp && followUp.isFollowUp)
     ? (FOLLOWUP_TYPE_MAP[followUp.type] || 0)
@@ -225,11 +226,17 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
         break;
 
       case 'how':
-      case 'why':
-        // Causal/explanatory follow-up — boost formal for mechanistic explanation
-        modifiedIntentFormScore = Math.max(modifiedIntentFormScore, 0.50);
-        modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.35);
+        // Process/mechanism — bias toward application + formal (how it works)
+        modifiedIntentFormScore = Math.max(modifiedIntentFormScore, 0.45);
+        modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.50);
         modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.30);
+        break;
+
+      case 'why':
+        // Reason/importance — bias toward intuition + formal (why it matters)
+        modifiedIntentFormScore = Math.max(modifiedIntentFormScore, 0.50);
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.40);
+        modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.30);
         break;
 
       case 'clarify':
@@ -266,6 +273,12 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
       case 'affirm_continue':
         // User confirms understanding — slightly boost continuity (default behavior)
         modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.25);
+        break;
+
+      case 'what_else':
+        // Adjacent facts — bias toward application + example for broader coverage
+        modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.45);
+        modifiedIntentExScore = Math.max(modifiedIntentExScore, 0.40);
         break;
 
       // reference_index — handled downstream in mlp-inference.js via targetIndex
@@ -395,10 +408,11 @@ export function packFeatures(features) {
   const f32 = new Float32Array(buffer, 0, 25);
   const u8  = new Uint8Array(buffer, 100, 7);
 
-  // Fill Float32Array in index order
+  // Fill Float32Array in index order — uses raw unnormalized values
+  // to match training data format (build_retrieval_dataset in train-policy.py).
   f32[0]  = clampf(features.qSimTop1);
   f32[1]  = clampf(features.qSimTop2);
-  f32[2]  = features.entityCount;             // cast to f32
+  f32[2]  = features.entityCount;             // raw 0-3
   f32[3]  = features.entityBoostHit ? 1.0 : 0.0;
   f32[4]  = clampf(features.intentDefScore);
   f32[5]  = clampf(features.intentExScore);
@@ -406,20 +420,20 @@ export function packFeatures(features) {
   f32[7]  = clampf(features.intentAppScore);
   f32[8]  = clampf(features.intentCompScore);
   f32[9]  = clampf(features.lastTopicSim);
-  f32[10] = features.lastTopicAge;             // cast to f32
+  f32[10] = features.lastTopicAge;             // raw 0-8
   f32[11] = clampf(features.kbCoverage);
-  f32[12] = features.queryLenTokens;           // cast to f32
+  f32[12] = features.queryLenTokens;           // raw 1-32
   f32[13] = features.hasComparisonCue ? 1.0 : 0.0;
   f32[14] = features.hasFormalCue ? 1.0 : 0.0;
   f32[15] = features.hasExampleCue ? 1.0 : 0.0;
   f32[16] = clampf(features.botCreativity);
   f32[17] = clampf(features.domainMatch);
-  f32[18] = features.followUpType;             // cast to f32
+  f32[18] = features.followUpType;             // raw 0-20
   f32[19] = features.wasAmbiguous ? 1.0 : 0.0;
   f32[20] = clampf(features.avgTruthConf);
   f32[21] = clampf(features.avgSourceConf);
-  f32[22] = features.minDifficulty;            // cast to f32
-  f32[23] = features.fragDiversity;            // cast to f32
+  f32[22] = features.minDifficulty;            // raw 0-4
+  f32[23] = features.fragDiversity;            // raw 0-5
   f32[24] = clampf(features.avoidWithCount);
 
   // Fill Uint8Array with compact discrete values
@@ -433,7 +447,7 @@ export function packFeatures(features) {
   );
   u8[2] = clampu(features.lastTopicAge, 0, 8);
   u8[3] = clampu(features.queryLenTokens, 1, 32);
-  u8[4] = clampu(features.followUpType, 0, 19);
+  u8[4] = clampu(features.followUpType, 0, 20);
   u8[5] = clampu(features.minDifficulty, 0, 4);
   u8[6] = clampu(features.fragDiversity, 0, 5);
 

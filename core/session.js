@@ -44,7 +44,7 @@ const FOLLOWUP_PATTERNS = [
 
   // "more detail" / "tell me more" / "elaborate" / "go deeper" / "expand on that"
   {
-    regex: /^(more\s+detail|tell\s+me\s+more|elaborate|go\s+deeper|expand\s+on\s+(that|it|this)|continue|go\s+on)$/i,
+    regex: /^(more\s+detail|tell\s+me\s+more|elaborate|go\s+deeper|expand\s+on\s+(that|it|this))$/i,
     type: 'elaborate',
     target: 'last'
   },
@@ -79,7 +79,7 @@ const FOLLOWUP_PATTERNS = [
 
   // "go ahead" / "keep going" / "and then" / "what's next" / "proceed" / "carry on"
   {
-    regex: /^(go\s+ahead|keep\s+going|and\s+then|what('?s|\s+is)\s+next|what\s+next|proceed|carry\s+on|next\s*)$/i,
+    regex: /^(go\s+ahead|keep\s+going|and\s+then|what('?s|\s+is)\s+next|what\s+next|proceed|carry\s+on|go\s+on|continue|next\s*)$/i,
     type: 'continue',
     target: 'last'
   },
@@ -87,7 +87,7 @@ const FOLLOWUP_PATTERNS = [
   // "what else" / "anything else" / "what more" / "is there more"
   {
     regex: /^(what\s+else|anything\s+else|what\s+more|is\s+there\s+more|any\s+more|and\s+more)$/i,
-    type: 'elaborate',
+    type: 'what_else',
     target: 'last'
   },
 
@@ -867,6 +867,7 @@ export class SessionMemory {
       'recap': 'summarize',
       'compare': 'comparison',
       'contrast': 'comparison',
+      'simpler': 'simplify',
       'proof': 'evidence',
       'source': 'evidence',
       'details': 'deep_dive',
@@ -902,8 +903,12 @@ export class SessionMemory {
           type: 'example'
         },
         {
-          patterns: [/more/, /detail/, /deeper/, /continue/, /go on/, /tell me more/, /expand/, /and then/, /what next/, /keep go/, /elaborat/, /go ahead/, /carry on/, /proceed/, /further/, /anything else/, /what else/, /any more/],
+          patterns: [/more/, /detail/, /deeper/, /tell me more/, /expand/, /and then/, /what next/, /keep go/, /elaborat/, /go ahead/, /carry on/, /proceed/, /further/, /anything else/, /what else/, /any more/],
           type: 'elaborate'
+        },
+        {
+          patterns: [/go on/, /continue/],
+          type: 'continue'
         },
         {
           patterns: [/another/, /other/, /one more/, /different/, /alternativ/, /one other/],
@@ -1120,7 +1125,7 @@ export class SessionMemory {
     const continuationTypes = ['continue', 'elaborate', 'deep_dive', 'how', 'why',
       'clarify', 'example', 'another_example', 'summarize', 'relevance',
       'evidence', 'challenge', 'acknowledge', 'affirm_continue', 'comparison',
-      'specific', 'compare_previous', 'simplify', 'reference_index'];
+      'specific', 'compare_previous', 'simplify', 'reference_index', 'what_else'];
     const followUp = this.detectSimpleFollowUp(query);
     if (followUp.isFollowUp && continuationTypes.includes(followUp.type)) {
       return {
@@ -1352,7 +1357,7 @@ export class SessionMemory {
     }
 
     // Broadening: user wants more examples, comparison, broader view
-    if (['example', 'another_example', 'comparison', 'what_else', 'summarize'].includes(type)) {
+    if (['example', 'another_example', 'comparison', 'elaborate', 'summarize', 'what_else'].includes(type)) {
       return 'broadening';
     }
 

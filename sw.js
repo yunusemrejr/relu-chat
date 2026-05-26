@@ -1,4 +1,4 @@
-const CACHE_VERSION = 4;
+const CACHE_VERSION = 5;
 const CACHE_PREFIX = 'relu-chat';
 const APP_CACHE = `${CACHE_PREFIX}-v${CACHE_VERSION}`;
 const MODEL_CACHE = `${CACHE_PREFIX}-models-v${CACHE_VERSION}`;
@@ -16,11 +16,12 @@ const APP_ASSETS = [
   '/core/bm25.js',
   '/core/signal-layer.js',
   '/core/chatbot-engine.js',
+  '/assets/transformers/transformers.js',
   '/manifest.webmanifest'
 ];
 
 // Immutable assets: versioned URLs that never change (cache-first, no network needed)
-const IMMUTABLE_REGEX = /\/assets\/transformers\/.*\.wasm$/;
+const IMMUTABLE_REGEX = /\/assets\/transformers\/.*\.wasm$|\/assets\/models\/.*\.(onnx|json)$/;
 
 // Static assets that benefit from stale-while-revalidate: serve cached, update in background
 const STATIC_REGEX = /\.(css|js|woff2?|ttf|otf|eot|png|svg|webmanifest)$/;
@@ -31,7 +32,9 @@ const MODEL_PRELOAD_ASSETS = [
   '/assets/transformers/ort-wasm-simd.wasm',
   '/assets/transformers/ort-wasm-threaded.wasm',
   '/assets/transformers/ort-wasm.wasm',
+  '/assets/models/all-MiniLM-L6-v2/onnx/model_quantized.onnx',
   '/assets/models/policy/policy.manifest.json',
+  '/assets/models/policy/policy.weights.json',
 ];
 
 function isModelRequest(url) {

@@ -249,16 +249,7 @@ function featuresToF32(features, version = 2) {
   const f = new Float32Array(25);
   f[0]  = clamp01(features.qSimTop1);
   f[1]  = clamp01(features.qSimTop2);
-  // Version >= 2 expects normalized discrete features
-  if (version >= 2) {
-    f[2]  = features.entityCount / 3;
-    f[10] = features.lastTopicAge / 8;
-    f[12] = features.queryLenTokens > 1 ? (features.queryLenTokens - 1) / 31 : 0;
-  } else {
-    f[2]  = features.entityCount;
-    f[10] = features.lastTopicAge;
-    f[12] = features.queryLenTokens;
-  }
+  f[2]  = features.entityCount;             // raw 0-3
   f[3]  = features.entityBoostHit ? 1 : 0;
   f[4]  = clamp01(features.intentDefScore);
   f[5]  = clamp01(features.intentExScore);
@@ -266,18 +257,20 @@ function featuresToF32(features, version = 2) {
   f[7]  = clamp01(features.intentAppScore);
   f[8]  = clamp01(features.intentCompScore);
   f[9]  = clamp01(features.lastTopicSim);
+  f[10] = features.lastTopicAge;             // raw 0-8
   f[11] = clamp01(features.kbCoverage);
+  f[12] = features.queryLenTokens;           // raw 1-32
   f[13] = features.hasComparisonCue ? 1 : 0;
   f[14] = features.hasFormalCue ? 1 : 0;
   f[15] = features.hasExampleCue ? 1 : 0;
   f[16] = clamp01(features.botCreativity);
   f[17] = clamp01(features.domainMatch);
-  f[18] = features.followUpType;
+  f[18] = features.followUpType;             // raw 0-19
   f[19] = features.wasAmbiguous ? 1 : 0;
   f[20] = clamp01(features.avgTruthConf);
   f[21] = clamp01(features.avgSourceConf);
-  f[22] = features.minDifficulty / 4;  // normalize [0,4] -> [0,1]
-  f[23] = features.fragDiversity / 5;  // normalize [0,5] -> [0,1]
+  f[22] = features.minDifficulty;            // raw 0-4
+  f[23] = features.fragDiversity;            // raw 0-5
   f[24] = clamp01(features.avoidWithCount);
   return f;
 }
@@ -481,7 +474,7 @@ export class MLPPolicy {
       intentProbs:      softmax(b.intent),
       topicCountProbs:  softmax(b.topic_count),
       fragCountProbs:   softmax(b.frag_count),
-      creativity:       0.5,
+      creativity:       sigmoid(b.creativity[0]),
       toneProbs:        softmax(b.tone),
     };
   }
@@ -543,7 +536,7 @@ export class MLPPolicy {
       intentProbs:      softmax(b.intent),
       topicCountProbs:  softmax(b.topic_count),
       fragCountProbs:   softmax(b.frag_count),
-      creativity:       0.5,
+      creativity:       sigmoid(b.creativity[0]),
       toneProbs:        softmax(b.tone),
     };
   }
@@ -754,12 +747,18 @@ export class MLPPolicy {
           decisionPath.push('followup:override-continue');
           break;
 
-        case 9:  // how
-        case 10: // why
-          // Causal/explanatory — may need more formal depth
+        case 9:  // how — process/mechanism: bias toward application
+          intent = 'application';
           tone = tone === 'neutral' ? 'formal' : tone;
           fragsPerTopic = Math.min(fragsPerTopic + 1, 4);
-          decisionPath.push(`followup:override-explanatory`);
+          decisionPath.push('followup:override-how');
+          break;
+
+        case 10: // why — reason/importance: bias toward formal + intuition
+          intent = 'formal';
+          tone = tone === 'neutral' ? 'formal' : tone;
+          fragsPerTopic = Math.min(fragsPerTopic + 1, 4);
+          decisionPath.push('followup:override-why');
           break;
 
         case 11: // challenge — user skeptical
@@ -812,6 +811,12 @@ export class MLPPolicy {
 
         case 19: // affirm_continue — user said "yes" / "go ahead"
           decisionPath.push('followup:override-affirm-continue');
+          break;
+
+        case 20: // what_else — adjacent facts, broader coverage
+          intent = 'application';
+          fragsPerTopic = Math.min(fragsPerTopic + 1, 4);
+          decisionPath.push('followup:override-what-else');
           break;
       }
     }

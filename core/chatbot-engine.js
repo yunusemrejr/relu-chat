@@ -1,16 +1,9 @@
-import { pipeline, env } from '/assets/transformers/transformers.js';
 import { LRUCache } from './cache.js';
 import { SessionMemory } from './session.js';
 import { composeV2, tokens, bowVec, compileAliasRegex } from './nlp.js';
 import { pushMessage, setStatus, escapeHTML, md } from './ui.js';
 import { loadPolicyRuntime, planAnswer, isPolicyLoaded } from '../policy/policy-runtime.js';
 import { SignalLayer } from './signal-layer.js';
-
-env.allowLocalModels = true;
-env.allowRemoteModels = false;
-env.localModelPath = '/assets/models';
-env.backends.onnx.wasm.wasmPaths = '/assets/transformers/';
-env.useBrowserCache = true;
 
 // ---------------------------------------------------------------------------
 // Loading state machine
@@ -92,9 +85,6 @@ export async function createChatbot(config) {
     _setLoadState('loading_transformer');
 
     // ---- Parallel initialization: start policy loading while transformer loads ----
-    // Policy runtime loads MLP weights (JSON) and WASM. Since MLP is just JSON,
-    // it typically finishes before the transformer model (which downloads ONNX + WASM).
-    // Even if policy finishes first, we hold ready until transformer is done.
     const policyPromise = (async () => {
       try {
         const policyBotProfile = botProfile || {
@@ -111,10 +101,17 @@ export async function createChatbot(config) {
           botProfile: policyBotProfile
         });
       } catch (policyErr) {
-        // Policy failure logged internally; don't throw — transformer may still load
         console.error('[chatbot-engine] Policy load failed:', policyErr.message);
       }
     })();
+
+    // ---- Deferred import: transformers.js only loaded when init() runs ----
+    const { pipeline, env } = await import('/assets/transformers/transformers.js');
+    env.allowLocalModels = true;
+    env.allowRemoteModels = false;
+    env.localModelPath = '/assets/models';
+    env.backends.onnx.wasm.wasmPaths = '/assets/transformers/';
+    env.useBrowserCache = true;
 
     // ---- Load transformer model while policy loads in background ----
     try {

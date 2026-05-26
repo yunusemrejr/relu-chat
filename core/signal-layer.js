@@ -262,12 +262,34 @@ export class SignalLayer {
         }
       }
 
-      // "how" / "why" — moderate depth increase
-      if (followUpType === 'how' || followUpType === 'why') {
+      // "how" — process/mechanism: bias toward formal + application (how it works)
+      if (followUpType === 'how') {
         followUpSignals.complexityHint = 'deeper';
         followUpSignals.fragmentCountHint = 'more';
+        followUpSignals.intentBias = 'application';
         if (intent.rawScores) {
-          intent.rawScores.formal = Math.max(intent.rawScores.formal || 0, 0.35);
+          intent.rawScores.formal = Math.max(intent.rawScores.formal || 0, 0.45);
+          intent.rawScores.application = Math.max(intent.rawScores.application || 0, 0.50);
+        }
+      }
+
+      // "why" — reason/importance: bias toward intuition + formal (why it matters)
+      if (followUpType === 'why') {
+        followUpSignals.complexityHint = 'deeper';
+        followUpSignals.fragmentCountHint = 'more';
+        followUpSignals.intentBias = 'formal';
+        if (intent.rawScores) {
+          intent.rawScores.formal = Math.max(intent.rawScores.formal || 0, 0.50);
+          intent.rawScores.definition = Math.max(intent.rawScores.definition || 0, 0.40);
+        }
+      }
+
+      // "what else" — adjacent facts: bias toward broader coverage
+      if (followUpType === 'what_else') {
+        followUpSignals.fragmentCountHint = 'more';
+        if (intent.rawScores) {
+          intent.rawScores.application = Math.max(intent.rawScores.application || 0, 0.45);
+          intent.rawScores.example = Math.max(intent.rawScores.example || 0, 0.40);
         }
       }
 

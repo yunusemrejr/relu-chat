@@ -1,9 +1,3 @@
-import { KB, entryText } from '../../../data/bots/game-theory-chat/knowledge.js';
-import { INTENTS } from '../../../data/bots/game-theory-chat/intents.js';
-import { CONFIG } from './config.js';
-import { overrides } from '../../../data/bots/game-theory-chat/overrides.js';
-import { createChatbot } from '../../../core/chatbot-engine.js';
-
 const SUGGESTIONS = [
   "What is Nash equilibrium?",
   "Example of a zero-sum game",
@@ -20,11 +14,25 @@ const WELCOME = '<span style="font-size:1.125rem;font-weight:600;color:var(--tex
 const botProfile = {
   id: "game-theory",
   name: "Game Theory Chat",
-  allowedIntents: Object.keys(INTENTS),
+  allowedIntents: ["definition", "example", "formal", "application", "comparison", "greeting", "help"],
   tone: "neutral",
   maxTopics: 3,
   creativityCeiling: 0.35
 };
+
+// Render UI shell immediately, then load heavy ML modules
+import { pushMessage, setStatus, escapeHTML, md } from '../../../core/ui.js';
+
+pushMessage('bot', WELCOME);
+setStatus('loading model...');
+
+const [{ KB, entryText }, { INTENTS }, { CONFIG }, { overrides }, { createChatbot }] = await Promise.all([
+  import('../../../data/bots/game-theory-chat/knowledge.js'),
+  import('../../../data/bots/game-theory-chat/intents.js'),
+  import('./config.js'),
+  import('../../../data/bots/game-theory-chat/overrides.js'),
+  import('../../../core/chatbot-engine.js'),
+]);
 
 createChatbot({
   KB,
@@ -33,6 +41,6 @@ createChatbot({
   INTENTS,
   overrides,
   suggestions: SUGGESTIONS,
-  welcomeMessage: WELCOME,
+  welcomeMessage: null,
   botProfile
 });

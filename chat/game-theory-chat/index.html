@@ -25,6 +25,21 @@
 <link rel="stylesheet" href="css/styles.css">
 
 <link rel="icon" href="../../assets/logo.png" type="image/png">
+
+<!-- Performance: preload critical assets for faster model initialization -->
+<link rel="modulepreload" href="../../core/chatbot-engine.js">
+<link rel="modulepreload" href="../../core/ui.js">
+<link rel="modulepreload" href="../../core/nlp.js">
+<link rel="modulepreload" href="../../core/cache.js">
+<link rel="modulepreload" href="../../core/session.js">
+<link rel="modulepreload" href="../../core/signal-layer.js">
+<link rel="modulepreload" href="../../policy/policy-runtime.js">
+<link rel="modulepreload" href="../../policy/feature-extractor.js">
+<link rel="modulepreload" href="../../policy/mlp-inference.js">
+<link rel="modulepreload" href="../../policy/action-schema.js">
+<link rel="preload" href="../../assets/transformers/transformers.js" as="script">
+<link rel="preload" href="../../assets/models/all-MiniLM-L6-v2/onnx/model_quantized.onnx" as="fetch" crossorigin>
+<link rel="preload" href="../../assets/models/policy/policy.weights.json" as="fetch" crossorigin>
 </head>
 <body>
 
@@ -74,6 +89,11 @@
     </div>
   </form>
 </main>
+
+<script src="../../core/ebook-promo.js" data-cfasync="false"></script>
+<script>
+  EbookPromo.mount(document.querySelector('main'));
+</script>
 
 <script src="../../assets/katex/katex.min.js" data-cfasync="false"></script>
 <script src="../../assets/katex/auto-render.min.js" data-cfasync="false"></script>
