@@ -12,6 +12,47 @@ env.localModelPath = '/assets/models';
 env.backends.onnx.wasm.wasmPaths = '/assets/transformers/';
 env.useBrowserCache = true;
 
+// ---------------------------------------------------------------------------
+// Loading state machine
+// ---------------------------------------------------------------------------
+
+/**
+ * @typedef {'idle'|'loading_transformer'|'loading_policy'|'loading_embeddings'|
+ *            'partially_ready'|'ready'|'error'} LoadState
+ */
+
+/** @type {LoadState} */
+let _loadState = 'idle';
+
+/** @type {Array<function>} */
+let _stateListeners = [];
+
+/**
+ * Get the current loading state.
+ * @returns {LoadState}
+ */
+export function getLoadState() { return _loadState; }
+
+/**
+ * Subscribe to loading state changes.
+ * @param {function} listener - called with (newState, oldState)
+ * @returns {function} unsubscribe
+ */
+export function onLoadStateChange(listener) {
+  _stateListeners.push(listener);
+  return () => {
+    _stateListeners = _stateListeners.filter(l => l !== listener);
+  };
+}
+
+function _setLoadState(newState) {
+  const old = _loadState;
+  _loadState = newState;
+  for (const fn of _stateListeners) {
+    try { fn(newState, old); } catch (e) { console.warn('[state] listener error:', e); }
+  }
+}
+
 export async function createChatbot(config) {
   const {
     KB, entryText, CONFIG, INTENTS, overrides,
@@ -48,6 +89,34 @@ export async function createChatbot(config) {
   }
 
   async function init() {
+    _setLoadState('loading_transformer');
+
+    // ---- Parallel initialization: start policy loading while transformer loads ----
+    // Policy runtime loads MLP weights (JSON) and WASM. Since MLP is just JSON,
+    // it typically finishes before the transformer model (which downloads ONNX + WASM).
+    // Even if policy finishes first, we hold ready until transformer is done.
+    const policyPromise = (async () => {
+      try {
+        const policyBotProfile = botProfile || {
+          id: 'default',
+          allowedIntents: Object.keys(INTENTS),
+          tone: 'neutral',
+          maxTopics: 3,
+          creativityCeiling: 0.35
+        };
+        await loadPolicyRuntime({
+          wasmPath: '/assets/models/policy/policy.wasm',
+          weightsPath: '/assets/models/policy/policy.weights.bin',
+          manifestPath: '/assets/models/policy/policy.manifest.json',
+          botProfile: policyBotProfile
+        });
+      } catch (policyErr) {
+        // Policy failure logged internally; don't throw — transformer may still load
+        console.error('[chatbot-engine] Policy load failed:', policyErr.message);
+      }
+    })();
+
+    // ---- Load transformer model while policy loads in background ----
     try {
       setStatus('loading transformer…');
       extractor = await pipeline('feature-extraction', CONFIG.EMBEDDING.model, {
@@ -60,6 +129,11 @@ export async function createChatbot(config) {
           }
         }
       });
+
+      // ---- Pre-warm embeddings: start encoding as soon as transformer is ready ----
+      // Don't wait for policy — this saves significant time on subsequent loads
+      // since the KB embedding is the heaviest computation.
+      _setLoadState('loading_embeddings');
       setStatus('encoding knowledge base…');
       bar.style.width = '0%';
       compileAliasRegex(KB);
@@ -76,6 +150,7 @@ export async function createChatbot(config) {
         intentEmb[k] = [];
         for (const p of INTENTS[k].prototypes) intentEmb[k].push(await embed(p));
       }
+
       // Pre-embed domain prototypes for domainMatch feature
       if (botProfile?.domainPrototypes && botProfile.domainPrototypes.length > 0) {
         for (const dp of botProfile.domainPrototypes) {
@@ -95,37 +170,27 @@ export async function createChatbot(config) {
       setStatus('offline mode', true);
     }
 
-    // Load policy runtime (blocks readiness — mandatory)
-    setStatus('loading policy…');
-    try {
-      const policyBotProfile = botProfile || {
-        id: 'default',
-        allowedIntents: Object.keys(INTENTS),
-        tone: 'neutral',
-        maxTopics: 3,
-        creativityCeiling: 0.35
-      };
-      await loadPolicyRuntime({
-        wasmPath: '/assets/models/policy/policy.wasm',
-        weightsPath: '/assets/models/policy/policy.weights.bin',
-        manifestPath: '/assets/models/policy/policy.manifest.json',
-        botProfile: policyBotProfile
-      });
-    } catch (policyErr) {
-      console.error('Policy load failed:', policyErr.message);
+    // ---- Wait for policy to finish ----
+    // At this point, embeddings are already computed (saved time).
+    // We just need policy for the planAnswer function.
+    // Update state if policy is still loading (may already be done if it finished fast)
+    if (!isPolicyLoaded()) {
+      _setLoadState('loading_policy');
+    }
+    await policyPromise;
+
+    // ---- Check readiness ----
+    if (!isPolicyLoaded()) {
+      _setLoadState('error');
       setStatus('policy error — please reload and clear browser cache', false);
       return; // block readiness — policy is mandatory
-    }
-
-    if (!isPolicyLoaded()) {
-      setStatus('policy not ready — please reload', false);
-      return;
     }
 
     bar.style.width = '100%';
     setTimeout(() => bar.style.width = '0%', 500);
     setStatus('ready', true);
     ready = true;
+    _setLoadState('ready');
     sendBtn.disabled = false;
     if (onReady) onReady();
   }

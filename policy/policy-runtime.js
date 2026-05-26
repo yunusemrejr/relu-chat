@@ -49,6 +49,97 @@ let mlpInstance = null;
 /** @type {Promise<object>|null} */
 let loadPromise = null;
 
+// ---------------------------------------------------------------------------
+// IndexedDB WASM module cache
+// ---------------------------------------------------------------------------
+
+const DB_NAME = 'relu-chat-models';
+const DB_VERSION = 1;
+const WASM_STORE = 'wasm-modules';
+
+/**
+ * Open the IndexedDB database.
+ * @returns {Promise<IDBDatabase>}
+ */
+async function _openDB() {
+  return new Promise((resolve, reject) => {
+    try {
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(WASM_STORE)) {
+          db.createObjectStore(WASM_STORE, { keyPath: 'url' });
+        }
+      };
+      req.onsuccess = (e) => resolve(e.target.result);
+      req.onerror = (e) => reject(e.target.error);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+/**
+ * Retrieve a cached WebAssembly.Module from IndexedDB.
+ * @param {string} url - WASM file URL
+ * @returns {Promise<WebAssembly.Module|null>}
+ */
+async function _getCachedWasmModule(url) {
+  try {
+    const db = await _openDB();
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(WASM_STORE, 'readonly');
+        const store = tx.objectStore(WASM_STORE);
+        const req = store.get(url);
+        req.onsuccess = (e) => {
+          const entry = e.target.result;
+          if (entry && entry.module instanceof WebAssembly.Module) {
+            resolve(entry.module);
+          } else {
+            resolve(null);
+          }
+        };
+        req.onerror = () => resolve(null);
+      } catch (e) {
+        resolve(null);
+      }
+    });
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Cache a compiled WebAssembly.Module in IndexedDB.
+ * @param {string} url  - WASM file URL
+ * @param {WebAssembly.Module} module
+ * @param {string} [hash] - optional integrity hash for verification
+ * @returns {Promise<void>}
+ */
+async function _cacheWasmModule(url, module, hash) {
+  try {
+    const db = await _openDB();
+    return new Promise((resolve, reject) => {
+      try {
+        const tx = db.transaction(WASM_STORE, 'readwrite');
+        const store = tx.objectStore(WASM_STORE);
+        store.put({ url, module, hash: hash || null, cachedAt: Date.now() });
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  } catch (e) {
+    // IDB caching is optional — silently skip on failure
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
+
 export function isPolicyLoaded() { return ready; }
 
 export function getPolicyStatus() {
@@ -77,6 +168,7 @@ export function getPolicyStatus() {
  * @param {string} [config.manifestPath]  - URL to policy.manifest.json (default: /assets/models/policy/policy.manifest.json)
  * @param {object} [config.botProfile]    - bot profile object (id, allowedIntents, tone, etc.)
  * @param {number} [config.timeoutMs]     - max wait time in ms (default: 4000)
+ * @param {function} [config.onProgress]  - progress callback (stage: string) => void
  * @returns {Promise<{ ready: boolean, planAnswer: Function, manifest: object|null, error: string|null }>}
  */
 export async function loadPolicyRuntime(config = {}) {
@@ -98,15 +190,41 @@ async function _doLoad(config) {
     botProfile   = null,
     timeoutMs    = 4000,
     mlpWeightsPath = config.mlpWeightsPath || weightsPath.replace(/\.bin$/i, '.json'),
+    onProgress   = null,
   } = config;
 
-  // ---- Step 1: Load and validate manifest (required) ----
+  const report = (stage) => { if (typeof onProgress === 'function') onProgress(stage); };
+
+  // ---- Step 1: Start all fetches in parallel ----
+  // Fetch manifest, WASM, weights, and MLP weights simultaneously.
+  // Manifest is needed first for validation and hash verification,
+  // but the actual downloads can overlap.
+  report('manifest');
+
+  const manifestPromise = fetchWithTimeout(manifestPath, timeoutMs).then(r => {
+    if (!r.ok) throw new Error(`manifest HTTP ${r.status}`);
+    return r.json();
+  });
+
+  // WASM and weights fetches start in parallel but their results are
+  // consumed after manifest validation.
+  const wasmResponsePromise = fetchWithTimeout(wasmPath, timeoutMs);
+  const weightsResponsePromise = fetchWithTimeout(weightsPath, timeoutMs);
+
+  // MLP weights fetch (small JSON) — no timeout needed.
+  const mlpFetchPromise = fetch(mlpWeightsPath).then(r => {
+    if (!r.ok) throw new Error(`MLP weights HTTP ${r.status}`);
+    return r.json();
+  }).catch(err => {
+    // MLP fetch failure is non-fatal — will skip to heuristic
+    console.warn('[policy-runtime] MLP weights fetch failed:', err.message);
+    return null;
+  });
+
+  // ---- Step 2: Load and validate manifest (required) ----
   let manifest;
   try {
-    manifest = await fetchWithTimeout(manifestPath, timeoutMs).then(r => {
-      if (!r.ok) throw new Error(`manifest HTTP ${r.status}`);
-      return r.json();
-    });
+    manifest = await manifestPromise;
   } catch (err) {
     console.error('[policy-runtime] CRITICAL: Manifest load failed:', err.message);
     return _rejectResult(`Policy manifest load failed: ${err.message}. Please reload and clear browser cache.`);
@@ -119,21 +237,147 @@ async function _doLoad(config) {
   }
   cachedManifest = manifest;
 
-  // ---- Step 2: Try WASM (non-fatal — controlled degradation) ----
+  // ---- Step 3: Try WASM (non-fatal — controlled degradation) ----
   let wasmOk = false;
-  if (typeof WebAssembly !== 'undefined') {
+  const wasmLoadPromise = (async () => {
+    if (typeof WebAssembly === 'undefined') {
+      console.warn('[policy-runtime] WebAssembly not available — skipping WASM');
+      return false;
+    }
     try {
-      const instance = await _instantiateWasm(wasmPath, timeoutMs, manifest);
-      wasmInstance = instance;
-      await _loadWeights(instance, weightsPath, timeoutMs, manifest);
+      report('wasm');
 
-      // Call _initialize
-      if (typeof instance.exports._initialize === 'function') {
+      // Check IndexedDB cache for pre-compiled module
+      let module = null;
+      try {
+        module = await _getCachedWasmModule(wasmPath);
+      } catch (e) { /* IDB unavailable */ }
+
+      const importObject = _createImportObject();
+
+      if (module) {
+        // Fast path: instantiate from cached module (no fetch/compile)
+        report('wasm-cache-hit');
+        const result = await WebAssembly.instantiate(module, importObject);
+        wasmInstance = result.instance;
+      } else {
+        // Normal path: fetch, verify hash, compile, instantiate
+        report('wasm-fetch');
+        const response = await wasmResponsePromise;
+        if (!response.ok) throw new Error(`WASM fetch failed: HTTP ${response.status}`);
+
+        // Verify WASM integrity against manifest hash before compiling
+        if (manifest.wasmHash) {
+          report('wasm-verify');
+          const wasmBuffer = await response.clone().arrayBuffer();
+          const hashParts = manifest.wasmHash.split('-');
+          const expectedHash = hashParts[1];
+          if (hashParts[0] === 'sha256' && expectedHash) {
+            const actualHash = await _sha256Hex(wasmBuffer);
+            if (actualHash !== expectedHash) {
+              throw new Error(`WASM integrity mismatch: expected ${expectedHash.substring(0, 12)}..., got ${actualHash.substring(0, 12)}...`);
+            }
+            console.debug('[policy-runtime] WASM integrity verified');
+          }
+
+          report('wasm-compile');
+          // Compile from buffer (already fetched for hash verification)
+          const compiledModule = await WebAssembly.compile(wasmBuffer);
+          const result = await WebAssembly.instantiate(compiledModule, importObject);
+          wasmInstance = result.instance;
+
+          // Cache the compiled module for faster subsequent loads (fire-and-forget)
+          _cacheWasmModule(wasmPath, compiledModule, manifest.wasmHash).catch(() => {});
+        } else {
+          // No hash to verify — try streaming instantiation
+          report('wasm-stream');
+
+          // Check content type
+          const contentType = response.headers.get('content-type') || '';
+          if (!contentType.includes('wasm') && !contentType.includes('octet-stream')) {
+            console.warn(
+              `[policy-runtime] unexpected Content-Type "${contentType}" for ${wasmPath} ` +
+              `– attempting instantiation anyway`
+            );
+          }
+
+          try {
+            const result = await WebAssembly.instantiateStreaming(response, importObject);
+            wasmInstance = result.instance;
+            // Cache compiled module (fire-and-forget)
+            if (result.module) {
+              _cacheWasmModule(wasmPath, result.module, null).catch(() => {});
+            }
+          } catch (streamingErr) {
+            console.debug('[policy-runtime] instantiateStreaming failed, trying buffered instantiation:', streamingErr.message);
+            const buffer = await response.arrayBuffer();
+            const result = await WebAssembly.instantiate(buffer, importObject);
+            wasmInstance = result.instance;
+            if (result.module) {
+              _cacheWasmModule(wasmPath, result.module, null).catch(() => {});
+            }
+          }
+        }
+      }
+
+      // Store memory reference
+      if (wasmInstance.exports.memory) {
+        wasmMemory = wasmInstance.exports.memory.buffer;
+      } else if (importObject.env.memory) {
+        wasmMemory = importObject.env.memory.buffer;
+      }
+
+      // ---- Load weights ----
+      report('weights');
+      const weightsResponse = await weightsResponsePromise;
+      if (!weightsResponse.ok) throw new Error(`weights fetch failed: HTTP ${weightsResponse.status}`);
+
+      const weightsBuffer = await weightsResponse.arrayBuffer();
+      const expectedSize = manifest.weightsSize || weightsBuffer.byteLength;
+
+      // Verify weights integrity against manifest hash
+      if (manifest.weightsHash) {
+        const actualHash = await _sha256Hex(weightsBuffer);
+        const expectedHash = manifest.weightsHash;
+        if (actualHash !== expectedHash) {
+          throw new Error(`weights integrity mismatch: expected ${expectedHash.substring(0, 12)}..., got ${actualHash.substring(0, 12)}...`);
+        }
+        console.debug('[policy-runtime] weights integrity verified');
+      }
+
+      // Verify size matches manifest (fatal if smaller)
+      if (weightsBuffer.byteLength < expectedSize) {
+        throw new Error(
+          `weights size mismatch: got ${weightsBuffer.byteLength}, ` +
+          `expected >= ${expectedSize}`
+        );
+      }
+
+      // Get the destination pointer from WASM
+      let destPtr = 0;
+      if (typeof wasmInstance.exports._getWeightsPtr === 'function') {
+        destPtr = wasmInstance.exports._getWeightsPtr();
+      }
+      if (destPtr === 0 && typeof wasmInstance.exports.__heap_base !== 'undefined') {
+        destPtr = wasmInstance.exports.__heap_base.value || 0;
+      }
+
+      // Copy weights into WASM linear memory
+      const mem = (wasmInstance.exports.memory && wasmInstance.exports.memory.buffer) || wasmMemory;
+      if (!mem) throw new Error('No WASM memory available for weights');
+
+      const dest = new Uint8Array(mem, destPtr, weightsBuffer.byteLength);
+      dest.set(new Uint8Array(weightsBuffer));
+      console.debug(`[policy-runtime] Loaded ${weightsBuffer.byteLength} bytes of weights at offset ${destPtr}`);
+
+      // ---- Call _initialize ----
+      report('init');
+      if (typeof wasmInstance.exports._initialize === 'function') {
         const botProfileJson = botProfile ? JSON.stringify(botProfile) : '{}';
-        const { ptr, len } = _allocString(instance, botProfileJson);
+        const { ptr, len } = _allocString(wasmInstance, botProfileJson);
         const manifestJson = JSON.stringify(manifest);
-        const { ptr: mptr, len: mlen } = _allocString(instance, manifestJson);
-        const result = instance.exports._initialize(ptr, len, mptr, mlen);
+        const { ptr: mptr, len: mlen } = _allocString(wasmInstance, manifestJson);
+        const result = wasmInstance.exports._initialize(ptr, len, mptr, mlen);
         if (result !== 0) {
           console.warn(`[policy-runtime] _initialize returned ${result} – may be degraded`);
         }
@@ -143,30 +387,55 @@ async function _doLoad(config) {
 
       wasmOk = true;
       console.info(`[policy-runtime] WASM policy loaded. Version: ${manifest.version}`);
+      return true;
     } catch (err) {
       console.warn('[policy-runtime] WASM failed, will try MLP:', err.message);
       wasmInstance = null;
+      return false;
     }
-  } else {
-    console.warn('[policy-runtime] WebAssembly not available — skipping WASM');
+  })();
+
+  // ---- Step 4: Try MLP (parallel with WASM) ----
+  report('mlp');
+
+  const mlpLoadPromise = (async () => {
+    try {
+      const mlpWeights = await mlpFetchPromise;
+      if (!mlpWeights) throw new Error('MLP weights not available');
+      const weights = mlpWeights.weights || mlpWeights;
+      mlpInstance = new MLPPolicy(weights);
+      console.info(`[policy-runtime] MLP policy loaded (v${mlpInstance._version})`);
+      return true;
+    } catch (err) {
+      console.warn('[policy-runtime] MLP failed:', err.message);
+      mlpInstance = null;
+      return false;
+    }
+  })();
+
+  // ---- Step 5: Lazy initialization — don't block readiness on WASM if MLP is available ----
+  // MLP is the primary engine (checked first in planAnswer) and loads fast
+  // (just a JSON fetch). Return ready as soon as MLP succeeds; WASM continues
+  // loading in background and is used as a secondary engine later.
+
+  const mlpResult = await mlpLoadPromise;
+
+  if (mlpResult) {
+    console.info('[policy-runtime] MLP ready — returning early, WASM loading in background');
+    // Fire-and-forget WASM completion (logs internally)
+    wasmLoadPromise.then(wasmOk => {
+      if (wasmOk) console.info('[policy-runtime] WASM also loaded (background)');
+    }).catch(() => {});
+    return _succeedResult();
   }
 
-  // ---- Step 3: Try MLP (non-fatal) ----
-  try {
-    mlpInstance = await MLPPolicy.load(mlpWeightsPath);
-    console.info(`[policy-runtime] MLP policy loaded (v${mlpInstance._version})`);
-  } catch (err) {
-    console.warn('[policy-runtime] MLP failed:', err.message);
-    mlpInstance = null;
-  }
+  // ---- MLP failed — wait for WASM ----
+  wasmOk = await wasmLoadPromise;
 
-  // ---- Step 4: Determine readiness ----
   if (!wasmOk && !mlpInstance) {
     console.warn('[policy-runtime] Neither WASM nor MLP available — using heuristic fallback');
-    // Still set ready=true; planAnswer will use planAnswerHeuristic
   }
 
-  // ---- Success (even if only heuristic is available) ----
   console.info(
     `[policy-runtime] Policy runtime ready. ` +
     `Engine: ${mlpInstance ? 'mlp' : (wasmOk ? 'wasm' : 'heuristic')}. ` +
@@ -545,26 +814,14 @@ export function planAnswerHeuristic(features, KB, config, overrides) {
 // ---------------------------------------------------------------------------
 
 /**
- * Instantiate the WASM module.
- *
- * IMPORTANT: policy.wasm is generated by the training pipeline in
- * /dev/scripts/train-policy.py.  If it does not exist or fails to
- * instantiate, loadPolicyRuntime falls back to planAnswerHeuristic
- * silently.  See the architecture document (§5) for the full loading flow.
- *
- * @param {string} wasmPath
- * @param {number} timeoutMs
- * @param {object} manifest
- * @returns {Promise<WebAssembly.Instance>}
+ * Create the WASM import object.
+ * Shared between cached and non-cached instantiation paths.
+ * @returns {object} importObject for WebAssembly.instantiate
  */
-async function _instantiateWasm(wasmPath, timeoutMs, manifest) {
-  // The import object provides only controlled, audited functions
-  // per the security model in wasm-policy-architecture.json §8.
-  const importObject = {
+function _createImportObject() {
+  return {
     env: {
-      // Linear memory — shared between JS and WASM
       memory: new WebAssembly.Memory({ initial: 16, maximum: 64 }),
-      // Safe logging (no DOM, no network)
       log: (ptr, len) => {
         if (wasmMemory) {
           const bytes = new Uint8Array(wasmMemory, ptr, len);
@@ -572,135 +829,15 @@ async function _instantiateWasm(wasmPath, timeoutMs, manifest) {
           console.debug('[policy-wasm]', msg);
         }
       },
-      // Feature buffer reader: copies bytes from JS buffer into WASM memory
       readFeatureBuffer: (destPtr, srcPtr) => {
         // Implemented as a no-op in the stub; real WASM module manages this
         // via its own _planAnswer export that takes a Float32Array view.
       },
-      // Required by emscripten-style builds (abort on unrecoverable error)
       abort: () => {
         console.error('[policy-wasm] abort() called – unrecoverable error');
       },
     },
   };
-
-  let instance;
-  const response = await fetchWithTimeout(wasmPath, timeoutMs);
-
-  if (!response.ok) {
-    throw new Error(`WASM fetch failed: HTTP ${response.status}`);
-  }
-
-  // Verify WASM integrity against manifest hash
-  if (manifest.wasmHash) {
-    const hashParts = manifest.wasmHash.split('-');
-    const expectedHash = hashParts[1];
-    if (hashParts[0] === 'sha256' && expectedHash) {
-      const responseClone = response.clone();
-      const wasmBuffer = await responseClone.arrayBuffer();
-      const actualHash = await _sha256Hex(wasmBuffer);
-      if (actualHash !== expectedHash) {
-        throw new Error(`WASM integrity mismatch: expected ${expectedHash.substring(0, 12)}..., got ${actualHash.substring(0, 12)}...`);
-      }
-      console.debug('[policy-runtime] WASM integrity verified');
-      // Re-instantiate from the buffered data
-      const result = await WebAssembly.instantiate(wasmBuffer, importObject);
-      instance = result.instance;
-      // Store memory reference so _allocString / _loadWeights work before the return
-      if (instance.exports.memory) {
-        wasmMemory = instance.exports.memory.buffer;
-      } else if (importObject.env.memory) {
-        wasmMemory = importObject.env.memory.buffer;
-      }
-      return instance;
-    }
-  }
-
-  // Check content type — if server returns HTML/404 page, it's not a WASM file
-  const contentType = response.headers.get('content-type') || '';
-  if (!contentType.includes('wasm') && !contentType.includes('octet-stream')) {
-    // Try instantiateStreaming anyway; it will fail gracefully if not valid WASM
-    console.warn(
-      `[policy-runtime] unexpected Content-Type "${contentType}" for ${wasmPath} ` +
-      `– attempting instantiation anyway`
-    );
-  }
-
-  try {
-    const result = await WebAssembly.instantiateStreaming(response, importObject);
-    instance = result.instance;
-  } catch (streamingErr) {
-    // Fallback: buffer the response and instantiate synchronously
-    console.debug('[policy-runtime] instantiateStreaming failed, trying buffered instantiation:', streamingErr.message);
-    const buffer = await response.arrayBuffer();
-    const result = await WebAssembly.instantiate(buffer, importObject);
-    instance = result.instance;
-  }
-
-  // Store memory reference for string allocation
-  if (instance.exports.memory) {
-    wasmMemory = instance.exports.memory.buffer;
-  } else if (importObject.env.memory) {
-    wasmMemory = importObject.env.memory.buffer;
-  }
-
-  return instance;
-}
-
-/**
- * Load weights from policy.weights.bin into WASM linear memory.
- *
- * @param {WebAssembly.Instance} instance
- * @param {string} weightsPath
- * @param {number} timeoutMs
- * @param {object} manifest
- */
-async function _loadWeights(instance, weightsPath, timeoutMs, manifest) {
-  const response = await fetchWithTimeout(weightsPath, timeoutMs);
-  if (!response.ok) throw new Error(`weights fetch failed: HTTP ${response.status}`);
-
-  const weightsBuffer = await response.arrayBuffer();
-  const expectedSize = manifest.weightsSize || weightsBuffer.byteLength;
-
-  // Verify weights integrity against manifest hash
-  if (manifest.weightsHash) {
-    const hashParts = manifest.weightsHash.split('-');
-    const expectedHash = hashParts[1];
-    if (hashParts[0] === 'sha256' && expectedHash) {
-      const actualHash = await _sha256Hex(weightsBuffer);
-      if (actualHash !== expectedHash) {
-        throw new Error(`weights integrity mismatch: expected ${expectedHash.substring(0, 12)}..., got ${actualHash.substring(0, 12)}...`);
-      }
-      console.debug('[policy-runtime] weights integrity verified');
-    }
-  }
-
-  // Verify size matches manifest (fatal if smaller)
-  if (weightsBuffer.byteLength < expectedSize) {
-    throw new Error(
-      `weights size mismatch: got ${weightsBuffer.byteLength}, ` +
-      `expected >= ${expectedSize}`
-    );
-  }
-
-  // Get the destination pointer from WASM
-  let destPtr = 0;
-  if (typeof instance.exports._getWeightsPtr === 'function') {
-    destPtr = instance.exports._getWeightsPtr();
-  }
-  // Some builds use a fixed offset in memory
-  if (destPtr === 0 && typeof instance.exports.__heap_base !== 'undefined') {
-    destPtr = instance.exports.__heap_base.value || 0;
-  }
-
-  // Copy weights into WASM linear memory
-  const mem = (instance.exports.memory && instance.exports.memory.buffer) || wasmMemory;
-  if (!mem) throw new Error('No WASM memory available for weights');
-
-  const dest = new Uint8Array(mem, destPtr, weightsBuffer.byteLength);
-  dest.set(new Uint8Array(weightsBuffer));
-
-  console.debug(`[policy-runtime] Loaded ${weightsBuffer.byteLength} bytes of weights at offset ${destPtr}`);
 }
 
 /**

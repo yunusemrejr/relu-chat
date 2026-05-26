@@ -234,7 +234,7 @@ function clamp01(v) {
  *  15:  hasExampleCue    bool→f32 {0,1}
  *  16:  botCreativity    f32  [0,1]
  *  17:  domainMatch      f32  [0,1]
- *  18:  followUpType     u8→f32 [0,7]
+ *  18:  followUpType     u8→f32 [0,19]
  *  19:  wasAmbiguous     bool→f32 {0,1}
  *  20:  avgTruthConf     f32  [0,1]
  *  21:  avgSourceConf    f32  [0,1]
@@ -746,6 +746,72 @@ export class MLPPolicy {
           } else {
             decisionPath.push('followup:ref-index-no-target');
           }
+          break;
+
+        // --- New follow-up type overrides (8+) ---
+
+        case 8: // continue — user wants more content
+          decisionPath.push('followup:override-continue');
+          break;
+
+        case 9:  // how
+        case 10: // why
+          // Causal/explanatory — may need more formal depth
+          tone = tone === 'neutral' ? 'formal' : tone;
+          fragsPerTopic = Math.min(fragsPerTopic + 1, 4);
+          decisionPath.push(`followup:override-explanatory`);
+          break;
+
+        case 11: // challenge — user skeptical
+          intent = 'formal';
+          creativity = Math.min(creativity, 0.25);
+          decisionPath.push('followup:override-challenge');
+          break;
+
+        case 12: // acknowledge — user confirmed understanding; continue naturally
+          decisionPath.push('followup:override-acknowledge');
+          break;
+
+        case 13: // clarify — user didn't understand
+          fragsPerTopic = 1;
+          topicCount = Math.min(topicCount, 2);
+          tone = 'intuitive';
+          creativity = Math.min(creativity, 0.2);
+          decisionPath.push('followup:override-clarify');
+          break;
+
+        case 14: // deep_dive — user wants thorough treatment
+          fragsPerTopic = Math.min(fragsPerTopic + 1, 4);
+          tone = tone === 'neutral' ? 'formal' : tone;
+          decisionPath.push('followup:override-deep-dive');
+          break;
+
+        case 15: // relevance — "so what?"
+          intent = 'application';
+          decisionPath.push('followup:override-relevance');
+          break;
+
+        case 16: // evidence — "prove it"
+          intent = 'formal';
+          creativity = Math.min(creativity, 0.2);
+          decisionPath.push('followup:override-evidence');
+          break;
+
+        case 17: // comparison
+          intent = 'comparison';
+          topicCount = Math.max(topicCount, 2);
+          decisionPath.push('followup:override-comparison');
+          break;
+
+        case 18: // summarize
+          fragsPerTopic = 1;
+          tone = tone === 'formal' ? 'neutral' : tone;
+          creativity = Math.min(creativity, 0.3);
+          decisionPath.push('followup:override-summarize');
+          break;
+
+        case 19: // affirm_continue — user said "yes" / "go ahead"
+          decisionPath.push('followup:override-affirm-continue');
           break;
       }
     }

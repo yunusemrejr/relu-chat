@@ -1,3 +1,8 @@
+// ── Edge-case safeguard constants ──────────────────────────────────────────
+const MAX_COSINE_DIM = 4096;
+const MAX_TOKEN_LENGTH = 5000;
+const MAX_VOCAB_SIZE = 50000;
+
 const DEFAULT_OPENERS = ["", "In short, ", "Here's the idea: ", "Let's unpack it. ", "Great question — ", "Consider this: "];
 
 const DEFAULT_CONNECTORS = {
@@ -33,81 +38,183 @@ const DEFAULT_INTENTS = {
   help: { prototypes: ["help", "what can you do", "how do i use this", "what topics do you know", "menu", "what can you help with", "list topics", "what do you know"], order: null }
 };
 
-export function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+export function pick(a) {
+  if (!Array.isArray(a) || a.length === 0) return '';
+  return a[Math.floor(Math.random() * a.length)];
+}
 
-export function cosine(a, b) { let s = 0, na = 0, nb = 0; for (let i = 0; i < a.length; i++) { s += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i]; } return s / (Math.sqrt(na) * Math.sqrt(nb) + 1e-9); }
+export function cosine(a, b) {
+  if (!Array.isArray(a) || !Array.isArray(b)) return 0;
+  if (a.length === 0 || b.length === 0) return 0;
+  if (a.length !== b.length) {
+    console.warn(`[nlp] cosine dimension mismatch: ${a.length} vs ${b.length}, clamping`);
+    return 0;
+  }
+  const len = Math.min(a.length, b.length, MAX_COSINE_DIM);
+  let s = 0, na = 0, nb = 0;
+  for (let i = 0; i < len; i++) {
+    const ai = Number.isFinite(a[i]) ? a[i] : 0;
+    const bi = Number.isFinite(b[i]) ? b[i] : 0;
+    s += ai * bi;
+    na += ai * ai;
+    nb += bi * bi;
+  }
+  const denom = Math.sqrt(na) * Math.sqrt(nb) + 1e-9;
+  return s / denom;
+}
 
-export function softmax(arr, t = 1) { const m = Math.max(...arr); const e = arr.map(x => Math.exp((x - m) / t)); const s = e.reduce((a, b) => a + b, 0); return e.map(x => x / s); }
+export function softmax(arr, t = 1) {
+  if (!Array.isArray(arr) || arr.length === 0) return [];
+  if (t <= 0) t = 1e-9;
+  const filtered = arr.map(x => Number.isFinite(x) ? x : 0);
+  const m = Math.max(...filtered);
+  const e = filtered.map(x => Math.exp((x - m) / t));
+  const s = e.reduce((a, b) => a + b, 0);
+  return s > 0 ? e.map(x => x / s) : filtered.map(() => 1 / filtered.length);
+}
 
-export function weightedChoice(items, w) { let total = w.reduce((a, b) => a + b, 0), r = Math.random() * total; for (let i = 0; i < items.length; i++) { r -= w[i]; if (r <= 0) return items[i]; } return items[items.length - 1]; }
+export function weightedChoice(items, w) {
+  if (!Array.isArray(items) || items.length === 0) return null;
+  if (!Array.isArray(w) || w.length === 0) return items[0];
+  const validW = w.map(x => Number.isFinite(x) && x >= 0 ? x : 0);
+  let total = validW.reduce((a, b) => a + b, 0);
+  if (total <= 0) return items[Math.floor(Math.random() * items.length)];
+  let r = Math.random() * total;
+  for (let i = 0; i < items.length; i++) {
+    r -= validW[i];
+    if (r <= 0) return items[i];
+  }
+  return items[items.length - 1];
+}
 
 const STOP = new Set("a an the of in on at for to with and or is are was were be been being what which who whom whose this that these those i you he she it we they them us my your his her its our their me do does did can could should would will might may has have had".split(' '));
 
-export function tokens(t) { return t.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(w => w && !STOP.has(w)); }
+export function tokens(t) {
+  if (!t || typeof t !== 'string') return [];
+  const str = t.slice(0, MAX_TOKEN_LENGTH);
+  return str.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w && w.length > 0 && !STOP.has(w));
+}
 
 function normalizeAlias(a) {
+  if (!a || typeof a !== 'string') return '';
   return a.toLowerCase()
     .replace(/[’']/g, "'")
     .replace(/\s+-\s+/g, '-')
     .trim();
 }
 
-export function bowVec(t, vocab) { const v = new Array(vocab.size).fill(0); for (const tk of tokens(t)) if (vocab.has(tk)) v[vocab.get(tk)] += 1; const n = Math.sqrt(v.reduce((a, b) => a + b * b, 0)) + 1e-9; return v.map(x => x / n); }
+export function bowVec(t, vocab) {
+  if (!t || typeof t !== 'string' || !vocab || vocab.size === 0) {
+    const empty = new Array(vocab ? Math.min(vocab.size, MAX_VOCAB_SIZE) : 0).fill(0);
+    return empty;
+  }
+  const size = Math.min(vocab.size, MAX_VOCAB_SIZE);
+  const v = new Array(size).fill(0);
+  for (const tk of tokens(t)) {
+    if (vocab.has(tk)) {
+      const idx = vocab.get(tk);
+      if (idx >= 0 && idx < size) v[idx] += 1;
+    }
+  }
+  const norm = Math.sqrt(v.reduce((a, b) => a + b * b, 0)) + 1e-9;
+  return v.map(x => x / norm);
+}
 
 export function compileAliasRegex(KB) {
+  if (!Array.isArray(KB)) return;
   for (const e of KB) {
+    if (!e || typeof e !== 'object') continue;
     e.aliasRegex = [];
     e.aliasPartialRegex = [];
-    for (const a of e.aliases) {
+    const aliases = Array.isArray(e.aliases) ? e.aliases : [];
+    for (const a of aliases) {
+      if (!a || typeof a !== 'string') continue;
       const na = normalizeAlias(a);
+      if (!na) continue;
       const escaped = na.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const escapedPartial = escaped.replace(/\\?\s+/g, '\\s*');
-      e.aliasRegex.push(new RegExp('(?:^|\\s|\\b)' + escaped + '(?:\\s|\\b|$)', 'i'));
-      e.aliasPartialRegex.push(new RegExp('(?:^|\\s)' + escapedPartial + '(?:\\s|$)', 'i'));
+      try {
+        e.aliasRegex.push(new RegExp('(?:^|\\s|\\b)' + escaped + '(?:\\s|\\b|$)', 'i'));
+        e.aliasPartialRegex.push(new RegExp('(?:^|\\s)' + escapedPartial + '(?:\\s|$)', 'i'));
+      } catch (err) {
+        console.warn(`[nlp] Invalid alias regex for "${na}":`, err.message);
+      }
     }
   }
 }
 
 export function extractEntities(query, KB) {
+  if (!query || typeof query !== 'string' || !Array.isArray(KB) || KB.length === 0) return [];
   const q = ' ' + query.toLowerCase() + ' ';
   const found = [], seen = new Set();
   for (let i = 0; i < KB.length; i++) {
-    for (let j = 0; j < KB[i].aliasRegex.length; j++) {
-      if (KB[i].aliasRegex[j].test(q) && !seen.has(KB[i].id)) {
-        found.push(i);
-        seen.add(KB[i].id);
-        break;
-      }
+    const entry = KB[i];
+    if (!entry || typeof entry !== 'object') continue;
+    const id = entry.id;
+    if (seen.has(id)) continue;
+    const aliasRegex = Array.isArray(entry.aliasRegex) ? entry.aliasRegex : [];
+    const aliasPartialRegex = Array.isArray(entry.aliasPartialRegex) ? entry.aliasPartialRegex : [];
+    for (let j = 0; j < aliasRegex.length; j++) {
+      try {
+        if (aliasRegex[j] && aliasRegex[j].test(q)) {
+          found.push(i);
+          seen.add(id);
+          break;
+        }
+      } catch (e) { /* skip bad regex */ }
     }
-    if (seen.has(KB[i].id)) continue;
-    for (let j = 0; j < KB[i].aliasPartialRegex.length; j++) {
-      if (KB[i].aliasPartialRegex[j].test(q) && !seen.has(KB[i].id)) {
-        found.push(i);
-        seen.add(KB[i].id);
-        break;
-      }
+    if (seen.has(id)) continue;
+    for (let j = 0; j < aliasPartialRegex.length; j++) {
+      try {
+        if (aliasPartialRegex[j] && aliasPartialRegex[j].test(q)) {
+          found.push(i);
+          seen.add(id);
+          break;
+        }
+      } catch (e) { /* skip bad regex */ }
     }
   }
   return found;
 }
 
 export function rankEntries(qEmb, entryEmb) {
-  return entryEmb.map((e, i) => ({ i, s: cosine(qEmb, e) })).sort((a, b) => b.s - a.s);
+  if (!Array.isArray(qEmb) || !Array.isArray(entryEmb) || entryEmb.length === 0) return [];
+  return entryEmb
+    .map((e, i) => {
+      if (!Array.isArray(e)) return { i, s: 0 };
+      return { i, s: cosine(qEmb, e) };
+    })
+    .sort((a, b) => b.s - a.s);
 }
 
 export async function classifyIntent(qEmb, intentEmb, intents, thresholds) {
-  if (!intents || !intentEmb) return { intent: 'definition', scores: {}, rawScores: {} };
+  if (!Array.isArray(qEmb) || qEmb.length === 0 || !intents || !intentEmb) {
+    return { intent: 'definition', scores: {}, rawScores: {} };
+  }
   const scores = {}, rawMax = {};
   for (const k of Object.keys(intents)) {
-    if (!intentEmb[k] || intentEmb[k].length === 0) continue;
+    const protos = intentEmb[k];
+    if (!Array.isArray(protos) || protos.length === 0) continue;
     let max = -1;
-    for (const pe of intentEmb[k]) { const s = cosine(qEmb, pe); if (s > max) max = s; }
-    rawMax[k] = max;
-    const countNorm = Math.log(intentEmb[k].length + 1);
-    scores[k] = max * countNorm;
+    for (const pe of protos) {
+      if (!Array.isArray(pe)) continue;
+      const s = cosine(qEmb, pe);
+      if (Number.isFinite(s) && s > max) max = s;
+    }
+    rawMax[k] = max > -1 ? max : 0;
+    const countNorm = Math.log(protos.length + 1);
+    scores[k] = rawMax[k] * countNorm;
   }
   let best = 'definition', bs = -1;
-  for (const k in scores) if (scores[k] > bs) { bs = scores[k]; best = k; }
+  for (const k in scores) {
+    if (Number.isFinite(scores[k]) && scores[k] > bs) {
+      bs = scores[k];
+      best = k;
+    }
+  }
   const confThresholds = thresholds?.CONFIDENCE || {};
   if (confThresholds[best] !== undefined && rawMax[best] < confThresholds[best]) {
     best = 'definition';
@@ -116,13 +223,24 @@ export async function classifyIntent(qEmb, intentEmb, intents, thresholds) {
 }
 
 export async function selectFragment(entry, cat, qEmb, embedCached, config) {
-  const frags = entry.f[cat];
-  if (!frags || frags.length === 0) return null;
+  if (!entry || !cat || !Array.isArray(qEmb) || typeof embedCached !== 'function') return null;
+  const f = entry.f;
+  if (!f || typeof f !== 'object') return null;
+  const frags = f[cat];
+  if (!Array.isArray(frags) || frags.length === 0) return null;
   if (frags.length === 1) return frags[0];
   const scores = [];
   for (const fr of frags) {
-    const v = await embedCached(fr);
-    scores.push(cosine(qEmb, v));
+    try {
+      const v = await embedCached(fr);
+      if (Array.isArray(v) && v.length > 0) {
+        scores.push(cosine(qEmb, v));
+      } else {
+        scores.push(0);
+      }
+    } catch (e) {
+      scores.push(0);
+    }
   }
   const catTemp = (config?.COMPOSITION?.FRAGMENT_TEMP_BY_CAT && config.COMPOSITION.FRAGMENT_TEMP_BY_CAT[cat])
     || config?.COMPOSITION?.FRAGMENT_TEMP || 0.8;
@@ -134,6 +252,12 @@ export async function selectFragment(entry, cat, qEmb, embedCached, config) {
 // compose() — legacy fallback (unchanged behavior when policy unavailable)
 // ============================================================
 export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, config, overrides) {
+  if (!Array.isArray(KB) || KB.length === 0) {
+    return {
+      text: "I don't have any knowledge loaded yet. Please try again later.",
+      meta: [{ text: 'empty-kb', type: 'warn' }]
+    };
+  }
   const OPENERS = overrides?.openers || DEFAULT_OPENERS;
   const CONNECTORS = overrides?.connectors || DEFAULT_CONNECTORS;
   const CLOSERS = overrides?.closers || DEFAULT_CLOSERS;
@@ -188,13 +312,20 @@ export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, las
   let parts = [];
   if (intent === 'comparison' && topEntries.length >= 2) {
     const eA = KB[topEntries[0]], eB = KB[topEntries[1]];
-    const openerKey = Math.random() < 0.33 ? 'similarity' : (Math.random() < 0.5 ? 'contrast' : 'both');
-    const openerText = (COMPARISON_OPENERS[openerKey] || '').replace(/\{A\}/g, eA.name).replace(/\{B\}/g, eB.name);
-    parts.push(openerText);
+    if (eA && eB && eA.name && eB.name) {
+      const openerKey = Math.random() < 0.33 ? 'similarity' : (Math.random() < 0.5 ? 'contrast' : 'both');
+      const openerText = (COMPARISON_OPENERS[openerKey] || '').replace(/\{A\}/g, eA.name).replace(/\{B\}/g, eB.name);
+      parts.push(openerText);
+    }
   }
 
   for (let ei = 0; ei < topEntries.length; ei++) {
     const entry = KB[topEntries[ei]];
+    if (!entry || typeof entry !== 'object') {
+      console.warn(`[compose] KB entry at index ${topEntries[ei]} is invalid, skipping`);
+      continue;
+    }
+    const entryName = entry.name || 'topic';
     const pieces = [];
     const cats = (intent === 'comparison' && topEntries.length >= 2) ? order : (ei === 0 ? order : [order[0]]);
     let prev = null;
@@ -210,24 +341,25 @@ export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, las
       } else if (intent === 'comparison' && topEntries.length >= 2 && ei === 0) {
         connector = "";
       } else if (ei === 0 && intent !== 'comparison') {
-        connector = Math.random() < 0.6 ? `**${entry.name}** — ` : "";
+        connector = Math.random() < 0.6 ? `**${entryName}** — ` : "";
       } else {
-        connector = pick(TRANSITIONS).replace(/\\n/g, '\n') + `**${entry.name}**: `;
+        connector = pick(TRANSITIONS).replace(/\\n/g, '\n') + `**${entryName}**: `;
       }
       pieces.push(connector + frag);
       prev = cat;
     }
-    parts.push(pieces.join(' '));
+    if (pieces.length > 0) parts.push(pieces.join(' '));
   }
 
   let text = (intent !== 'comparison' || topEntries.length < 2 ? pick(OPENERS) : '') + (parts[0] || '');
   for (let i = 1; i < parts.length; i++) text += parts[i];
 
-  const lastEntry = KB[topEntries[topEntries.length - 1]];
-  if (lastEntry.related && lastEntry.related.length > 0) {
+  const lastEntryIdx = topEntries[topEntries.length - 1];
+  const lastEntry = lastEntryIdx !== undefined ? KB[lastEntryIdx] : null;
+  if (lastEntry && lastEntry.related && Array.isArray(lastEntry.related) && lastEntry.related.length > 0) {
     const relNames = lastEntry.related.slice(0, 3).map(rid => {
-      const found = KB.findIndex(e => e.id === rid);
-      return found >= 0 ? KB[found].name : rid;
+      const found = Array.isArray(KB) ? KB.findIndex(e => e && e.id === rid) : -1;
+      return found >= 0 && KB[found] ? KB[found].name : rid;
     }).filter(Boolean);
     if (relNames.length > 0) {
       text += '\n\n' + pick(SEE_ALSO_PREFIXES) + relNames.join(', ') + '.';
@@ -236,7 +368,10 @@ export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, las
   text += pick(CLOSERS);
 
   const meta = [{ text: `intent: ${intent}`, type: 'intent' }];
-  for (const idx of topEntries) meta.push({ text: KB[idx].name, type: '' });
+  for (const idx of topEntries) {
+    const entry = KB[idx];
+    meta.push({ text: entry && entry.name ? entry.name : `entry:${idx}`, type: '' });
+  }
   meta.push({ text: `sim ${(ranked[0]?.s || 0).toFixed(2)}`, type: 'score' });
   if (entities.length > 0) meta.push({ text: `${entities.length} entit${entities.length > 1 ? 'ies' : 'y'}`, type: 'score' });
 
@@ -307,13 +442,20 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
 
   if (plan.mode === 'comparison' && topEntries.length >= 2) {
     const eA = KB[topEntries[0]], eB = KB[topEntries[1]];
-    const openerKey = plan.template?.comparisonOpenerKey || (creativity < 0.33 ? 'similarity' : (creativity < 0.66 ? 'contrast' : 'both'));
-    const openerText = (COMPARISON_OPENERS[openerKey] || '').replace(/\{A\}/g, eA.name).replace(/\{B\}/g, eB.name);
-    parts.push(openerText);
+    if (eA && eB && eA.name && eB.name) {
+      const openerKey = plan.template?.comparisonOpenerKey || (creativity < 0.33 ? 'similarity' : (creativity < 0.66 ? 'contrast' : 'both'));
+      const openerText = (COMPARISON_OPENERS[openerKey] || '').replace(/\{A\}/g, eA.name).replace(/\{B\}/g, eB.name);
+      parts.push(openerText);
+    }
   }
 
   for (let ei = 0; ei < topEntries.length; ei++) {
     const entry = KB[topEntries[ei]];
+    if (!entry || typeof entry !== 'object') {
+      console.warn(`[composeV2] KB entry at index ${topEntries[ei]} is invalid, skipping`);
+      continue;
+    }
+    const entryName = entry.name || 'topic';
     const pieces = [];
     const cats = (plan.fragmentPlan && plan.fragmentPlan[ei] && plan.fragmentPlan[ei].cats)
       ? plan.fragmentPlan[ei].cats
@@ -338,9 +480,9 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
       } else if (plan.mode === 'comparison' && topEntries.length >= 2 && ei === 0) {
         connector = "";
       } else if (ei === 0 && plan.mode !== 'comparison') {
-        connector = Math.random() < (0.5 + creativity * 0.2) ? `**${entry.name}** — ` : "";
+        connector = Math.random() < (0.5 + creativity * 0.2) ? `**${entryName}** — ` : "";
       } else {
-        connector = pick(TRANSITIONS).replace(/\\n/g, '\n') + `**${entry.name}**: `;
+        connector = pick(TRANSITIONS).replace(/\\n/g, '\n') + `**${entryName}**: `;
       }
       pieces.push(connector + frag);
       prev = cat;
@@ -411,7 +553,10 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   text += closer;
 
   const meta = [{ text: `intent: ${intent}`, type: 'intent' }];
-  for (const idx of topEntries) meta.push({ text: KB[idx].name, type: '' });
+  for (const idx of topEntries) {
+    const entry = KB[idx];
+    meta.push({ text: entry && entry.name ? entry.name : `entry:${idx}`, type: '' });
+  }
   meta.push({ text: `plan:${plan.mode}`, type: 'score' });
   if (selectedFragments.length > 0) {
     meta.fragmentIds = selectedFragments.map(f => (f && f.id) || null).filter(Boolean);

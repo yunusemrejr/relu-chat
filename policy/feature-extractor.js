@@ -26,7 +26,7 @@
  *  15:  hasExampleCue    bool [0,1]   query contains 'example', 'illustrate', 'case'
  *  16:  botCreativity    f32  [0,1]   botProfile.creativityCeiling
  *  17:  domainMatch      f32  [0,1]   max similarity to botProfile.domainPrototypes
- *  18:  followUpType     u8   [0,7]   0=none, 1=simplify, 2=compare_previous, 3=example, 4=elaborate, 5=reference_index, 6=another_example, 7=specific
+ *  18:  followUpType     u8   [0,19]  0=none, 1=simplify, 2=compare_previous, 3=example, 4=elaborate, 5=reference_index, 6=another_example, 7=specific, 8=continue, 9=how, 10=why, 11=challenge, 12=acknowledge, 13=clarify, 14=deep_dive, 15=relevance, 16=evidence, 17=comparison, 18=summarize, 19=affirm_continue
  *  19:  wasAmbiguous     bool [0,1]   previous turn was flagged as ambiguous
  *  20:  avgTruthConf     f32  [0,1]   average truth_confidence of available fragments (0 if unknown)
  *  21:  avgSourceConf    f32  [0,1]   average source_confidence of available fragments (0 if unknown)
@@ -153,9 +153,25 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
   }
 
   // ---- Follow-up type (from session memory) ----
+  // Expanded map covering all nuanced follow-up types from session.js.
+  // Types 1-7 are original (unchanged). Types 8+ are new additions.
   const FOLLOWUP_TYPE_MAP = {
+    // Original types (1-7) — preserved for backward compatibility
     'simplify': 1, 'compare_previous': 2, 'example': 3, 'elaborate': 4,
     'reference_index': 5, 'another_example': 6, 'specific': 7,
+    // New nuanced types (8-20+)
+    'continue': 8,
+    'how': 9,
+    'why': 10,
+    'challenge': 11,
+    'acknowledge': 12,
+    'clarify': 13,
+    'deep_dive': 14,
+    'relevance': 15,
+    'evidence': 16,
+    'comparison': 17,
+    'summarize': 18,
+    'affirm_continue': 19,
   };
   const followUpType = (followUp && followUp.isFollowUp)
     ? (FOLLOWUP_TYPE_MAP[followUp.type] || 0)
@@ -193,6 +209,63 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
       case 'another_example':
         // Re-bias toward example to get another illustrative fragment
         modifiedIntentExScore = Math.max(modifiedIntentExScore, 0.70);
+        break;
+
+      case 'continue':
+        // Continue/get more — boost formal for depth, increase depth appetite
+        modifiedIntentFormScore = Math.max(modifiedIntentFormScore, 0.40);
+        modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.40);
+        break;
+
+      case 'deep_dive':
+        // User wants thorough/detailed treatment — strongly boost all depth intents
+        modifiedIntentFormScore = Math.max(modifiedIntentFormScore, 0.65);
+        modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.55);
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.40);
+        break;
+
+      case 'how':
+      case 'why':
+        // Causal/explanatory follow-up — boost formal for mechanistic explanation
+        modifiedIntentFormScore = Math.max(modifiedIntentFormScore, 0.50);
+        modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.35);
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.30);
+        break;
+
+      case 'clarify':
+        // User didn't understand — simplify and lower creativity
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.55);
+        modifiedBotCreativity = Math.min(modifiedBotCreativity, 0.20);
+        modifiedHasExampleCue = true;
+        break;
+
+      case 'comparison':
+        // User wants comparison — strongly bias comparison intent
+        modifiedIntentCompScore = Math.max(modifiedIntentCompScore, 0.70);
+        break;
+
+      case 'challenge':
+      case 'evidence':
+        // User wants proof/evidence — boost formal + definition
+        modifiedIntentFormScore = Math.max(modifiedIntentFormScore, 0.65);
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.50);
+        break;
+
+      case 'summarize':
+        // User wants brief — lower creativity, bias definition
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.45);
+        modifiedBotCreativity = Math.min(modifiedBotCreativity, 0.20);
+        break;
+
+      case 'relevance':
+        // User asks "so what" — boost application to show practical relevance
+        modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.60);
+        break;
+
+      case 'acknowledge':
+      case 'affirm_continue':
+        // User confirms understanding — slightly boost continuity (default behavior)
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.25);
         break;
 
       // reference_index — handled downstream in mlp-inference.js via targetIndex
@@ -310,7 +383,7 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
  *                                bit 4: wasAmbiguous)
  *   [2] = lastTopicAge         (u8, 0-8)
  *   [3] = queryLenTokens       (u8, 1-32)
- *   [4] = followUpType         (u8, 0-7)
+ *   [4] = followUpType         (u8, 0-19)
  *   [5] = minDifficulty        (u8, 0-4)
  *   [6] = fragDiversity        (u8, 0-5)
  *
@@ -360,7 +433,7 @@ export function packFeatures(features) {
   );
   u8[2] = clampu(features.lastTopicAge, 0, 8);
   u8[3] = clampu(features.queryLenTokens, 1, 32);
-  u8[4] = clampu(features.followUpType, 0, 7);
+  u8[4] = clampu(features.followUpType, 0, 19);
   u8[5] = clampu(features.minDifficulty, 0, 4);
   u8[6] = clampu(features.fragDiversity, 0, 5);
 
