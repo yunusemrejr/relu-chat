@@ -12,7 +12,7 @@ var EbookPromo = (function () {
     subtitle: 'Resource-Efficient RL for Edge ML',
     description: 'A practical, no-fluff guide to training and deploying reinforcement learning agents on microcontrollers, NPUs, and other severely constrained hardware. Real techniques for reward design, quantization-aware training, policy distillation, and production deployment on the edge.',
     ctaText: 'Get the Book',
-    ctaUrl: '#/null',
+    ctaUrl: 'https://elroystar8.gumroad.com/l/ecvuf',
     tags: ['Reinforcement Learning', 'Edge AI', 'TinyML', 'Model Compression']
   };
 
