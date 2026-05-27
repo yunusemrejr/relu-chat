@@ -258,7 +258,7 @@ var EbookPromo = (function () {
     section.innerHTML =
       '<div class="ebook-promo-inner">' +
         '<div class="ebook-promo-cover" aria-hidden="true">' +
-          '<img src="assets/ebook-cover.jpg" alt="Fringe Learning book cover" width="260" height="340">' +
+          '<img src="/assets/ebook-cover.jpg" alt="Fringe Learning book cover" width="260" height="340">' +
         '</div>' +
         '<div class="ebook-promo-body">' +
           '<div class="ebook-promo-label">New from ReLU Research</div>' +
