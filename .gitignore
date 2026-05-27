@@ -46,6 +46,15 @@ internal-notes.md
 .agent-imperative.json
 dev/.agent_memory/
 
+# Blog system (PRIVATE — not part of open-source repo)
+blog/
+content/
+scripts/blog/
+sitemap.xml
+robots.txt
+llms.txt
+llms-full.txt
+
 # Session exports (agent logs, not for public)
 session-*.md
 session-ses_*.md
