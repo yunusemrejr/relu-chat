@@ -571,7 +571,7 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
       comparison: ['def', 'int', 'ex'],
     };
     const catOrder = INTENT_CAT_ORDERS[plan.intent] || ['def', 'int', 'ex'];
-    const fragsPerTopic = Math.min(2, catOrder.length);
+    const fragsPerTopic = Math.min(3, catOrder.length);  // Round 7: safe +1 fragment surfacing (was 2); still capped by policy+catOrder+botProfile
     plan.fragmentPlan = [];
     for (let ti = 0; ti < plan.topics.length; ti++) {
       const cats = (plan.intent === 'comparison' && ti > 0)
