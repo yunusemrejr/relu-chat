@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>How It Works — ReLU.chat Architecture</title>
-<meta name="description" content="Complete technical architecture of ReLU.chat: BM25 sparse retrieval, transformer embeddings, dense-sparse ensemble ranking, topic correction, 25-feature MLP policy network, RL training pipeline, and fragment-based response composition.">
+<meta name="description" content="Complete technical architecture of ReLU.chat: field-weighted BM25 with bigram phrase matching, fuzzy entity extraction, transformer embeddings, dense-sparse ensemble ranking, topic correction, session-aware fragment diversity, 25-feature MLP policy network, RL training pipeline, and fragment-based response composition.">
 <link rel="stylesheet" href="assets/fonts/inter.css">
 <link rel="canonical" href="https://relu.chat/how-it-works.html">
 <link rel="stylesheet" href="assets/shared-design.css">
@@ -88,11 +88,11 @@ footer a{color:var(--text-secondary);text-decoration:underline}
 
 <div class="hero">
   <h1>How ReLU.chat Works</h1>
-  <p>An open-source, browser-based chatbot platform. A sentence transformer embeds queries and knowledge-base entries into 384-dimensional vectors. A signal layer extracts BM25 sparse signals, dense cosine similarities, entity matches, and intent scores — then fuses them into a 25-feature decision packet. An RL-trained MLP policy network decides how to respond, and a fragment-based composition engine renders the final answer.</p>
+  <p>An open-source, browser-based chatbot platform. A sentence transformer embeds queries and knowledge-base entries into 384-dimensional vectors. A signal layer extracts <strong>field-weighted BM25</strong> sparse signals with bigram phrase matching, dense cosine similarities, <strong>fuzzy entity extraction</strong> with word-overlap scoring, and temperature-calibrated intent classification with 19 prototypes per intent — then fuses them into a 25-feature decision packet. An RL-trained MLP policy network decides how to respond, and a fragment-based composition engine with <strong>session-aware diversity</strong> renders the final answer.</p>
 </div>
 
 <h2>1. Overview</h2>
-<p>ReLU.chat processes every message entirely in your browser. No API keys, no cloud LLMs, no telemetry. The system uses a <strong>sentence-transformer</strong> (<code>all-MiniLM-L6-v2</code>, quantized ONNX, ~22 MB) to embed queries and knowledge-base entries into 384-dimensional vectors. A <strong>signal layer</strong> combines BM25 sparse retrieval with dense cosine similarity, entity extraction, and temperature-calibrated intent classification into a 25-feature decision packet. A <strong>reinforcement-learning-trained MLP policy network</strong> (25 inputs → 128 → 64 → 6 action heads) decides <em>how</em> to respond, and a fragment-based composition engine renders the final answer with linguistic connectors.</p>
+<p>ReLU.chat processes every message entirely in your browser. No API keys, no cloud LLMs, no telemetry. The system uses a <strong>sentence-transformer</strong> (<code>all-MiniLM-L6-v2</code>, quantized ONNX, ~22 MB) to embed queries and knowledge-base entries into 384-dimensional vectors. A <strong>signal layer</strong> combines <strong>field-weighted BM25</strong> (name/aliases boosted via TF repetition + bigram phrase matching) with dense cosine similarity, <strong>fuzzy entity extraction</strong> (Levenshtein distance + word-overlap scoring + notation pattern matching), and temperature-calibrated intent classification (19 prototypes per intent, 70/30 best-vs-average scoring) into a 25-feature decision packet. A <strong>reinforcement-learning-trained MLP policy network</strong> (25 inputs → 128 → 64 → 6 action heads) decides <em>how</em> to respond, and a fragment-based composition engine with <strong>session-aware diversity penalties</strong> renders the final answer with linguistic connectors.</p>
 
 <div class="arch-diagram">
   <div class="arch-flow">
@@ -116,10 +116,10 @@ footer a{color:var(--text-secondary);text-decoration:underline}
 <p>After embedding, a lightweight signal layer prepares a structured <strong>DecisionPacket</strong> for the policy network. It combines multiple retrieval and classification signals into a coherent pre-policy feature bundle.</p>
 
 <ol style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
-  <li><strong>BM25 Sparse Retrieval</strong> — Term-frequency-based scoring (k1=1.5, b=0.75) with IDF pre-computed from the knowledge base at load time. Provides complementary lexical matching alongside dense embeddings.</li>
-  <li><strong>Entity Extraction</strong> — Regex-based alias matching with session context enrichment. Detected entities are boosted in downstream ranking.</li>
-  <li><strong>Intent Classification</strong> — Cosine similarity against intent prototypes (definition, example, formal, application, comparison), calibrated with temperature=1.5 softmax for reliable confidence estimates.</li>
-  <li><strong>Ensemble Ranking</strong> — Dense cosine similarity (0.7 weight) and BM25 scores (0.3 weight) are fused into a combined ranking. A neural reranking pass applies a token-overlap bonus to refine the top results.</li>
+  <li><strong>BM25 Sparse Retrieval</strong> — Field-weighted term-frequency scoring (k1=1.5, b=0.75). Entry names are repeated 3× and aliases 2× during indexing, so name-matched terms naturally score higher via TF boosting. <strong>Bigram phrase matching</strong> catches multi-word queries like "Nash equilibrium" as a single token (<code>nash_equilibrium</code>), with an IDF-weighted bonus that complements unigram scoring.</li>
+  <li><strong>Entity Extraction</strong> — Three-pass extraction: (1) exact alias regex matching, (2) <strong>fuzzy word-overlap scoring</strong> using Levenshtein distance and substring containment for typo tolerance, (3) <strong>notation pattern matching</strong> for game-theory expressions like <code>(D,D)</code> and <code>(C,C)</code>. Session context enriches entities from recent turns with decay weighting.</li>
+  <li><strong>Intent Classification</strong> — Cosine similarity against <strong>19 intent prototypes per category</strong> (definition, example, formal, application, comparison), scored with a <strong>70/30 blend of best-match and weighted-average</strong> to prevent one lucky prototype from dominating. Calibrated with temperature=1.5 softmax for reliable confidence estimates.</li>
+  <li><strong>Ensemble Ranking</strong> — Dense cosine similarity (0.7 weight) and BM25 scores (0.3 weight) are fused into a combined ranking. A neural reranking pass applies a token-overlap bonus to refine the top results. Follow-up queries get a <strong>0.35 boost</strong> (scaled by conversation depth) to the previous topic, preventing topic drift.</li>
   <li><strong>Feature Extraction</strong> — The ensemble ranking, calibrated intent scores, entity data, and session context are compiled into the 25-feature vector that feeds the policy network.</li>
 </ol>
 
@@ -149,7 +149,7 @@ footer a{color:var(--text-secondary);text-decoration:underline}
 <tr><td>15</td><td><code>hasExampleCue</code></td><td>bool</td><td>{0,1}</td><td>"example", "illustrate", "case" detected</td></tr>
 <tr><td>16</td><td><code>botCreativity</code></td><td>f32</td><td>[0,1]</td><td>Bot profile creativity ceiling</td></tr>
 <tr><td>17</td><td><code>domainMatch</code></td><td>f32</td><td>[0,1]</td><td>Max cosine to domain prototype embeddings</td></tr>
-<tr><td>18</td><td><code>followUpType</code></td><td>u8</td><td>[0,7]</td><td>Session follow-up type (simplify, elaborate, etc.)</td></tr>
+<tr><td>18</td><td><code>followUpType</code></td><td>u8</td><td>[0,22]</td><td>Session follow-up type (simplify, elaborate, topic correction, etc.)</td></tr>
 <tr><td>19</td><td><code>wasAmbiguous</code></td><td>bool</td><td>{0,1}</td><td>Previous turn flagged as ambiguous</td></tr>
 <tr><td>20</td><td><code>avgTruthConf</code></td><td>f32</td><td>[0,1]</td><td>Average truth confidence of fragments in top results</td></tr>
 <tr><td>21</td><td><code>avgSourceConf</code></td><td>f32</td><td>[0,1]</td><td>Average source confidence of fragments in top results</td></tr>
@@ -179,7 +179,7 @@ Heads (all share fc2 output, 64 dims):
   tone_head:        Linear(64, 4)   → softmax → [neutral, formal, intuitive, playful]
 
 Total:  ~13,079 parameters (trained, exportable)
-Version: 0.3.0 (25-feature input, topic correction, includes avoidWithCount)</code></pre>
+Version: 0.4.0 (25-feature input, field-weighted BM25, fuzzy entity extraction, session-aware fragment diversity)</code></pre>
 
 <h3>Multi-Engine Inference</h3>
 <p>The policy runtime (<code>policy/policy-runtime.js</code>) attempts engines in priority order:</p>
@@ -208,7 +208,7 @@ Version: 0.3.0 (25-feature input, topic correction, includes avoidWithCount)</co
 <div class="step-card">
   <div class="num">Step 3</div>
   <h3>RL Training (REINFORCE)</h3>
-  <p>The policy network is trained with a state-dependent value baseline. Each step: forward pass → sample actions → ε-greedy exploration → compute reward → policy gradient update with gradient clipping. The reward function has 6 dynamic components: intent match, topic precision, fragment coherence, length penalty, creativity alignment, and guardrail compliance.</p>
+  <p>The policy network is trained with a state-dependent value baseline. Each step: forward pass → sample actions → ε-greedy exploration → compute reward → policy gradient update with gradient clipping. The reward function has 6 dynamic components: intent match, topic precision, fragment coherence, length penalty, creativity alignment, and guardrail compliance. <strong>Follow-up topic continuity</strong> is heavily rewarded (0.6 weight) to penalize drift, and <strong>explicit topic corrections</strong> ("I asked about X") generate dedicated reward signals.</p>
 </div>
 
 <div class="step-card">
@@ -265,7 +265,7 @@ Uint8Array layout:
   [1] = packed booleans     (bits: entityBoostHit|hasComparisonCue|hasFormalCue|hasExampleCue|wasAmbiguous)
   [2] = lastTopicAge        (u8, 0-8)
   [3] = queryLenTokens      (u8, 1-32)
-  [4] = followUpType        (u8, 0-7)
+  [4] = followUpType        (u8, 0-22)
   [5] = minDifficulty       (u8, 0-4)
   [6] = fragDiversity       (u8, 0-5)</code></pre>
 

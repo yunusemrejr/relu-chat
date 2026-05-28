@@ -99,7 +99,21 @@ export class SignalLayer {
   }
 
   initBM25(KB) {
-    const texts = KB.map(e => entryText(e));
+    // Build field-boosted texts: name/aliases repeated 3x, summary 2x
+    // so that terms in important fields get higher TF and thus higher BM25 scores.
+    const texts = KB.map(e => {
+      const name = e.name || '';
+      const aliases = Array.isArray(e.aliases) ? e.aliases.join(' ') : '';
+      const summary = e.summary || '';
+      const f = e.f || {};
+      const def = (f.def || []).map(d => typeof d === 'string' ? d : (d?.text || '')).join(' ');
+      const int = (f.int || []).map(d => typeof d === 'string' ? d : (d?.text || '')).join(' ');
+      const ex = (f.ex || []).map(d => typeof d === 'string' ? d : (d?.text || '')).join(' ');
+      const form = (f.form || []).map(d => typeof d === 'string' ? d : (d?.text || '')).join(' ');
+      const app = (f.app || []).map(d => typeof d === 'string' ? d : (d?.text || '')).join(' ');
+      // Boost name and aliases by repeating, summary doubled
+      return `${name} ${name} ${name} ${aliases} ${aliases} ${summary} ${summary} ${def} ${int} ${ex} ${form} ${app}`;
+    });
     this._bm25Scorer = new BM25Scorer(1.5, 0.75).fit(texts);
     this._bm25Ready = this._bm25Scorer.getReady();
     return this;

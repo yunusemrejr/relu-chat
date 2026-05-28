@@ -29,13 +29,75 @@ const DEFAULT_COMPARISON_OPENERS = {
 const DEFAULT_TRANSITIONS = ["\n\nRelatedly, ", "\n\nClosely linked — ", "\n\nConnected idea: ", "\n\nBuilding on that, "];
 
 const DEFAULT_INTENTS = {
-  definition: { prototypes: ["what is X", "define X", "explain X", "what does X mean", "tell me about X", "describe X", "what is meant by X", "what is the meaning of X", "explain the concept of X"], order: ['def', 'int', 'ex'] },
-  example: { prototypes: ["give an example of X", "show me an example", "example of X", "illustrate X", "concrete case of X", "an example of X", "show an example", "give examples of X", "illustrate with an example"], order: ['ex', 'int', 'def'] },
-  formal: { prototypes: ["formal definition of X", "prove X", "theorem about X", "math behind X", "derive X", "equation for X", "formalism of X", "mathematical definition of X", "proof of X", "formal proof of X", "rigorous definition of X", "formal treatment of X", "mathematical formulation of X"], order: ['form', 'def', 'ex'] },
-  application: { prototypes: ["applications of X", "where is X used", "uses of X", "real world X", "practical use of X", "why is X useful", "how is X applied", "real-world applications of X", "where does X apply", "practical applications of X", "use cases of X"], order: ['app', 'ex', 'int'] },
-  comparison: { prototypes: ["difference between X and Y", "X vs Y", "compare X and Y", "how is X different from Y", "relation between X and Y", "X versus Y", "X compared to Y", "compare X with Y"], order: ['def', 'int', 'ex'] },
-  greeting: { prototypes: ["hi", "hello", "hey there", "good morning", "how are you", "what up", "hey", "hi there", "good afternoon", "good evening"], order: null },
-  help: { prototypes: ["help", "what can you do", "how do i use this", "what topics do you know", "menu", "what can you help with", "list topics", "what do you know"], order: null }
+  definition: {
+    prototypes: [
+      "what is X", "define X", "explain X", "what does X mean", "tell me about X",
+      "describe X", "what is meant by X", "what is the meaning of X", "explain the concept of X",
+      "can you explain X", "help me understand X", "what exactly is X", "define the term X",
+      "i want to know about X", "could you describe X", "break down X for me",
+      "what's the definition of X", "how would you define X", "in simple terms what is X"
+    ],
+    order: ['def', 'int', 'ex']
+  },
+  example: {
+    prototypes: [
+      "give an example of X", "show me an example", "example of X", "illustrate X",
+      "concrete case of X", "an example of X", "show an example", "give examples of X",
+      "illustrate with an example", "can you give me an example of X", "what's a good example of X",
+      "show me X in practice", "demonstrate X with an example", "what would X look like",
+      "give me a real example of X", "how does X work in practice", "walk me through an example of X"
+    ],
+    order: ['ex', 'int', 'def']
+  },
+  formal: {
+    prototypes: [
+      "formal definition of X", "prove X", "theorem about X", "math behind X",
+      "derive X", "equation for X", "formalism of X", "mathematical definition of X",
+      "proof of X", "formal proof of X", "rigorous definition of X", "formal treatment of X",
+      "mathematical formulation of X", "give me the formal version of X", "what's the rigorous definition of X",
+      "show me the math for X", "how is X formally defined", "what's the mathematical expression for X",
+      "derive the formula for X", "prove that X holds"
+    ],
+    order: ['form', 'def', 'ex']
+  },
+  application: {
+    prototypes: [
+      "applications of X", "where is X used", "uses of X", "real world X",
+      "practical use of X", "why is X useful", "how is X applied", "real-world applications of X",
+      "where does X apply", "practical applications of X", "use cases of X",
+      "how is X used in practice", "where can I see X in action", "what are the practical uses of X",
+      "why does X matter", "how do people use X", "what's X good for",
+      "where has X been applied successfully", "give me a practical example of X"
+    ],
+    order: ['app', 'ex', 'int']
+  },
+  comparison: {
+    prototypes: [
+      "difference between X and Y", "X vs Y", "compare X and Y",
+      "how is X different from Y", "relation between X and Y", "X versus Y",
+      "X compared to Y", "compare X with Y", "what's the difference between X and Y",
+      "how does X relate to Y", "contrast X and Y", "what distinguishes X from Y",
+      "how are X and Y similar", "X or Y which is better", "distinguish between X and Y"
+    ],
+    order: ['def', 'int', 'ex']
+  },
+  greeting: {
+    prototypes: [
+      "hi", "hello", "hey there", "good morning", "how are you", "what up",
+      "hey", "hi there", "good afternoon", "good evening", "greetings",
+      "howdy", "what's up", "yo", "sup", "hiya"
+    ],
+    order: null
+  },
+  help: {
+    prototypes: [
+      "help", "what can you do", "how do i use this", "what topics do you know",
+      "menu", "what can you help with", "list topics", "what do you know",
+      "show me what you can do", "how does this work", "what are my options",
+      "guide me", "i need help", "what should i ask"
+    ],
+    order: null
+  }
 };
 
 export function pick(a) {
@@ -101,9 +163,76 @@ export function tokens(t) {
 function normalizeAlias(a) {
   if (!a || typeof a !== 'string') return '';
   return a.toLowerCase()
-    .replace(/[’']/g, "'")
+    .replace(/['']/g, "'")
     .replace(/\s+-\s+/g, '-')
     .trim();
+}
+
+/**
+ * Simple Levenshtein-based fuzzy match score.
+ * Returns 0-1 similarity (1 = exact match).
+ */
+function fuzzyScore(a, b) {
+  if (a === b) return 1;
+  if (a.length === 0 || b.length === 0) return 0;
+  // Quick length-based filter
+  if (Math.abs(a.length - b.length) > Math.max(a.length, b.length) * 0.4) return 0;
+
+  const la = a.length, lb = b.length;
+  const matrix = Array.from({ length: la + 1 }, () => new Array(lb + 1).fill(0));
+  for (let i = 0; i <= la; i++) matrix[i][0] = i;
+  for (let j = 0; j <= lb; j++) matrix[0][j] = j;
+
+  for (let i = 1; i <= la; i++) {
+    for (let j = 1; j <= lb; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1,
+        matrix[i][j - 1] + 1,
+        matrix[i - 1][j - 1] + cost
+      );
+    }
+  }
+
+  const maxLen = Math.max(la, lb);
+  return 1 - matrix[la][lb] / maxLen;
+}
+
+/**
+ * Word-overlap score between query and a term.
+ * Returns 0-1 based on fraction of words matched.
+ */
+function wordOverlapScore(query, term) {
+  const qWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+  const tWords = term.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+  if (qWords.length === 0 || tWords.length === 0) return 0;
+
+  let matches = 0;
+  for (const qw of qWords) {
+    for (const tw of tWords) {
+      if (qw === tw || qw.includes(tw) || tw.includes(qw)) {
+        matches++;
+        break;
+      }
+    }
+  }
+  return matches / Math.max(qWords.length, tWords.length);
+}
+
+/**
+ * Extract game-theory notation patterns like (D,D), (C,C), (O,O) from queries.
+ * Returns an array of normalized notation strings that can be matched against aliases.
+ */
+function extractNotationPatterns(query) {
+  const patterns = [];
+  // Match parenthesized strategy profiles: (D,D), (C,C), (O,O), (F,F), etc.
+  const notationMatch = query.match(/\([A-Za-z]\s*,\s*[A-Za-z]\)/g);
+  if (notationMatch) {
+    for (const n of notationMatch) {
+      patterns.push(n.toLowerCase().replace(/\s+/g, ''));
+    }
+  }
+  return patterns;
 }
 
 export function bowVec(t, vocab) {
@@ -149,7 +278,10 @@ export function compileAliasRegex(KB) {
 export function extractEntities(query, KB) {
   if (!query || typeof query !== 'string' || !Array.isArray(KB) || KB.length === 0) return [];
   const q = ' ' + query.toLowerCase() + ' ';
+  const qClean = query.toLowerCase().trim();
   const found = [], seen = new Set();
+
+  // First pass: exact alias regex matching (existing behavior)
   for (let i = 0; i < KB.length; i++) {
     const entry = KB[i];
     if (!entry || typeof entry !== 'object') continue;
@@ -157,6 +289,7 @@ export function extractEntities(query, KB) {
     if (seen.has(id)) continue;
     const aliasRegex = Array.isArray(entry.aliasRegex) ? entry.aliasRegex : [];
     const aliasPartialRegex = Array.isArray(entry.aliasPartialRegex) ? entry.aliasPartialRegex : [];
+
     for (let j = 0; j < aliasRegex.length; j++) {
       try {
         if (aliasRegex[j] && aliasRegex[j].test(q)) {
@@ -167,6 +300,7 @@ export function extractEntities(query, KB) {
       } catch (e) { /* skip bad regex */ }
     }
     if (seen.has(id)) continue;
+
     for (let j = 0; j < aliasPartialRegex.length; j++) {
       try {
         if (aliasPartialRegex[j] && aliasPartialRegex[j].test(q)) {
@@ -177,6 +311,61 @@ export function extractEntities(query, KB) {
       } catch (e) { /* skip bad regex */ }
     }
   }
+
+  // Second pass: word-overlap scoring for entries not found by exact match
+  // Only check if we found fewer than 3 entities
+  if (found.length < 3) {
+    const qWords = new Set(qClean.split(/\s+/).filter(w => w.length > 2));
+
+    for (let i = 0; i < KB.length; i++) {
+      const entry = KB[i];
+      if (!entry || typeof entry !== 'object') continue;
+      if (seen.has(entry.id)) continue;
+
+      const name = (entry.name || '').toLowerCase();
+      const aliases = Array.isArray(entry.aliases) ? entry.aliases.map(a => a.toLowerCase()) : [];
+      const allTerms = [name, ...aliases].filter(Boolean);
+
+      let bestScore = 0;
+      for (const term of allTerms) {
+        // Word overlap
+        const overlap = wordOverlapScore(qClean, term);
+        if (overlap > bestScore) bestScore = overlap;
+
+        // Fuzzy match for short terms (handles typos)
+        if (term.length >= 4 && qClean.length <= 30) {
+          const fuzzy = fuzzyScore(qClean, term);
+          if (fuzzy > bestScore) bestScore = fuzzy;
+        }
+      }
+
+      // Threshold: require at least 0.5 word overlap or 0.75 fuzzy
+      if (bestScore >= 0.5) {
+        found.push(i);
+        seen.add(entry.id);
+        if (found.length >= 5) break; // cap at 5 entities
+      }
+    }
+  }
+
+  // Third pass: notation pattern matching for game theory
+  if (found.length < 3) {
+    const notations = extractNotationPatterns(query);
+    for (const notation of notations) {
+      for (let i = 0; i < KB.length; i++) {
+        const entry = KB[i];
+        if (!entry || typeof entry !== 'object') continue;
+        if (seen.has(entry.id)) continue;
+        const aliases = Array.isArray(entry.aliases) ? entry.aliases.map(a => a.toLowerCase()) : [];
+        if (aliases.includes(notation)) {
+          found.push(i);
+          seen.add(entry.id);
+          break;
+        }
+      }
+    }
+  }
+
   return found;
 }
 
@@ -195,19 +384,35 @@ export async function classifyIntent(qEmb, intentEmb, intents, thresholds) {
     return { intent: 'definition', scores: {}, rawScores: {} };
   }
   const scores = {}, rawMax = {};
+  const qLen = qEmb.length; // not useful here, but keep for API compat
+  
   for (const k of Object.keys(intents)) {
     const protos = intentEmb[k];
     if (!Array.isArray(protos) || protos.length === 0) continue;
+    
+    // Score each prototype, weight by recency (later prototypes are more specific)
     let max = -1;
-    for (const pe of protos) {
+    let weightedSum = 0;
+    let totalWeight = 0;
+    for (let pi = 0; pi < protos.length; pi++) {
+      const pe = protos[pi];
       if (!Array.isArray(pe)) continue;
       const s = cosine(qEmb, pe);
       if (Number.isFinite(s) && s > max) max = s;
+      // Weight later prototypes slightly higher (they're more specific)
+      const weight = 1.0 + pi * 0.02;
+      weightedSum += s * weight;
+      totalWeight += weight;
     }
+    
     rawMax[k] = max > -1 ? max : 0;
+    
+    // Combined score: best match + weighted average (prevents one lucky match from dominating)
+    const avgScore = totalWeight > 0 ? weightedSum / totalWeight : 0;
     const countNorm = Math.log(protos.length + 1);
-    scores[k] = rawMax[k] * countNorm;
+    scores[k] = (0.7 * rawMax[k] + 0.3 * avgScore) * countNorm;
   }
+  
   let best = 'definition', bs = -1;
   for (const k in scores) {
     if (Number.isFinite(scores[k]) && scores[k] > bs) {
@@ -215,29 +420,46 @@ export async function classifyIntent(qEmb, intentEmb, intents, thresholds) {
       best = k;
     }
   }
+  
+  // Adaptive confidence threshold: shorter queries need higher confidence
   const confThresholds = thresholds?.CONFIDENCE || {};
   if (confThresholds[best] !== undefined && rawMax[best] < confThresholds[best]) {
     best = 'definition';
   }
+  
   return { intent: best, scores, rawScores: rawMax };
 }
 
-export async function selectFragment(entry, cat, qEmb, embedCached, config) {
+export async function selectFragment(entry, cat, qEmb, embedCached, config, recentlyUsedFragments) {
   if (!entry || !cat || !Array.isArray(qEmb) || typeof embedCached !== 'function') return null;
   const f = entry.f;
   if (!f || typeof f !== 'object') return null;
   const frags = f[cat];
   if (!Array.isArray(frags) || frags.length === 0) return null;
   if (frags.length === 1) return frags[0];
+
   const scores = [];
-  for (const fr of frags) {
+  for (let fi = 0; fi < frags.length; fi++) {
+    const fr = frags[fi];
     try {
       const v = await embedCached(fr);
-      if (Array.isArray(v) && v.length > 0) {
-        scores.push(cosine(qEmb, v));
-      } else {
-        scores.push(0);
+      let sim = (Array.isArray(v) && v.length > 0) ? cosine(qEmb, v) : 0;
+
+      // Diversity penalty: penalize recently-shown fragments to avoid repetition
+      if (recentlyUsedFragments && recentlyUsedFragments.length > 0) {
+        const fragText = typeof fr === 'string' ? fr : (fr?.text || '');
+        if (fragText) {
+          const prefix = fragText.substring(0, 50);
+          for (const usedFrag of recentlyUsedFragments) {
+            if (usedFrag && prefix && prefix === usedFrag.substring(0, 50)) {
+              sim *= 0.5; // 50% penalty for recently shown fragments
+              break;
+            }
+          }
+        }
       }
+
+      scores.push(sim);
     } catch (e) {
       scores.push(0);
     }
@@ -468,7 +690,7 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
       const wantFrag = plan.fragmentPlan && plan.fragmentPlan[ei] && plan.fragmentPlan[ei].cats && plan.fragmentPlan[ei].cats.includes(cat);
       if (!wantFrag) continue;
 
-      const frag = await selectFragment(entry, cat, qEmb, embedCached, config);
+      const frag = await selectFragment(entry, cat, qEmb, embedCached, config, plan._recentlyUsedFragments);
       if (!frag) continue;
       selectedFragments.push(frag);
 

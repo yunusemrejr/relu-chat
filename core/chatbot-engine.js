@@ -228,6 +228,7 @@ export async function createChatbot(config) {
         overrides,
       };
       const plan = await planAnswer(query, qEmb, KB, context, { EMBEDDING: CONFIG.EMBEDDING, botProfile, _domainPrototypeEmbs: domainPrototypeEmbs.length > 0 ? domainPrototypeEmbs : intentEmb });
+      plan._recentlyUsedFragments = session.getRecentlyUsedFragments();
       const result = await composeV2(query, qEmb, embedCached, entryEmb, intentEmb, session.lastTopic, KB, CONFIG, overrides, plan);
 
       text = result.text;
