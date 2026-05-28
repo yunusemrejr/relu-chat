@@ -10,7 +10,7 @@ export function entryText(e) {
 }
 
 export const KB = [
-  kb('nash_eq','Nash Equilibrium',['nash','ne'],
+  kb('nash_eq','Nash Equilibrium',['nash','ne','nash eq','(d,d)','nash equilibrium'],
     'A profile of strategies where no player can profit by unilateral deviation.',{
     def:['A strategy profile $s^*=(s_1^*,\\ldots,s_n^*)$ is a Nash equilibrium if $u_i(s_i^*,s_{-i}^*)\\ge u_i(s_i,s_{-i}^*)$ for every player $i$ and every $s_i\\in S_i$.',
          'Equivalently, $s_i^*\\in\\arg\\max_{s_i\\in S_i} u_i(s_i,s_{-i}^*)$ for each $i$ — every player best-responds to everyone else.'],
@@ -24,7 +24,7 @@ export const KB = [
          'Provides the baseline benchmark for the Price of Anarchy and mechanism design guarantees.']},
    ['spe','pbe','mixed_strat','dom_strat','corr_eq']),
 
-  kb('prisoners_dilemma','Prisoner\'s Dilemma',['pd','prisoners dilemma','prisoner dilemma'],
+  kb('prisoners_dilemma','Prisoner\'s Dilemma',['pd','prisoners dilemma','prisoner dilemma','(d,d)','(c,c)','mutual defection','defection','cooperate defect','defect defect'],
     'Canonical 2x2 game where individually rational defection leads to a Pareto-inferior outcome.',{
     def:['A symmetric $2\\times 2$ game with payoffs satisfying $T>R>P>S$ and $2R>T+S$, where $C$ and $D$ denote Cooperate and Defect.',
          'A standard payoff matrix is $\\begin{pmatrix}(R,R)&(S,T)\\\\(T,S)&(P,P)\\end{pmatrix}$ with e.g. $(T,R,P,S)=(5,3,1,0)$.'],
@@ -386,7 +386,7 @@ export const KB = [
     app:['Explains social norms and conventions as coordination devices.','Computationally attractive and learnable via simple algorithms.']},
    ['nash_eq','poa','potential']),
 
-  kb('spe','Subgame Perfect Equilibrium',['spe','subgame perfection'],
+  kb('spe','Subgame Perfect Equilibrium',['spe','subgame perfection','subgame perfect','backward induction'],
     'A Nash equilibrium that also prescribes a Nash equilibrium in every subgame.',{
     def:['A strategy profile $\\sigma^*$ is a subgame perfect equilibrium if its restriction to every subgame is a Nash equilibrium of that subgame.',
          'Found via backward induction in finite games of perfect information.'],
@@ -425,7 +425,7 @@ export const KB = [
     app:['Motivates robust mechanism design and evolutionary robustness.','Commonly invoked to discard weakly dominated equilibria.']},
    ['nash_eq','spe','trembling_hand','ied']),
 
-  kb('battle_of_sexes','Battle of the Sexes',['bos','battle of sexes'],
+  kb('battle_of_sexes','Battle of the Sexes',['bos','battle of sexes','(o,o)','(f,f)','battle of the sexes'],
     'A coordination game with asymmetric preferences over the two coordinated outcomes.',{
     def:['Payoff matrix $\\begin{pmatrix}(2,1)&(0,0)\\\\(0,0)&(1,2)\\end{pmatrix}$ representing two activities each player prefers differently but both prefer coordinating.',
          'Two pure Nash equilibria and one mixed Nash equilibrium.'],
@@ -477,7 +477,7 @@ export const KB = [
     app:['The 1962 Cuban Missile Crisis is the definitive Chicken game: the US and USSR each preferred the other to back down, but mutual escalation meant nuclear war. Kennedy\'s naval blockade was a calibrated move short of full, irreversible commitment.','In labor disputes, both union and management may threaten a strike or lockout — each hoping the other will concede first. The risk is that both hold firm and the resulting work stoppage hurts everyone, just like a crash in Chicken.']},
    ['hawk_dove','battle_of_sexes','nash_eq','corr_eq']),
 
-  kb('matching_pennies','Matching Pennies',['matching pennies','odd-even'],
+  kb('matching_pennies','Matching Pennies',['matching pennies','odd-even','matching pennies game'],
     'A zero-sum $2\\times 2$ game with no pure equilibrium and a unique uniform mixed equilibrium.',{
     def:['Payoff matrix $\\begin{pmatrix}(1,-1)&(-1,1)\\\\(-1,1)&(1,-1)\\end{pmatrix}$ where player 1 wins if the pennies match.',
          'Unique Nash equilibrium: both mix $(1/2,1/2)$ with value $0$.'],

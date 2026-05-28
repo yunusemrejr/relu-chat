@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>How It Works — ReLU.chat Architecture</title>
-<meta name="description" content="Complete technical architecture of ReLU.chat: BM25 sparse retrieval, transformer embeddings, dense-sparse ensemble ranking, 25-feature MLP policy network, RL training pipeline, and fragment-based response composition.">
+<meta name="description" content="Complete technical architecture of ReLU.chat: BM25 sparse retrieval, transformer embeddings, dense-sparse ensemble ranking, topic correction, 25-feature MLP policy network, RL training pipeline, and fragment-based response composition.">
 <link rel="stylesheet" href="assets/fonts/inter.css">
 <link rel="canonical" href="https://relu.chat/how-it-works.html">
 <link rel="stylesheet" href="assets/shared-design.css">
@@ -123,6 +123,8 @@ footer a{color:var(--text-secondary);text-decoration:underline}
   <li><strong>Feature Extraction</strong> — The ensemble ranking, calibrated intent scores, entity data, and session context are compiled into the 25-feature vector that feeds the policy network.</li>
 </ol>
 
+<p><strong>Topic Correction</strong> — The signal layer detects explicit topic corrections (e.g., "I meant X" or "no, just X") via regex pattern matching against the current query and session history. When a correction is detected, the corrected topic embedding is forced to the top of the dense-sparse ranking, overriding the ensemble score. This prevents topic drift when the user redirects the conversation mid-turn.</p>
+
 <p>The signal layer is stateless and runs entirely in the browser — no server calls, no external inference APIs. The resulting DecisionPacket contains the query embedding, entity list, calibrated intent distribution, dense and sparse rankings, confidence metrics, and session context.</p>
 
 <h2>3. Feature Extraction</h2>
@@ -177,7 +179,7 @@ Heads (all share fc2 output, 64 dims):
   tone_head:        Linear(64, 4)   → softmax → [neutral, formal, intuitive, playful]
 
 Total:  ~13,079 parameters (trained, exportable)
-Version: 0.2.0 (25-feature input, includes avoidWithCount)</code></pre>
+Version: 0.3.0 (25-feature input, topic correction, includes avoidWithCount)</code></pre>
 
 <h3>Multi-Engine Inference</h3>
 <p>The policy runtime (<code>policy/policy-runtime.js</code>) attempts engines in priority order:</p>

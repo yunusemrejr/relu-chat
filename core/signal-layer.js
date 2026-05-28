@@ -194,7 +194,7 @@ export class SignalLayer {
         const lastTopicIdx = reranked.findIndex(r => r.i === lastTopicId);
         if (lastTopicIdx >= 0) {
           // Apply a boost proportional to follow-up confidence
-          const boostAmount = 0.2 * (1 + (followUp.conversationDepth || 1) * 0.1);
+          const boostAmount = 0.35 * (1 + (followUp.conversationDepth || 1) * 0.15);
           reranked[lastTopicIdx] = {
             ...reranked[lastTopicIdx],
             s: reranked[lastTopicIdx].s + boostAmount,
@@ -208,7 +208,7 @@ export class SignalLayer {
         } else if (lastTopicId >= 0 && lastTopicId < KB.length) {
           // Last topic wasn't in top-K — add it with a base score so it
           // has a chance to be considered by the policy
-          const baseScore = 0.15 + (followUp.conversationDepth || 1) * 0.05;
+          const baseScore = 0.25 + (followUp.conversationDepth || 1) * 0.08;
           reranked.push({ i: lastTopicId, s: baseScore, followUpBoost: baseScore, dense: 0, sparse: 0, rerankBonus: 0 });
           reranked.sort((a, b) => b.s - a.s);
           followUpSignals.boostApplied = true;
@@ -305,6 +305,68 @@ export class SignalLayer {
         if (intent.rawScores) {
           intent.rawScores.formal = Math.max(intent.rawScores.formal || 0, 0.6);
           intent.rawScores.definition = Math.max(intent.rawScores.definition || 0, 0.4);
+        }
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Explicit correction handling: when user says "I asked about X" or "no, just X"
+    // Force the corrected topic to the top of rankings
+    // -----------------------------------------------------------------------
+    if (followUp && followUp.isFollowUp && (followUp.type === 'topic_correction' || followUp.type === 'topic_rejection')) {
+      const correctionTarget = followUp.correctionTarget || followUp.target;
+
+      if (correctionTarget && correctionTarget !== 'last') {
+        // Try to find the correction target in the KB by name/alias matching
+        const correctionLower = correctionTarget.toLowerCase();
+        let correctionIdx = -1;
+
+        for (let i = 0; i < KB.length; i++) {
+          const entry = KB[i];
+          if (!entry) continue;
+          const name = (entry.name || '').toLowerCase();
+          const aliases = Array.isArray(entry.aliases) ? entry.aliases.map(a => a.toLowerCase()) : [];
+          const allNames = [name, ...aliases];
+
+          if (allNames.some(n => correctionLower.includes(n) || n.includes(correctionLower))) {
+            correctionIdx = i;
+            break;
+          }
+        }
+
+        if (correctionIdx >= 0) {
+          // Force this topic to the top with a very high score
+          const existingIdx = reranked.findIndex(r => r.i === correctionIdx);
+          const correctionBoost = 0.8; // Very strong boost — user explicitly asked for this
+
+          if (existingIdx >= 0) {
+            reranked[existingIdx] = {
+              ...reranked[existingIdx],
+              s: reranked[existingIdx].s + correctionBoost,
+              correctionBoost,
+            };
+          } else {
+            reranked.push({ i: correctionIdx, s: correctionBoost, correctionBoost, dense: 0, sparse: 0, rerankBonus: 0 });
+          }
+
+          // Demote topics that the user explicitly rejected
+          if (followUp.type === 'topic_rejection' && session?.lastTopic != null) {
+            const lastIdx = reranked.findIndex(r => r.i === session.lastTopic);
+            if (lastIdx >= 0 && lastIdx < 3) {
+              reranked[lastIdx] = {
+                ...reranked[lastIdx],
+                s: Math.max(reranked[lastIdx].s - 0.4, 0),
+                correctionDemotion: -0.4,
+              };
+            }
+          }
+
+          // Re-sort
+          reranked.sort((a, b) => b.s - a.s);
+
+          followUpSignals.topicOverride = correctionIdx;
+          followUpSignals.boostApplied = true;
+          followUpSignals.boostDelta = correctionBoost;
         }
       }
     }

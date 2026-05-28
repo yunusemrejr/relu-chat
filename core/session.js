@@ -188,6 +188,34 @@ const FOLLOWUP_PATTERNS = [
     type: 'affirm_continue',
     target: 'last'
   },
+
+  // -------------------------------------------------------------------------
+  // Explicit topic correction patterns (highest priority)
+  // -------------------------------------------------------------------------
+
+  // "I asked about X" / "I was asking about X" / "I meant X"
+  {
+    regex: /\b(i\s+(?:was\s+)?asked\s+about|i\s+meant|meant\s+to\s+ask\s+about|i\s+was\s+(?:asking|talking)\s+about|about\s+the\s+same\s+topic)\s+(.+)/i,
+    type: 'topic_correction',
+    targetFn: (m) => m[2]?.trim() || 'last'
+  },
+
+  // "no, just X" / "not Y, X" / "no I meant X" / "just X please"
+  {
+    regex: /^(no[,!]?\s+(?:just|only|the)\s+|(?:not|no)\s+.+?[,;]\s*(?:just\s+)?|(?:no\s+i\s+)?meant\s+)(.+?)(?:\s+please|\s+only|\s+instead)?$/i,
+    type: 'topic_correction',
+    targetFn: (m) => {
+      const target = m[2]?.trim() || '';
+      return target.replace(/[.!?]+$/, '').replace(/\s+(please|only|instead|ok|okay)$/i, '').trim() || 'last';
+    }
+  },
+
+  // "not subgame stuff" / "not that" / "not what I asked" — rejection without explicit alternative
+  {
+    regex: /^(not\s+(?:that|this|it|subgame|what\s+i\s+asked|what\s+i\s+meant)|nah|nope|wrong|thats?\s+(?:not|wrong)|that'?s?\s+(?:not|wrong)\b).*$/i,
+    type: 'topic_rejection',
+    target: 'last'
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -782,6 +810,15 @@ export class SessionMemory {
       return { isFollowUp: false };
     }
 
+    // -------------------------------------------------------------------
+    // Explicit correction detection (highest priority)
+    // -------------------------------------------------------------------
+    // Check for correction patterns that should override normal follow-up
+    const correctionResult = this._detectExplicitCorrection(query);
+    if (correctionResult.isCorrection) {
+      return { isFollowUp: true, type: correctionResult.type, target: correctionResult.target };
+    }
+
     // First try pattern-based detection
     const patternResult = this.detectFollowUp(query);
     if (patternResult.isFollowUp) {
@@ -968,6 +1005,40 @@ export class SessionMemory {
   }
 
   /**
+   * Detect explicit topic corrections like "I asked about X" or "no, just X".
+   * These are high-confidence signals that should override normal follow-up detection.
+   *
+   * @param {string} query - raw user query
+   * @returns {{ isCorrection: boolean, type?: string, target?: string }}
+   */
+  _detectExplicitCorrection(query) {
+    if (!query || typeof query !== 'string') return { isCorrection: false };
+    const q = query.trim();
+
+    // "I asked about X actually" / "I was asking about X"
+    const askedAbout = q.match(/\b(i\s+(?:was\s+)?asked\s+about|i\s+meant|meant\s+to\s+ask\s+about|i\s+was\s+(?:asking|talking)\s+about)\s+(.+)/i);
+    if (askedAbout) {
+      const target = askedAbout[2]?.replace(/[.!?]+$/, '').trim();
+      if (target) return { isCorrection: true, type: 'topic_correction', target };
+    }
+
+    // "no, just X" / "not Y, X" / "no I meant X" / "just X please" (when preceded by rejection)
+    const noJust = q.match(/^(no[,!]?\s+(?:just|only|the)\s+|(?:not|no)\s+.+?[,;]\s*(?:just\s+)?|(?:no\s+i\s+)?meant\s+)(.+?)(?:\s+please|\s+only|\s+instead)?$/i);
+    if (noJust) {
+      const target = noJust[2]?.replace(/[.!?]+$/, '').replace(/\s+(please|only|instead|ok|okay)$/i, '').trim();
+      if (target && target.length > 1) return { isCorrection: true, type: 'topic_correction', target };
+    }
+
+    // "not subgame stuff" / "not that" — rejection without clear alternative
+    const rejection = q.match(/^(not\s+(?:that|this|it|subgame|what\s+i\s+asked|what\s+i\s+meant)|nah|nope|wrong|thats?\s+(?:not|wrong)|that'?s?\s+(?:not|wrong))\b/i);
+    if (rejection && this.history.length > 0) {
+      return { isCorrection: true, type: 'topic_rejection', target: 'last' };
+    }
+
+    return { isCorrection: false };
+  }
+
+  /**
    * Build a rich follow-up context object for the current query.
    * Combines enhanced follow-up detection with session history state,
    * conversation depth tracking, topic continuity scoring, and engagement
@@ -985,11 +1056,19 @@ export class SessionMemory {
    *   turnCount: number,
    *   conversationDepth: number,
    *   topicContinuity: number,
-   *   engagementSignal: string
+   *   engagementSignal: string,
+   *   correctionTarget: string|null,
+   *   isExplicitCorrection: boolean
    * }}
    */
   getFollowUpContext(query) {
     const followUp = this.detectSimpleFollowUp(query);
+
+    // Handle explicit topic corrections
+    if (followUp.isFollowUp && (followUp.type === 'topic_correction' || followUp.type === 'topic_rejection')) {
+      followUp.correctionTarget = followUp.target;
+      followUp.isExplicitCorrection = true;
+    }
 
     const lastTurn = this.history.length > 0
       ? this.history[this.history.length - 1]
@@ -1029,6 +1108,9 @@ export class SessionMemory {
       conversationDepth,
       topicContinuity,
       engagementSignal,
+      // Explicit correction fields
+      correctionTarget: followUp.correctionTarget || null,
+      isExplicitCorrection: followUp.isExplicitCorrection || false,
     };
   }
 
@@ -1125,7 +1207,8 @@ export class SessionMemory {
     const continuationTypes = ['continue', 'elaborate', 'deep_dive', 'how', 'why',
       'clarify', 'example', 'another_example', 'summarize', 'relevance',
       'evidence', 'challenge', 'acknowledge', 'affirm_continue', 'comparison',
-      'specific', 'compare_previous', 'simplify', 'reference_index', 'what_else'];
+      'specific', 'compare_previous', 'simplify', 'reference_index', 'what_else',
+      'topic_correction', 'topic_rejection'];
     const followUp = this.detectSimpleFollowUp(query);
     if (followUp.isFollowUp && continuationTypes.includes(followUp.type)) {
       return {
@@ -1383,6 +1466,11 @@ export class SessionMemory {
 
     // Reference to specific item
     if (['reference_index', 'specific'].includes(type)) {
+      return 'redirecting';
+    }
+
+    // Explicit correction — user is redirecting back to intended topic
+    if (['topic_correction', 'topic_rejection'].includes(type)) {
       return 'redirecting';
     }
 

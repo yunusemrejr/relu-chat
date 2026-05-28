@@ -440,7 +440,18 @@ def fast_reward(actions, prompt, features):
     # Light diversity on counts (prevents always picking 1 or 4)
     fc_div = 0.1 if 1 < pred_fc < 4 else 0.0
 
-    reward = 2.0 * intent_match + 1.0 * mode_match + 0.5 * diff_r + 0.4 * fc_match + 0.1 * fc_div
+    # Follow-up topic continuity bonus: penalize drifting away from the topic
+    # when the query was a follow-up (followUpType > 0)
+    follow_up_bonus = 0.0
+    fu_type = features[18] if len(features) > 18 else 0
+    if fu_type > 0:
+        # If intent stayed the same (or close) as gold, reward continuity
+        follow_up_bonus = 0.8 * intent_match + 0.3 * mode_match
+        # Extra penalty for choosing 'off_topic' on a follow-up (drift)
+        if pred_mode == MODE_LABELS.index('off_topic'):
+            follow_up_bonus -= 0.5
+
+    reward = 2.0 * intent_match + 1.0 * mode_match + 0.5 * diff_r + 0.4 * fc_match + 0.1 * fc_div + 0.6 * follow_up_bonus
     return round(reward, 4)
 
 

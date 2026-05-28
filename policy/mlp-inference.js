@@ -818,6 +818,22 @@ export class MLPPolicy {
           fragsPerTopic = Math.min(fragsPerTopic + 1, 4);
           decisionPath.push('followup:override-what-else');
           break;
+
+        case 21: // topic_correction — user explicitly corrected the topic
+          intent = 'definition';
+          fragsPerTopic = 2;
+          tone = 'neutral';
+          creativity = Math.min(creativity, 0.25);
+          decisionPath.push('followup:override-topic-correction');
+          break;
+
+        case 22: // topic_rejection — user rejected the response
+          intent = 'definition';
+          fragsPerTopic = 1;
+          tone = 'intuitive';
+          creativity = Math.min(creativity, 0.20);
+          decisionPath.push('followup:override-topic-rejection');
+          break;
       }
     }
 

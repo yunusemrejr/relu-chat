@@ -26,7 +26,7 @@
  *  15:  hasExampleCue    bool [0,1]   query contains 'example', 'illustrate', 'case'
  *  16:  botCreativity    f32  [0,1]   botProfile.creativityCeiling
  *  17:  domainMatch      f32  [0,1]   max similarity to botProfile.domainPrototypes
- *  18:  followUpType     u8   [0,20]  0=none, 1=simplify, 2=compare_previous, 3=example, 4=elaborate, 5=reference_index, 6=another_example, 7=specific, 8=continue, 9=how, 10=why, 11=challenge, 12=acknowledge, 13=clarify, 14=deep_dive, 15=relevance, 16=evidence, 17=comparison, 18=summarize, 19=affirm_continue, 20=what_else
+ *  18:  followUpType     u8   [0,22]  0=none, 1=simplify, 2=compare_previous, 3=example, 4=elaborate, 5=reference_index, 6=another_example, 7=specific, 8=continue, 9=how, 10=why, 11=challenge, 12=acknowledge, 13=clarify, 14=deep_dive, 15=relevance, 16=evidence, 17=comparison, 18=summarize, 19=affirm_continue, 20=what_else, 21=topic_correction, 22=topic_rejection
  *  19:  wasAmbiguous     bool [0,1]   previous turn was flagged as ambiguous
  *  20:  avgTruthConf     f32  [0,1]   average truth_confidence of available fragments (0 if unknown)
  *  21:  avgSourceConf    f32  [0,1]   average source_confidence of available fragments (0 if unknown)
@@ -173,6 +173,9 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
     'summarize': 18,
     'affirm_continue': 19,
     'what_else': 20,
+    // Explicit correction types (21-22)
+    'topic_correction': 21,
+    'topic_rejection': 22,
   };
   const followUpType = (followUp && followUp.isFollowUp)
     ? (FOLLOWUP_TYPE_MAP[followUp.type] || 0)
@@ -279,6 +282,19 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
         // Adjacent facts — bias toward application + example for broader coverage
         modifiedIntentAppScore = Math.max(modifiedIntentAppScore, 0.45);
         modifiedIntentExScore = Math.max(modifiedIntentExScore, 0.40);
+        break;
+
+      case 'topic_correction':
+        // User explicitly corrected the topic — strongly bias toward definition
+        // to re-explain the correct topic clearly
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.70);
+        modifiedBotCreativity = Math.min(modifiedBotCreativity, 0.25);
+        break;
+
+      case 'topic_rejection':
+        // User rejected the previous response — simplify and re-focus
+        modifiedIntentDefScore = Math.max(modifiedIntentDefScore, 0.60);
+        modifiedBotCreativity = Math.min(modifiedBotCreativity, 0.20);
         break;
 
       // reference_index — handled downstream in mlp-inference.js via targetIndex
@@ -396,7 +412,7 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
  *                                bit 4: wasAmbiguous)
  *   [2] = lastTopicAge         (u8, 0-8)
  *   [3] = queryLenTokens       (u8, 1-32)
- *   [4] = followUpType         (u8, 0-19)
+ *   [4] = followUpType         (u8, 0-22)
  *   [5] = minDifficulty        (u8, 0-4)
  *   [6] = fragDiversity        (u8, 0-5)
  *
@@ -428,7 +444,7 @@ export function packFeatures(features) {
   f32[15] = features.hasExampleCue ? 1.0 : 0.0;
   f32[16] = clampf(features.botCreativity);
   f32[17] = clampf(features.domainMatch);
-  f32[18] = features.followUpType;             // raw 0-20
+  f32[18] = features.followUpType;             // raw 0-22
   f32[19] = features.wasAmbiguous ? 1.0 : 0.0;
   f32[20] = clampf(features.avgTruthConf);
   f32[21] = clampf(features.avgSourceConf);
@@ -447,7 +463,7 @@ export function packFeatures(features) {
   );
   u8[2] = clampu(features.lastTopicAge, 0, 8);
   u8[3] = clampu(features.queryLenTokens, 1, 32);
-  u8[4] = clampu(features.followUpType, 0, 20);
+  u8[4] = clampu(features.followUpType, 0, 22);
   u8[5] = clampu(features.minDifficulty, 0, 4);
   u8[6] = clampu(features.fragDiversity, 0, 5);
 

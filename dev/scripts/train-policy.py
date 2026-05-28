@@ -117,7 +117,7 @@ REWARD_WEIGHTS = {
     "length_penalty":       0.08,   # penalize too-short or too-long responses
     "creativity_alignment": 0.08,   # creativity level vs expected difficulty
     "guardrail_ok":         0.15,   # guardrail compliance (topic limits, truth)
-    "follow_up_continuity": 0.10,   # NEW: reward topic continuity for follow-ups
+    "follow_up_continuity": 0.18,   # Reward topic continuity for follow-ups (increased from 0.10)
     "diversity":            0.07,   # NEW: penalize always choosing same mode/intent
     "response_coherence":   0.05,   # NEW: reward fragment-semantic match to query
 }
@@ -240,6 +240,10 @@ FOLLOW_UP_TEMPLATES = [
     ("what do you mean by that", "clarification", 0.70),
     ("why",              "causal",           0.60),
     ("give me more details", "expansion",    0.75),
+    ("i asked about X actually", "topic_correction", 0.95),
+    ("no, just X",       "topic_correction", 0.95),
+    ("not that, X",      "topic_correction", 0.90),
+    ("not subgame stuff", "topic_rejection", 0.30),
 ]
 
 # Follow-up type string → numeric code mapping (must match feature-extractor.js FOLLOWUP_TYPE_MAP)
@@ -249,7 +253,7 @@ FOLLOWUP_TYPE_TO_CODE = {
     'continue': 8, 'how': 9, 'why': 10, 'challenge': 11,
     'acknowledge': 12, 'clarify': 13, 'deep_dive': 14, 'relevance': 15,
     'evidence': 16, 'comparison': 17, 'summarize': 18, 'affirm_continue': 19,
-    'what_else': 20,
+    'what_else': 20, 'topic_correction': 21, 'topic_rejection': 22,
 }
 
 # Follow-up type string → follow_up_type string mapping (for training data)
@@ -262,6 +266,8 @@ FOLLOWUP_LABEL_TO_TYPE = {
     'elaboration':     'elaborate',
     'clarification':   'clarify',
     'causal':          'why',
+    'topic_correction':'topic_correction',
+    'topic_rejection': 'topic_rejection',
 }
 
 
