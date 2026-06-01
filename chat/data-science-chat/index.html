@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Data Science Chat — ReLU.chat</title>
+<meta name="description" content="On-device NLU assistant for data science concepts: pandas, NumPy, statistics, machine learning, and more.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/chat/data-science-chat/">
+<!-- Rocket Loader disabled for ES module compatibility -->
+<meta property="og:title" content="Data Science Chat — ReLU.chat">
+<meta property="og:description" content="On-device NLU assistant for data science concepts.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://relu.chat/chat/data-science-chat/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Data Science Chat — ReLU.chat">
+<meta name="twitter:description" content="On-device NLU assistant for data science concepts.">
+
+<link rel="stylesheet" href="../../assets/fonts/inter.css">
+<link rel="stylesheet" href="../../assets/shared-design.css">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="css/styles.css">
+
+<link rel="icon" href="../../assets/logo.png" type="image/png">
+
+<!-- Performance: preload critical assets for faster model initialization -->
+<link rel="modulepreload" href="../../core/chatbot-engine.js">
+<link rel="modulepreload" href="../../core/ui.js">
+<link rel="modulepreload" href="../../core/nlp.js">
+<link rel="modulepreload" href="../../core/cache.js">
+<link rel="modulepreload" href="../../core/session.js">
+<link rel="modulepreload" href="../../core/signal-layer.js">
+<link rel="modulepreload" href="../../policy/policy-runtime.js">
+<link rel="modulepreload" href="../../policy/feature-extractor.js">
+<link rel="modulepreload" href="../../policy/mlp-inference.js">
+<link rel="modulepreload" href="../../policy/action-schema.js">
+<link rel="preload" href="../../assets/transformers/transformers.js" as="script">
+<link rel="preload" href="../../assets/models/all-MiniLM-L6-v2/onnx/model_quantized.onnx" as="fetch" crossorigin>
+<link rel="preload" href="../../assets/models/policy/policy.weights.json" as="fetch" crossorigin>
+</head>
+<body>
+
+<nav class="site-nav" id="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">
+      <img src="../../assets/logo.png" alt="ReLU.chat" width="28" height="28">
+      <span>Data Science Chat</span>
+    </a>
+    <div class="nav-status" id="status-container">
+      <div class="status-indicator">
+        <span class="status-dot" id="dot"></span>
+      </div>
+      <span id="status-text">loading model...</span>
+    </div>
+  </div>
+</nav>
+
+<div class="progress"><div id="bar"></div></div>
+
+<main class="chat-layout">
+  <div class="chat-container">
+    <div class="chat-header-mobile">
+      <a href="/" class="back-btn" aria-label="Back to home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <div class="chat-title-mobile">
+      <span>ReLU.chat — Data Science</span>
+        <small>On-device AI assistant</small>
+      </div>
+    </div>
+
+    <div id="messages" role="log" aria-live="polite" aria-label="Chat messages">
+    </div>
+
+    <div class="suggestions" id="suggestions">
+    </div>
+  </div>
+
+  <form id="form">
+    <div class="input-container">
+      <input id="input" type="text" placeholder="Ask about data science..." autocomplete="off" aria-label="Message input">
+      <button id="send" type="submit" disabled aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </form>
+</main>
+
+<script src="../../core/ebook-promo.js" data-cfasync="false"></script>
+<script>
+  EbookPromo.mount(document.querySelector('main'));
+</script>
+
+<script src="../../assets/katex/katex.min.js" data-cfasync="false"></script>
+<script src="../../assets/katex/auto-render.min.js" data-cfasync="false"></script>
+<script type="module" src="js/app.js" data-cfasync="false"></script>
+
+</body>
+</html>

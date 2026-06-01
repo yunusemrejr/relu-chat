@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "inputFeatures": 25,
+  "inputBytes": 107,
+  "outputSchema": "AnswerPlan.v1",
+  "fragmentMetaVersion": "1.0.0",
+  "model": "mlp_policy",
+  "weightsSize": 281339,
+  "weightsHash": "3e183a55561b2e8f",
+  "wasmSize": 43,
+  "wasmHash": "sha256-663d8c24a7d60e63d283277d20cceeb7c153217f63de3890a6accfd6d4ab0008",
+  "botProfiles": ["game-theory", "golden-age", "data-science"],
+  "trained": "2026-05-24",
+  "architecture": {
+    "trunk": "25->128->64 (ReLU)",
+    "heads": {
+      "mode": 5,
+      "intent": 5,
+      "topic_count": 4,
+      "frag_count": 4,
+      "creativity": 1,
+      "tone": 4
+    },
+    "total_params": 13079
+  },
+  "notes": "Trained with synthetic data. Archive reference — runtime manifest lives in assets/models/policy/."
+}

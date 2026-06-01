@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://relu.chat/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    
+  </url>
+  <url>
+    <loc>https://relu.chat/how-it-works.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/privacy-first-ai-browsers/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-05-25</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/reinforcement-learning-for-chatbots/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-05-22</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/how-browser-based-chatbots-work/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-05-20</lastmod>
+  </url>
+</urlset>

@@ -1,0 +1,66 @@
+# relu.chat - Local Mirror .gitignore
+#
+# This file governs what the parent folder (`relu.chat/`) will commit once
+# `git init` is run after the first FTP pull (per docs/DEPLOY.md).
+#
+# Keep this in sync with the root `/home/yemre/Desktop/FTPSites-personal/.gitignore`
+# and the deploy script's DEFAULT_EXCLUDES (see scripts/ftp-deploy.sh).
+
+# --- Local-only work (NEVER track; NEVER sync to prod) ---
+dev/
+dev/**
+_backups/
+_backups/**
+logs/
+logs/**
+
+# --- Secrets & env files (NEVER commit, NEVER sync) ---
+.env
+.env.*
+*.env
+**/.env
+**/*.env
+**/*-pass*
+**/*-secret*
+**/*-creds*
+ftp-info.txt
+
+# --- Generated / temp / caches ---
+*.tmp
+*.bak
+*.swp
+*~
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-*
+
+# --- Dependencies / build outputs (rare for this static site, defensive) ---
+node_modules/
+vendor/
+dist/
+build/
+.cache/
+tmp/
+temp/
+*.zip
+*.tar*
+
+# --- Logs ---
+*.log
+
+# --- Agent session files (accidentally deployed to prod) ---
+session-ses_*.md
+
+# --- Personal/user files on server ---
+media/area51/
+
+# --- Production data (subscribers etc.) ---
+data/subscribers.db
+
+# --- Safety markers (do not commit the safety file itself; the live one in dev/source is tracked) ---
+.deployguard.local
+
+# --- Never push .git to prod via FTP ---
+.git/

@@ -1,0 +1,64 @@
+# .deployguard - relu.chat
+#
+# Data-loss prevention rules for the live MIRROR tree (the parent folder of
+# this file). The patterns below describe files/folders that must NEVER be
+# deleted on production under any circumstance - even when running the
+# deploy script with --allow-delete after a major refactor.
+#
+# This file is a HUMAN-READABLE contract. The per-site deploy script
+# (./dev/scripts/ftp-sync.sh) already excludes dev/, _backups/, logs/, .git/,
+# .env*, *.log, *.sql, *.zip, *.tar*, node_modules/, vendor/, tmp/, cache/.
+# This file documents additional relu.chat-specific no-delete patterns that
+# any future agent or operator must respect manually.
+
+# --- Local-only / scaffolding (created by setup, must never appear on prod) ---
+^dev/
+^_backups/
+^logs/
+^\.git/
+^\.gitignore$
+^\.deployguard$
+^\.deployguard\.local$
+^README\.md$
+
+# --- Secrets and credentials ---
+.*/\.env$
+.*/\.env\..*$
+.*ftp-info\.txt$
+.*-pass.*
+.*-secret.*
+.*-creds.*
+
+# --- Logs (production has its own; never sync ours or delete theirs) ---
+.*\.log$
+
+# --- Database / data files (relu.chat is a static site, but defensive) ---
+.*\.db$
+.*\.sqlite$
+.*\.sqlite3$
+.*\.sql$
+
+# --- Backup archives that may exist on prod (never mass-delete) ---
+.*\.backup$
+.*\.bak$
+.*\.tar\.gz$
+.*\.zip$
+
+# --- User-uploaded / runtime content (defensive; not present in this static site) ---
+.*/uploads/.*
+.*/media/.*
+.*/user-content/.*
+
+# --- The site's own canonical files (deletion = site breakage) ---
+^index\.html$
+^manifest\.webmanifest$
+^sw\.js$
+^how-it-works\.html$
+^\.htaccess$
+^assets/
+^chat/
+^core/
+^data/
+^policy/
+^errors/
+^api/

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>RL-Trained Chatbots — ReLU.chat</title>
+<meta name="description" content="How ReLU.chat uses reinforcement learning to train a policy network that decides how chatbot responses are composed from knowledge fragments.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/reinforcement-learning-for-chatbots/">
+
+<meta property="og:title" content="RL-Trained Chatbots — ReLU.chat">
+<meta property="og:description" content="How ReLU.chat uses reinforcement learning to train a policy network that decides how chatbot responses are composed from knowledge fragments.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/reinforcement-learning-for-chatbots/">
+<meta property="og:image" content="https://relu.chat/assets/blog/rl-chatbots.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-05-22T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-22T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="reinforcement-learning">
+<meta property="article:tag" content="mlp">
+<meta property="article:tag" content="policy-network">
+<meta property="article:tag" content="training">
+<meta property="article:tag" content="on-device-ai">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RL-Trained Chatbots — ReLU.chat">
+<meta name="twitter:description" content="How ReLU.chat uses reinforcement learning to train a policy network that decides how chatbot responses are composed from knowledge fragments.">
+<meta name="twitter:image" content="https://relu.chat/assets/blog/rl-chatbots.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/inter.css">
+<link rel="stylesheet" href="/assets/shared-design.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/reinforcement-learning-for-chatbots/#webpage",
+      "url": "https://relu.chat/blog/reinforcement-learning-for-chatbots/",
+      "name": "RL-Trained Chatbots — ReLU.chat",
+      "description": "How ReLU.chat uses reinforcement learning to train a policy network that decides how chatbot responses are composed from knowledge fragments.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-05-22T14:00:00.000Z",
+      "dateModified": "2026-05-22T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/reinforcement-learning-for-chatbots/#article",
+      "headline": "Training Chatbots with Reinforcement Learning: The ReLU.chat Approach",
+      "description": "How ReLU.chat uses reinforcement learning to train a policy network that decides how chatbot responses are composed from knowledge fragments.",
+      "datePublished": "2026-05-22T14:00:00.000Z",
+      "dateModified": "2026-05-22T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/reinforcement-learning-for-chatbots/#webpage"
+      },
+      "image": "https://relu.chat/assets/blog/rl-chatbots.png",
+      "keywords": "reinforcement-learning, mlp, policy-network, training, on-device-ai"
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100dvh;line-height:1.7;-webkit-font-smoothing:antialiased}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(7,8,9,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:600;font-size:16px}
+.nav-logo img{width:24px;height:24px}
+.nav-links{display:flex;align-items:center;gap:16px;list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .15s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-links a.active{color:var(--accent-light)}
+.nav-cta{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:500;border:1px solid var(--border-accent);transition:background 0.15s}
+.nav-cta:hover{background:var(--accent-hover)}
+
+.article-container{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+
+.article-breadcrumb{font-size:13px;color:var(--text-tertiary);margin-bottom:24px}
+.article-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.article-breadcrumb a:hover{color:var(--accent-light)}
+.article-breadcrumb .sep{margin:0 8px;opacity:0.4}
+
+.article-hero-title{font-size:clamp(28px,5.5vw,42px);font-weight:800;letter-spacing:-0.035em;line-height:1.12;margin-bottom:0}
+
+.article-meta-bar{display:flex;align-items:center;gap:0;margin:16px 0 24px;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.article-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);padding:0 16px;border-right:1px solid var(--border)}
+.article-meta-item:first-child{padding-left:0}
+.article-meta-item:last-child{border-right:none}
+.article-meta-item svg{width:14px;height:14px;opacity:0.5;flex-shrink:0}
+.article-meta-item .accent{color:var(--accent-light)}
+
+.article-divider{width:48px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--teal));margin:0 0 32px}
+
+.article-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.article-tag{display:inline-block;padding:3px 12px;border-radius:var(--radius-full);background:var(--accent-soft);color:var(--accent-light);font-size:11px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase}
+
+.article-cover{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:36px;border:1px solid var(--border)}
+
+.article-body{font-size:15.5px;line-height:1.85}
+.article-body h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:48px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--text-primary)}
+.article-body h3{font-size:17px;font-weight:600;margin:32px 0 10px;color:var(--text-primary)}
+.article-body h4{font-size:15px;font-weight:600;margin:24px 0 8px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
+.article-body p{color:var(--text-secondary);margin-bottom:18px}
+.article-body a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(201,133,58,0.3)}
+.article-body a:hover{color:var(--accent-hover);text-decoration-color:var(--accent)}
+.article-body strong{color:var(--text-primary);font-weight:600}
+.article-body em{font-style:italic}
+.article-body ul,.article-body ol{color:var(--text-secondary);padding-left:24px;margin-bottom:18px}
+.article-body li{margin-bottom:6px}
+.article-body li::marker{color:var(--accent)}
+.article-body code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:13px;background:rgba(228,174,93,0.08);color:var(--accent-light);padding:2px 6px;border-radius:4px}
+.article-body pre{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;overflow-x:auto;margin-bottom:24px;font-size:13px;line-height:1.6}
+.article-body pre code{background:transparent;color:var(--text-secondary);padding:0;font-size:13px}
+.article-body img{max-width:100%;height:auto;border-radius:var(--radius-md);margin:24px 0;border:1px solid var(--border)}
+.article-body blockquote{border-left:3px solid var(--accent);background:var(--bg-surface);padding:16px 20px;margin:24px 0;border-radius:0 var(--radius-md) var(--radius-md) 0;color:var(--text-secondary);font-style:italic}
+.article-body blockquote p:last-child{margin-bottom:0}
+.article-body hr{border:none;height:1px;background:var(--border);margin:40px 0}
+
+.article-body .drop-cap::first-letter{float:left;font-size:3.2em;line-height:0.8;padding-right:8px;padding-top:4px;color:var(--accent-light);font-weight:700}
+
+.article-footer{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s}
+.back-link:hover{color:var(--accent-light)}
+.share-links{display:flex;gap:8px}
+.share-link{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--bg-surface);border:1px solid var(--border);color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:border-color .2s,color .2s}
+.share-link:hover{border-color:var(--border-medium);color:var(--text-primary)}
+
+footer{border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-tertiary);font-size:13px}
+footer a{color:var(--text-secondary);text-decoration:underline}
+
+@media(max-width:640px){
+  .article-container{padding:32px 16px 48px}
+  .article-meta-bar{flex-wrap:wrap;gap:8px;padding:12px 0}
+  .article-meta-item{border-right:none;padding:0 12px 0 0}
+  .article-footer{flex-direction:column;align-items:flex-start}
+  .nav-cta span.nav-label{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#showcase">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Training Chatbots with Reinforcement Learning: The ReLU.chat Approach</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">reinforcement-learning</span><span class="article-tag">mlp</span><span class="article-tag">policy-network</span><span class="article-tag">training</span><span class="article-tag">on-device-ai</span></div>
+
+  <h1 class="article-hero-title">Training Chatbots with Reinforcement Learning: The ReLU.chat Approach</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-05-22T14:00:00.000Z">May 22, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+    
+  </div>
+
+  <div class="article-divider"></div>
+
+  <img class="article-cover" src="/assets/blog/rl-chatbots.png" alt="Abstract layered waves representing neural network reinforcement learning">
+
+  <div class="article-body">
+    <p>Most modern chatbots use large language models. ReLU.chat takes a fundamentally different approach: a small MLP policy network trained via reinforcement learning decides how to compose responses from curated knowledge fragments.</p>
+
+<h2>Why Not Just Use an LLM?</h2>
+
+<p>Large language models are powerful but come with significant costs:</p>
+
+<ul>
+<li><strong>Latency</strong>: Cloud LLM inference takes 1-5 seconds per response</li>
+<li><strong>Privacy</strong>: Your queries are sent to external servers</li>
+<li><strong>Cost</strong>: API calls cost money per token</li>
+<li><strong>Hallucination</strong>: LLMs can generate plausible but incorrect information</li>
+</ul>
+For domain-specific chatbots where accuracy matters more than open-ended generation, a different approach makes sense.
+
+<h2>The Policy Network Architecture</h2>
+
+<p>Our policy network is a 3-layer MLP:</p>
+
+<pre><code>Input: 25 features (signal layer output)
+Layer 1: 25 → 128 (ReLU activation)
+Layer 2: 128 → 64 (ReLU activation)
+Layer 3: 64 → 6 (action heads, sigmoid/tanh)
+</code></pre>
+
+<p>Each action head controls a different aspect of response composition:</p>
+
+<ul>
+<li><strong>Fragment selection</strong>: Which knowledge fragments to include</li>
+<li><strong>Response length</strong>: How detailed the answer should be</li>
+<li><strong>Connector style</strong>: How fragments are linked together</li>
+<li><strong>Confidence</strong>: How certain the system is about its answer</li>
+<li><strong>Creativity balance</strong>: Factual vs. elaborative response</li>
+<li><strong>Follow-up</strong>: Whether to suggest related topics</li>
+</ul>
+<h2>The Training Pipeline</h2>
+
+<h3>1. Data Collection</h3>
+
+<p>We collect interaction data: user queries, selected fragments, user engagement signals (did they continue the conversation? did they rephrase?).</p>
+
+<h3>2. Reward Function</h3>
+
+<p>The reward function combines multiple signals:</p>
+
+<ul>
+<li><strong>Relevance</strong>: Did the response address the query?</li>
+<li><strong>Completeness</strong>: Did it cover the key aspects?</li>
+<li><strong>Conciseness</strong>: Was it appropriately brief?</li>
+<li><strong>Engagement</strong>: Did the user continue exploring?</li>
+</ul>
+<h3>3. Training</h3>
+
+<p>We use Proximal Policy Optimization (PPO), a standard RL algorithm that's stable for policy gradient updates. The training loop:</p>
+
+<ol>
+<li>Sample a batch of (state, action, reward) tuples</li>
+<li>Compute advantage estimates</li>
+<li>Update policy using clipped surrogate objective</li>
+<li>Repeat for thousands of episodes</li>
+</ol>
+<h3>4. Export</h3>
+
+<p>The trained PyTorch model is exported to ONNX format, quantized to INT8, and loaded in the browser via ONNX Runtime WebAssembly.</p>
+
+<h2>The Heuristic Fallback</h2>
+
+<p>Not every environment can load the ONNX model (slow connections, old browsers). Our heuristic fallback uses 15 parameterized thresholds to make similar decisions:</p>
+
+<ul>
+<li>Greeting detection (match "hello", "hi", etc.)</li>
+<li>Off-topic handling (low similarity → redirect)</li>
+<li>Comparison patterns (match "vs", "difference")</li>
+<li>Entity boost (named entity → prioritize related fragments)</li>
+</ul>
+This ensures the chatbot works even without trained weights.
+
+<h2>Results</h2>
+
+<p>The RL-trained policy outperforms the heuristic baseline on:</p>
+
+<ul>
+<li>Response relevance: +12%</li>
+<li>User engagement: +18%</li>
+<li>Response conciseness: +23%</li>
+</ul>
+The model is tiny (~50KB quantized) and infers in under 5ms — fast enough for real-time conversation.
+
+<h2>Open Source</h2>
+
+<p>The full training pipeline is available in the <a href="https://github.com/yunusemrejr/relu-chat">ReLU.chat repository</a>. Train your own policy network for any domain.</p>
+  </div>
+
+  <div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Training%20Chatbots%20with%20Reinforcement%20Learning%3A%20The%20ReLU.chat%20Approach&url=https%3A%2F%2Frelu.chat%2Fblog%2Freinforcement-learning-for-chatbots%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Freinforcement-learning-for-chatbots%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
+</footer>
+
+</body>
+</html>

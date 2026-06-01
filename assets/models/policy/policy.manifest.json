@@ -1,0 +1,41 @@
+{
+  "version": "0.4.0",
+  "inputFeatures": 25,
+  "inputBytes": 107,
+  "outputSchema": "AnswerPlan.v1",
+  "fragmentMetaVersion": "1.0.0",
+  "model": "mlp_policy",
+  "weightsSize": 362599,
+  "wasmSize": 43,
+  "wasmHash": "sha256-stub",
+  "botProfiles": [
+    "game-theory",
+    "golden-age",
+    "data-science"
+  ],
+  "trained": "2026-05-26",
+  "seed": 12345,
+  "rewardWeights": {
+    "intent_match": 0.2,
+    "topic_precision": 0.15,
+    "fragment_coherence": 0.12,
+    "length_penalty": 0.08,
+    "creativity_alignment": 0.08,
+    "guardrail_ok": 0.15,
+    "follow_up_continuity": 0.1,
+    "diversity": 0.07,
+    "response_coherence": 0.05
+  },
+  "architecture": {
+    "trunk": "25\u2192128\u219264 (ReLU + LayerNorm + Dropout)",
+    "heads": {
+      "mode": 5,
+      "intent": 5,
+      "topic_count": 4,
+      "frag_count": 4,
+      "creativity": 1,
+      "tone": 4
+    },
+    "total_params": 13528
+  }
+}

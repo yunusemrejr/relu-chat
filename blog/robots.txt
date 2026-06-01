@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /data/
+Disallow: /dev/
+Disallow: /core/
+Disallow: /policy/
+Disallow: /assets/models/
+Disallow: /_backups/
+
+User-agent: GPTBot
+Allow: /
+Allow: /blog/
+Allow: /how-it-works.html
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /blog/
+Allow: /how-it-works.html
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /blog/
+Allow: /how-it-works.html
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://relu.chat/sitemap.xml

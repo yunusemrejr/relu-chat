@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>ReLU.chat Blog</title>
+  <link>https://relu.chat/blog/</link>
+  <description>Technical articles about on-device AI, browser-based chatbots, NLP, and privacy-first machine learning.</description>
+  <language>en</language>
+  <lastBuildDate>Wed, 27 May 2026 19:27:21 GMT</lastBuildDate>
+  <atom:link href="https://relu.chat/blog/feed.xml" rel="self" type="application/rss+xml"/>
+  <image>
+    <url>https://relu.chat/assets/logo.png</url>
+    <title>ReLU.chat</title>
+    <link>https://relu.chat</link>
+  </image>
+  <item>
+    <title>Privacy-First AI: Why Browser-Based Machine Learning Matters</title>
+    <link>https://relu.chat/blog/privacy-first-ai-browsers/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/privacy-first-ai-browsers/</guid>
+    <pubDate>Mon, 25 May 2026 09:00:00 GMT</pubDate>
+    <description>Why running AI in the browser matters for privacy. Zero data collection, zero tracking, zero server dependency. The future of privacy-first machine learning.</description>
+    <author>ReLU.chat</author>
+    <category>privacy</category>
+    <category>browser</category>
+    <category>machine-learning</category>
+    <category>on-device-ai</category>
+    <category>open-source</category>
+  </item>
+  <item>
+    <title>Training Chatbots with Reinforcement Learning: The ReLU.chat Approach</title>
+    <link>https://relu.chat/blog/reinforcement-learning-for-chatbots/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/reinforcement-learning-for-chatbots/</guid>
+    <pubDate>Fri, 22 May 2026 14:00:00 GMT</pubDate>
+    <description>How ReLU.chat uses reinforcement learning to train a policy network that decides how chatbot responses are composed from knowledge fragments.</description>
+    <author>ReLU.chat</author>
+    <category>reinforcement-learning</category>
+    <category>mlp</category>
+    <category>policy-network</category>
+    <category>training</category>
+    <category>on-device-ai</category>
+  </item>
+  <item>
+    <title>How Browser-Based Chatbots Work: A Deep Dive into On-Device NLP</title>
+    <link>https://relu.chat/blog/how-browser-based-chatbots-work/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/how-browser-based-chatbots-work/</guid>
+    <pubDate>Wed, 20 May 2026 10:00:00 GMT</pubDate>
+    <description>Learn how modern browser-based chatbots run NLP pipelines entirely client-side using ONNX, sentence transformers, and reinforcement learning.</description>
+    <author>ReLU.chat</author>
+    <category>nlp</category>
+    <category>on-device-ai</category>
+    <category>chatbots</category>
+    <category>onnx</category>
+    <category>browser</category>
+  </item>
+</channel>
+</rss>
