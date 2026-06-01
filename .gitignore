@@ -1,29 +1,48 @@
-# relu.chat - Local Mirror .gitignore
+# relu.chat - .gitignore
 #
-# This file governs what the parent folder (`relu.chat/`) will commit once
-# `git init` is run after the first FTP pull (per docs/DEPLOY.md).
-#
-# Keep this in sync with the root `/home/yemre/Desktop/FTPSites-personal/.gitignore`
-# and the deploy script's DEFAULT_EXCLUDES (see scripts/ftp-deploy.sh).
+# Public open-source static site. Secrets, dev artifacts, private blog
+# content, and operational noise are NEVER tracked in the public repo.
 
-# --- Local-only work (NEVER track; NEVER sync to prod) ---
+# --- Secrets & credentials (NEVER commit) ---
+.env
+.env.local
+.env.example
+.env.*
+*.env
+**/.env
+**/.env.*
+**/*-pass*
+**/*-secret*
+**/*-creds*
+ftp-info.txt
+
+# --- Agent / session artifacts (leaked to prod; stay local) ---
+session-ses_*.md
+session-*.md
+opc_ua
+.agent_memory/
+.agent-logs/
+.agent-imperative.json
+
+# --- Dev folder (local-only ML training, backups, operational noise) ---
 dev/
 dev/**
+
+# --- Local-only work (NEVER track; NEVER sync to prod) ---
 _backups/
 _backups/**
 logs/
 logs/**
 
-# --- Secrets & env files (NEVER commit, NEVER sync) ---
-.env
-.env.*
-*.env
-**/.env
-**/*.env
-**/*-pass*
-**/*-secret*
-**/*-creds*
-ftp-info.txt
+# --- Deployment scripts and logs ---
+deploy.sh
+deploy.sh.example
+.deployignore
+.deployments/
+deploy-*.log
+
+# --- Documentation — local operational docs ---
+docs/
 
 # --- Generated / temp / caches ---
 *.tmp
@@ -36,7 +55,7 @@ Thumbs.db
 .vscode/
 *.sublime-*
 
-# --- Dependencies / build outputs (rare for this static site, defensive) ---
+# --- Dependencies / build outputs ---
 node_modules/
 vendor/
 dist/
@@ -46,21 +65,32 @@ tmp/
 temp/
 *.zip
 *.tar*
+*.onnx
+*.wasm
+*.bin
 
 # --- Logs ---
 *.log
 
-# --- Agent session files (accidentally deployed to prod) ---
-session-ses_*.md
+# --- Data (production databases; public site ships no DB) ---
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# --- Python cache ---
+__pycache__/
+*.pyc
+
+# --- Blog system (PRIVATE — generated output + source; not part of public open-source repo) ---
+blog/
+content/
+scripts/blog/
 
 # --- Personal/user files on server ---
 media/area51/
 
-# --- Production data (subscribers etc.) ---
-data/subscribers.db
-
-# --- Safety markers (do not commit the safety file itself; the live one in dev/source is tracked) ---
+# --- Safety markers ---
 .deployguard.local
 
-# --- Never push .git to prod via FTP ---
+# --- Never sync .git to prod ---
 .git/

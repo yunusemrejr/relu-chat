@@ -32,7 +32,7 @@
 # --- Logs (production has its own; never sync ours or delete theirs) ---
 .*\.log$
 
-# --- Database / data files (relu.chat is a static site, but defensive) ---
+# --- Database / data files ---
 .*\.db$
 .*\.sqlite$
 .*\.sqlite3$
@@ -44,7 +44,7 @@
 .*\.tar\.gz$
 .*\.zip$
 
-# --- User-uploaded / runtime content (defensive; not present in this static site) ---
+# --- User-uploaded / runtime content (defensive) ---
 .*/uploads/.*
 .*/media/.*
 .*/user-content/.*
