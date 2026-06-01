@@ -125,15 +125,7 @@ export function cosine(a, b) {
   return s / denom;
 }
 
-export function softmax(arr, t = 1) {
-  if (!Array.isArray(arr) || arr.length === 0) return [];
-  if (t <= 0) t = 1e-9;
-  const filtered = arr.map(x => Number.isFinite(x) ? x : 0);
-  const m = Math.max(...filtered);
-  const e = filtered.map(x => Math.exp((x - m) / t));
-  const s = e.reduce((a, b) => a + b, 0);
-  return s > 0 ? e.map(x => x / s) : filtered.map(() => 1 / filtered.length);
-}
+import { softmax } from './math-utils.js';
 
 export function weightedChoice(items, w) {
   if (!Array.isArray(items) || items.length === 0) return null;
@@ -149,7 +141,9 @@ export function weightedChoice(items, w) {
   return items[items.length - 1];
 }
 
-const STOP = new Set("a an the of in on at for to with and or is are was were be been being what which who whom whose this that these those i you he she it we they them us my your his her its our their me do does did can could should would will might may has have had".split(' '));
+const STOP = new Set("a an the of in on at for to with and or is are was were be been being what which who whom whose this that these those i you he she it we they them us my your his her its our their me do does did can could should would will might may has have had not no nor don't doesn't didn't won't wouldn't can't couldn't".split(' '));
+
+export { STOP };
 
 export function tokens(t) {
   if (!t || typeof t !== 'string') return [];
@@ -163,7 +157,7 @@ export function tokens(t) {
 function normalizeAlias(a) {
   if (!a || typeof a !== 'string') return '';
   return a.toLowerCase()
-    .replace(/['']/g, "'")
+    .replace(/[\u2018\u2019'']/g, "'")
     .replace(/\s+-\s+/g, '-')
     .trim();
 }
@@ -445,17 +439,11 @@ export async function selectFragment(entry, cat, qEmb, embedCached, config, rece
       const v = await embedCached(fr);
       let sim = (Array.isArray(v) && v.length > 0) ? cosine(qEmb, v) : 0;
 
-      // Diversity penalty: penalize recently-shown fragments to avoid repetition
+      // Diversity penalty: penalize recently-shown fragments by category ID
       if (recentlyUsedFragments && recentlyUsedFragments.length > 0) {
-        const fragText = typeof fr === 'string' ? fr : (fr?.text || '');
-        if (fragText) {
-          const prefix = fragText.substring(0, 50);
-          for (const usedFrag of recentlyUsedFragments) {
-            if (usedFrag && prefix && prefix === usedFrag.substring(0, 50)) {
-              sim *= 0.5; // 50% penalty for recently shown fragments
-              break;
-            }
-          }
+        const fragId = `${entry.id}:${cat}`;
+        if (recentlyUsedFragments.includes(fragId)) {
+          sim *= 0.5;
         }
       }
 

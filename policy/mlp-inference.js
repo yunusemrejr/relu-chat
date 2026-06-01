@@ -5,12 +5,15 @@
  * No external dependencies — direct array math on Float32.
  *
  * Architecture:  25 inputs → 128 hidden → 64 hidden → 6 action heads
- * Parameters:    ~4.5K total (fc1: 3.2K, fc2: 8.3K, heads: 1.6K)
+ * Parameters:    ~13.1K total (fc1: 3.3K, fc2: 8.3K, heads: 1.5K)
  * Weights form:  PyTorch Linear convention — weight @ input.T + bias
  *
  * Design Version: 2.0.0 (mlp-inference) — adds quantized path, buffer reuse
  * Companion to:   policy-runtime.js, feature-extractor.js, action-schema.js
  */
+
+import { softmax, sigmoid, argmax, clamp01 } from '../core/math-utils.js';
+import { INTENT_CAT_ORDERS } from './action-schema.js';
 
 // ---------------------------------------------------------------------------
 // Label vocabularies — must match the training pipeline
@@ -20,18 +23,6 @@ const MODE_LABELS    = ['normal', 'off_topic', 'greeting', 'help', 'comparison']
 const INTENT_LABELS  = ['definition', 'example', 'formal', 'application', 'comparison'];
 const TONE_LABELS    = ['neutral', 'formal', 'intuitive', 'playful'];
 const COUNT_LABELS   = [1, 2, 3, 4];  // topic-count & frag-count both use [1,2,3,4]
-
-// ---------------------------------------------------------------------------
-// Intent → category-order mapping (mirrors nlp.js DEFAULT_INTENTS)
-// ---------------------------------------------------------------------------
-
-const INTENT_CAT_ORDERS = {
-  definition:  ['def', 'int', 'ex'],
-  example:     ['ex', 'int', 'def'],
-  formal:      ['form', 'def', 'ex'],
-  application: ['app', 'ex', 'int'],
-  comparison:  ['def', 'int', 'ex'],
-};
 
 // ---------------------------------------------------------------------------
 // Expected weight tensor shapes — validated at construction time
@@ -88,7 +79,8 @@ function matMul(vec, wmat, target) {
 
 /**
  * Int8 vector × weight-matrix multiply (quantized path).
- * Uses Int32Array for accumulation to avoid overflow.
+ * Uses Number (Float64) accumulation; safe for layers up to ~1000 in_features
+ * due to 53-bit mantissa. For larger layers, use Int32Array accumulation.
  *
  * @param {Int8Array|Float32Array} vec - input vector (length in_features)
  * @param {Int8Array} wmat - quantized weight matrix [out_features][in_features] as flat Int8Array
@@ -137,74 +129,6 @@ function addBiasInPlace(target, bias) {
   for (let i = 0; i < target.length; i++) {
     target[i] += bias[i];
   }
-}
-
-/**
- * Stable softmax: exp(x_i - max) / Σ exp(x_j - max).
- *
- * @param {Float32Array} logits
- * @returns {Float32Array} probabilities (sums to 1)
- */
-function softmax(logits) {
-  // Find max for numerical stability
-  let maxVal = logits[0];
-  for (let i = 1; i < logits.length; i++) {
-    if (logits[i] > maxVal) maxVal = logits[i];
-  }
-  const result = new Float32Array(logits.length);
-  let sum = 0;
-  for (let i = 0; i < logits.length; i++) {
-    const e = Math.exp(logits[i] - maxVal);
-    result[i] = e;
-    sum += e;
-  }
-  const invSum = 1 / sum;
-  for (let i = 0; i < logits.length; i++) {
-    result[i] *= invSum;
-  }
-  return result;
-}
-
-/**
- * Sigmoid activation: 1 / (1 + exp(-x)).
- *
- * @param {number} x
- * @returns {number} in [0, 1]
- */
-function sigmoid(x) {
-  if (x >= 0) {
-    // Numerically stable for positive x: 1 / (1 + exp(-x))
-    return 1 / (1 + Math.exp(-x));
-  }
-  // For negative x: exp(x) / (1 + exp(x))
-  const e = Math.exp(x);
-  return e / (1 + e);
-}
-
-/**
- * Argmax — index of the maximum value.
- *
- * @param {Float32Array|Array<number>} arr
- * @returns {number} index
- */
-function argmax(arr) {
-  let best = 0;
-  let bestVal = arr[0];
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i] > bestVal) {
-      best = i;
-      bestVal = arr[i];
-    }
-  }
-  return best;
-}
-
-/**
- * Clamp float to [0, 1] (force NaN → 0).
- */
-function clamp01(v) {
-  if (!Number.isFinite(v)) return 0;
-  return v < 0 ? 0 : (v > 1 ? 1 : v);
 }
 
 // ---------------------------------------------------------------------------
@@ -554,26 +478,29 @@ export class MLPPolicy {
    * @returns {{ float32_us: number, quantized_us: number, speedup: number }}
    */
   static benchmark(policy, features, iterations = 1000) {
+    const now = typeof performance !== 'undefined' && performance.now
+      ? () => performance.now()
+      : () => Date.now();
+
     const warmup = 100;
-    // Warm up both paths
     for (let i = 0; i < warmup; i++) {
       policy.forward(features);
       if (policy._qWeights) policy.forwardQuantized(features);
     }
 
     // Benchmark float32
-    const t0 = process.hrtime.bigint();
+    const t0 = now();
     for (let i = 0; i < iterations; i++) policy.forward(features);
-    const t1 = process.hrtime.bigint();
-    const float32_us = Number(t1 - t0) / iterations / 1000;
+    const t1 = now();
+    const float32_us = (t1 - t0) / iterations * 1000;
 
     // Benchmark quantized
     let quantized_us = 0;
     if (policy._qWeights) {
-      const t2 = process.hrtime.bigint();
+      const t2 = now();
       for (let i = 0; i < iterations; i++) policy.forwardQuantized(features);
-      const t3 = process.hrtime.bigint();
-      quantized_us = Number(t3 - t2) / iterations / 1000;
+      const t3 = now();
+      quantized_us = (t3 - t2) / iterations * 1000;
     }
 
     return {

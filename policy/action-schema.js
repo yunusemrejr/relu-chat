@@ -337,6 +337,14 @@ export function validatePlan(plan) {
   };
 }
 
+export const INTENT_CAT_ORDERS = Object.freeze({
+  definition:  ['def', 'int', 'ex'],
+  example:     ['ex', 'int', 'def'],
+  formal:      ['form', 'def', 'ex'],
+  application: ['app', 'ex', 'int'],
+  comparison:  ['def', 'int', 'ex'],
+});
+
 /**
  * Quick type-check: is this object shaped like an AnswerPlan?
  * Useful as a guard before calling validatePlan.

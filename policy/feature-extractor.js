@@ -403,7 +403,8 @@ export function extractPolicyFeatures(query, qEmb, ranked, entities, intentScore
  *   - Float32Array(25) at offset 0  (all features as f32)
  *   - Uint8Array(7)    at offset 100 (discrete features in compact form)
  *
- * Total buffer size: 25 * 4 + 7 = 107 bytes.
+ *   Total buffer size: 25 * 4 + 7 = 107 bytes.
+ *   (The packedFeatures comment previously stated 76 bytes; 107 is correct.)
  *
  * Uint8Array layout:
  *   [0] = entityCount          (u8, 0-3)

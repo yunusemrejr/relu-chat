@@ -30,7 +30,7 @@ RewriteRule ^(.*)$ https://relu.chat/$1 [L,R=301]
 
 # Block access to .git, .env, .agent-logs, data directory
 <IfModule mod_rewrite.c>
-    RewriteRule (^\.|^\.) - [F,L]
+    RewriteRule ^\. - [F,L]
 </IfModule>
 
 <FilesMatch "^\.">
@@ -42,6 +42,11 @@ RewriteRule ^(.*)$ https://relu.chat/$1 [L,R=301]
     Require all denied
 </FilesMatch>
 
+# Block sensitive files (environment, logs, scripts, backups, Python, Markdown)
+<FilesMatch "\.(env|log|bak|tmp|sh|py|md)$">
+    Require all denied
+</FilesMatch>
+
 # Block .htaccess itself
 <Files ".htaccess">
     Require all denied
@@ -50,6 +55,11 @@ RewriteRule ^(.*)$ https://relu.chat/$1 [L,R=301]
 # Block PHP files in data directory
 <IfModule mod_rewrite.c>
     RewriteRule ^data/.*\.php$ - [F,L]
+</IfModule>
+
+# Block access to dev directory (contains .env, training data, benchmarks)
+<IfModule mod_rewrite.c>
+    RewriteRule ^dev/ - [F,L]
 </IfModule>
 
 # Block access to api directory listing (only PHP files should execute)
@@ -64,6 +74,13 @@ Options -Indexes
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+    # HSTS — enforce HTTPS everywhere (2 year max age)
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+    # Cross-origin isolation headers (required by ONNX WASM backends for SharedArrayBuffer)
+    Header always set Cross-Origin-Embedder-Policy "require-corp"
+    Header always set Cross-Origin-Opener-Policy "same-origin"
 
     # CSP — allow self only. Remote models disabled (env.allowRemoteModels=false).
     Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://static.cloudflareinsights.com; frame-ancestors 'self'"

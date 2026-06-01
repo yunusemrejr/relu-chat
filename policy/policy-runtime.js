@@ -18,7 +18,7 @@
  */
 
 import { extractPolicyFeatures, packFeatures } from './feature-extractor.js';
-import { validatePlan, DEFAULT_PLAN } from './action-schema.js';
+import { validatePlan, DEFAULT_PLAN, INTENT_CAT_ORDERS } from './action-schema.js';
 import { MLPPolicy } from './mlp-inference.js';
 
 // ---------------------------------------------------------------------------
@@ -563,13 +563,6 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
       }
     }
     // Rebuild fragmentPlan to match the new topics
-    const INTENT_CAT_ORDERS = {
-      definition: ['def', 'int', 'ex'],
-      example: ['ex', 'int', 'def'],
-      formal: ['form', 'def', 'ex'],
-      application: ['app', 'ex', 'int'],
-      comparison: ['def', 'int', 'ex'],
-    };
     const catOrder = INTENT_CAT_ORDERS[plan.intent] || ['def', 'int', 'ex'];
     const fragsPerTopic = Math.min(3, catOrder.length);  // Round 7: safe +1 fragment surfacing (was 2); still capped by policy+catOrder+botProfile
     plan.fragmentPlan = [];
@@ -726,14 +719,7 @@ export function planAnswerHeuristic(features, KB, config, overrides) {
   const fragmentPlan = [];
 
   // Intent order (defaults from DEFAULT_INTENTS in nlp.js)
-  const INTENT_ORDERS = {
-    definition:  ['def', 'int', 'ex'],
-    example:     ['ex', 'int', 'def'],
-    formal:      ['form', 'def', 'ex'],
-    application: ['app', 'ex', 'int'],
-    comparison:  ['def', 'int', 'ex'],
-  };
-  const order = INTENT_ORDERS[intent] || ['def', 'int', 'ex'];
+  const order = INTENT_CAT_ORDERS[intent] || ['def', 'int', 'ex'];
 
   // For comparison mode, first topic gets full order, second gets only first cat
   const numTopics = Math.max(topics.length, (mode === 'comparison' ? 2 : 0));
@@ -859,7 +845,7 @@ async function _wasmPlanAnswer(instance, features, config) {
   const mem = instance.exports.memory?.buffer || wasmMemory;
   if (!mem) throw new Error('No WASM memory');
 
-  const packedLen = packed.buffer.byteLength; // 76 bytes
+  const packedLen = packed.buffer.byteLength; // 107 bytes (25*4 + 7)
   const inputPtr = _allocBuffer(instance, packedLen);
   const inputView = new Uint8Array(mem, inputPtr, packedLen);
   inputView.set(new Uint8Array(packed.buffer));
