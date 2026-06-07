@@ -802,6 +802,12 @@ pre code {
   transform: translateY(-1px);
 }
 
+#send:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px rgba(228,174,93,0.18), 0 0 20px var(--accent-glow);
+}
+
 #send:active:not(:disabled) {
   transform: scale(0.95);
 }

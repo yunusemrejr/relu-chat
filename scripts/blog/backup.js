@@ -27,8 +27,9 @@ function backup() {
     );
   }
 
-  // Also backup schema
-  const schemaPath = path.join(engine.POSTS_DIR, '../schema/schema.json');
+  // Also backup schema (use correct location next to engine, not the empty content/blog/schema/)
+  // Note: backups currently go to root _backups/ (consider moving to dev/_backups/ for project consistency in future).
+  const schemaPath = path.join(__dirname, 'schema.json');
   if (fs.existsSync(schemaPath)) {
     fs.copyFileSync(schemaPath, path.join(backupDir, 'schema.json'));
   }

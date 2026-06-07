@@ -5,7 +5,7 @@
   <link>https://relu.chat/blog/</link>
   <description>Technical articles about on-device AI, browser-based chatbots, NLP, and privacy-first machine learning.</description>
   <language>en</language>
-  <lastBuildDate>Wed, 27 May 2026 19:27:21 GMT</lastBuildDate>
+  <lastBuildDate>Sun, 07 Jun 2026 20:43:49 GMT</lastBuildDate>
   <atom:link href="https://relu.chat/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <image>
     <url>https://relu.chat/assets/logo.png</url>
@@ -17,7 +17,7 @@
     <link>https://relu.chat/blog/privacy-first-ai-browsers/</link>
     <guid isPermaLink="true">https://relu.chat/blog/privacy-first-ai-browsers/</guid>
     <pubDate>Mon, 25 May 2026 09:00:00 GMT</pubDate>
-    <description>Why running AI in the browser matters for privacy. Zero data collection, zero tracking, zero server dependency. The future of privacy-first machine learning.</description>
+    <description>Why running AI in the browser matters for privacy. Zero data collection, zero tracking, zero server dependency.</description>
     <author>ReLU.chat</author>
     <category>privacy</category>
     <category>browser</category>
