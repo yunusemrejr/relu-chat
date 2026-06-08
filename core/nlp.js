@@ -28,7 +28,7 @@ const DEFAULT_COMPARISON_OPENERS = {
 
 const DEFAULT_TRANSITIONS = ["\n\nRelatedly, ", "\n\nClosely linked — ", "\n\nConnected idea: ", "\n\nBuilding on that, "];
 
-const DEFAULT_INTENTS = {
+export const DEFAULT_INTENTS = {
   definition: {
     prototypes: [
       "what is X", "define X", "explain X", "what does X mean", "tell me about X",

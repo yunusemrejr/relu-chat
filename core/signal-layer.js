@@ -1,6 +1,7 @@
 import { BM25Scorer } from './bm25.js';
-import { cosine, softmax, tokens, bowVec, compileAliasRegex, extractEntities, classifyIntent, rankEntries, DEFAULT_INTENTS } from './nlp.js';
+import { cosine, tokens, compileAliasRegex, extractEntities, classifyIntent, rankEntries, DEFAULT_INTENTS } from './nlp.js';
 import { extractPolicyFeatures } from '../policy/feature-extractor.js';
+import { softmax } from './math-utils.js';
 
 export class SignalLayer {
   constructor(config = {}) {
@@ -341,4 +342,107 @@ export class SignalLayer {
 
     return Object.freeze(decisionPacket);
   }
+}
+
+function calibrateConfidence(rawScores = {}, temperature = 1.5) {
+  const scoreEntries = Object.entries(rawScores || {});
+  if (scoreEntries.length === 0) {
+    return { calibrated: {}, confidence: 0, entropy: 0 };
+  }
+
+  const rawValues = scoreEntries.map(([, score]) => {
+    const normalized = Number(score);
+    return Number.isFinite(normalized) ? Math.max(0, normalized) : 0;
+  });
+
+  const keys = scoreEntries.map(([label]) => label);
+  const calibrated = softmax(rawValues, temperature);
+  const confidence = calibrated.length > 0 ? Math.max(...calibrated) : 0;
+  const entropy = calibrated.length > 0
+    ? -calibrated.reduce((acc, p) => acc - p * Math.log2(Math.max(p, Number.EPSILON)), 0)
+    : 0;
+
+  const calibratedScores = {};
+  for (let i = 0; i < keys.length; i++) {
+    calibratedScores[keys[i]] = calibrated[i];
+  }
+
+  return {
+    calibrated: calibratedScores,
+    confidence,
+    entropy,
+  };
+}
+
+function ensembleRanking(denseRanked = [], sparseRanked = [], denseWeight = 0.7, sparseWeight = 0.3) {
+  if (!Array.isArray(denseRanked) || !Array.isArray(sparseRanked)) {
+    return [];
+  }
+
+  const wDense = Number.isFinite(denseWeight) ? denseWeight : 0.7;
+  const wSparse = Number.isFinite(sparseWeight) ? sparseWeight : 0.3;
+  const totalW = wDense + wSparse;
+  const normDense = totalW > 0 ? wDense / totalW : 0.7;
+  const normSparse = totalW > 0 ? wSparse / totalW : 0.3;
+
+  const scoreMap = new Map();
+
+  for (const entry of denseRanked) {
+    const idx = entry?.i;
+    if (!Number.isInteger(idx) || idx < 0) continue;
+    const base = scoreMap.get(idx) || { i: idx, dense: 0, sparse: 0 };
+    const rawDense = Number(entry.s);
+    base.dense = Number.isFinite(rawDense) ? Math.max(0, rawDense) : 0;
+    scoreMap.set(idx, base);
+  }
+
+  for (const entry of sparseRanked) {
+    const idx = entry?.i;
+    if (!Number.isInteger(idx) || idx < 0) continue;
+    const base = scoreMap.get(idx) || { i: idx, dense: 0, sparse: 0 };
+    const rawSparse = Number(entry.s);
+    base.sparse = Number.isFinite(rawSparse) ? Math.max(0, rawSparse) : 0;
+    scoreMap.set(idx, base);
+  }
+
+  const results = [];
+  for (const item of scoreMap.values()) {
+    const blended = normDense * item.dense + normSparse * item.sparse;
+    results.push({ i: item.i, dense: item.dense, sparse: item.sparse, s: blended });
+  }
+
+  return results.sort((a, b) => b.s - a.s || a.i - b.i);
+}
+
+function neuralRerank(query, qEmb, ranked = [], entryEmb = [], alpha = 0.15) {
+  if (!Array.isArray(ranked) || ranked.length === 0) return [];
+  if (!Array.isArray(qEmb) || qEmb.length === 0) {
+    return ranked.slice().sort((a, b) => b.s - a.s).slice(0, Math.max(0, ranked.length));
+  }
+
+  const blend = Number.isFinite(alpha) ? Math.min(1, Math.max(0, alpha)) : 0.15;
+
+  const output = [];
+  for (const item of ranked) {
+    const idx = item?.i;
+    if (!Number.isInteger(idx) || idx < 0) continue;
+    const baseScore = Number.isFinite(item.s) ? item.s : 0;
+    const embed = entryEmb[idx];
+    const sim = cosine(qEmb, Array.isArray(embed) ? embed : []);
+    const sim01 = Math.min(1, Math.max(0, (sim + 1) / 2));
+    const semanticBoost = alpha * sim01;
+    const lexicalBoost = Math.min(1, Math.max(0, tokens(query).length / 12));
+    const bonus = Math.min(semanticBoost, 0.7) * (0.6 + 0.4 * lexicalBoost);
+    const rerankScore = (1 - blend) * Math.max(0, baseScore) + blend * sim01;
+
+    output.push({
+      ...item,
+      s: rerankScore,
+      dense: Number.isFinite(item.dense) ? item.dense : 0,
+      sparse: Number.isFinite(item.sparse) ? item.sparse : 0,
+      rerankBonus: bonus,
+    });
+  }
+
+  return output.sort((a, b) => b.s - a.s);
 }

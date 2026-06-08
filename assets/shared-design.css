@@ -780,6 +780,16 @@ pre code {
   outline: none;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role='button']:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px var(--accent-glow-soft);
+}
+
 #send {
   width: 44px;
   height: 44px;
