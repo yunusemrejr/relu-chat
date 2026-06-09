@@ -1,5 +1,5 @@
 import { BM25Scorer } from './bm25.js';
-import { cosine, tokens, compileAliasRegex, extractEntities, classifyIntent, rankEntries, DEFAULT_INTENTS } from './nlp.js';
+import { cosine, tokens, compileAliasRegex, extractEntities, classifyIntent, rankEntries, rankTopK, DEFAULT_INTENTS } from './nlp.js';
 import { extractPolicyFeatures } from '../policy/feature-extractor.js';
 import { softmax } from './math-utils.js';
 
@@ -72,11 +72,11 @@ export class SignalLayer {
       entropy: calibration.entropy,
     };
 
-    const denseRanked = rankEntries(qEmb, entryEmb).slice(0, 20);
+    const denseRanked = rankTopK(qEmb, entryEmb, 20);
 
     let sparseRanked = [];
     if (this._bm25Ready) {
-      sparseRanked = this._bm25Scorer.scoreAll(query).slice(0, 20);
+      sparseRanked = this._bm25Scorer.scoreTopK(query, 20);
     }
 
     const ensemble = ensembleRanking(denseRanked, sparseRanked, 0.7, 0.3);

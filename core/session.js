@@ -286,6 +286,12 @@ export class SessionMemory {
     this._lastQueryTime = Date.now();
 
     this._turnCount = 0;
+
+    // Session summarization vector (gap fix): lightweight EMA of recent query embeddings.
+    // Provides multi-turn context beyond lastTopicSim/lastTopicAge without new policy features.
+    /** @type {number[]|null} */
+    this._emaVector = null;
+    this._emaAlpha = 0.65; // decay toward older context (higher = more weight on history)
   }
 
   // -------------------------------------------------------------------------
@@ -309,7 +315,7 @@ export class SessionMemory {
    * @param {number[]} topics    - KB indices presented in the answer
    * @param {string[]} fragments - fragment identifiers shown (e.g. `"relu:def"`)
    */
-  addTurn(query, response, entities, topics, fragments) {
+  addTurn(query, response, entities, topics, fragments, qEmb = null) {
     // ── Input validation ─────────────────────────────────────────────
     if (typeof query !== 'string') {
       console.warn('[session] addTurn received non-string query, coercing');
@@ -337,6 +343,8 @@ export class SessionMemory {
     } else {
       fragments = fragments.filter(f => typeof f === 'string' && f.length > 0);
     }
+    // Optional qEmb for EMA (array of numbers or null)
+    if (!Array.isArray(qEmb) || qEmb.length === 0) qEmb = null;
 
     const turn = {
       query,
@@ -372,6 +380,11 @@ export class SessionMemory {
     this.history.push(turn);
     this._turnCount++;
     this._lastQueryTime = Date.now();
+
+    // Update EMA summary vector (cheap, one 384-d vector)
+    if (qEmb) {
+      this._emaVector = this._updateEma(this._emaVector, qEmb);
+    }
 
     // --- Importance-based eviction ---
     // If over capacity, evict the least important turn that is NOT among the
@@ -510,6 +523,32 @@ export class SessionMemory {
   getLastBotResponse() {
     if (this.history.length === 0) return null;
     return this.history[this.history.length - 1].response;
+  }
+
+  /**
+   * Session EMA summarization vector (gap fix).
+   * Running exponential moving average of turn query embeddings.
+   * Gives policy/runtime real multi-turn dense context (free, 384-d).
+   * @returns {number[]|null}
+   */
+  getSummaryEmbedding() {
+    return this._emaVector ? this._emaVector.slice() : null;
+  }
+
+  /** @private */
+  _updateEma(oldVec, newVec) {
+    if (!Array.isArray(newVec) || newVec.length === 0) return oldVec;
+    const alpha = this._emaAlpha || 0.65;
+    if (!oldVec || oldVec.length !== newVec.length) {
+      return newVec.map(v => Number.isFinite(v) ? v : 0);
+    }
+    const out = new Array(oldVec.length);
+    for (let i = 0; i < oldVec.length; i++) {
+      const o = Number.isFinite(oldVec[i]) ? oldVec[i] : 0;
+      const n = Number.isFinite(newVec[i]) ? newVec[i] : 0;
+      out[i] = alpha * o + (1 - alpha) * n;
+    }
+    return out;
   }
 
   // -------------------------------------------------------------------------

@@ -66,12 +66,21 @@ export async function createChatbot(config) {
   const signalLayer = new SignalLayer();
   let bowVocab = null;
 
+  // Query embedding memoization (gap fix): identical/near follow-ups skip re-embed.
+  const queryEmbCache = new LRUCache(CONFIG?.CACHE?.QUERY_EMB_MAX || 64);
+
   async function embed(text) {
+    const key = (text || '').trim().toLowerCase().slice(0, 240);
+    if (key && queryEmbCache.has(key)) return queryEmbCache.get(key);
+    let v;
     if (extractor) {
       const out = await extractor(text, { pooling: 'mean', normalize: true });
-      return Array.from(out.data);
+      v = Array.from(out.data);
+    } else {
+      v = bowVec(text, bowVocab);
     }
-    return bowVec(text, bowVocab);
+    if (key) queryEmbCache.set(key, v);
+    return v;
   }
 
   async function embedCached(text) {
@@ -83,6 +92,26 @@ export async function createChatbot(config) {
 
   async function init() {
     _setLoadState('loading_transformer');
+
+    // ---- Fast bootstrap: BOW + heuristic so first turns are usable immediately ----
+    // Addresses "No lazy/progressive model loading — MiniLM blocks first interaction".
+    // Heuristic + BOW (already built) handle queries while full transformer streams in
+    // (aided by SW model pre-cache). Hot-swap to dense vectors when ready.
+    const voc = new Set();
+    for (const e of KB) for (const t of tokens(entryText(e))) voc.add(t);
+    for (const k of Object.keys(INTENTS)) for (const p of INTENTS[k].prototypes) for (const t of tokens(p)) voc.add(t);
+    bowVocab = new Map();
+    [...voc].forEach((w, i) => bowVocab.set(w, i));
+    entryEmb = KB.map(e => bowVec(entryText(e), bowVocab));
+    for (const k of Object.keys(INTENTS)) intentEmb[k] = INTENTS[k].prototypes.map(p => bowVec(p, bowVocab));
+    try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init (bootstrap) failed:', e); }
+
+    // Partial ready: enable UI + heuristic path right away (first turns use fast BOW+policy heuristic)
+    _setLoadState('partially_ready');
+    setStatus('basic (enhancing…)', true);
+    sendBtn.disabled = false;
+    ready = true; // allow handle(); embed() will use bow until extractor present
+    if (onReady) onReady();
 
     // ---- Parallel initialization: start policy loading while transformer loads ----
     const policyPromise = (async () => {
@@ -114,6 +143,7 @@ export async function createChatbot(config) {
     env.useBrowserCache = true;
 
     // ---- Load transformer model while policy loads in background ----
+    let usedFallback = false;
     try {
       setStatus('loading transformer…');
       extractor = await pipeline('feature-extraction', CONFIG.EMBEDDING.model, {
@@ -127,20 +157,21 @@ export async function createChatbot(config) {
         }
       });
 
-      // ---- Pre-warm embeddings: start encoding as soon as transformer is ready ----
-      // Don't wait for policy — this saves significant time on subsequent loads
-      // since the KB embedding is the heaviest computation.
+      // ---- Hot-swap: re-encode KB with real dense embeddings (progressive upgrade) ----
+      // Previous BOW entryEmb/intentEmb allow instant first turns; now replace in place.
       _setLoadState('loading_embeddings');
       setStatus('encoding knowledge base…');
       bar.style.width = '0%';
       compileAliasRegex(KB);
       const BATCH = 8;
+      const newEntryEmb = [];
       for (let i = 0; i < KB.length; i += BATCH) {
         const batch = KB.slice(i, i + BATCH).map(e => embed(entryText(e)));
-        entryEmb.push(...await Promise.all(batch));
+        newEntryEmb.push(...await Promise.all(batch));
         bar.style.width = (Math.min(i + BATCH, KB.length) / KB.length * 100) + '%';
       }
-      // Initialize BM25 sparse retrieval via SignalLayer
+      entryEmb = newEntryEmb; // hot-swap
+      // Initialize (or re-init) BM25 sparse retrieval via SignalLayer (now with better text)
       try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed:', e); }
 
       for (const k of Object.keys(INTENTS)) {
@@ -156,21 +187,13 @@ export async function createChatbot(config) {
       }
     } catch (err) {
       console.error('Model load failed, using BOW fallback:', err);
-      const voc = new Set();
-      for (const e of KB) for (const t of tokens(entryText(e))) voc.add(t);
-      for (const k of Object.keys(INTENTS)) for (const p of INTENTS[k].prototypes) for (const t of tokens(p)) voc.add(t);
+      usedFallback = true;
+      // BOW already bootstrapped above; ensure signal
       try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed in fallback:', e); }
-      bowVocab = new Map();
-      [...voc].forEach((w, i) => bowVocab.set(w, i));
-      entryEmb = KB.map(e => bowVec(entryText(e), bowVocab));
-      for (const k of Object.keys(INTENTS)) intentEmb[k] = INTENTS[k].prototypes.map(p => bowVec(p, bowVocab));
       setStatus('offline mode', true);
     }
 
     // ---- Wait for policy to finish ----
-    // At this point, embeddings are already computed (saved time).
-    // We just need policy for the planAnswer function.
-    // Update state if policy is still loading (may already be done if it finished fast)
     if (!isPolicyLoaded()) {
       _setLoadState('loading_policy');
     }
@@ -180,15 +203,15 @@ export async function createChatbot(config) {
     if (!isPolicyLoaded()) {
       _setLoadState('error');
       setStatus('policy error — please reload and clear browser cache', false);
-      return; // block readiness — policy is mandatory
+      return; // block further — policy is mandatory
     }
 
     bar.style.width = '100%';
     setTimeout(() => bar.style.width = '0%', 500);
-    setStatus('ready', true);
+    if (!usedFallback) setStatus('ready', true);
     ready = true;
     _setLoadState('ready');
-    sendBtn.disabled = false;
+    // sendBtn already enabled from partial bootstrap
     if (onReady) onReady();
   }
 
@@ -255,7 +278,7 @@ export async function createChatbot(config) {
         }
       }
 
-      session.addTurn(query, text, dp.entities, presentedTopics, fragmentsUsed);
+      session.addTurn(query, text, dp.entities, presentedTopics, fragmentsUsed, qEmb);
     } catch (err) {
       console.error(err);
       typingEl.remove();

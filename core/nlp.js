@@ -373,6 +373,32 @@ export function rankEntries(qEmb, entryEmb) {
     .sort((a, b) => b.s - a.s);
 }
 
+/**
+ * Bounded top-K ranking using O(N·k) selection (no full sort).
+ * Addresses "brute-force cosine over all KB" gap for future larger KBs.
+ * Returns top k by cosine desc. For tiny current KBs (~50-100) cost is negligible.
+ */
+export function rankTopK(qEmb, entryEmb, k = 8) {
+  if (!Array.isArray(qEmb) || !Array.isArray(entryEmb) || entryEmb.length === 0) return [];
+  const n = entryEmb.length;
+  const kk = Math.max(1, Math.min(k | 0, n));
+  const res = [];
+  const used = new Set();
+  for (let r = 0; r < kk; r++) {
+    let best = -1, bs = -Infinity;
+    for (let j = 0; j < n; j++) {
+      if (used.has(j)) continue;
+      const e = entryEmb[j];
+      const s = Array.isArray(e) ? cosine(qEmb, e) : 0;
+      if (s > bs) { bs = s; best = j; }
+    }
+    if (best < 0) break;
+    used.add(best);
+    res.push({ i: best, s: bs });
+  }
+  return res;
+}
+
 export async function classifyIntent(qEmb, intentEmb, intents, thresholds) {
   if (!Array.isArray(qEmb) || qEmb.length === 0 || !intents || !intentEmb) {
     return { intent: 'definition', scores: {}, rawScores: {} };
@@ -698,6 +724,27 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
       prev = cat;
     }
     if (pieces.length > 0) parts.push(pieces.join(' '));
+  }
+
+  // === Multi-fragment semantic deduplication (gap fix) ===
+  // Session already penalizes exact recent; this catches cross-topic near-dups cheaply
+  // (string prefix + length heuristic; full embed-cosine would work too via embedCached but adds awaits).
+  if (selectedFragments.length > 1) {
+    const unique = [];
+    for (let fi = 0; fi < selectedFragments.length; fi++) {
+      const f = selectedFragments[fi];
+      if (!f) continue;
+      const ftext = (typeof f === 'string') ? f : (f.text || '');
+      let dup = false;
+      for (const u of unique) {
+        const utext = (typeof u === 'string') ? u : (u.text || '');
+        if (ftext === utext || (ftext.length > 20 && utext.length > 20 && ftext.slice(0, 80) === utext.slice(0, 80))) {
+          dup = true; break;
+        }
+      }
+      if (!dup) unique.push(f);
+    }
+    selectedFragments = unique;
   }
 
   // === Factual Guardrail ===

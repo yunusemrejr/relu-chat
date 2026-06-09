@@ -518,6 +518,20 @@ export async function planAnswer(query, qEmb, KB, context = {}, config = {}) {
           plan = null;
         }
       }
+
+      // ---- Shadow compare (local-only, gap fix): detect silent heuristic vs MLP drift ----
+      // Helps spot weight-load regressions or policy skew without any network.
+      if (plan && typeof planAnswerHeuristic === 'function') {
+        try {
+          const h = planAnswerHeuristic(features, /*KB*/ null, config, /*overrides*/ {});
+          if (h && (h.mode !== plan.mode || JSON.stringify(h.topics || []) !== JSON.stringify(plan.topics || []))) {
+            console.debug('[shadow] mlp vs heuristic differ', {
+              mlp: { mode: plan.mode, topics: plan.topics },
+              heur: { mode: h.mode, topics: h.topics }
+            });
+          }
+        } catch (_) { /* non-fatal */ }
+      }
     } catch (err) {
       console.error('[policy-runtime] MLP inference failed:', err.message);
       plan = null;

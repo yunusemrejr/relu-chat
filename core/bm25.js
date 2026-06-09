@@ -118,5 +118,34 @@ export class BM25Scorer {
     return results.sort((a, b) => b.s - a.s);
   }
 
+  /**
+   * Top-K scores only (bounded, no full sort of entire KB).
+   * Complements scoreAll for the "brute-force" gap.
+   */
+  scoreTopK(query, k = 20) {
+    if (!this._ready) return [];
+    const n = this._docCount;
+    const kk = Math.max(1, Math.min(k | 0, n));
+    const res = [];
+    const used = new Set();
+    let maxS = 0;
+    for (let r = 0; r < kk; r++) {
+      let best = -1, bs = -Infinity;
+      for (let j = 0; j < n; j++) {
+        if (used.has(j)) continue;
+        const s = this.score(query, j);
+        if (s > bs) { bs = s; best = j; }
+      }
+      if (best < 0) break;
+      used.add(best);
+      if (bs > maxS) maxS = bs;
+      res.push({ i: best, s: bs });
+    }
+    if (maxS > 0) {
+      for (const r of res) r.s /= maxS;
+    }
+    return res;
+  }
+
   getReady() { return this._ready; }
 }
