@@ -995,7 +995,7 @@
       <div class="step-card reveal">
         <span class="step-number">01 Embed</span>
         <div class="step-title">Sentence Embedding</div>
-        <div class="step-desc"><code>sentence-transformer</code> (MiniLM-L6-v2) downloads once, caches in your browser, and runs fully on-device. A one-time warm-up — then it's yours forever.</div>
+        <div class="step-desc"><code>sentence-transformer</code> (MiniLM-L6-v2) downloads once and is pre-cached by the Service Worker. <strong>Progressive loading</strong>: heuristic/BOW fallback gives instant first-turn answers while the model warms up; full dense embeddings hot-swap automatically. Query memoization + top-k keep repeats fast.</div>
       </div>
 
       <div class="step-card reveal">

@@ -8,8 +8,8 @@ ReLU.chat is an open-source platform for building and running interactive chatbo
 
 ## Technical Architecture
 
-### Embedding Layer
-The system uses the all-MiniLM-L6-v2 sentence transformer model, quantized to ONNX format (~22MB). It converts user queries and knowledge-base entries into 384-dimensional dense vectors for semantic similarity computation.
+### Loading & Embedding Layer
+Progressive loading: heuristic + BOW fallback (already built) enables instant first-turn responses on cold start while the quantized all-MiniLM-L6-v2 ONNX model (~22 MB) streams in background (pre-cached by Service Worker). Full dense embeddings and KB vectors hot-swap seamlessly once ready. Query embeddings are memoized (LRU) for near-zero cost repeats. The model converts queries and KB entries into 384-dimensional dense vectors. Top-k (O(N·k)) ranking replaces brute-force full sorts for efficiency.
 
 ### Signal Layer
 A multi-signal retrieval system combines:
@@ -33,8 +33,8 @@ A multi-layer perceptron (MLP) with architecture 25→128→64→6 action heads,
 ### Fragment Composition
 Responses are composed from knowledge-base fragments connected by linguistic connectors. The system supports LaTeX rendering (via KaTeX), code blocks, and structured data presentation.
 
-### Heuristic Fallback
-When the MLP is unavailable (cold start, weight load failure), a parameterized heuristic system provides fallback behavior using 15 decision thresholds.
+### Heuristic Fallback & Shadowing
+When the MLP is unavailable (cold start, weight load failure), a parameterized heuristic system provides fallback behavior using 15 decision thresholds. Local-only shadow logging compares MLP vs heuristic decisions on every turn to detect regressions. The same heuristic powers the progressive first-turn path before full model readiness.
 
 ## Key Features
 
