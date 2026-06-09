@@ -105,6 +105,37 @@ export function pick(a) {
   return a[Math.floor(Math.random() * a.length)];
 }
 
+/**
+ * Seeded PRNG (mulberry32-style) for deterministic composition choices.
+ * Seed from botId + kbVersion + normalized query + top topic + turn + creativity bucket.
+ * Makes "random" openers/connectors/choices reproducible for the same conversational state
+ * (addresses uncontrolled randomness while keeping variety).
+ */
+function mulberry32(seed) {
+  let t = seed >>> 0;
+  return function() {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r = r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+let _seededRng = Math.random; // default fallback
+
+export function setCompositionSeed(seed) {
+  if (typeof seed === 'number' && Number.isFinite(seed)) {
+    _seededRng = mulberry32(seed | 0);
+  } else {
+    _seededRng = Math.random;
+  }
+}
+
+export function seededPick(a) {
+  if (!Array.isArray(a) || a.length === 0) return '';
+  return a[Math.floor(_seededRng() * a.length)];
+}
+
 export function cosine(a, b) {
   if (!Array.isArray(a) || !Array.isArray(b)) return 0;
   if (a.length === 0 || b.length === 0) return 0;
@@ -132,8 +163,8 @@ export function weightedChoice(items, w) {
   if (!Array.isArray(w) || w.length === 0) return items[0];
   const validW = w.map(x => Number.isFinite(x) && x >= 0 ? x : 0);
   let total = validW.reduce((a, b) => a + b, 0);
-  if (total <= 0) return items[Math.floor(Math.random() * items.length)];
-  let r = Math.random() * total;
+  if (total <= 0) return items[Math.floor(_seededRng() * items.length)];
+  let r = _seededRng() * total;
   for (let i = 0; i < items.length; i++) {
     r -= validW[i];
     if (r <= 0) return items[i];

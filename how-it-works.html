@@ -161,7 +161,13 @@ footer a{color:var(--text-secondary);text-decoration:underline}
 </div>
 
 <h2>4. Policy Network (MLP)</h2>
-<p>The policy is a <strong>multilayer perceptron</strong> trained via reinforcement learning to select the optimal response parameters given the 25-dim feature context.</p>
+<p>The policy is a <strong>multilayer perceptron</strong> trained via reinforcement learning to select the optimal response parameters given the 25-dim feature context. Practical cold-start tiers (what users actually experience):</p>
+<ol style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+  <li>Heuristic + sparse/BOW immediately (usable shell before any heavy assets).</li>
+  <li>Policy MLP once small weights load (decisions become policy-driven).</li>
+  <li>Dense MiniLM once the ~22 MB transformer finishes (full embeddings + reranking active; hot-swap from progressive bootstrap).</li>
+  <li>Optional WASM/ORT acceleration only when a real policy WASM asset + cross-origin isolation are present.</li>
+</ol>
 
 <h3>Architecture</h3>
 <pre><code>Input:     Float32Array(25) — 25 normalized features
@@ -182,11 +188,11 @@ Total:  ~13,079 parameters (trained, exportable)
 Version: 0.4.0 (25-feature input, field-weighted BM25, fuzzy entity extraction, session-aware fragment diversity)</code></pre>
 
 <h3>Multi-Engine Inference</h3>
-<p>The policy runtime (<code>policy/policy-runtime.js</code>) attempts engines in priority order:</p>
+<p>The policy runtime (<code>policy/policy-runtime.js</code>) uses this order for the tiny 13k-param policy (WASM asset is optional/stub-like until a real compiled policy is shipped; MLP is the real, validated, always-available path):</p>
 <ol style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
-  <li><strong>WASM Engine</strong> — Compiled ONNX model via WebAssembly. Fastest path when available. <code>_wasmPlanAnswer()</code> in <code>policy-runtime.js</code>.</li>
-  <li><strong>MLP Engine</strong> — Pure-JS float32 math (<code>policy/mlp-inference.js</code>). No dependencies. Same architecture and weights as the PyTorch-trained model. Always available.</li>
-  <li><strong>Heuristic Fallback</strong> — 15 parameterized decision thresholds. Used when neither WASM nor MLP weights are loaded. Ensures the system is always functional.</li>
+  <li><strong>MLP Engine (primary)</strong> — Pure-JS float32 math (<code>policy/mlp-inference.js</code>). No dependencies. Same architecture and weights as the PyTorch-trained model. Fast and always available for this small policy.</li>
+  <li><strong>WASM Engine (secondary/optional)</strong> — Only if a real compiled policy WASM is provided. Not the main target until the asset is real (a 13k-param MLP is not the runtime bottleneck).</li>
+  <li><strong>Heuristic Fallback</strong> — 15 parameterized decision thresholds. Used when neither MLP weights nor WASM are ready. Ensures the system is always functional.</li>
 </ol>
 
 <h2>5. Training Pipeline</h2>
