@@ -1,0 +1,456 @@
+{
+  "python.datawork": {
+    "entry_id": "python.datawork",
+    "name": "Python for Data Work",
+    "summary": "Python's data ecosystem centers on pandas for tabular data and NumPy for numerical computing.",
+    "related": [
+      "pandas",
+      "numpy",
+      "data_cleaning",
+      "eda"
+    ],
+    "fragmentCount": 10
+  },
+  "pandas": {
+    "entry_id": "pandas",
+    "name": "Pandas DataFrame",
+    "summary": "A pandas DataFrame is a two-dimensional labeled data structure resembling a table with named columns and a row index.",
+    "related": [
+      "python.datawork",
+      "numpy",
+      "data_cleaning",
+      "eda"
+    ],
+    "fragmentCount": 10
+  },
+  "numpy": {
+    "entry_id": "numpy",
+    "name": "NumPy Arrays",
+    "summary": "NumPy's ndarray is a homogeneous n-dimensional array enabling efficient vectorized computation.",
+    "related": [
+      "python.datawork",
+      "pandas",
+      "linear_regression",
+      "statistics"
+    ],
+    "fragmentCount": 10
+  },
+  "data_cleaning": {
+    "entry_id": "data_cleaning",
+    "name": "Data Cleaning",
+    "summary": "Data cleaning is the process of fixing errors, inconsistencies, and structural issues in raw data before analysis.",
+    "related": [
+      "missing_values",
+      "pandas",
+      "eda",
+      "outliers"
+    ],
+    "fragmentCount": 10
+  },
+  "missing_values": {
+    "entry_id": "missing_values",
+    "name": "Missing Values",
+    "summary": "Missing values (NaN in pandas, null in SQL) represent unknown or uncollected data that must be handled before modeling.",
+    "related": [
+      "data_cleaning",
+      "pandas",
+      "feature_engineering",
+      "cross_validation"
+    ],
+    "fragmentCount": 10
+  },
+  "visualization": {
+    "entry_id": "visualization",
+    "name": "Data Visualization",
+    "summary": "Visualization translates data into graphics to reveal patterns, trends, and anomalies that numbers alone obscure.",
+    "related": [
+      "statistics",
+      "pandas",
+      "eda",
+      "outliers"
+    ],
+    "fragmentCount": 10
+  },
+  "statistics": {
+    "entry_id": "statistics",
+    "name": "Descriptive Statistics",
+    "summary": "Descriptive statistics summarize the central tendency, spread, and shape of a dataset.",
+    "related": [
+      "probability",
+      "distributions",
+      "visualization",
+      "outliers"
+    ],
+    "fragmentCount": 10
+  },
+  "probability": {
+    "entry_id": "probability",
+    "name": "Probability Basics",
+    "summary": "Probability quantifies uncertainty, measuring how likely an event is on a scale from 0 (impossible) to 1 (certain).",
+    "related": [
+      "distributions",
+      "statistics",
+      "model_evaluation"
+    ],
+    "fragmentCount": 10
+  },
+  "distributions": {
+    "entry_id": "distributions",
+    "name": "Probability Distributions",
+    "summary": "A probability distribution assigns probabilities to outcomes of a random variable; key distributions model common data-generating processes.",
+    "related": [
+      "statistics",
+      "probability",
+      "linear_regression"
+    ],
+    "fragmentCount": 10
+  },
+  "train_test_split": {
+    "entry_id": "train_test_split",
+    "name": "Train/Test Split",
+    "summary": "Splitting data into training and test sets evaluates how a model generalizes to unseen data.",
+    "related": [
+      "cross_validation",
+      "model_evaluation",
+      "overfitting",
+      "underfitting"
+    ],
+    "fragmentCount": 10
+  },
+  "classification": {
+    "entry_id": "classification",
+    "name": "Classification",
+    "summary": "Classification predicts a discrete class label (spam/not spam, iris species) from input features.",
+    "related": [
+      "logistic_regression",
+      "decision_trees",
+      "model_evaluation",
+      "accuracy"
+    ],
+    "fragmentCount": 10
+  },
+  "logistic_regression": {
+    "entry_id": "logistic_regression",
+    "name": "Logistic Regression",
+    "summary": "Logistic regression models the probability of a binary outcome as a logistic (sigmoid) function of a linear combination of features.",
+    "related": [
+      "classification",
+      "regularization",
+      "cross_validation",
+      "accuracy"
+    ],
+    "fragmentCount": 10
+  },
+  "decision_trees": {
+    "entry_id": "decision_trees",
+    "name": "Decision Trees",
+    "summary": "A decision tree splits data recursively on feature values, creating a flowchart-like model that's easy to interpret.",
+    "related": [
+      "classification",
+      "ensemble",
+      "overfitting",
+      "feature_importance"
+    ],
+    "fragmentCount": 10
+  },
+  "regression": {
+    "entry_id": "regression",
+    "name": "Regression",
+    "summary": "Regression predicts a continuous numerical outcome (house price, GDP growth) from input features.",
+    "related": [
+      "linear_regression",
+      "model_evaluation",
+      "overfitting",
+      "feature_engineering"
+    ],
+    "fragmentCount": 10
+  },
+  "linear_regression": {
+    "entry_id": "linear_regression",
+    "name": "Linear Regression",
+    "summary": "Linear regression predicts a continuous target as a weighted sum of features, fit by ordinary least squares (OLS).",
+    "related": [
+      "regression",
+      "regularization",
+      "bias_variance",
+      "cross_validation"
+    ],
+    "fragmentCount": 10
+  },
+  "clustering": {
+    "entry_id": "clustering",
+    "name": "Clustering",
+    "summary": "Clustering groups similar data points without predefined labels — an unsupervised technique for discovering structure.",
+    "related": [
+      "kmeans",
+      "feature_engineering",
+      "eda",
+      "pca"
+    ],
+    "fragmentCount": 10
+  },
+  "kmeans": {
+    "entry_id": "kmeans",
+    "name": "K-Means Clustering",
+    "summary": "K-means partitions $n$ points into $k$ clusters, each represented by its centroid, minimizing within-cluster variance.",
+    "related": [
+      "clustering",
+      "pca",
+      "feature_engineering",
+      "standardization"
+    ],
+    "fragmentCount": 10
+  },
+  "feature_engineering": {
+    "entry_id": "feature_engineering",
+    "name": "Feature Engineering",
+    "summary": "Feature engineering transforms raw data into model-friendly inputs, often determining model success more than algorithm choice.",
+    "related": [
+      "data_cleaning",
+      "regularization",
+      "cross_validation",
+      "leakage"
+    ],
+    "fragmentCount": 10
+  },
+  "model_evaluation": {
+    "entry_id": "model_evaluation",
+    "name": "Model Evaluation",
+    "summary": "Model evaluation quantifies how well a model performs, using metrics tailored to the problem type and business goal.",
+    "related": [
+      "accuracy",
+      "precision_recall",
+      "f1_score",
+      "roc_auc",
+      "train_test_split"
+    ],
+    "fragmentCount": 10
+  },
+  "accuracy": {
+    "entry_id": "accuracy",
+    "name": "Accuracy",
+    "summary": "Accuracy is the proportion of correct predictions (both true positives and true negatives) out of all predictions.",
+    "related": [
+      "model_evaluation",
+      "precision_recall",
+      "f1_score",
+      "confusion_matrix"
+    ],
+    "fragmentCount": 10
+  },
+  "precision_recall": {
+    "entry_id": "precision_recall",
+    "name": "Precision and Recall",
+    "summary": "Precision measures how trustworthy positive predictions are; recall measures how many actual positives the model captures.",
+    "related": [
+      "model_evaluation",
+      "f1_score",
+      "roc_auc",
+      "accuracy"
+    ],
+    "fragmentCount": 10
+  },
+  "f1_score": {
+    "entry_id": "f1_score",
+    "name": "F1 Score",
+    "summary": "The F1 score is the harmonic mean of precision and recall, balancing both in a single metric.",
+    "related": [
+      "precision_recall",
+      "model_evaluation",
+      "accuracy",
+      "roc_auc"
+    ],
+    "fragmentCount": 10
+  },
+  "roc_auc": {
+    "entry_id": "roc_auc",
+    "name": "ROC and AUC",
+    "summary": "The ROC curve plots true positive rate (recall) against false positive rate at every classification threshold; AUC summarizes it.",
+    "related": [
+      "model_evaluation",
+      "precision_recall",
+      "f1_score",
+      "accuracy"
+    ],
+    "fragmentCount": 10
+  },
+  "overfitting": {
+    "entry_id": "overfitting",
+    "name": "Overfitting",
+    "summary": "Overfitting occurs when a model learns the training data too well — including its noise — and generalizes poorly.",
+    "related": [
+      "underfitting",
+      "regularization",
+      "cross_validation",
+      "bias_variance"
+    ],
+    "fragmentCount": 10
+  },
+  "underfitting": {
+    "entry_id": "underfitting",
+    "name": "Underfitting",
+    "summary": "Underfitting occurs when a model is too simple to capture the underlying pattern, performing poorly on both training and test data.",
+    "related": [
+      "overfitting",
+      "bias_variance",
+      "feature_engineering",
+      "regularization"
+    ],
+    "fragmentCount": 10
+  },
+  "cross_validation": {
+    "entry_id": "cross_validation",
+    "name": "Cross-Validation",
+    "summary": "Cross-validation splits data into $k$ folds, training on $k-1$ and validating on the held-out fold, rotating until every fold has been the test set.",
+    "related": [
+      "train_test_split",
+      "overfitting",
+      "model_selection",
+      "leakage"
+    ],
+    "fragmentCount": 10
+  },
+  "leakage": {
+    "entry_id": "leakage",
+    "name": "Data Leakage",
+    "summary": "Data leakage occurs when information from the test set sneaks into the training process, making evaluation overly optimistic.",
+    "related": [
+      "cross_validation",
+      "feature_engineering",
+      "train_test_split",
+      "time_series"
+    ],
+    "fragmentCount": 10
+  },
+  "bias_variance": {
+    "entry_id": "bias_variance",
+    "name": "Bias-Variance Tradeoff",
+    "summary": "Bias-variance decomposition separates a model's error into bias (systematic error from wrong assumptions) and variance (sensitivity to training data).",
+    "related": [
+      "overfitting",
+      "underfitting",
+      "ensemble",
+      "regularization"
+    ],
+    "fragmentCount": 10
+  },
+  "regularization": {
+    "entry_id": "regularization",
+    "name": "Regularization",
+    "summary": "Regularization adds a penalty to the loss function to discourage overly complex models, reducing overfitting.",
+    "related": [
+      "linear_regression",
+      "overfitting",
+      "cross_validation",
+      "bias_variance"
+    ],
+    "fragmentCount": 10
+  },
+  "ensemble": {
+    "entry_id": "ensemble",
+    "name": "Ensemble Methods",
+    "summary": "Ensemble methods combine multiple models into one prediction, typically reducing variance (bagging) or bias (boosting).",
+    "related": [
+      "decision_trees",
+      "overfitting",
+      "cross_validation",
+      "bias_variance"
+    ],
+    "fragmentCount": 10
+  },
+  "pca": {
+    "entry_id": "pca",
+    "name": "Principal Component Analysis",
+    "summary": "PCA finds orthogonal directions of maximum variance in data, projecting onto a lower-dimensional subspace.",
+    "related": [
+      "dimensionality_reduction",
+      "clustering",
+      "feature_engineering",
+      "standardization"
+    ],
+    "fragmentCount": 10
+  },
+  "time_series": {
+    "entry_id": "time_series",
+    "name": "Time Series Analysis",
+    "summary": "Time series analysis handles data ordered chronologically, where temporal dependencies matter.",
+    "related": [
+      "train_test_split",
+      "leakage",
+      "feature_engineering",
+      "visualization"
+    ],
+    "fragmentCount": 10
+  },
+  "deployment": {
+    "entry_id": "deployment",
+    "name": "Model Deployment",
+    "summary": "Deploying a model means making it available to make predictions on new data in a production environment.",
+    "related": [
+      "browser_ml",
+      "model_evaluation",
+      "leakage",
+      "cross_validation"
+    ],
+    "fragmentCount": 10
+  },
+  "browser_ml": {
+    "entry_id": "browser_ml",
+    "name": "Browser and Local ML",
+    "summary": "Running ML models directly in the browser or on the local machine without a server enables privacy-preserving, low-latency inference.",
+    "related": [
+      "deployment",
+      "model_evaluation",
+      "regularization"
+    ],
+    "fragmentCount": 10
+  },
+  "eda": {
+    "entry_id": "eda",
+    "name": "Exploratory Data Analysis",
+    "summary": "EDA is the initial investigation of a dataset to understand its structure, spot anomalies, and generate hypotheses.",
+    "related": [
+      "data_cleaning",
+      "missing_values",
+      "visualization",
+      "statistics"
+    ],
+    "fragmentCount": 10
+  },
+  "outliers": {
+    "entry_id": "outliers",
+    "name": "Outlier Detection",
+    "summary": "Outliers are data points that deviate significantly from the overall pattern; they may indicate errors, rare events, or genuine extreme behavior.",
+    "related": [
+      "data_cleaning",
+      "statistics",
+      "visualization",
+      "data_cleaning"
+    ],
+    "fragmentCount": 10
+  },
+  "standardization": {
+    "entry_id": "standardization",
+    "name": "Feature Scaling",
+    "summary": "Feature scaling standardizes the range or distribution of features so that no single feature dominates distance calculations.",
+    "related": [
+      "data_cleaning",
+      "regularization",
+      "kmeans",
+      "cross_validation"
+    ],
+    "fragmentCount": 10
+  },
+  "dimensionality_reduction": {
+    "entry_id": "dimensionality_reduction",
+    "name": "Dimensionality Reduction",
+    "summary": "Dimensionality reduction transforms high-dimensional data into a lower-dimensional representation while preserving key structure.",
+    "related": [
+      "pca",
+      "feature_engineering",
+      "clustering",
+      "standardization"
+    ],
+    "fragmentCount": 10
+  }
+}

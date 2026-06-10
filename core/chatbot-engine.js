@@ -1,9 +1,10 @@
 import { LRUCache } from './cache.js';
 import { SessionMemory } from './session.js';
-import { composeV2, tokens, bowVec, compileAliasRegex } from './nlp.js';
-import { pushMessage, setStatus, escapeHTML, md } from './ui.js';
+import { composeV2, setCompositionSeed, tokens, bowVec, compileAliasRegex } from './nlp.js';
+import { pushMessage, setStatus, escapeHTML, md, renderDiagramElement } from './ui.js';
 import { loadPolicyRuntime, planAnswer, isPolicyLoaded } from '../policy/policy-runtime.js';
 import { SignalLayer } from './signal-layer.js';
+import { BotPackLoader } from './bot-pack-loader.js';
 
 // ---------------------------------------------------------------------------
 // Loading state machine
@@ -44,6 +45,21 @@ function _setLoadState(newState) {
   for (const fn of _stateListeners) {
     try { fn(newState, old); } catch (e) { console.warn('[state] listener error:', e); }
   }
+}
+
+/**
+ * Simple 32-bit string hash (djb2 variant) for deterministic composition seeding.
+ * @param {string} str
+ * @returns {number}
+ */
+function hash32(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0;
+  }
+  return hash;
 }
 
 export async function createChatbot(config) {
@@ -93,7 +109,24 @@ export async function createChatbot(config) {
   async function init() {
     _setLoadState('loading_transformer');
 
-    // ---- Fast bootstrap: BOW + heuristic so first turns are usable immediately ----
+    // ── Attempt bot-pack fast-path (Track B P1) ───────────────────────────
+    let botPack = null;
+    let botPackLoader = null;
+    try {
+      const botId = botProfile?.id || 'default';
+      botPackLoader = new BotPackLoader(botId, '/data/bot-packs/');
+      const available = await botPackLoader.probe();
+      if (available) {
+        console.log('[chatbot-engine] Bot-pack found, using fast-path loading');
+        await botPackLoader.stage1_basic();
+        await botPackLoader.stage2_sparse();
+        botPack = botPackLoader.getData();
+      }
+    } catch (packErr) {
+      console.warn('[chatbot-engine] Bot-pack probe failed, falling back:', packErr.message);
+    }
+
+    // ── Fast bootstrap: BOW + heuristic so first turns are usable immediately ──
     // Addresses "No lazy/progressive model loading — MiniLM blocks first interaction".
     // Heuristic + BOW (already built) handle queries while full transformer streams in
     // (aided by SW model pre-cache). Hot-swap to dense vectors when ready.
@@ -104,7 +137,16 @@ export async function createChatbot(config) {
     [...voc].forEach((w, i) => bowVocab.set(w, i));
     entryEmb = KB.map(e => bowVec(entryText(e), bowVocab));
     for (const k of Object.keys(INTENTS)) intentEmb[k] = INTENTS[k].prototypes.map(p => bowVec(p, bowVocab));
-    try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init (bootstrap) failed:', e); }
+
+    // Use precomputed BM25 from bot-pack if available, else build client-side
+    if (botPack?.bm25) {
+      try {
+        signalLayer.initBM25FromIndex(botPack.bm25);
+        console.log('[chatbot-engine] Using precomputed BM25 index from bot-pack');
+      } catch (e) { console.warn('BM25 init (bot-pack) failed:', e); }
+    } else {
+      try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init (bootstrap) failed:', e); }
+    }
 
     // Partial ready: enable UI + heuristic path right away (first turns use fast BOW+policy heuristic)
     _setLoadState('partially_ready');
@@ -123,12 +165,17 @@ export async function createChatbot(config) {
           maxTopics: 3,
           creativityCeiling: 0.35
         };
-        await loadPolicyRuntime({
+        const policyResult = await loadPolicyRuntime({
           wasmPath: '/assets/models/policy/policy.wasm',
           weightsPath: '/assets/models/policy/policy.weights.bin',
           manifestPath: '/assets/models/policy/policy.manifest.json',
           botProfile: policyBotProfile
         });
+        // W8: Surface schema-mismatch to UI
+        if (policyResult && policyResult.schemaMismatch) {
+          console.warn('[chatbot-engine] Schema mismatch detected:', policyResult.schemaMismatchMessage);
+          setStatus('schema mismatch — using heuristic', false);
+        }
       } catch (policyErr) {
         console.error('[chatbot-engine] Policy load failed:', policyErr.message);
       }
@@ -163,16 +210,46 @@ export async function createChatbot(config) {
       setStatus('encoding knowledge base…');
       bar.style.width = '0%';
       compileAliasRegex(KB);
-      const BATCH = 8;
-      const newEntryEmb = [];
-      for (let i = 0; i < KB.length; i += BATCH) {
-        const batch = KB.slice(i, i + BATCH).map(e => embed(entryText(e)));
-        newEntryEmb.push(...await Promise.all(batch));
-        bar.style.width = (Math.min(i + BATCH, KB.length) / KB.length * 100) + '%';
+
+      // ── Bot-pack vector fast-path: use precomputed vectors if available ──
+      let usedBotPackVectors = false;
+      if (botPackLoader) {
+        try {
+          const vecData = await botPackLoader.stage3_vectors();
+          const ev = vecData.entryVectors;
+          const fv = vecData.fragmentVectors;
+          // Check if vectors are real (not placeholder)
+          if (ev && !ev._note && Array.isArray(ev.data || ev)) {
+            entryEmb = ev.data || ev;
+            usedBotPackVectors = true;
+            console.log('[chatbot-engine] Using precomputed entry vectors from bot-pack');
+          }
+          if (fv && !fv._note) {
+            // Fragment vectors loaded; store for potential use in signal layer
+            botPackLoader._fragmentVectors = fv.data || fv;
+          }
+        } catch (vecErr) {
+          console.warn('[chatbot-engine] Bot-pack vectors failed, encoding at runtime:', vecErr.message);
+        }
       }
-      entryEmb = newEntryEmb; // hot-swap
+
+      if (!usedBotPackVectors) {
+        const BATCH = 8;
+        const newEntryEmb = [];
+        for (let i = 0; i < KB.length; i += BATCH) {
+          const batch = KB.slice(i, i + BATCH).map(e => embed(entryText(e)));
+          newEntryEmb.push(...await Promise.all(batch));
+          bar.style.width = (Math.min(i + BATCH, KB.length) / KB.length * 100) + '%';
+        }
+        entryEmb = newEntryEmb; // hot-swap
+      } else {
+        bar.style.width = '100%';
+      }
+
       // Initialize (or re-init) BM25 sparse retrieval via SignalLayer (now with better text)
-      try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed:', e); }
+      if (!botPack?.bm25) {
+        try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed:', e); }
+      }
 
       for (const k of Object.keys(INTENTS)) {
         intentEmb[k] = [];
@@ -189,7 +266,9 @@ export async function createChatbot(config) {
       console.error('Model load failed, using BOW fallback:', err);
       usedFallback = true;
       // BOW already bootstrapped above; ensure signal
-      try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed in fallback:', e); }
+      if (!botPack?.bm25) {
+        try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed in fallback:', e); }
+      }
       setStatus('offline mode', true);
     }
 
@@ -252,6 +331,23 @@ export async function createChatbot(config) {
       };
       const plan = await planAnswer(query, qEmb, KB, context, { EMBEDDING: CONFIG.EMBEDDING, botProfile, _domainPrototypeEmbs: domainPrototypeEmbs.length > 0 ? domainPrototypeEmbs : intentEmb });
       plan._recentlyUsedFragments = session.getRecentlyUsedFragments();
+      // Budget classifier context — injected before composeV2 for local budget detection
+      plan._followUpDepth = dp.session.followUp?.conversationDepth || 0;
+      plan._topSim = dp.rankings.reranked?.[0]?.s || 0;
+
+      // I1/I2: Wire composition seed for deterministic output
+      if (botProfile?.id) {
+        const seedHash = hash32(
+          (botProfile.id || 'default') +
+          (KB.length || 0) +
+          query +
+          (Array.isArray(plan.topics) ? plan.topics.join(',') : '') +
+          (session._turnCount || 0) +
+          (plan.answerBudget || 'auto')
+        );
+        setCompositionSeed(seedHash);
+      }
+
       const result = await composeV2(query, qEmb, embedCached, entryEmb, intentEmb, session.lastTopic, KB, CONFIG, overrides, plan);
 
       text = result.text;
@@ -259,6 +355,11 @@ export async function createChatbot(config) {
 
       typingEl.remove();
       pushMessage('bot', md(text), meta);
+
+      // W1: Render diagram if available
+      if (result.diagramAst) {
+        await renderDiagramElement(result.diagramAst, { theme: 'dark' });
+      }
 
       // ---- Session: record turn and track fragment usage ----
       const presentedTopics = (plan && Array.isArray(plan.topics)) ? plan.topics : [];

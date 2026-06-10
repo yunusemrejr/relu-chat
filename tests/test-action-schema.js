@@ -66,6 +66,12 @@ function assertEq(actual, expected, msg) {
       policyHash: 'test',
       decisionPath: ['test'],
     },
+    answerBudget: 'auto',
+    visualMode: 'none',
+    visualType: 'none',
+    visualRef: '',
+    visualPlacement: 'after_text',
+    visualBudget: 'standard',
   };
   const { valid, errors, sanitized } = validatePlan(plan);
   assert(valid, 'valid normal plan passes');
@@ -203,6 +209,12 @@ function assertEq(actual, expected, msg) {
     guardrails: { maxTopics: 3, requireEntity: false, minSim: 0.15, allowOffTopic: false },
     clarification: null,
     meta: { policyVersion: '0.1.0', policyHash: 'test', decisionPath: [] },
+    answerBudget: 'auto',
+    visualMode: 'none',
+    visualType: 'none',
+    visualRef: '',
+    visualPlacement: 'after_text',
+    visualBudget: 'standard',
   };
   const { valid, errors, sanitized } = validatePlan(completePlan);
   assert(valid, `comparison with 2 topics is valid (errors: ${errors.join('; ')})`);

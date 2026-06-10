@@ -918,8 +918,8 @@ export class SessionMemory {
     // Single-word follow-up mapping (expanded)
     // -------------------------------------------------------------------
     const singleWordMap = {
-      'how': 'elaborate',
-      'why': 'elaborate',
+      'how': 'how',
+      'why': 'why',
       'what': 'elaborate',
       'huh': 'clarify',
       'explain': 'simplify',

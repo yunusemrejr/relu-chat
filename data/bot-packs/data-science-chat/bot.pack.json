@@ -1,0 +1,29 @@
+{
+  "botId": "data-science-chat",
+  "kbVersion": "1.0.0",
+  "model": {
+    "embedding": "all-MiniLM-L6-v2",
+    "dim": 384,
+    "vectorDtype": "float16"
+  },
+  "config": {
+    "thresholds": {
+      "minSim": 0.15,
+      "entityBoost": 0.2,
+      "followUpBoost": 0.15
+    }
+  },
+  "entries": "entries.json",
+  "fragments": "fragments.json",
+  "aliasIndex": "aliases.json",
+  "bm25Index": "bm25.json",
+  "entryVectors": "entry-vectors.f16.json",
+  "fragmentVectors": "fragment-vectors.f16.json",
+  "diagrams": "diagrams.json",
+  "overrides": "overrides.json",
+  "intents": "intents.json",
+  "policy": {
+    "weights": "policy.weights.json",
+    "manifest": null
+  }
+}

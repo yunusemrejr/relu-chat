@@ -12,6 +12,60 @@ export function setStatus(t, ready = false) {
   if (container) container.classList.toggle('ready', ready);
 }
 
+/**
+ * Render a diagram AST into a container element.
+ * Dynamically imports diagram-renderer.js and attaches the rendered SVG.
+ *
+ * @param {Object} ast       - Diagram AST object
+ * @param {Object} [options] - Render options
+ * @param {HTMLElement} [options.container] - Container to append the diagram to
+ * @param {string} [options.theme='dark']   - 'light' or 'dark'
+ * @returns {Promise<HTMLElement|null>} The diagram wrapper element, or null on failure
+ */
+export async function renderDiagramElement(ast, options = {}) {
+  if (!ast || typeof ast !== 'object') return null;
+  try {
+    const { renderDiagram } = await import('./diagram-renderer.js');
+    const { svgElement, textFallback, hasRendered } = renderDiagram(ast, { theme: options.theme || 'dark' });
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'relu-diagram';
+    wrapper.setAttribute('data-diagram-id', ast.id || '');
+
+    if (hasRendered && svgElement) {
+      wrapper.appendChild(svgElement);
+    } else if (textFallback) {
+      const fb = document.createElement('div');
+      fb.className = 'text-fallback';
+      fb.textContent = textFallback;
+      wrapper.appendChild(fb);
+    }
+
+    if (ast.caption) {
+      const caption = document.createElement('div');
+      caption.className = 'caption';
+      caption.textContent = ast.caption;
+      wrapper.appendChild(caption);
+    }
+
+    const container = options.container || document.getElementById('messages');
+    if (container) {
+      // Insert after the last bot message or append to end
+      const lastMsg = container.querySelector('.msg.bot:last-of-type .msg-body > div:not(.meta)');
+      if (lastMsg) {
+        lastMsg.appendChild(wrapper);
+      } else {
+        container.appendChild(wrapper);
+      }
+    }
+
+    return wrapper;
+  } catch (err) {
+    console.warn('[ui] renderDiagramElement failed:', err.message);
+    return null;
+  }
+}
+
 export function pushMessage(role, html, meta) {
   const messagesEl = document.getElementById('messages');
   const div = document.createElement('div');

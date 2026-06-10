@@ -24,6 +24,9 @@ export class BM25Scorer {
     this._idf = new Map();
     this._docTokens = [];
     this._docBigrams = [];
+    // Precomputed index support (bot-pack Track B P1)
+    this._index = null;
+    this._fieldWeights = { title: 4.0, alias: 3.0, summary: 1.5, fragment: 1.0 };
   }
 
   fit(documents) {
@@ -65,8 +68,84 @@ export class BM25Scorer {
     return this;
   }
 
+  /**
+   * Load from a precomputed inverted index (bot-pack format).
+   * Index format matches dev/scripts/build-bm25-index.js output:
+   * { terms, bigrams, idf, docLen, avgDocLen, fieldWeights, docCount }
+   */
+  loadFromIndex(indexData) {
+    if (!indexData || !indexData.terms || !indexData.idf) {
+      console.warn('[BM25] Invalid index data');
+      return this;
+    }
+    this._index = indexData;
+    this._docCount = indexData.docCount || 0;
+    this._avgDocLen = indexData.avgDocLen || 0;
+    this._docLens = indexData.docLen || [];
+    this._idf = new Map(Object.entries(indexData.idf));
+    this._fieldWeights = indexData.fieldWeights || this._fieldWeights;
+    this._ready = true;
+    return this;
+  }
+
+  /**
+   * Score a single document using the precomputed inverted index.
+   * Computes field-weighted BM25 from posting lists.
+   */
+  _scoreFromIndex(query, docIdx) {
+    if (!this._index) return 0;
+    const qTokens = tokens(query);
+    if (qTokens.length === 0) return 0;
+
+    const docLen = this._docLens[docIdx] || 0;
+    if (docLen === 0) return 0;
+
+    const { terms, bigrams: bigramIndex, idf, fieldWeights } = this._index;
+    const fw = fieldWeights || this._fieldWeights;
+    let score = 0;
+
+    // Unigram scoring with field weights
+    for (const qt of qTokens) {
+      const postings = terms[qt];
+      if (!postings) continue;
+      const idfVal = idf[qt] || 0;
+      if (idfVal === 0) continue;
+
+      const posting = postings.find(p => p[0] === docIdx);
+      if (!posting) continue;
+
+      // posting = [entryId, tfTitle, tfAlias, tfSummary, tfFragment]
+      const tfWeighted =
+        (posting[1] || 0) * (fw.title || 1) +
+        (posting[2] || 0) * (fw.alias || 1) +
+        (posting[3] || 0) * (fw.summary || 1) +
+        (posting[4] || 0) * (fw.fragment || 1);
+
+      if (tfWeighted === 0) continue;
+      score += idfVal * ((tfWeighted * (this.k1 + 1)) /
+        (tfWeighted + this.k1 * (1 - this.b + this.b * (docLen / this._avgDocLen))));
+    }
+
+    // Bigram scoring (bonus)
+    const qBigrams = bigrams(qTokens);
+    if (qBigrams.length > 0 && bigramIndex) {
+      for (const qbg of qBigrams) {
+        const postings = bigramIndex[qbg];
+        if (!postings) continue;
+        const posting = postings.find(p => p[0] === docIdx);
+        if (!posting) continue;
+        const idfVal = idf[qbg] || 1.5;
+        score += idfVal * 0.8 * posting[1]; // tfPhrase * 0.8
+      }
+    }
+
+    return score;
+  }
+
   score(query, docIdx) {
     if (!this._ready) return 0;
+    if (this._index) return this._scoreFromIndex(query, docIdx);
+
     const qTokens = tokens(query);
     const docTokens = this._docTokens[docIdx];
     const docLen = this._docLens[docIdx];

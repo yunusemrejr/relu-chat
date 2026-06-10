@@ -102,7 +102,7 @@ export const DEFAULT_INTENTS = {
 
 export function pick(a) {
   if (!Array.isArray(a) || a.length === 0) return '';
-  return a[Math.floor(Math.random() * a.length)];
+  return a[Math.floor(_seededRng() * a.length)];
 }
 
 /**
@@ -122,6 +122,9 @@ function mulberry32(seed) {
 }
 
 let _seededRng = Math.random; // default fallback
+
+// Diagram library cache (fetched once per session for W1/W3)
+let _diagramsLib = null;
 
 export function setCompositionSeed(seed) {
   if (typeof seed === 'number' && Number.isFinite(seed)) {
@@ -157,6 +160,7 @@ export function cosine(a, b) {
 }
 
 import { softmax } from './math-utils.js';
+import { classifyAnswerBudget, getBudgetConstraints } from './budget-classifier.js';
 
 export function weightedChoice(items, w) {
   if (!Array.isArray(items) || items.length === 0) return null;
@@ -516,6 +520,39 @@ export async function selectFragment(entry, cat, qEmb, embedCached, config, rece
 }
 
 // ============================================================
+// Word-counting and truncation helpers (used by budget enforcement)
+// ============================================================
+
+/**
+ * Count words in a text string (whitespace-delimited, non-empty tokens).
+ * @param {string} text
+ * @returns {number}
+ */
+function countWords(text) {
+  if (!text || typeof text !== 'string') return 0;
+  return text.trim().split(/\s+/).filter(w => w.length > 0).length;
+}
+
+/**
+ * Truncate a text to at most maxWords, cutting at the last full sentence boundary.
+ * Falls back to raw word truncation with ellipsis if no sentence boundary found.
+ * @param {string} text
+ * @param {number} maxWords
+ * @returns {string}
+ */
+function truncateAtSentence(text, maxWords) {
+  if (countWords(text) <= maxWords) return text;
+  const sentences = text.split(/(?<=[.!?])\s+/);
+  let result = '';
+  for (const s of sentences) {
+    const candidate = result ? result + ' ' + s : s;
+    if (countWords(candidate) > maxWords) break;
+    result = candidate;
+  }
+  return result || text.split(/\s+/).slice(0, maxWords).join(' ') + '...';
+}
+
+// ============================================================
 // compose() — legacy fallback (unchanged behavior when policy unavailable)
 // ============================================================
 export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, config, overrides) {
@@ -704,6 +741,27 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   const order = INTENTS[intent]?.order || ['def', 'int', 'ex'];
   const creativity = typeof plan.creativity === 'number' ? plan.creativity : 0.2;
 
+  // ── Budget enforcement: classify or use plan.answerBudget, then enforce caps ──
+  let answerBudget = (plan.answerBudget && plan.answerBudget !== 'auto') ? plan.answerBudget : 'auto';
+  if (answerBudget === 'auto') {
+    const budgetCtx = {
+      isMobile: typeof window !== 'undefined' && window.innerWidth < 600,
+      saveData: typeof navigator !== 'undefined' && !!(navigator.connection && navigator.connection.saveData),
+      followUpDepth: typeof plan._followUpDepth === 'number' ? plan._followUpDepth : 0,
+      topSim: typeof plan._topSim === 'number' ? plan._topSim : 0.5,
+      entityCount: Array.isArray(plan.topics) ? plan.topics.length : 0,
+      hasDiagramAvailable: false,
+    };
+    answerBudget = classifyAnswerBudget(query, budgetCtx);
+  }
+  const budgetConstraints = getBudgetConstraints(answerBudget);
+
+  // Truncate fragmentPlan to budget cap (do not pad — cap only)
+  if (plan.fragmentPlan && plan.fragmentPlan.length > budgetConstraints.maxFragments) {
+    console.warn(`[composeV2] Budget ${answerBudget}: truncating fragmentPlan from ${plan.fragmentPlan.length} to ${budgetConstraints.maxFragments} entries`);
+    plan.fragmentPlan = plan.fragmentPlan.slice(0, budgetConstraints.maxFragments);
+  }
+
   let parts = [];
   let selectedFragments = [];
 
@@ -747,7 +805,7 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
       } else if (plan.mode === 'comparison' && topEntries.length >= 2 && ei === 0) {
         connector = "";
       } else if (ei === 0 && plan.mode !== 'comparison') {
-        connector = Math.random() < (0.5 + creativity * 0.2) ? `**${entryName}** — ` : "";
+        connector = _seededRng() < (0.5 + creativity * 0.2) ? `**${entryName}** — ` : "";
       } else {
         connector = pick(TRANSITIONS).replace(/\\n/g, '\n') + `**${entryName}**: `;
       }
@@ -776,6 +834,15 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
       if (!dup) unique.push(f);
     }
     selectedFragments = unique;
+  }
+
+  // ── Budget enforcement: cap selected fragments and corresponding parts ──
+  if (selectedFragments.length > budgetConstraints.maxFragments) {
+    console.warn(`[composeV2] Budget ${answerBudget}: capping selectedFragments from ${selectedFragments.length} to ${budgetConstraints.maxFragments}`);
+    selectedFragments = selectedFragments.slice(0, budgetConstraints.maxFragments);
+    if (parts.length > budgetConstraints.maxFragments) {
+      parts = parts.slice(0, budgetConstraints.maxFragments);
+    }
   }
 
   // === Factual Guardrail ===
@@ -826,9 +893,15 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   let text = (plan.mode !== 'comparison' || topEntries.length < 2 ? opener : '') + (parts[0] || '');
   for (let i = 1; i < parts.length; i++) text += parts[i];
 
-  // Related topics (respect guardrails)
+  // ── Budget enforcement: word count cap (sentence-boundary truncation) ──
+  if (countWords(text) > budgetConstraints.maxWords) {
+    console.warn(`[composeV2] Budget ${answerBudget}: truncating text from ${countWords(text)} words to ${budgetConstraints.maxWords}`);
+    text = truncateAtSentence(text, budgetConstraints.maxWords);
+  }
+
+  // Related topics (respect guardrails AND budget allowRelated)
   const lastEntry = KB[topEntries[topEntries.length - 1]];
-  if (lastEntry?.related && lastEntry.related.length > 0 && plan.guardrails?.requireCite !== true) {
+  if (lastEntry?.related && lastEntry.related.length > 0 && plan.guardrails?.requireCite !== true && budgetConstraints.allowRelated) {
     const relNames = lastEntry.related.slice(0, 3).map(rid => {
       const found = KB.findIndex(e => e.id === rid);
       return found >= 0 ? KB[found].name : rid;
@@ -838,7 +911,39 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
     }
   }
 
-  text += closer;
+  if (budgetConstraints.allowCloser) {
+    text += closer;
+  }
+
+  // ── Diagram rendering (W3: consume allowDiagram + W1: wire diagram-renderer) ──
+  let diagramAst = null;
+  if (budgetConstraints.allowDiagram && plan.visualMode && plan.visualMode !== 'none' && plan.visualRef) {
+    try {
+      // Fetch the diagrams library once and cache for the session
+      if (!_diagramsLib) {
+        const res = await fetch('/data/diagrams.json');
+        if (res.ok) {
+          _diagramsLib = await res.json();
+        }
+      }
+      if (_diagramsLib && _diagramsLib.diagrams) {
+        diagramAst = _diagramsLib.diagrams.find(
+          d => d.id === plan.visualRef || d.topicId === plan.visualRef
+        );
+        if (diagramAst && diagramAst.ast) {
+          // Use ast-level caption if present, else fall back to the diagram-level caption
+          if (!diagramAst.ast.caption && diagramAst.caption) {
+            diagramAst.ast.caption = diagramAst.caption;
+          }
+          diagramAst = diagramAst.ast;
+        } else {
+          diagramAst = null;
+        }
+      }
+    } catch (err) {
+      console.warn('[composeV2] Diagram lookup failed:', err.message);
+    }
+  }
 
   const meta = [{ text: `intent: ${intent}`, type: 'intent' }];
   for (const idx of topEntries) {
@@ -846,6 +951,7 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
     meta.push({ text: entry && entry.name ? entry.name : `entry:${idx}`, type: '' });
   }
   meta.push({ text: `plan:${plan.mode}`, type: 'score' });
+  meta.push({ text: `budget:${answerBudget}`, type: 'budget' });
   if (selectedFragments.length > 0) {
     meta.fragmentIds = selectedFragments.map(f => (f && f.id) || null).filter(Boolean);
   }
@@ -853,5 +959,5 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
     meta.guardrailWarnings = guardrailWarnings;
   }
 
-  return { text, meta };
+  return { text, meta, diagramAst };
 }

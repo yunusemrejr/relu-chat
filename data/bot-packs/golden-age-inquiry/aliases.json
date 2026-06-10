@@ -1,0 +1,1182 @@
+{
+  "house of wisdom": [
+    [
+      0,
+      1
+    ]
+  ],
+  "bayt al hikmah": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "house of wisdom baghdad": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "bayt al hikma": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "house of knowledge": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "bait al hikmah": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "al khwarizmi": [
+    [
+      1,
+      1
+    ]
+  ],
+  "algoritmi": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "muhammad ibn musa": [
+    [
+      1,
+      0.9
+    ],
+    [
+      33,
+      0.9
+    ]
+  ],
+  "alkhwarizmi": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "khwarizmi": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "algebra": [
+    [
+      2,
+      1
+    ]
+  ],
+  "al jabr": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "algebra history": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "origin of algebra": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "algebra origin": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "al kitab al mukhtasar": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "al kindi": [
+    [
+      3,
+      1
+    ]
+  ],
+  "al kindus": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "philosopher of the arabs": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "yaqub ibn ishaq": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "alkindi": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "kindi": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "ibn sina avicenna": [
+    [
+      4,
+      1
+    ]
+  ],
+  "avicenna": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "ibn sina": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "abu ali al husayn": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "ibnsina": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "abu ali ibn sina": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "canon of medicine": [
+    [
+      5,
+      1
+    ]
+  ],
+  "al qanun fi al tibb": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "avicenna canon": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "ibn al haytham alhazen": [
+    [
+      6,
+      1
+    ]
+  ],
+  "alhazen": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "ibn al haytham": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "hasan ibn al haytham": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "ibnalhaytham": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "al haytham": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "haytham": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "optics in the golden age": [
+    [
+      7,
+      1
+    ]
+  ],
+  "ilm al manazir": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "golden age optics": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "translation movement": [
+    [
+      8,
+      1
+    ]
+  ],
+  "graeco arabic translation": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "translation movement abbasid": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "greek arabic translation": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "arabic translation movement": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "al razi rhazes": [
+    [
+      9,
+      1
+    ]
+  ],
+  "rhazes": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "al razi": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "muhammad ibn zakariya": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "astrolabe": [
+    [
+      10,
+      1
+    ]
+  ],
+  "astronomical astrolabe": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "islamic astrolabe": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "astronomy in the golden age": [
+    [
+      11,
+      1
+    ]
+  ],
+  "ilm al falak": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "islamic astronomy": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "development of algebra": [
+    [
+      12,
+      1
+    ]
+  ],
+  "history of algebra": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "algebra evolution": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "maragha school": [
+    [
+      13,
+      1
+    ]
+  ],
+  "maragheh observatory": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "tusi couple": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "paper making": [
+    [
+      14,
+      1
+    ]
+  ],
+  "paper islam": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "spread of paper": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "ibn rushd averroes": [
+    [
+      15,
+      1
+    ]
+  ],
+  "averroes": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "ibn rushd": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "ibnrushd": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "averroes ibn rushd": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "al ghazali": [
+    [
+      16,
+      1
+    ]
+  ],
+  "algazel": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "abu hamid al ghazali": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "alghazali": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "ghazali": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "imam al ghazali": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "medicine in the golden age": [
+    [
+      17,
+      1
+    ]
+  ],
+  "tibb": [
+    [
+      17,
+      0.9
+    ]
+  ],
+  "islamic medicine": [
+    [
+      17,
+      0.9
+    ]
+  ],
+  "al biruni": [
+    [
+      18,
+      1
+    ]
+  ],
+  "biruni": [
+    [
+      18,
+      0.9
+    ]
+  ],
+  "abu rayhan": [
+    [
+      18,
+      0.9
+    ]
+  ],
+  "al zahrawi abulcasis": [
+    [
+      19,
+      1
+    ]
+  ],
+  "abulcasis": [
+    [
+      19,
+      0.9
+    ]
+  ],
+  "al zahrawi": [
+    [
+      19,
+      0.9
+    ]
+  ],
+  "ibn al nafis": [
+    [
+      20,
+      1
+    ]
+  ],
+  "ala al din": [
+    [
+      20,
+      0.9
+    ]
+  ],
+  "philosophy in the golden age": [
+    [
+      21,
+      1
+    ]
+  ],
+  "falsafa": [
+    [
+      21,
+      0.9
+    ]
+  ],
+  "islamic philosophy": [
+    [
+      21,
+      0.9
+    ]
+  ],
+  "al farabi": [
+    [
+      22,
+      1
+    ]
+  ],
+  "farabi": [
+    [
+      22,
+      0.9
+    ]
+  ],
+  "second teacher": [
+    [
+      22,
+      0.9
+    ]
+  ],
+  "alpharabius": [
+    [
+      22,
+      0.9
+    ]
+  ],
+  "omar khayyam": [
+    [
+      23,
+      1
+    ]
+  ],
+  "khayyam": [
+    [
+      23,
+      0.9
+    ]
+  ],
+  "persian mathematician": [
+    [
+      23,
+      0.9
+    ]
+  ],
+  "rubaiyat": [
+    [
+      23,
+      0.9
+    ]
+  ],
+  "al zarqali": [
+    [
+      24,
+      1
+    ]
+  ],
+  "arzaquiel": [
+    [
+      24,
+      0.9
+    ]
+  ],
+  "toledo astronomer": [
+    [
+      24,
+      0.9
+    ]
+  ],
+  "saphea": [
+    [
+      24,
+      0.9
+    ]
+  ],
+  "nasir al din al tusi": [
+    [
+      25,
+      1
+    ]
+  ],
+  "tusi": [
+    [
+      25,
+      0.9
+    ]
+  ],
+  "nasir al din": [
+    [
+      25,
+      0.9
+    ]
+  ],
+  "khajeh nasir": [
+    [
+      25,
+      0.9
+    ]
+  ],
+  "maragha astronomer": [
+    [
+      25,
+      0.9
+    ]
+  ],
+  "ibn al shatir": [
+    [
+      26,
+      1
+    ]
+  ],
+  "ala al din ibn al shatir": [
+    [
+      26,
+      0.9
+    ]
+  ],
+  "damascene astronomer": [
+    [
+      26,
+      0.9
+    ]
+  ],
+  "ulugh beg": [
+    [
+      27,
+      1
+    ]
+  ],
+  "samarkand observatory": [
+    [
+      27,
+      0.9
+    ]
+  ],
+  "ulugh beg observatory": [
+    [
+      27,
+      0.9
+    ]
+  ],
+  "al battani": [
+    [
+      28,
+      1
+    ]
+  ],
+  "albategnius": [
+    [
+      28,
+      0.9
+    ]
+  ],
+  "battani": [
+    [
+      28,
+      0.9
+    ]
+  ],
+  "harran astronomer": [
+    [
+      28,
+      0.9
+    ]
+  ],
+  "hunayn ibn ishaq": [
+    [
+      29,
+      1
+    ]
+  ],
+  "johannitius": [
+    [
+      29,
+      0.9
+    ]
+  ],
+  "abu zaid": [
+    [
+      29,
+      0.9
+    ]
+  ],
+  "al idrisi": [
+    [
+      30,
+      1
+    ]
+  ],
+  "idrisi": [
+    [
+      30,
+      0.9
+    ]
+  ],
+  "dreses": [
+    [
+      30,
+      0.9
+    ]
+  ],
+  "nubian geographer": [
+    [
+      30,
+      0.9
+    ]
+  ],
+  "roger s book": [
+    [
+      30,
+      0.9
+    ]
+  ],
+  "ibn khaldun": [
+    [
+      31,
+      1
+    ]
+  ],
+  "khaldun": [
+    [
+      31,
+      0.9
+    ]
+  ],
+  "muqaddimah": [
+    [
+      31,
+      0.9
+    ]
+  ],
+  "father of historiography": [
+    [
+      31,
+      0.9
+    ]
+  ],
+  "al jazari": [
+    [
+      32,
+      1
+    ]
+  ],
+  "jazzari": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "elephant clock": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "automata engineer": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "islamic engineer": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "banu musa brothers": [
+    [
+      33,
+      1
+    ]
+  ],
+  "banu musa": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "ahmad ibn musa": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "hasan ibn musa": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "book of ingenious devices": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "thabit ibn qurra": [
+    [
+      34,
+      1
+    ]
+  ],
+  "thebit": [
+    [
+      34,
+      0.9
+    ]
+  ],
+  "thabit": [
+    [
+      34,
+      0.9
+    ]
+  ],
+  "harran mathematician": [
+    [
+      34,
+      0.9
+    ]
+  ],
+  "al karaji": [
+    [
+      35,
+      1
+    ]
+  ],
+  "karaji": [
+    [
+      35,
+      0.9
+    ]
+  ],
+  "abu bakr": [
+    [
+      35,
+      0.9
+    ]
+  ],
+  "arithmetization of algebra": [
+    [
+      35,
+      0.9
+    ]
+  ],
+  "al samawal": [
+    [
+      36,
+      1
+    ]
+  ],
+  "al samaw al": [
+    [
+      36,
+      0.9
+    ]
+  ],
+  "samawal": [
+    [
+      36,
+      0.9
+    ]
+  ],
+  "polynomial algebra": [
+    [
+      36,
+      0.9
+    ]
+  ],
+  "ibn sahl": [
+    [
+      37,
+      1
+    ]
+  ],
+  "alawi": [
+    [
+      37,
+      0.9
+    ]
+  ],
+  "lens law": [
+    [
+      37,
+      0.9
+    ]
+  ],
+  "refraction pioneer": [
+    [
+      37,
+      0.9
+    ]
+  ],
+  "al farghani": [
+    [
+      38,
+      1
+    ]
+  ],
+  "alfraganus": [
+    [
+      38,
+      0.9
+    ]
+  ],
+  "farghani": [
+    [
+      38,
+      0.9
+    ]
+  ],
+  "astronomer of the nile": [
+    [
+      38,
+      0.9
+    ]
+  ],
+  "qusta ibn luqa": [
+    [
+      39,
+      1
+    ]
+  ],
+  "costa ben luca": [
+    [
+      39,
+      0.9
+    ]
+  ],
+  "baalbek physician": [
+    [
+      39,
+      0.9
+    ]
+  ],
+  "translator physician": [
+    [
+      39,
+      0.9
+    ]
+  ],
+  "al majriti": [
+    [
+      40,
+      1
+    ]
+  ],
+  "majriti": [
+    [
+      40,
+      0.9
+    ]
+  ],
+  "abu muslim": [
+    [
+      40,
+      0.9
+    ]
+  ],
+  "andalusian astronomer": [
+    [
+      40,
+      0.9
+    ]
+  ],
+  "madrid astronomer": [
+    [
+      40,
+      0.9
+    ]
+  ],
+  "fatima al fihri": [
+    [
+      41,
+      1
+    ]
+  ],
+  "fatima al fihriya": [
+    [
+      41,
+      0.9
+    ]
+  ],
+  "umm al banin": [
+    [
+      41,
+      0.9
+    ]
+  ],
+  "founder of university": [
+    [
+      41,
+      0.9
+    ]
+  ],
+  "qarawiyyin founder": [
+    [
+      41,
+      0.9
+    ]
+  ],
+  "mariam al astrulabi": [
+    [
+      42,
+      1
+    ]
+  ],
+  "al astrulabiyya": [
+    [
+      42,
+      0.9
+    ]
+  ],
+  "female astrolabe maker": [
+    [
+      42,
+      0.9
+    ]
+  ],
+  "lubana of cordoba": [
+    [
+      43,
+      1
+    ]
+  ],
+  "lubana": [
+    [
+      43,
+      0.9
+    ]
+  ],
+  "lubna of cordoba": [
+    [
+      43,
+      0.9
+    ]
+  ],
+  "cordoban mathematician": [
+    [
+      43,
+      0.9
+    ]
+  ],
+  "andalusian scholar": [
+    [
+      43,
+      0.9
+    ]
+  ],
+  "abbas ibn firnas": [
+    [
+      44,
+      1
+    ]
+  ],
+  "ibn firnas": [
+    [
+      44,
+      0.9
+    ]
+  ],
+  "armen firman": [
+    [
+      44,
+      0.9
+    ]
+  ],
+  "first aviator": [
+    [
+      44,
+      0.9
+    ]
+  ],
+  "ibn bajjah avempace": [
+    [
+      45,
+      1
+    ]
+  ],
+  "ibn bajjah": [
+    [
+      45,
+      0.9
+    ]
+  ],
+  "avempace": [
+    [
+      45,
+      0.9
+    ]
+  ],
+  "ibn bajja": [
+    [
+      45,
+      0.9
+    ]
+  ],
+  "zurara": [
+    [
+      45,
+      0.9
+    ]
+  ],
+  "andalusian philosopher": [
+    [
+      45,
+      0.9
+    ]
+  ],
+  "ibn tufayl": [
+    [
+      46,
+      1
+    ]
+  ],
+  "abu bakar": [
+    [
+      46,
+      0.9
+    ]
+  ],
+  "abuubekr": [
+    [
+      46,
+      0.9
+    ]
+  ],
+  "hayy ibn yaqzan": [
+    [
+      46,
+      0.9
+    ]
+  ]
+}

@@ -1,0 +1,232 @@
+{
+  "_comment": "ReLU.chat Diagram AST Library — Track C P1. Hand-crafted diagram ASTs for high-value topics. Consumed by core/diagram-renderer.js.",
+  "diagrams": [
+    {
+      "id": "prisoners_dilemma_matrix",
+      "botId": "game-theory-chat",
+      "topicId": "prisoners_dilemma",
+      "ast": {
+        "type": "payoff_matrix",
+        "title": "Prisoner's Dilemma",
+        "players": ["Player 1", "Player 2"],
+        "rows": ["Cooperate", "Defect"],
+        "cols": ["Cooperate", "Defect"],
+        "cells": [
+          {"payoff": [3, 3], "label": "mutual cooperation"},
+          {"payoff": [0, 5], "label": "P1 exploited"},
+          {"payoff": [5, 0], "label": "P2 exploited"},
+          {"payoff": [1, 1], "label": "Nash equilibrium", "highlight": true}
+        ],
+        "caption": "Defect strictly dominates Cooperate. (D,D) is the unique Nash equilibrium even though (C,C) is Pareto-superior."
+      }
+    },
+    {
+      "id": "chicken_matrix",
+      "botId": "game-theory-chat",
+      "topicId": "chicken",
+      "ast": {
+        "type": "payoff_matrix",
+        "title": "Chicken (Hawk-Dove)",
+        "players": ["Driver 1", "Driver 2"],
+        "rows": ["Swerve", "Straight"],
+        "cols": ["Swerve", "Straight"],
+        "cells": [
+          {"payoff": [0, 0], "label": "both swerve"},
+          {"payoff": [-1, 1], "label": "P1 yields"},
+          {"payoff": [1, -1], "label": "P2 yields", "highlight": true},
+          {"payoff": [-10, -10], "label": "crash"}
+        ],
+        "caption": "Two pure Nash equilibria: (Swerve, Straight) and (Straight, Swerve). Mutual crash is catastrophic."
+      }
+    },
+    {
+      "id": "stag_hunt_matrix",
+      "botId": "game-theory-chat",
+      "topicId": "stag_hunt",
+      "ast": {
+        "type": "payoff_matrix",
+        "title": "Stag Hunt",
+        "players": ["Hunter 1", "Hunter 2"],
+        "rows": ["Stag", "Hare"],
+        "cols": ["Stag", "Hare"],
+        "cells": [
+          {"payoff": [5, 5], "label": "both hunt stag", "highlight": true},
+          {"payoff": [0, 3], "label": "P1 fails alone"},
+          {"payoff": [3, 0], "label": "P2 fails alone"},
+          {"payoff": [3, 3], "label": "both hunt hare"}
+        ],
+        "caption": "Payoff-dominant (Stag,Stag) vs risk-dominant (Hare,Hare). Coordination problem with trust."
+      }
+    },
+    {
+      "id": "nash_equilibrium_comparison",
+      "botId": "game-theory-chat",
+      "topicId": "nash_eq",
+      "ast": {
+        "type": "chart",
+        "title": "Equilibrium Refinement Strength",
+        "bars": [
+          {"label": "Nash", "value": 1.0, "color": "#c9853a"},
+          {"label": "Subgame Perfect", "value": 0.75, "color": "#c9853a"},
+          {"label": "Bayes-Nash", "value": 0.85, "color": "#c9853a"},
+          {"label": "Perfect Bayesian", "value": 0.65, "color": "#417d97"},
+          {"label": "Trembling-Hand", "value": 0.45, "color": "#417d97"},
+          {"label": "Sequential", "value": 0.35, "color": "#2d9e5a"}
+        ],
+        "xLabel": "Fraction of Games with Unique Prediction",
+        "caption": "Stronger refinements eliminate more equilibria. Sequential equilibrium is the most restrictive."
+      }
+    },
+    {
+      "id": "confusion_matrix_binary",
+      "botId": "data-science-chat",
+      "topicId": "confusion_matrix",
+      "ast": {
+        "type": "confusion_matrix",
+        "title": "Binary Classifier — Confusion Matrix",
+        "labels": ["Positive", "Negative"],
+        "cells": [[50, 10], [5, 35]],
+        "rowLabel": "Actual",
+        "colLabel": "Predicted",
+        "caption": "TP=50, FP=10, FN=5, TN=35. Accuracy=85%, Precision=83.3%, Recall=90.9%"
+      }
+    },
+    {
+      "id": "bias_variance_tradeoff",
+      "botId": "data-science-chat",
+      "topicId": "bias_variance",
+      "ast": {
+        "type": "chart",
+        "title": "Bias-Variance Tradeoff",
+        "bars": [
+          {"label": "Underfitting", "value": 0.9, "color": "#ff9800"},
+          {"label": "Optimal", "value": 0.35, "color": "#2d9e5a"},
+          {"label": "Overfitting", "value": 0.8, "color": "#c44130"}
+        ],
+        "xLabel": "Total Error (Bias^2 + Variance + Irreducible)",
+        "caption": "Underfitting: high bias, low variance. Overfitting: low bias, high variance. Optimal balances both."
+      }
+    },
+    {
+      "id": "model_performance_comparison",
+      "botId": "data-science-chat",
+      "topicId": "model_comparison",
+      "ast": {
+        "type": "chart",
+        "title": "Model Performance Comparison",
+        "bars": [
+          {"label": "Logistic Regression", "value": 0.82, "color": "#4CAF50"},
+          {"label": "Random Forest", "value": 0.89, "color": "#2196F3"},
+          {"label": "XGBoost", "value": 0.94, "color": "#FF9800"},
+          {"label": "Neural Network", "value": 0.91, "color": "#9C27B0"}
+        ],
+        "xLabel": "F1 Score",
+        "caption": "XGBoost leads on tabular data. Tree ensembles typically outperform linear models on structured datasets."
+      }
+    },
+    {
+      "id": "house_of_wisdom_timeline",
+      "botId": "golden-age-inquiry",
+      "topicId": "house_of_wisdom",
+      "ast": {
+        "type": "timeline",
+        "title": "House of Wisdom — Key Milestones",
+        "events": [
+          {"year": "c. 780 CE", "title": "Harun al-Rashid becomes Caliph", "detail": "Patron of early translation movement"},
+          {"year": "800 CE", "title": "House of Wisdom founded", "detail": "Bayt al-Hikma established in Baghdad"},
+          {"year": "813–833 CE", "title": "Al-Ma'mun's Golden Patronage", "detail": "Massive expansion of translation and research"},
+          {"year": "c. 820 CE", "title": "Al-Khwarizmi writes 'Algebra'", "detail": "Kitab al-Jabr wal-Muqabala"},
+          {"year": "c. 850 CE", "title": "Al-Kindi's philosophical works", "detail": "Harmonized Greek philosophy with Islam"},
+          {"year": "1258 CE", "title": "Mongol Siege of Baghdad", "detail": "House of Wisdom destroyed. Books thrown into the Tigris."}
+        ],
+        "caption": "The House of Wisdom was the intellectual center of the Islamic Golden Age for over 450 years."
+      }
+    },
+    {
+      "id": "algebra_development_flow",
+      "botId": "golden-age-inquiry",
+      "topicId": "algebra_history",
+      "ast": {
+        "type": "flow",
+        "title": "Development of Algebra",
+        "nodes": [
+          {"id": "babylonian", "label": "Babylonian Mathematics", "x": 0.5, "y": 0},
+          {"id": "greek", "label": "Greek Geometry", "x": 0.2, "y": 0.25},
+          {"id": "khwarizmi", "label": "Al-Khwarizmi's Algebra", "x": 0.5, "y": 0.45},
+          {"id": "india", "label": "Indian Mathematics", "x": 0.8, "y": 0.25},
+          {"id": "europe", "label": "European Algebra", "x": 0.5, "y": 0.75}
+        ],
+        "edges": [
+          {"from": "babylonian", "to": "khwarizmi", "label": "inherited"},
+          {"from": "greek", "to": "khwarizmi", "label": "synthesized"},
+          {"from": "india", "to": "khwarizmi", "label": "decimal system"},
+          {"from": "khwarizmi", "to": "europe", "label": "Latin translations"}
+        ],
+        "caption": "Al-Khwarizmi's synthesis of Babylonian, Greek, and Indian traditions created modern algebra."
+      }
+    },
+    {
+      "id": "train_test_split_diagram",
+      "botId": "data-science-chat",
+      "topicId": "train_test_split",
+      "ast": {
+        "type": "chart",
+        "title": "Typical Data Split Ratios",
+        "bars": [
+          {"label": "Training", "value": 0.70, "color": "#2196F3"},
+          {"label": "Validation", "value": 0.15, "color": "#FF9800"},
+          {"label": "Test", "value": 0.15, "color": "#2d9e5a"}
+        ],
+        "xLabel": "Fraction of Dataset",
+        "caption": "Standard 70/15/15 split. Training for fitting, validation for tuning, test for final evaluation."
+      }
+    },
+    {
+      "id": "islamic_golden_age_timeline",
+      "botId": "golden-age-inquiry",
+      "topicId": "golden_age",
+      "ast": {
+        "type": "timeline",
+        "title": "Islamic Golden Age — Major Figures",
+        "events": [
+          {"year": "c. 780–850 CE", "title": "Al-Khwarizmi", "detail": "Algebra, algorithms, decimal system"},
+          {"year": "c. 801–873 CE", "title": "Al-Kindi", "detail": "Philosophy, cryptography, frequency analysis"},
+          {"year": "c. 865–925 CE", "title": "Al-Razi (Rhazes)", "detail": "Medicine, smallpox vs measles distinction"},
+          {"year": "c. 965–1040 CE", "title": "Ibn al-Haytham (Alhazen)", "detail": "Optics, scientific method, camera obscura"},
+          {"year": "c. 980–1037 CE", "title": "Ibn Sina (Avicenna)", "detail": "Canon of Medicine, philosophy"},
+          {"year": "c. 1058–1111 CE", "title": "Al-Ghazali", "detail": "Theology, skepticism, revival of Islamic sciences"},
+          {"year": "c. 1126–1198 CE", "title": "Ibn Rushd (Averroes)", "detail": "Philosophy, Aristotle commentaries"}
+        ],
+        "caption": "Seven centuries of extraordinary contributions to mathematics, medicine, astronomy, and philosophy."
+      }
+    },
+    {
+      "id": "decision_tree_flow",
+      "botId": "data-science-chat",
+      "topicId": "decision_tree",
+      "ast": {
+        "type": "flow",
+        "title": "Decision Tree — Should I Use a Tree Model?",
+        "nodes": [
+          {"id": "start", "label": "Start", "x": 0.5, "y": 0},
+          {"id": "tabular", "label": "Tabular data?", "x": 0.5, "y": 0.18},
+          {"id": "interpret", "label": "Need explainability?", "x": 0.2, "y": 0.4},
+          {"id": "n_samples", "label": "Large dataset?", "x": 0.8, "y": 0.4},
+          {"id": "ensemble", "label": "Use Ensemble", "x": 0.15, "y": 0.65},
+          {"id": "single", "label": "Single Tree OK", "x": 0.4, "y": 0.65},
+          {"id": "nn", "label": "Use Neural Net", "x": 0.85, "y": 0.65}
+        ],
+        "edges": [
+          {"from": "start", "to": "tabular", "label": "next"},
+          {"from": "tabular", "to": "interpret", "label": "yes"},
+          {"from": "tabular", "to": "n_samples", "label": "no"},
+          {"from": "interpret", "to": "ensemble", "label": "yes"},
+          {"from": "interpret", "to": "single", "label": "no"},
+          {"from": "n_samples", "to": "ensemble", "label": "no"},
+          {"from": "n_samples", "to": "nn", "label": "yes (>100K rows)"}
+        ],
+        "caption": "Decision trees excel at tabular data with interpretability requirements."
+      }
+    }
+  ]
+}

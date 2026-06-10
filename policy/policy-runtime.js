@@ -140,6 +140,23 @@ async function _cacheWasmModule(url, module, hash) {
 // Public API
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Feature Schema Versioning
+// ---------------------------------------------------------------------------
+
+/** Expected feature schema version. Must match the training pipeline output. */
+const EXPECTED_FEATURE_SCHEMA_VERSION = '0.5.0';
+
+/**
+ * Return the expected feature schema version for this runtime.
+ * Training pipelines should produce manifests with a matching
+ * featureSchemaVersion field.
+ * @returns {string}
+ */
+export function getExpectedFeatureSchemaVersion() {
+  return EXPECTED_FEATURE_SCHEMA_VERSION;
+}
+
 export function isPolicyLoaded() { return ready; }
 
 export function getPolicyStatus() {
@@ -147,9 +164,15 @@ export function getPolicyStatus() {
     ready,
     error: loadError,
     version: cachedManifest?.version || null,
+    featureSchemaVersion: cachedManifest?.featureSchemaVersion || null,
+    expectedFeatureSchemaVersion: EXPECTED_FEATURE_SCHEMA_VERSION,
+    schemaMismatch: _schemaMismatch,
     engine: mlpInstance ? 'mlp' : (wasmInstance ? 'wasm' : 'heuristic'),
   };
 }
+
+/** @type {boolean} */
+let _schemaMismatch = false;
 
 // ---------------------------------------------------------------------------
 // Public API — loadPolicyRuntime
@@ -234,6 +257,30 @@ async function _doLoad(config) {
   if (manifestErr) {
     console.error('[policy-runtime] CRITICAL: Manifest validation failed:', manifestErr);
     return _rejectResult(`Policy manifest invalid: ${manifestErr}. Please reload and clear browser cache.`);
+  }
+
+  // ---- Feature Schema Version Check ----
+  const manifestSchemaVersion = manifest.featureSchemaVersion || null;
+  if (manifestSchemaVersion && manifestSchemaVersion !== EXPECTED_FEATURE_SCHEMA_VERSION) {
+    console.warn(
+      `[policy-runtime] Feature schema version mismatch: ` +
+      `manifest says "${manifestSchemaVersion}", runtime expects "${EXPECTED_FEATURE_SCHEMA_VERSION}". ` +
+      `Falling back to heuristic inference.`
+    );
+    _schemaMismatch = true;
+    cachedManifest = manifest;
+
+    // Skip MLP and WASM — schema mismatch means feature layout may differ,
+    // so model weights would produce incorrect results. Go straight to heuristic.
+    return _succeedResult();
+  } else if (!manifestSchemaVersion) {
+    console.warn(
+      '[policy-runtime] Manifest missing featureSchemaVersion field. ' +
+      'Assuming compatibility — consider re-training with unified pipeline.'
+    );
+    _schemaMismatch = false;
+  } else {
+    _schemaMismatch = false;
   }
   cachedManifest = manifest;
 
@@ -923,13 +970,22 @@ function _allocString(instance, str) {
 }
 
 /**
- * Allocate a buffer in WASM memory.
+ * Return the success result object.
  */
-function _allocBuffer(instance, byteLength) {
-  // Use _malloc export if available
-  if (typeof instance.exports._malloc === 'function') {
-    return instance.exports._malloc(byteLength);
-  }
+function _succeedResult() {
+  ready = true;
+  loadError = null;
+  return {
+    ready: true,
+    planAnswer,
+    manifest: cachedManifest,
+    error: null,
+    schemaMismatch: _schemaMismatch || false,
+    schemaMismatchMessage: _schemaMismatch
+      ? `Feature schema version mismatch: manifest says "${cachedManifest?.featureSchemaVersion || 'unknown'}", runtime expects "${EXPECTED_FEATURE_SCHEMA_VERSION}". Falling back to heuristic inference.`
+      : null,
+  };
+}
   // Otherwise, use a simple static offset (works for small, single-call buffers)
   // This is a best-effort fallback; real WASM modules export _malloc.
   return 1024; // start of heap in most emscripten builds

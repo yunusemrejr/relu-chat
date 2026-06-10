@@ -130,6 +130,41 @@ export const PLAN_SCHEMA = Object.freeze({
       decisionPath:  { type: 'array',  elementType: 'string', default: [], desc: 'Decision trace e.g. ["greeting: low sim", "entity: Nash equilibrium"].' }
     },
     desc: 'Metadata for traceability and debugging.'
+  },
+  answerBudget: {
+    type: 'string',
+    enum: ['auto', 'micro', 'short', 'medium', 'long', 'diagram_plus_text'],
+    default: 'auto',
+    desc: 'Controls response length and detail level. Auto means the policy decides based on local features.'
+  },
+  visualMode: {
+    type: 'string',
+    enum: ['none', 'inline', 'card', 'expandable'],
+    default: 'none',
+    desc: 'How to render diagram alongside text.'
+  },
+  visualType: {
+    type: 'string',
+    enum: ['none', 'payoff_matrix', 'tree', 'timeline', 'flow', 'chart'],
+    default: 'none',
+    desc: 'Type of diagram to render.'
+  },
+  visualRef: {
+    type: 'string',
+    default: '',
+    desc: 'Fragment or topic diagram ID reference.'
+  },
+  visualPlacement: {
+    type: 'string',
+    enum: ['before_text', 'after_intro', 'after_text'],
+    default: 'after_text',
+    desc: 'Where to place the diagram relative to text.'
+  },
+  visualBudget: {
+    type: 'string',
+    enum: ['tiny', 'standard', 'detailed'],
+    default: 'standard',
+    desc: 'Detail level for diagram rendering.'
   }
 });
 
@@ -165,7 +200,13 @@ export const DEFAULT_PLAN = Object.freeze({
     policyVersion: '0.1.0',
     policyHash: 'default-plan',
     decisionPath: ['DEFAULT_PLAN']
-  }
+  },
+  answerBudget: 'auto',
+  visualMode: 'none',
+  visualType: 'none',
+  visualRef: '',
+  visualPlacement: 'after_text',
+  visualBudget: 'standard'
 });
 
 // ---------------------------------------------------------------------------

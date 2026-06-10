@@ -1,0 +1,770 @@
+{
+  "nodes": [
+    {
+      "id": "python.datawork",
+      "label": "Python for Data Work"
+    },
+    {
+      "id": "pandas",
+      "label": "pandas"
+    },
+    {
+      "id": "numpy",
+      "label": "numpy"
+    },
+    {
+      "id": "data_cleaning",
+      "label": "data_cleaning"
+    },
+    {
+      "id": "eda",
+      "label": "eda"
+    },
+    {
+      "id": "linear_regression",
+      "label": "linear_regression"
+    },
+    {
+      "id": "statistics",
+      "label": "statistics"
+    },
+    {
+      "id": "missing_values",
+      "label": "missing_values"
+    },
+    {
+      "id": "outliers",
+      "label": "outliers"
+    },
+    {
+      "id": "feature_engineering",
+      "label": "feature_engineering"
+    },
+    {
+      "id": "cross_validation",
+      "label": "cross_validation"
+    },
+    {
+      "id": "visualization",
+      "label": "Data Visualization"
+    },
+    {
+      "id": "probability",
+      "label": "probability"
+    },
+    {
+      "id": "distributions",
+      "label": "distributions"
+    },
+    {
+      "id": "model_evaluation",
+      "label": "model_evaluation"
+    },
+    {
+      "id": "train_test_split",
+      "label": "Train/Test Split"
+    },
+    {
+      "id": "overfitting",
+      "label": "overfitting"
+    },
+    {
+      "id": "underfitting",
+      "label": "underfitting"
+    },
+    {
+      "id": "classification",
+      "label": "Classification"
+    },
+    {
+      "id": "logistic_regression",
+      "label": "logistic_regression"
+    },
+    {
+      "id": "decision_trees",
+      "label": "decision_trees"
+    },
+    {
+      "id": "accuracy",
+      "label": "accuracy"
+    },
+    {
+      "id": "regularization",
+      "label": "regularization"
+    },
+    {
+      "id": "ensemble",
+      "label": "ensemble"
+    },
+    {
+      "id": "feature_importance",
+      "label": "feature_importance"
+    },
+    {
+      "id": "regression",
+      "label": "Regression"
+    },
+    {
+      "id": "bias_variance",
+      "label": "bias_variance"
+    },
+    {
+      "id": "clustering",
+      "label": "Clustering"
+    },
+    {
+      "id": "kmeans",
+      "label": "kmeans"
+    },
+    {
+      "id": "pca",
+      "label": "pca"
+    },
+    {
+      "id": "standardization",
+      "label": "standardization"
+    },
+    {
+      "id": "leakage",
+      "label": "leakage"
+    },
+    {
+      "id": "precision_recall",
+      "label": "precision_recall"
+    },
+    {
+      "id": "f1_score",
+      "label": "f1_score"
+    },
+    {
+      "id": "roc_auc",
+      "label": "roc_auc"
+    },
+    {
+      "id": "confusion_matrix",
+      "label": "confusion_matrix"
+    },
+    {
+      "id": "model_selection",
+      "label": "model_selection"
+    },
+    {
+      "id": "time_series",
+      "label": "time_series"
+    },
+    {
+      "id": "dimensionality_reduction",
+      "label": "dimensionality_reduction"
+    },
+    {
+      "id": "deployment",
+      "label": "Model Deployment"
+    },
+    {
+      "id": "browser_ml",
+      "label": "browser_ml"
+    }
+  ],
+  "edges": [
+    {
+      "source": "python.datawork",
+      "target": "pandas"
+    },
+    {
+      "source": "python.datawork",
+      "target": "numpy"
+    },
+    {
+      "source": "python.datawork",
+      "target": "data_cleaning"
+    },
+    {
+      "source": "python.datawork",
+      "target": "eda"
+    },
+    {
+      "source": "pandas",
+      "target": "python.datawork"
+    },
+    {
+      "source": "pandas",
+      "target": "numpy"
+    },
+    {
+      "source": "pandas",
+      "target": "data_cleaning"
+    },
+    {
+      "source": "pandas",
+      "target": "eda"
+    },
+    {
+      "source": "numpy",
+      "target": "python.datawork"
+    },
+    {
+      "source": "numpy",
+      "target": "pandas"
+    },
+    {
+      "source": "numpy",
+      "target": "linear_regression"
+    },
+    {
+      "source": "numpy",
+      "target": "statistics"
+    },
+    {
+      "source": "data_cleaning",
+      "target": "missing_values"
+    },
+    {
+      "source": "data_cleaning",
+      "target": "pandas"
+    },
+    {
+      "source": "data_cleaning",
+      "target": "eda"
+    },
+    {
+      "source": "data_cleaning",
+      "target": "outliers"
+    },
+    {
+      "source": "missing_values",
+      "target": "data_cleaning"
+    },
+    {
+      "source": "missing_values",
+      "target": "pandas"
+    },
+    {
+      "source": "missing_values",
+      "target": "feature_engineering"
+    },
+    {
+      "source": "missing_values",
+      "target": "cross_validation"
+    },
+    {
+      "source": "visualization",
+      "target": "statistics"
+    },
+    {
+      "source": "visualization",
+      "target": "pandas"
+    },
+    {
+      "source": "visualization",
+      "target": "eda"
+    },
+    {
+      "source": "visualization",
+      "target": "outliers"
+    },
+    {
+      "source": "statistics",
+      "target": "probability"
+    },
+    {
+      "source": "statistics",
+      "target": "distributions"
+    },
+    {
+      "source": "statistics",
+      "target": "visualization"
+    },
+    {
+      "source": "statistics",
+      "target": "outliers"
+    },
+    {
+      "source": "probability",
+      "target": "distributions"
+    },
+    {
+      "source": "probability",
+      "target": "statistics"
+    },
+    {
+      "source": "probability",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "distributions",
+      "target": "statistics"
+    },
+    {
+      "source": "distributions",
+      "target": "probability"
+    },
+    {
+      "source": "distributions",
+      "target": "linear_regression"
+    },
+    {
+      "source": "train_test_split",
+      "target": "cross_validation"
+    },
+    {
+      "source": "train_test_split",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "train_test_split",
+      "target": "overfitting"
+    },
+    {
+      "source": "train_test_split",
+      "target": "underfitting"
+    },
+    {
+      "source": "classification",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "classification",
+      "target": "decision_trees"
+    },
+    {
+      "source": "classification",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "classification",
+      "target": "accuracy"
+    },
+    {
+      "source": "logistic_regression",
+      "target": "classification"
+    },
+    {
+      "source": "logistic_regression",
+      "target": "regularization"
+    },
+    {
+      "source": "logistic_regression",
+      "target": "cross_validation"
+    },
+    {
+      "source": "logistic_regression",
+      "target": "accuracy"
+    },
+    {
+      "source": "decision_trees",
+      "target": "classification"
+    },
+    {
+      "source": "decision_trees",
+      "target": "ensemble"
+    },
+    {
+      "source": "decision_trees",
+      "target": "overfitting"
+    },
+    {
+      "source": "decision_trees",
+      "target": "feature_importance"
+    },
+    {
+      "source": "regression",
+      "target": "linear_regression"
+    },
+    {
+      "source": "regression",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "regression",
+      "target": "overfitting"
+    },
+    {
+      "source": "regression",
+      "target": "feature_engineering"
+    },
+    {
+      "source": "linear_regression",
+      "target": "regression"
+    },
+    {
+      "source": "linear_regression",
+      "target": "regularization"
+    },
+    {
+      "source": "linear_regression",
+      "target": "bias_variance"
+    },
+    {
+      "source": "linear_regression",
+      "target": "cross_validation"
+    },
+    {
+      "source": "clustering",
+      "target": "kmeans"
+    },
+    {
+      "source": "clustering",
+      "target": "feature_engineering"
+    },
+    {
+      "source": "clustering",
+      "target": "eda"
+    },
+    {
+      "source": "clustering",
+      "target": "pca"
+    },
+    {
+      "source": "kmeans",
+      "target": "clustering"
+    },
+    {
+      "source": "kmeans",
+      "target": "pca"
+    },
+    {
+      "source": "kmeans",
+      "target": "feature_engineering"
+    },
+    {
+      "source": "kmeans",
+      "target": "standardization"
+    },
+    {
+      "source": "feature_engineering",
+      "target": "data_cleaning"
+    },
+    {
+      "source": "feature_engineering",
+      "target": "regularization"
+    },
+    {
+      "source": "feature_engineering",
+      "target": "cross_validation"
+    },
+    {
+      "source": "feature_engineering",
+      "target": "leakage"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "accuracy"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "precision_recall"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "f1_score"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "roc_auc"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "train_test_split"
+    },
+    {
+      "source": "accuracy",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "accuracy",
+      "target": "precision_recall"
+    },
+    {
+      "source": "accuracy",
+      "target": "f1_score"
+    },
+    {
+      "source": "accuracy",
+      "target": "confusion_matrix"
+    },
+    {
+      "source": "precision_recall",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "precision_recall",
+      "target": "f1_score"
+    },
+    {
+      "source": "precision_recall",
+      "target": "roc_auc"
+    },
+    {
+      "source": "precision_recall",
+      "target": "accuracy"
+    },
+    {
+      "source": "f1_score",
+      "target": "precision_recall"
+    },
+    {
+      "source": "f1_score",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "f1_score",
+      "target": "accuracy"
+    },
+    {
+      "source": "f1_score",
+      "target": "roc_auc"
+    },
+    {
+      "source": "roc_auc",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "roc_auc",
+      "target": "precision_recall"
+    },
+    {
+      "source": "roc_auc",
+      "target": "f1_score"
+    },
+    {
+      "source": "roc_auc",
+      "target": "accuracy"
+    },
+    {
+      "source": "overfitting",
+      "target": "underfitting"
+    },
+    {
+      "source": "overfitting",
+      "target": "regularization"
+    },
+    {
+      "source": "overfitting",
+      "target": "cross_validation"
+    },
+    {
+      "source": "overfitting",
+      "target": "bias_variance"
+    },
+    {
+      "source": "underfitting",
+      "target": "overfitting"
+    },
+    {
+      "source": "underfitting",
+      "target": "bias_variance"
+    },
+    {
+      "source": "underfitting",
+      "target": "feature_engineering"
+    },
+    {
+      "source": "underfitting",
+      "target": "regularization"
+    },
+    {
+      "source": "cross_validation",
+      "target": "train_test_split"
+    },
+    {
+      "source": "cross_validation",
+      "target": "overfitting"
+    },
+    {
+      "source": "cross_validation",
+      "target": "model_selection"
+    },
+    {
+      "source": "cross_validation",
+      "target": "leakage"
+    },
+    {
+      "source": "leakage",
+      "target": "cross_validation"
+    },
+    {
+      "source": "leakage",
+      "target": "feature_engineering"
+    },
+    {
+      "source": "leakage",
+      "target": "train_test_split"
+    },
+    {
+      "source": "leakage",
+      "target": "time_series"
+    },
+    {
+      "source": "bias_variance",
+      "target": "overfitting"
+    },
+    {
+      "source": "bias_variance",
+      "target": "underfitting"
+    },
+    {
+      "source": "bias_variance",
+      "target": "ensemble"
+    },
+    {
+      "source": "bias_variance",
+      "target": "regularization"
+    },
+    {
+      "source": "regularization",
+      "target": "linear_regression"
+    },
+    {
+      "source": "regularization",
+      "target": "overfitting"
+    },
+    {
+      "source": "regularization",
+      "target": "cross_validation"
+    },
+    {
+      "source": "regularization",
+      "target": "bias_variance"
+    },
+    {
+      "source": "ensemble",
+      "target": "decision_trees"
+    },
+    {
+      "source": "ensemble",
+      "target": "overfitting"
+    },
+    {
+      "source": "ensemble",
+      "target": "cross_validation"
+    },
+    {
+      "source": "ensemble",
+      "target": "bias_variance"
+    },
+    {
+      "source": "pca",
+      "target": "dimensionality_reduction"
+    },
+    {
+      "source": "pca",
+      "target": "clustering"
+    },
+    {
+      "source": "pca",
+      "target": "feature_engineering"
+    },
+    {
+      "source": "pca",
+      "target": "standardization"
+    },
+    {
+      "source": "time_series",
+      "target": "train_test_split"
+    },
+    {
+      "source": "time_series",
+      "target": "leakage"
+    },
+    {
+      "source": "time_series",
+      "target": "feature_engineering"
+    },
+    {
+      "source": "time_series",
+      "target": "visualization"
+    },
+    {
+      "source": "deployment",
+      "target": "browser_ml"
+    },
+    {
+      "source": "deployment",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "deployment",
+      "target": "leakage"
+    },
+    {
+      "source": "deployment",
+      "target": "cross_validation"
+    },
+    {
+      "source": "browser_ml",
+      "target": "deployment"
+    },
+    {
+      "source": "browser_ml",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "browser_ml",
+      "target": "regularization"
+    },
+    {
+      "source": "eda",
+      "target": "data_cleaning"
+    },
+    {
+      "source": "eda",
+      "target": "missing_values"
+    },
+    {
+      "source": "eda",
+      "target": "visualization"
+    },
+    {
+      "source": "eda",
+      "target": "statistics"
+    },
+    {
+      "source": "outliers",
+      "target": "data_cleaning"
+    },
+    {
+      "source": "outliers",
+      "target": "statistics"
+    },
+    {
+      "source": "outliers",
+      "target": "visualization"
+    },
+    {
+      "source": "outliers",
+      "target": "data_cleaning"
+    },
+    {
+      "source": "standardization",
+      "target": "data_cleaning"
+    },
+    {
+      "source": "standardization",
+      "target": "regularization"
+    },
+    {
+      "source": "standardization",
+      "target": "kmeans"
+    },
+    {
+      "source": "standardization",
+      "target": "cross_validation"
+    },
+    {
+      "source": "dimensionality_reduction",
+      "target": "pca"
+    },
+    {
+      "source": "dimensionality_reduction",
+      "target": "feature_engineering"
+    },
+    {
+      "source": "dimensionality_reduction",
+      "target": "clustering"
+    },
+    {
+      "source": "dimensionality_reduction",
+      "target": "standardization"
+    }
+  ]
+}

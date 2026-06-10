@@ -31,6 +31,16 @@ export class SignalLayer {
     return this;
   }
 
+  /**
+   * Load BM25 from a precomputed inverted index (bot-pack Track B P1).
+   * @param {object} indexData - output from build-bm25-index.js
+   */
+  initBM25FromIndex(indexData) {
+    this._bm25Scorer = new BM25Scorer(1.5, 0.75).loadFromIndex(indexData);
+    this._bm25Ready = this._bm25Scorer.getReady();
+    return this;
+  }
+
   isBM25Ready() { return this._bm25Ready; }
 
   async process(query, qEmb, entryEmb, intentEmb, KB, config, session = null) {
