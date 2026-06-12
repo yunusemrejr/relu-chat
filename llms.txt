@@ -1,0 +1,30 @@
+# ReLU.chat
+
+> Free, browser-based, privacy-first open-source chatbots that run entirely in your browser. No servers, no LLMs, no tracking.
+
+## Overview
+
+ReLU.chat is an open-source platform for interactive on-device chatbots. All NLP processing happens in the browser using quantized ONNX models (~22MB). The system uses sentence transformers for 384-dimensional embeddings, BM25 sparse retrieval, dense cosine similarity, and a reinforcement-learning-trained MLP policy network.
+
+## Key Pages
+
+- [Home](https://relu.chat/) — Landing page with feature overview
+- [How It Works](https://relu.chat/how-it-works.html) — Full technical architecture
+- [Blog](https://relu.chat/blog/) — Technical articles on on-device AI and NLP
+
+## Architecture
+
+- **Embedding**: all-MiniLM-L6-v2 (quantized ONNX, 384-dim)
+- **Retrieval**: BM25 sparse + dense cosine similarity ensemble
+- **Policy**: MLP 25→128→64→6 action heads, RL-trained
+- **Runtime**: Pure browser JavaScript, WebAssembly, ONNX Runtime
+- **Storage**: Client-side only (IndexedDB, no server state)
+
+## Source Code
+
+GitHub: https://github.com/yunusemrejr/relu-chat
+License: MIT
+
+## Contact
+
+For questions about the project, visit the GitHub repository.

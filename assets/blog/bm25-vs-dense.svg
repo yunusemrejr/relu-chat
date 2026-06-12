@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#efe7d6"/>
+      <stop offset="100%" stop-color="#cbd9d6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg2)"/>
+  <g>
+    <circle cx="420" cy="315" r="180" fill="#e0d3bc" opacity="0.6"/>
+    <circle cx="780" cy="315" r="180" fill="#b7d2cf" opacity="0.6"/>
+    <g fill="#5a4f3f" opacity="0.8">
+      <text x="350" y="305" font-family="Inter,system-ui,sans-serif" font-size="34" font-weight="700">BM25</text>
+      <text x="335" y="345" font-family="Inter,system-ui,sans-serif" font-size="16">sparse · lexical</text>
+    </g>
+    <g fill="#3e5754" opacity="0.85">
+      <text x="685" y="305" font-family="Inter,system-ui,sans-serif" font-size="34" font-weight="700">Dense</text>
+      <text x="675" y="345" font-family="Inter,system-ui,sans-serif" font-size="16">semantic · vector</text>
+    </g>
+    <g stroke="#a89678" stroke-width="3" fill="none" opacity="0.6">
+      <path d="M600 315 L420 315"/>
+      <path d="M600 315 L780 315"/>
+      <path d="M600 220 L600 410"/>
+    </g>
+    <circle cx="600" cy="315" r="14" fill="#fff" stroke="#a89678" stroke-width="3"/>
+  </g>
+  <text x="100" y="540" font-family="Inter,system-ui,sans-serif" font-size="22" fill="#5a4f3f">Hybrid retrieval · fused scoring</text>
+</svg>

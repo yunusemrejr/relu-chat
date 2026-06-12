@@ -1,0 +1,892 @@
+{
+  "python for data work": [
+    [
+      0,
+      1
+    ]
+  ],
+  "python data": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "pandas numpy": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "data python": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "pandas dataframe": [
+    [
+      1,
+      1
+    ]
+  ],
+  "dataframe": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "series": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "pandas operations": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "numpy arrays": [
+    [
+      2,
+      1
+    ]
+  ],
+  "ndarray": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "numpy": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "array operations": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "data cleaning": [
+    [
+      3,
+      1
+    ]
+  ],
+  "cleaning": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "data preparation": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "data wrangling": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "missing values": [
+    [
+      4,
+      1
+    ]
+  ],
+  "nan": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "null": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "imputation": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "missing data": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "data visualization": [
+    [
+      5,
+      1
+    ]
+  ],
+  "matplotlib": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "seaborn": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "plots": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "charts": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "descriptive statistics": [
+    [
+      6,
+      1
+    ]
+  ],
+  "mean": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "median": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "std": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "variance": [
+    [
+      6,
+      0.9
+    ],
+    [
+      27,
+      0.9
+    ]
+  ],
+  "distribution": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "probability basics": [
+    [
+      7,
+      1
+    ]
+  ],
+  "probability": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "conditional": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "bayes theorem": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "probability distributions": [
+    [
+      8,
+      1
+    ]
+  ],
+  "normal distribution": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "binomial": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "poisson": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "uniform": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "train test split": [
+    [
+      9,
+      1
+    ]
+  ],
+  "train test": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "holdout": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "classification": [
+    [
+      10,
+      1
+    ]
+  ],
+  "classify": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "classifier": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "categorical outcome": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "logistic regression": [
+    [
+      11,
+      1
+    ]
+  ],
+  "logistic": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "logit": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "sigmoid": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "decision trees": [
+    [
+      12,
+      1
+    ]
+  ],
+  "decision tree": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "tree model": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "classification tree": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "regression": [
+    [
+      13,
+      1
+    ]
+  ],
+  "continuous prediction": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "regression analysis": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "linear regression": [
+    [
+      14,
+      1
+    ]
+  ],
+  "ols": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "least squares": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "clustering": [
+    [
+      15,
+      1
+    ]
+  ],
+  "unsupervised": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "segmentation": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "k means clustering": [
+    [
+      16,
+      1
+    ]
+  ],
+  "kmeans": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "k means": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "centroid": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "feature engineering": [
+    [
+      17,
+      1
+    ]
+  ],
+  "feature creation": [
+    [
+      17,
+      0.9
+    ]
+  ],
+  "feature transformation": [
+    [
+      17,
+      0.9
+    ]
+  ],
+  "model evaluation": [
+    [
+      18,
+      1
+    ]
+  ],
+  "evaluation": [
+    [
+      18,
+      0.9
+    ]
+  ],
+  "metrics": [
+    [
+      18,
+      0.9
+    ]
+  ],
+  "model assessment": [
+    [
+      18,
+      0.9
+    ]
+  ],
+  "accuracy": [
+    [
+      19,
+      1
+    ]
+  ],
+  "correct predictions": [
+    [
+      19,
+      0.9
+    ]
+  ],
+  "precision and recall": [
+    [
+      20,
+      1
+    ]
+  ],
+  "precision": [
+    [
+      20,
+      0.9
+    ]
+  ],
+  "recall": [
+    [
+      20,
+      0.9
+    ]
+  ],
+  "sensitivity": [
+    [
+      20,
+      0.9
+    ]
+  ],
+  "specificity": [
+    [
+      20,
+      0.9
+    ]
+  ],
+  "f1 score": [
+    [
+      21,
+      1
+    ]
+  ],
+  "f1": [
+    [
+      21,
+      0.9
+    ]
+  ],
+  "harmonic mean": [
+    [
+      21,
+      0.9
+    ]
+  ],
+  "roc and auc": [
+    [
+      22,
+      1
+    ]
+  ],
+  "roc": [
+    [
+      22,
+      0.9
+    ]
+  ],
+  "auc": [
+    [
+      22,
+      0.9
+    ]
+  ],
+  "roc auc": [
+    [
+      22,
+      0.9
+    ]
+  ],
+  "receiver operating characteristic": [
+    [
+      22,
+      0.9
+    ]
+  ],
+  "overfitting": [
+    [
+      23,
+      1
+    ]
+  ],
+  "over train": [
+    [
+      23,
+      0.9
+    ]
+  ],
+  "memorizing": [
+    [
+      23,
+      0.9
+    ]
+  ],
+  "underfitting": [
+    [
+      24,
+      1
+    ]
+  ],
+  "high bias": [
+    [
+      24,
+      0.9
+    ]
+  ],
+  "too simple": [
+    [
+      24,
+      0.9
+    ]
+  ],
+  "cross validation": [
+    [
+      25,
+      1
+    ]
+  ],
+  "cv": [
+    [
+      25,
+      0.9
+    ]
+  ],
+  "k fold": [
+    [
+      25,
+      0.9
+    ]
+  ],
+  "data leakage": [
+    [
+      26,
+      1
+    ]
+  ],
+  "leak": [
+    [
+      26,
+      0.9
+    ]
+  ],
+  "lookahead bias": [
+    [
+      26,
+      0.9
+    ]
+  ],
+  "bias variance tradeoff": [
+    [
+      27,
+      1
+    ]
+  ],
+  "bias": [
+    [
+      27,
+      0.9
+    ]
+  ],
+  "regularization": [
+    [
+      28,
+      1
+    ]
+  ],
+  "l1 l2": [
+    [
+      28,
+      0.9
+    ]
+  ],
+  "ridge lasso": [
+    [
+      28,
+      0.9
+    ]
+  ],
+  "ensemble methods": [
+    [
+      29,
+      1
+    ]
+  ],
+  "ensemble": [
+    [
+      29,
+      0.9
+    ]
+  ],
+  "random forest": [
+    [
+      29,
+      0.9
+    ]
+  ],
+  "boosting": [
+    [
+      29,
+      0.9
+    ]
+  ],
+  "bagging": [
+    [
+      29,
+      0.9
+    ]
+  ],
+  "principal component analysis": [
+    [
+      30,
+      1
+    ]
+  ],
+  "pca": [
+    [
+      30,
+      0.9
+    ]
+  ],
+  "dimensionality reduction": [
+    [
+      30,
+      0.9
+    ],
+    [
+      37,
+      1
+    ]
+  ],
+  "principal components": [
+    [
+      30,
+      0.9
+    ]
+  ],
+  "time series analysis": [
+    [
+      31,
+      1
+    ]
+  ],
+  "time series": [
+    [
+      31,
+      0.9
+    ]
+  ],
+  "forecasting": [
+    [
+      31,
+      0.9
+    ]
+  ],
+  "temporal data": [
+    [
+      31,
+      0.9
+    ]
+  ],
+  "model deployment": [
+    [
+      32,
+      1
+    ]
+  ],
+  "deployment": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "production": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "mlops": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "serving": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "browser and local ml": [
+    [
+      33,
+      1
+    ]
+  ],
+  "browser ml": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "webml": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "onnx": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "tensorflow js": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "wasm": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "exploratory data analysis": [
+    [
+      34,
+      1
+    ]
+  ],
+  "eda": [
+    [
+      34,
+      0.9
+    ]
+  ],
+  "exploratory analysis": [
+    [
+      34,
+      0.9
+    ]
+  ],
+  "data exploration": [
+    [
+      34,
+      0.9
+    ]
+  ],
+  "outlier detection": [
+    [
+      35,
+      1
+    ]
+  ],
+  "outliers": [
+    [
+      35,
+      0.9
+    ]
+  ],
+  "anomalies": [
+    [
+      35,
+      0.9
+    ]
+  ],
+  "outlier treatment": [
+    [
+      35,
+      0.9
+    ]
+  ],
+  "feature scaling": [
+    [
+      36,
+      1
+    ]
+  ],
+  "scaling": [
+    [
+      36,
+      0.9
+    ]
+  ],
+  "normalization": [
+    [
+      36,
+      0.9
+    ]
+  ],
+  "standardization": [
+    [
+      36,
+      0.9
+    ]
+  ],
+  "minmax": [
+    [
+      36,
+      0.9
+    ]
+  ],
+  "feature reduction": [
+    [
+      37,
+      0.9
+    ]
+  ],
+  "manifold learning": [
+    [
+      37,
+      0.9
+    ]
+  ]
+}

@@ -1,0 +1,1900 @@
+[
+  {
+    "id": "nash_eq",
+    "idx": 0,
+    "name": "Nash Equilibrium",
+    "aliases": [
+      "nash equilibrium",
+      "nash",
+      "ne",
+      "nash eq",
+      "(d,d)",
+      "nash equilibrium"
+    ],
+    "summary": "A profile of strategies where no player can profit by unilateral deviation.",
+    "related": [
+      "spe",
+      "pbe",
+      "mixed_strat",
+      "dom_strat",
+      "corr_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "prisoners_dilemma",
+    "idx": 1,
+    "name": "Prisoner's Dilemma",
+    "aliases": [
+      "prisoner's dilemma",
+      "pd",
+      "prisoners dilemma",
+      "prisoner dilemma",
+      "(d,d)",
+      "(c,c)",
+      "mutual defection",
+      "defection",
+      "cooperate defect",
+      "defect defect"
+    ],
+    "summary": "Canonical 2x2 game where individually rational defection leads to a Pareto-inferior outcome.",
+    "related": [
+      "repeated_game",
+      "tft",
+      "folk",
+      "dom_strat"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "dom_strat",
+    "idx": 2,
+    "name": "Dominant Strategy",
+    "aliases": [
+      "dominant strategy",
+      "dominance",
+      "strictly dominant",
+      "weakly dominant"
+    ],
+    "summary": "A strategy that yields at least as high a payoff as any alternative regardless of others' play.",
+    "related": [
+      "nash_eq",
+      "ied",
+      "vickrey",
+      "mech_design"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "mixed_strat",
+    "idx": 3,
+    "name": "Mixed Strategy",
+    "aliases": [
+      "mixed strategy",
+      "mixed",
+      "randomized strategy",
+      "mixing"
+    ],
+    "summary": "A probability distribution over a player's pure strategies.",
+    "related": [
+      "nash_eq",
+      "pure_strat",
+      "matching_pennies"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "pure_strat",
+    "idx": 4,
+    "name": "Pure Strategy",
+    "aliases": [
+      "pure strategy",
+      "pure"
+    ],
+    "summary": "A deterministic choice of an action from a player's strategy set.",
+    "related": [
+      "mixed_strat",
+      "nash_eq",
+      "extensive_form",
+      "battle_of_sexes"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "zero_sum",
+    "idx": 5,
+    "name": "Zero-Sum Game",
+    "aliases": [
+      "zero-sum game",
+      "zerosum",
+      "zero sum",
+      "constant-sum",
+      "strictly competitive"
+    ],
+    "summary": "A game in which one player's gain exactly offsets the others' losses.",
+    "related": [
+      "minimax",
+      "nash_eq",
+      "matching_pennies"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "coop_game",
+    "idx": 6,
+    "name": "Cooperative Game",
+    "aliases": [
+      "cooperative game",
+      "coalitional",
+      "tu game",
+      "characteristic function"
+    ],
+    "summary": "A game where binding agreements among coalitions are allowed; analysis focuses on joint payoffs.",
+    "related": [
+      "shapley",
+      "core",
+      "coalition",
+      "noncoop_game"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "noncoop_game",
+    "idx": 7,
+    "name": "Non-Cooperative Game",
+    "aliases": [
+      "non-cooperative game",
+      "non-cooperative"
+    ],
+    "summary": "A game in which binding agreements are not possible; each player chooses independently.",
+    "related": [
+      "coop_game",
+      "nash_eq",
+      "spe",
+      "bayesian_game"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "minimax",
+    "idx": 8,
+    "name": "Minimax Theorem",
+    "aliases": [
+      "minimax theorem",
+      "von neumann theorem",
+      "max-min",
+      "minmax"
+    ],
+    "summary": "In any finite two-player zero-sum game, max-min and min-max values coincide in mixed strategies.",
+    "related": [
+      "zero_sum",
+      "nash_eq",
+      "lp_duality",
+      "zermelo"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "extensive_form",
+    "idx": 9,
+    "name": "Extensive-Form Game",
+    "aliases": [
+      "extensive-form game",
+      "game tree",
+      "sequential",
+      "extensive form"
+    ],
+    "summary": "A representation of sequential play using a rooted tree with information sets.",
+    "related": [
+      "normal_form",
+      "spe",
+      "backward_induction",
+      "perfect_info"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "normal_form",
+    "idx": 10,
+    "name": "Normal-Form Game",
+    "aliases": [
+      "normal-form game",
+      "strategic form",
+      "matrix game"
+    ],
+    "summary": "A simultaneous-move representation via strategy sets and payoff functions.",
+    "related": [
+      "extensive_form",
+      "nash_eq",
+      "bimatrix"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "bayesian_game",
+    "idx": 11,
+    "name": "Bayesian Game",
+    "aliases": [
+      "bayesian game",
+      "games of incomplete information",
+      "bayes nash",
+      "type space"
+    ],
+    "summary": "A game in which players have private information (types) drawn from a common prior.",
+    "related": [
+      "pbe",
+      "harsanyi",
+      "signaling",
+      "screening",
+      "auction_theory"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "repeated_game",
+    "idx": 12,
+    "name": "Repeated Game",
+    "aliases": [
+      "repeated game",
+      "iterated game",
+      "supergame"
+    ],
+    "summary": "A stage game played repeatedly, allowing histories to influence future play.",
+    "related": [
+      "folk",
+      "tft",
+      "prisoners_dilemma",
+      "spe"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "evo_gt",
+    "idx": 13,
+    "name": "Evolutionary Game Theory",
+    "aliases": [
+      "evolutionary game theory",
+      "egt",
+      "evolution"
+    ],
+    "summary": "Studies strategy frequencies in large populations under selection and mutation.",
+    "related": [
+      "ess",
+      "replicator",
+      "hawk_dove",
+      "nash_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "ess",
+    "idx": 14,
+    "name": "Evolutionarily Stable Strategy",
+    "aliases": [
+      "evolutionarily stable strategy",
+      "ess",
+      "evolutionary stable"
+    ],
+    "summary": "A strategy that, if adopted by the population, cannot be invaded by any rare mutant.",
+    "related": [
+      "evo_gt",
+      "replicator",
+      "nash_eq",
+      "hawk_dove"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "replicator",
+    "idx": 15,
+    "name": "Replicator Dynamics",
+    "aliases": [
+      "replicator dynamics",
+      "replicator equation"
+    ],
+    "summary": "ODEs describing how strategy frequencies evolve under selection proportional to fitness.",
+    "related": [
+      "evo_gt",
+      "ess",
+      "nash_eq",
+      "poa"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "stackelberg",
+    "idx": 16,
+    "name": "Stackelberg Competition",
+    "aliases": [
+      "stackelberg competition",
+      "stackelberg",
+      "leader-follower"
+    ],
+    "summary": "A sequential duopoly in which a leader commits to an output and the follower best-responds.",
+    "related": [
+      "cournot",
+      "nash_eq",
+      "spe",
+      "backward_induction"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "cournot",
+    "idx": 17,
+    "name": "Cournot Competition",
+    "aliases": [
+      "cournot competition",
+      "cournot",
+      "quantity competition"
+    ],
+    "summary": "A simultaneous-move duopoly/oligopoly with quantity as the strategic variable.",
+    "related": [
+      "stackelberg",
+      "bertrand",
+      "nash_eq",
+      "poa"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "bertrand",
+    "idx": 18,
+    "name": "Bertrand Competition",
+    "aliases": [
+      "bertrand competition",
+      "bertrand",
+      "price competition"
+    ],
+    "summary": "Simultaneous price-setting competition among firms producing a homogeneous good.",
+    "related": [
+      "cournot",
+      "nash_eq",
+      "poa",
+      "mech_design"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "auction_theory",
+    "idx": 19,
+    "name": "Auction Theory",
+    "aliases": [
+      "auction theory",
+      "auctions"
+    ],
+    "summary": "Study of resource allocation via bidding mechanisms.",
+    "related": [
+      "vickrey",
+      "mech_design",
+      "revelation",
+      "bayesian_game",
+      "dom_strat"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "vickrey",
+    "idx": 20,
+    "name": "Vickrey Auction",
+    "aliases": [
+      "vickrey auction",
+      "second price",
+      "second-price sealed bid"
+    ],
+    "summary": "A sealed-bid auction where the highest bidder wins and pays the second-highest bid.",
+    "related": [
+      "auction_theory",
+      "mech_design",
+      "dom_strat",
+      "revelation"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "mech_design",
+    "idx": 21,
+    "name": "Mechanism Design",
+    "aliases": [
+      "mechanism design",
+      "reverse game theory",
+      "social choice mechanism"
+    ],
+    "summary": "Designing the rules of a game so that equilibrium behavior yields desired outcomes.",
+    "related": [
+      "revelation",
+      "vickrey",
+      "auction_theory",
+      "dom_strat"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "revelation",
+    "idx": 22,
+    "name": "Revelation Principle",
+    "aliases": [
+      "revelation principle",
+      "revelation"
+    ],
+    "summary": "Any equilibrium outcome of any mechanism can be reproduced by a direct truthful mechanism.",
+    "related": [
+      "mech_design",
+      "auction_theory",
+      "bayesian_game"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "shapley",
+    "idx": 23,
+    "name": "Shapley Value",
+    "aliases": [
+      "shapley value",
+      "shapley",
+      "fair allocation"
+    ],
+    "summary": "A unique fair allocation in cooperative games satisfying efficiency, symmetry, dummy, and additivity.",
+    "related": [
+      "core",
+      "coop_game",
+      "coalition",
+      "nash_bargaining"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "core",
+    "idx": 24,
+    "name": "Core (of a Cooperative Game)",
+    "aliases": [
+      "core (of a cooperative game)",
+      "core"
+    ],
+    "summary": "The set of coalition-stable payoff allocations.",
+    "related": [
+      "shapley",
+      "coop_game",
+      "coalition"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "coalition",
+    "idx": 25,
+    "name": "Coalition Formation",
+    "aliases": [
+      "coalition formation",
+      "coalitions",
+      "partition function"
+    ],
+    "summary": "Study of which coalitions form and how they share surplus.",
+    "related": [
+      "core",
+      "shapley",
+      "coop_game",
+      "hedonic"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "nash_bargaining",
+    "idx": 26,
+    "name": "Nash Bargaining Solution",
+    "aliases": [
+      "nash bargaining solution",
+      "nash bargaining",
+      "bargaining solution",
+      "nash bargaining solution"
+    ],
+    "summary": "The unique allocation satisfying Pareto-efficiency, symmetry, scale invariance, and IIA.",
+    "related": [
+      "rubinstein",
+      "core",
+      "nash_eq",
+      "coop_game"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "rubinstein",
+    "idx": 27,
+    "name": "Rubinstein Bargaining",
+    "aliases": [
+      "rubinstein bargaining",
+      "alternating offers",
+      "rubinstein-stahl"
+    ],
+    "summary": "A non-cooperative alternating-offers model of bargaining with a unique subgame-perfect outcome.",
+    "related": [
+      "nash_bargaining",
+      "spe",
+      "backward_induction",
+      "coop_game"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "corr_eq",
+    "idx": 28,
+    "name": "Correlated Equilibrium",
+    "aliases": [
+      "correlated equilibrium",
+      "correlated equilibrium",
+      "aumann correlated"
+    ],
+    "summary": "An equilibrium in which players obey recommendations from a common randomization device.",
+    "related": [
+      "nash_eq",
+      "poa",
+      "potential"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "spe",
+    "idx": 29,
+    "name": "Subgame Perfect Equilibrium",
+    "aliases": [
+      "subgame perfect equilibrium",
+      "spe",
+      "subgame perfection",
+      "subgame perfect",
+      "backward induction"
+    ],
+    "summary": "A Nash equilibrium that also prescribes a Nash equilibrium in every subgame.",
+    "related": [
+      "nash_eq",
+      "pbe",
+      "backward_induction",
+      "extensive_form"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "pbe",
+    "idx": 30,
+    "name": "Perfect Bayesian Equilibrium",
+    "aliases": [
+      "perfect bayesian equilibrium",
+      "pbe",
+      "perfect bayesian"
+    ],
+    "summary": "A refinement for dynamic games of incomplete information pairing strategies with beliefs.",
+    "related": [
+      "spe",
+      "bayesian_game",
+      "signaling",
+      "screening"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "trembling",
+    "idx": 31,
+    "name": "Trembling-Hand Perfection",
+    "aliases": [
+      "trembling-hand perfection",
+      "trembling hand",
+      "selten perfect"
+    ],
+    "summary": "An equilibrium robust to small probabilities of mistakes.",
+    "related": [
+      "nash_eq",
+      "spe",
+      "trembling_hand",
+      "ied"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "battle_of_sexes",
+    "idx": 32,
+    "name": "Battle of the Sexes",
+    "aliases": [
+      "battle of the sexes",
+      "bos",
+      "battle of sexes",
+      "(o,o)",
+      "(f,f)",
+      "battle of the sexes"
+    ],
+    "summary": "A coordination game with asymmetric preferences over the two coordinated outcomes.",
+    "related": [
+      "stag_hunt",
+      "chicken",
+      "nash_eq",
+      "corr_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "hawk_dove",
+    "idx": 33,
+    "name": "Hawk-Dove Game",
+    "aliases": [
+      "hawk-dove game",
+      "hawk dove",
+      "chicken in biology"
+    ],
+    "summary": "A symmetric 2x2 conflict game used to model animal contests.",
+    "related": [
+      "ess",
+      "evo_gt",
+      "chicken",
+      "replicator"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "stag_hunt",
+    "idx": 34,
+    "name": "Stag Hunt",
+    "aliases": [
+      "stag hunt",
+      "stag-hunt",
+      "assurance game"
+    ],
+    "summary": "A coordination game where mutual cooperation on the risky action maximizes welfare.",
+    "related": [
+      "battle_of_sexes",
+      "nash_eq",
+      "coordination",
+      "repeated_game"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "chicken",
+    "idx": 35,
+    "name": "Chicken Game",
+    "aliases": [
+      "chicken game",
+      "chicken",
+      "hawk-dove economic"
+    ],
+    "summary": "An anti-coordination game where both players prefer to yield if the other stays the course.",
+    "related": [
+      "hawk_dove",
+      "battle_of_sexes",
+      "nash_eq",
+      "corr_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "matching_pennies",
+    "idx": 36,
+    "name": "Matching Pennies",
+    "aliases": [
+      "matching pennies",
+      "matching pennies",
+      "odd-even",
+      "matching pennies game"
+    ],
+    "summary": "A zero-sum $2\\times 2$ game with no pure equilibrium and a unique uniform mixed equilibrium.",
+    "related": [
+      "zero_sum",
+      "mixed_strat",
+      "minimax",
+      "nash_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "ultimatum",
+    "idx": 37,
+    "name": "Ultimatum Game",
+    "aliases": [
+      "ultimatum game",
+      "ultimatum"
+    ],
+    "summary": "A two-stage bargaining game highlighting the gap between rational prediction and observed fairness.",
+    "related": [
+      "spe",
+      "dictator_game",
+      "prisoners_dilemma",
+      "fairness"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "centipede",
+    "idx": 38,
+    "name": "Centipede Game",
+    "aliases": [
+      "centipede game",
+      "centipede"
+    ],
+    "summary": "A multi-stage game where backward induction predicts immediate termination despite cooperative gains.",
+    "related": [
+      "spe",
+      "backward_induction",
+      "prisoners_dilemma",
+      "common_knowledge"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "public_goods",
+    "idx": 39,
+    "name": "Public-Goods Game",
+    "aliases": [
+      "public-goods game",
+      "public good",
+      "voluntary contribution"
+    ],
+    "summary": "A game in which individuals contribute to a shared good; the efficient outcome is not individually rational.",
+    "related": [
+      "prisoners_dilemma",
+      "tragedy_commons",
+      "nash_eq",
+      "poa"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "tragedy_commons",
+    "idx": 40,
+    "name": "Tragedy of the Commons",
+    "aliases": [
+      "tragedy of the commons",
+      "commons",
+      "common pool"
+    ],
+    "summary": "Overuse of a shared resource when individual users ignore the externality they impose on others.",
+    "related": [
+      "public_goods",
+      "prisoners_dilemma",
+      "nash_eq",
+      "poa"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "signaling",
+    "idx": 41,
+    "name": "Signaling Games",
+    "aliases": [
+      "signaling games",
+      "signaling",
+      "spence"
+    ],
+    "summary": "Dynamic incomplete-information games where an informed sender chooses a signal that a receiver observes.",
+    "related": [
+      "pbe",
+      "bayesian_game",
+      "screening",
+      "principal_agent"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "screening",
+    "idx": 42,
+    "name": "Screening Games",
+    "aliases": [
+      "screening games",
+      "screening",
+      "rothschild stiglitz"
+    ],
+    "summary": "Games where an uninformed principal offers a menu of contracts to sort informed agents.",
+    "related": [
+      "signaling",
+      "principal_agent",
+      "bayesian_game",
+      "mech_design"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "principal_agent",
+    "idx": 43,
+    "name": "Principal-Agent Problem",
+    "aliases": [
+      "principal-agent problem",
+      "agency",
+      "moral hazard",
+      "hidden action"
+    ],
+    "summary": "A contracting problem where an agent's action is unobservable to the principal.",
+    "related": [
+      "screening",
+      "signaling",
+      "mech_design",
+      "bayesian_game"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "folk",
+    "idx": 44,
+    "name": "Folk Theorem",
+    "aliases": [
+      "folk theorem",
+      "folk theorem",
+      "repeated games folk"
+    ],
+    "summary": "Any individually rational feasible payoff can be sustained in an infinitely repeated game with patient enough players.",
+    "related": [
+      "repeated_game",
+      "tft",
+      "prisoners_dilemma",
+      "spe"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "tft",
+    "idx": 45,
+    "name": "Tit-for-Tat",
+    "aliases": [
+      "tit-for-tat",
+      "tft",
+      "axelrod",
+      "reciprocity"
+    ],
+    "summary": "A simple reciprocal strategy — cooperate first, then mimic the opponent's previous action.",
+    "related": [
+      "repeated_game",
+      "folk",
+      "prisoners_dilemma",
+      "evo_gt"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "backward_induction",
+    "idx": 46,
+    "name": "Backward Induction",
+    "aliases": [
+      "backward induction",
+      "backward induction"
+    ],
+    "summary": "Algorithm for solving finite perfect-information games by reasoning from terminal nodes back to the root.",
+    "related": [
+      "spe",
+      "extensive_form",
+      "zermelo",
+      "stackelberg"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "ied",
+    "idx": 47,
+    "name": "Iterated Elimination of Dominated Strategies",
+    "aliases": [
+      "iterated elimination of dominated strategies",
+      "ieds",
+      "iesds",
+      "dominance solvable"
+    ],
+    "summary": "Iteratively removing strategies that are strictly dominated.",
+    "related": [
+      "dom_strat",
+      "rationalizability",
+      "nash_eq",
+      "common_knowledge"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "rationalizability",
+    "idx": 48,
+    "name": "Rationalizability",
+    "aliases": [
+      "rationalizability",
+      "rationalizable"
+    ],
+    "summary": "The set of strategies surviving iterated elimination of strategies that are never a best response.",
+    "related": [
+      "ied",
+      "nash_eq",
+      "dom_strat",
+      "common_knowledge"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "common_knowledge",
+    "idx": 49,
+    "name": "Common Knowledge",
+    "aliases": [
+      "common knowledge",
+      "common knowledge",
+      "aumann"
+    ],
+    "summary": "An event is common knowledge if everyone knows it, everyone knows that everyone knows it, and so on ad infinitum.",
+    "related": [
+      "ied",
+      "rationalizability",
+      "bayesian_game",
+      "harsanyi"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "potential",
+    "idx": 50,
+    "name": "Potential Games",
+    "aliases": [
+      "potential games",
+      "potential game",
+      "monderer shapley"
+    ],
+    "summary": "Games where all unilateral payoff changes are captured by a single real-valued function.",
+    "related": [
+      "congestion",
+      "poa",
+      "nash_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "congestion",
+    "idx": 51,
+    "name": "Congestion Games",
+    "aliases": [
+      "congestion games",
+      "congestion",
+      "rosenthal",
+      "routing games"
+    ],
+    "summary": "Games where each player's payoff depends on the load each facility carries.",
+    "related": [
+      "potential",
+      "poa",
+      "nash_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "poa",
+    "idx": 52,
+    "name": "Price of Anarchy",
+    "aliases": [
+      "price of anarchy",
+      "poa",
+      "price of anarchy"
+    ],
+    "summary": "The worst-case ratio between the social cost of a Nash equilibrium and the social optimum.",
+    "related": [
+      "nash_eq",
+      "congestion",
+      "corr_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "zermelo",
+    "idx": 53,
+    "name": "Zermelo's Theorem",
+    "aliases": [
+      "zermelo's theorem",
+      "zermelo"
+    ],
+    "summary": "In finite two-player zero-sum games of perfect information without chance and draws allowed, either one player has a winning strategy or both can force a draw.",
+    "related": [
+      "backward_induction",
+      "extensive_form",
+      "minimax",
+      "nash_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "harsanyi",
+    "idx": 54,
+    "name": "Harsanyi Transformation",
+    "aliases": [
+      "harsanyi transformation",
+      "harsanyi doctrine",
+      "type space transformation"
+    ],
+    "summary": "Transforms games of incomplete information into games of imperfect information via a type space.",
+    "related": [
+      "bayesian_game",
+      "pbe",
+      "common_knowledge"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "pareto",
+    "idx": 55,
+    "name": "Pareto Efficiency",
+    "aliases": [
+      "pareto efficiency",
+      "pareto optimality",
+      "pareto improvement",
+      "pareto frontier"
+    ],
+    "summary": "An allocation is Pareto efficient if no player can be made strictly better off without making someone else worse off.",
+    "related": [
+      "nash_eq",
+      "prisoners_dilemma",
+      "nash_bargaining",
+      "social_choice"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "sequential_eq",
+    "idx": 56,
+    "name": "Sequential Equilibrium",
+    "aliases": [
+      "sequential equilibrium",
+      "sequential equilibrium",
+      "kreps wilson",
+      "consistent assessment"
+    ],
+    "summary": "A refinement of PBE requiring beliefs to be limits of fully mixed strategy perturbations.",
+    "related": [
+      "pbe",
+      "trembling",
+      "signaling",
+      "spe"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "proper_eq",
+    "idx": 57,
+    "name": "Proper Equilibrium",
+    "aliases": [
+      "proper equilibrium",
+      "proper equilibrium",
+      "myerson proper",
+      "trembling perfection refinement"
+    ],
+    "summary": "A refinement of trembling-hand perfection where more costly mistakes are infinitely less likely.",
+    "related": [
+      "trembling",
+      "nash_eq",
+      "sequential_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "quantal_response",
+    "idx": 58,
+    "name": "Quantal Response Equilibrium",
+    "aliases": [
+      "quantal response equilibrium",
+      "qre",
+      "mckelvey palfrey",
+      "stochastic choice",
+      "logit equilibrium"
+    ],
+    "summary": "An equilibrium where players best-respond noisily with choice probabilities increasing in expected payoff.",
+    "related": [
+      "nash_eq",
+      "level_k",
+      "centipede",
+      "corr_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "level_k",
+    "idx": 59,
+    "name": "Level-k Reasoning",
+    "aliases": [
+      "level-k reasoning",
+      "level-k",
+      "cognitive hierarchy",
+      "depth of reasoning",
+      "iterated best response"
+    ],
+    "summary": "A bounded-rationality model where players best-respond to lower-level opponents in a hierarchy of strategic depth.",
+    "related": [
+      "ied",
+      "quantal_response",
+      "centipede",
+      "rationalizability"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "global_games",
+    "idx": 60,
+    "name": "Global Games",
+    "aliases": [
+      "global games",
+      "global game",
+      "carlsson van damme",
+      "noisy signals",
+      "incomplete information coordination"
+    ],
+    "summary": "Games of incomplete information where players observe noisy signals of an underlying state, often producing unique equilibrium.",
+    "related": [
+      "supermodular",
+      "nash_eq",
+      "pbe",
+      "common_knowledge"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "supermodular",
+    "idx": 61,
+    "name": "Supermodular Games",
+    "aliases": [
+      "supermodular games",
+      "supermodular game",
+      "strategic complements",
+      "topkis monotonicity",
+      "lattice game"
+    ],
+    "summary": "A game in which a player's incentive to raise their action increases with opponents' actions (strategic complements).",
+    "related": [
+      "global_games",
+      "nash_eq",
+      "potential",
+      "poa"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "wardrop",
+    "idx": 62,
+    "name": "Wardrop Equilibrium",
+    "aliases": [
+      "wardrop equilibrium",
+      "wardrop equilibrium",
+      "user equilibrium",
+      "wardrop principle",
+      "selfish routing"
+    ],
+    "summary": "A flow assignment in which every used path has equal cost and no unused path has lower cost.",
+    "related": [
+      "congestion",
+      "poa",
+      "potential",
+      "nash_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "price_of_stability",
+    "idx": 63,
+    "name": "Price of Stability",
+    "aliases": [
+      "price of stability",
+      "pos",
+      "price of stability"
+    ],
+    "summary": "The best-case ratio between the social cost of a Nash equilibrium and the social optimum.",
+    "related": [
+      "poa",
+      "congestion",
+      "nash_eq",
+      "potential"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "smoothed_poa",
+    "idx": 64,
+    "name": "Smoothed Analysis of Price of Anarchy",
+    "aliases": [
+      "smoothed analysis of price of anarchy",
+      "smoothed analysis",
+      "roughgarden",
+      "near tightness poa"
+    ],
+    "summary": "A framework showing that worst-case PoA bounds can be overly pessimistic — typical-case bounds are often dramatically better.",
+    "related": [
+      "poa",
+      "congestion",
+      "wardrop",
+      "nash_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "no_regret",
+    "idx": 65,
+    "name": "No-Regret Learning",
+    "aliases": [
+      "no-regret learning",
+      "no regret",
+      "regret minimization",
+      "hannan consistency",
+      "calibrated learning"
+    ],
+    "summary": "Learning dynamics where a player's cumulative payoff is no worse than the best fixed action in hindsight, up to a vanishing average error.",
+    "related": [
+      "corr_eq",
+      "fictitious_play",
+      "nash_eq",
+      "quantal_response"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "fictitious_play",
+    "idx": 66,
+    "name": "Fictitious Play",
+    "aliases": [
+      "fictitious play",
+      "fictitious play",
+      "brown robustson",
+      "best response dynamics"
+    ],
+    "summary": "A learning process in which players best-respond to the empirical distribution of past opponent play.",
+    "related": [
+      "no_regret",
+      "nash_eq",
+      "quantal_response",
+      "corr_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "evol_stable_sets",
+    "idx": 67,
+    "name": "Evolutionarily Stable Sets",
+    "aliases": [
+      "evolutionarily stable sets",
+      "evolutionarily stable set",
+      "ess set",
+      "equilibrium selection egt",
+      "neutrally stable"
+    ],
+    "summary": "A set of strategies such that every strategy in the set resists invasion by any outside mutant.",
+    "related": [
+      "ess",
+      "evo_gt",
+      "replicator",
+      "nash_eq"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "cheap_talk",
+    "idx": 68,
+    "name": "Cheap Talk",
+    "aliases": [
+      "cheap talk",
+      "cheap talk",
+      "crawford sobel",
+      "costless communication",
+      "pre-play communication"
+    ],
+    "summary": "Costless, non-binding, and verifiable communication prior to play that can influence equilibrium selection.",
+    "related": [
+      "signaling",
+      "pbe",
+      "common_knowledge",
+      "screening"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "berge_eq",
+    "idx": 69,
+    "name": "Berge Equilibrium",
+    "aliases": [
+      "berge equilibrium",
+      "berge equilibrium",
+      "altruistic equilibrium",
+      "social stability",
+      "zhukovskii"
+    ],
+    "summary": "An equilibrium where each player maximizes the payoff of all others, assuming they do not deviate from their Berge strategies.",
+    "related": [
+      "nash_eq",
+      "pareto",
+      "coop_game",
+      "nash_bargaining"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "mean_field",
+    "idx": 70,
+    "name": "Mean Field Game",
+    "aliases": [
+      "mean field game",
+      "mean field game",
+      "mfg",
+      "large population game",
+      "lasry lions",
+      "continuous population"
+    ],
+    "summary": "A game with a continuum of players where each player's influence on aggregate is negligible, simplifying equilibrium to a PDE system.",
+    "related": [
+      "nash_eq",
+      "evo_gt",
+      "potential",
+      "repeated_game"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "algo_mech_design",
+    "idx": 71,
+    "name": "Algorithmic Mechanism Design",
+    "aliases": [
+      "algorithmic mechanism design",
+      "algorithmic mechanism design",
+      "amd",
+      "nisan",
+      "computationally efficient mechanisms"
+    ],
+    "summary": "The interface of mechanism design and computer science, concerned with computational tractability of incentive-compatible outcomes.",
+    "related": [
+      "mech_design",
+      "auction_theory",
+      "revelation",
+      "vickrey"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "fair_division",
+    "idx": 72,
+    "name": "Fair Division",
+    "aliases": [
+      "fair division",
+      "fair division",
+      "cake cutting",
+      "envy-freeness",
+      "proportionality",
+      "equitable division"
+    ],
+    "summary": "The study of how to divide resources among agents so that each receives a fair share according to some criterion.",
+    "related": [
+      "coop_game",
+      "shapley",
+      "core",
+      "nash_bargaining"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "voting_theory",
+    "idx": 73,
+    "name": "Voting Theory",
+    "aliases": [
+      "voting theory",
+      "voting theory",
+      "voting rules",
+      "social choice function",
+      "plurality",
+      "ranked choice"
+    ],
+    "summary": "The study of procedures for aggregating individual preferences into a collective decision.",
+    "related": [
+      "social_choice",
+      "mech_design",
+      "dom_strat",
+      "revelation"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "social_choice",
+    "idx": 74,
+    "name": "Social Choice Theory",
+    "aliases": [
+      "social choice theory",
+      "social choice",
+      "aggregation of preferences",
+      "arrow theorem",
+      "collective decision"
+    ],
+    "summary": "The theoretical study of how individual preferences and judgments can be aggregated into collective decisions.",
+    "related": [
+      "voting_theory",
+      "mech_design",
+      "pareto",
+      "fair_division"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "banzhaf",
+    "idx": 75,
+    "name": "Banzhaf Power Index",
+    "aliases": [
+      "banzhaf power index",
+      "banzhaf index",
+      "banzhaf power",
+      "voting power",
+      "pivotal index"
+    ],
+    "summary": "A measure of a voter's ability to influence the outcome of a vote, calculated as the number of coalitions in which they are pivotal.",
+    "related": [
+      "core",
+      "shapley",
+      "coalition",
+      "voting_theory"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "core_selection",
+    "idx": 76,
+    "name": "Core Selection (Matching)",
+    "aliases": [
+      "core selection (matching)",
+      "stable matching",
+      "gale shapley",
+      "deferred acceptance",
+      "matching theory"
+    ],
+    "summary": "The selection of an allocation from the core of a matching market, typically via deferred-acceptance algorithms.",
+    "related": [
+      "coalition",
+      "core",
+      "mech_design",
+      "fair_division"
+    ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  }
+]

@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BlogPost",
+  "type": "object",
+  "required": ["id", "slug", "title", "meta_title", "meta_description", "status", "published_at", "author", "content"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique identifier, lowercase alphanumeric with hyphens"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "URL-safe slug, lowercase with hyphens"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "meta_title": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "SEO title, max 60 chars"
+    },
+    "meta_description": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "SEO description, max 160 chars"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "published", "archived", "deleted"]
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "author": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string",
+      "description": "Markdown or HTML content"
+    },
+    "excerpt": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "canonical": {
+      "type": "string",
+      "format": "uri"
+    },
+    "cover_image": {
+      "type": "string",
+      "description": "Path or URL to cover image"
+    },
+    "cover_image_alt": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "redirects": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Old URLs that should redirect to this post"
+    }
+  }
+}

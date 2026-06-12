@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#efe7d6"/>
+      <stop offset="100%" stop-color="#d4cfc1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg3)"/>
+  <g fill="#b8a48a" opacity="0.75">
+    <rect x="180" y="180" width="220" height="40" rx="20"/>
+    <rect x="180" y="240" width="220" height="40" rx="20"/>
+    <rect x="180" y="300" width="220" height="40" rx="20"/>
+    <rect x="180" y="360" width="220" height="40" rx="20"/>
+  </g>
+  <g fill="#fff" opacity="0.95" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="600">
+    <text x="200" y="206">index.html</text>
+    <text x="200" y="266">shared-design.css</text>
+    <text x="200" y="326">model.onnx (22MB)</text>
+    <text x="200" y="386">kb.json + bm25</text>
+  </g>
+  <g stroke="#8fb5b3" stroke-width="3" fill="none" opacity="0.8">
+    <path d="M410 200 Q620 200 760 270"/>
+    <path d="M410 260 Q620 240 760 290"/>
+    <path d="M410 320 Q620 320 760 310"/>
+    <path d="M410 380 Q620 380 760 330"/>
+  </g>
+  <g fill="#8fb5b3" opacity="0.5">
+    <circle cx="760" cy="270" r="60"/>
+  </g>
+  <g fill="#5a4f3f" font-family="Inter,system-ui,sans-serif">
+    <text x="720" y="265" font-size="18" font-weight="700">Service</text>
+    <text x="710" y="290" font-size="18" font-weight="700">Worker</text>
+  </g>
+  <g stroke="#a89678" stroke-width="2" fill="none" opacity="0.5" stroke-dasharray="6 6">
+    <path d="M760 350 Q800 460 600 500"/>
+  </g>
+  <text x="100" y="540" font-family="Inter,system-ui,sans-serif" font-size="22" fill="#5a4f3f">Offline-first PWA caching</text>
+</svg>

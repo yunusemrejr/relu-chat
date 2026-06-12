@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg8" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e6dac8"/>
+      <stop offset="100%" stop-color="#cdd6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg8)"/>
+  <g>
+    <rect x="100" y="180" width="320" height="220" rx="14" fill="#fff" opacity="0.6" stroke="#b8a48a" stroke-width="2"/>
+    <text x="130" y="220" font-family="Inter,system-ui,sans-serif" font-size="18" font-weight="700" fill="#5a4f3f">Stage 1 · Heuristic</text>
+    <text x="130" y="250" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#7a6e5b">· 0 ms (always ready)</text>
+    <text x="130" y="272" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#7a6e5b">· lexical matching</text>
+    <text x="130" y="294" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#7a6e5b">· 15 thresholds</text>
+    <text x="130" y="316" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#7a6e5b">· pattern triggers</text>
+    <text x="130" y="338" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#7a6e5b">· returns "I do not know"</text>
+    <text x="130" y="360" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#7a6e5b">  on low confidence</text>
+    <text x="130" y="388" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600" fill="#a89678">~10ms · good enough for many</text>
+  </g>
+  <g>
+    <rect x="780" y="180" width="320" height="220" rx="14" fill="#fff" opacity="0.6" stroke="#8fb5b3" stroke-width="2"/>
+    <text x="810" y="220" font-family="Inter,system-ui,sans-serif" font-size="18" font-weight="700" fill="#3e5754">Stage 2 · Transformer</text>
+    <text x="810" y="250" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#5a6e6c">· 22MB ONNX model loads</text>
+    <text x="810" y="272" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#5a6e6c">· service worker pre-caches</text>
+    <text x="810" y="294" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#5a6e6c">· MiniLM embeddings</text>
+    <text x="810" y="316" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#5a6e6c">· BM25 + dense fusion</text>
+    <text x="810" y="338" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#5a6e6c">· RL policy network</text>
+    <text x="810" y="388" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600" fill="#5a8a87">~15ms · paraphrases + semantics</text>
+  </g>
+  <g stroke="#a89678" stroke-width="3" fill="none" stroke-dasharray="8 6">
+    <path d="M420 290 L780 290"/>
+  </g>
+  <g fill="#a89678" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="600">
+    <text x="540" y="275">hot-swap</text>
+    <text x="540" y="320">when ready</text>
+  </g>
+  <text x="100" y="540" font-family="Inter,system-ui,sans-serif" font-size="22" fill="#5a4f3f">Graceful degradation for cold-start</text>
+</svg>

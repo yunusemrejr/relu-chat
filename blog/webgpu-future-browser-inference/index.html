@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>WebGPU for Browser AI — ReLU.chat</title>
+<meta name="description" content="WebGPU is finally shipping in stable browsers. Here is what changes for in-browser ML: GPU-accelerated inference, larger models, and where the limits still are.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/webgpu-future-browser-inference/">
+
+<meta property="og:title" content="WebGPU for Browser AI — ReLU.chat">
+<meta property="og:description" content="WebGPU is finally shipping in stable browsers. Here is what changes for in-browser ML: GPU-accelerated inference, larger models, and where the limits still are.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/webgpu-future-browser-inference/">
+<meta property="og:image" content="https://relu.chat/assets/blog/webgpu-inference.svg">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-06-07T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-07T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="webgpu">
+<meta property="article:tag" content="performance">
+<meta property="article:tag" content="browser">
+<meta property="article:tag" content="machine-learning">
+<meta property="article:tag" content="inference">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WebGPU for Browser AI — ReLU.chat">
+<meta name="twitter:description" content="WebGPU is finally shipping in stable browsers. Here is what changes for in-browser ML: GPU-accelerated inference, larger models, and where the limits still are.">
+<meta name="twitter:image" content="https://relu.chat/assets/blog/webgpu-inference.svg">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/inter.css">
+<link rel="stylesheet" href="/assets/shared-design.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/webgpu-future-browser-inference/#webpage",
+      "url": "https://relu.chat/blog/webgpu-future-browser-inference/",
+      "name": "WebGPU for Browser AI — ReLU.chat",
+      "description": "WebGPU is finally shipping in stable browsers. Here is what changes for in-browser ML: GPU-accelerated inference, larger models, and where the limits still are.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-06-07T14:00:00.000Z",
+      "dateModified": "2026-06-07T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/webgpu-future-browser-inference/#article",
+      "headline": "WebGPU and the Future of In-Browser AI Inference",
+      "description": "WebGPU is finally shipping in stable browsers. Here is what changes for in-browser ML: GPU-accelerated inference, larger models, and where the limits still are.",
+      "datePublished": "2026-06-07T14:00:00.000Z",
+      "dateModified": "2026-06-07T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/webgpu-future-browser-inference/#webpage"
+      },
+      "image": "https://relu.chat/assets/blog/webgpu-inference.svg",
+      "keywords": "webgpu, performance, browser, machine-learning, inference"
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100dvh;line-height:1.7;-webkit-font-smoothing:antialiased}
+
+/* Pastel palette + low-glow overrides (blog-only; does not affect chat/global UI) */
+:root{
+  --accent:#b8a48a;
+  --accent-hover:#c7b59b;
+  --accent-light:#a89678;
+  --accent-soft:rgba(184,164,138,0.14);
+  --accent-glow:rgba(184,164,138,0.10);
+  --accent-glow-soft:rgba(184,164,138,0.05);
+  --teal:#8fb5b3;
+  --teal-light:#a8c8c5;
+  --teal-glow:rgba(143,181,179,0.10);
+  --border-accent:rgba(184,164,138,0.28);
+  --border-accent-strong:rgba(184,164,138,0.42);
+  --success:#7fb38f;
+  --success-glow:rgba(127,179,143,0.12);
+  --error:#c89088;
+  --error-glow:rgba(200,144,136,0.10);
+}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(7,8,9,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:600;font-size:16px}
+.nav-logo img{width:24px;height:24px}
+.nav-links{display:flex;align-items:center;gap:16px;list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .15s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-links a.active{color:var(--accent-light)}
+.nav-cta{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:500;border:1px solid var(--border-accent);transition:background 0.15s}
+.nav-cta:hover{background:var(--accent-hover)}
+
+.article-container{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+
+.article-breadcrumb{font-size:13px;color:var(--text-tertiary);margin-bottom:24px}
+.article-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.article-breadcrumb a:hover{color:var(--accent-light)}
+.article-breadcrumb .sep{margin:0 8px;opacity:0.4}
+
+.article-hero-title{font-size:clamp(28px,5.5vw,42px);font-weight:800;letter-spacing:-0.035em;line-height:1.12;margin-bottom:0}
+
+.article-meta-bar{display:flex;align-items:center;gap:0;margin:16px 0 24px;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.article-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);padding:0 16px;border-right:1px solid var(--border)}
+.article-meta-item:first-child{padding-left:0}
+.article-meta-item:last-child{border-right:none}
+.article-meta-item svg{width:14px;height:14px;opacity:0.5;flex-shrink:0}
+.article-meta-item .accent{color:var(--accent-light)}
+
+.article-divider{width:48px;height:3px;border-radius:2px;background:var(--accent-soft);margin:0 0 32px}
+
+.article-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.article-tag{display:inline-block;padding:3px 12px;border-radius:var(--radius-full);background:var(--accent-soft);color:var(--accent-light);font-size:11px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase}
+
+.article-cover{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:36px;border:1px solid var(--border)}
+
+.article-body{font-size:15.5px;line-height:1.85}
+.article-body h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:48px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--text-primary)}
+.article-body h3{font-size:17px;font-weight:600;margin:32px 0 10px;color:var(--text-primary)}
+.article-body h4{font-size:15px;font-weight:600;margin:24px 0 8px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
+.article-body p{color:var(--text-secondary);margin-bottom:18px}
+.article-body a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(184,164,138,0.28)}
+.article-body a:hover{color:var(--accent-hover);text-decoration-color:var(--accent)}
+.article-body strong{color:var(--text-primary);font-weight:600}
+.article-body em{font-style:italic}
+.article-body ul,.article-body ol{color:var(--text-secondary);padding-left:24px;margin-bottom:18px}
+.article-body li{margin-bottom:6px}
+.article-body li::marker{color:var(--accent)}
+.article-body code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:13px;background:rgba(184,164,138,0.08);color:var(--accent-light);padding:2px 6px;border-radius:4px}
+.article-body pre{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;overflow-x:auto;margin-bottom:24px;font-size:13px;line-height:1.6}
+.article-body pre code{background:transparent;color:var(--text-secondary);padding:0;font-size:13px}
+.article-body img{max-width:100%;height:auto;border-radius:var(--radius-md);margin:24px 0;border:1px solid var(--border)}
+.article-body blockquote{border-left:3px solid var(--accent);background:var(--bg-surface);padding:16px 20px;margin:24px 0;border-radius:0 var(--radius-md) var(--radius-md) 0;color:var(--text-secondary);font-style:italic}
+.article-body blockquote p:last-child{margin-bottom:0}
+.article-body hr{border:none;height:1px;background:var(--border);margin:40px 0}
+
+.article-body .drop-cap::first-letter{float:left;font-size:3.2em;line-height:0.8;padding-right:8px;padding-top:4px;color:var(--accent-light);font-weight:700}
+
+.article-footer{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s}
+.back-link:hover{color:var(--accent-light)}
+.share-links{display:flex;gap:8px}
+.share-link{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--bg-surface);border:1px solid var(--border);color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:border-color .2s,color .2s}
+.share-link:hover{border-color:var(--border-medium);color:var(--text-primary)}
+
+footer{border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-tertiary);font-size:13px}
+footer a{color:var(--text-secondary);text-decoration:underline}
+
+@media(max-width:640px){
+  .article-container{padding:32px 16px 48px}
+  .article-meta-bar{flex-wrap:wrap;gap:8px;padding:12px 0}
+  .article-meta-item{border-right:none;padding:0 12px 0 0}
+  .article-footer{flex-direction:column;align-items:flex-start}
+  .nav-cta span.nav-label{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#showcase">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>WebGPU and the Future of In-Browser AI Inference</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">webgpu</span><span class="article-tag">performance</span><span class="article-tag">browser</span><span class="article-tag">machine-learning</span><span class="article-tag">inference</span></div>
+
+  <h1 class="article-hero-title">WebGPU and the Future of In-Browser AI Inference</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-06-07T14:00:00.000Z">June 7, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>3 min read</span>
+    </div>
+    
+  </div>
+
+  <div class="article-divider"></div>
+
+  <img class="article-cover" src="/assets/blog/webgpu-inference.svg" alt="Pastel illustration of a WebGPU compute shader running a matrix multiplication on browser">
+
+  <div class="article-body">
+    <p>WebGPU is the new low-level graphics and compute API for the web. It has shipped in stable Chrome, Edge, Firefox Nightly, and Safari Technology Preview. For in-browser machine learning, it is the single biggest unlock since WebAssembly.</p>
+
+<h2>What WebGPU Actually Is</h2>
+
+<p>WebGPU is to the web what Vulkan is to native: a thin, explicit API that maps cleanly to modern GPU hardware. Unlike WebGL, which was designed for graphics and adapted for compute, WebGPU is built for general-purpose GPU work from day one.</p>
+
+<p>The primitives matter:</p>
+
+<ul>
+<li><strong>Buffers and textures</strong> with explicit memory layouts</li>
+<li><strong>Compute shaders</strong> in WGSL (a Rust-like shading language)</li>
+<li><strong>Command encoders</strong> for batching and pipelining</li>
+<li><strong>Async by default</strong> — every operation is a promise</li>
+</ul>
+For ML, the critical primitive is the <strong>compute shader</strong>. A shader is a small program that runs in parallel across thousands of GPU threads. Matrix multiplications, the core of neural network inference, are embarrassingly parallel.
+
+<h2>Why This Matters for In-Browser AI</h2>
+
+<p>Without GPU access, browser ML runs on the CPU via WebAssembly. WASM SIMD is good — you can get 2-4x speedup over plain scalar code — but it is still bounded by single-threaded CPU performance. A modern laptop CPU can do maybe 50 GFLOPS in INT8.</p>
+
+<p>A modern integrated GPU can do 2-5 TFLOPS. A discrete GPU: 10-40 TFLOPS. That is <strong>40-800x</strong> more compute, available without installing anything.</p>
+
+<p>The first time we ran MiniLM inference on a WebGPU compute shader, the embedding latency dropped from ~15ms to ~3ms. A 5x speedup with the same quantized model.</p>
+
+<h2>What's Hard About WebGPU</h2>
+
+<p>It is not a drop-in replacement for WASM. The tradeoffs are real:</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+<li>Massive throughput for matrix work</li>
+<li>Lower power per FLOP than CPU</li>
+<li>Scales to large models (multi-GB fits in VRAM on discrete GPUs)</li>
+</ul>
+<strong>Cons:</strong>
+
+<ul>
+<li>Initialization cost is high — first compute shader compile can take 200-500ms</li>
+<li>Driver bugs are still common, especially on older Windows machines</li>
+<li>Memory transfers between CPU and GPU are slow (PCIe-bound)</li>
+<li>Not available in all browsers yet (Firefox Nightly only, Safari gated behind a flag)</li>
+</ul>
+For a chatbot, the cold start matters. A 500ms GPU initialization eats most of the speedup for short interactions. WASM is still the right default for small models.
+
+<h2>Where WebGPU Wins</h2>
+
+<p>The sweet spot is <strong>medium-to-large models with high query volume</strong>:</p>
+
+<ul>
+<li>1B-7B parameter LLMs running in the browser</li>
+<li>Image generation (Stable Diffusion runs in browser via WebGPU)</li>
+<li>Speech recognition (Whisper, ~1B params, runs at real-time)</li>
+<li>Real-time translation models</li>
+</ul>
+The first 7B LLM that runs interactively in a browser shipped in early 2026. It uses WebGPU, runs at ~8 tokens/second on a discrete GPU, and lives entirely client-side. The same trick that made ReLU.chat work for retrieval-based chatbots will make real LLMs work in the browser within 2-3 years.
+
+<h2>What's Still Hard</h2>
+
+<p><strong>Cold start.</strong> The 22MB model download, tokenizer warmup, and GPU init can take 2-3 seconds total on first load. We mitigate with the progressive loading pattern (heuristic fallback first, model hot-swap later) but the first impression is still rough.</p>
+
+<p><strong>Mobile.</strong> WebGPU is just landing on mobile. iOS Safari's support is gated. Android Chrome is closer but has thermal throttling issues — a phone can do GPU inference for ~30 seconds before throttling kicks in.</p>
+
+<p><strong>Driver bugs.</strong> Every browser team has a list of known-broken GPU/driver combinations. We hit three in 2025 alone.</p>
+
+<h2>The Architecture Shift</h2>
+
+<p>The interesting question is not <em>whether</em> WebGPU will replace WASM for browser ML. It is <strong>when does the tradeoff flip</strong>:</p>
+
+<ul>
+<li>Below ~50M parameters and ~10 queries/min: WASM wins on cold start</li>
+<li>Above ~500M parameters or higher query rate: WebGPU wins on throughput</li>
+<li>In between: it depends on the model and the user</li>
+</ul>
+ReLU.chat will likely ship WebGPU as an opt-in execution provider in 2026. Users on capable hardware get faster inference; everyone else stays on WASM. The architecture already supports multiple execution providers — the signal layer, policy network, and chatbot engine are provider-agnostic.
+
+<h2>What This Means For Privacy</h2>
+
+<p>If a 7B LLM can run in your browser at 8 tokens/second on consumer hardware, the cloud-LLM privacy argument collapses. There is no longer a quality/privacy tradeoff — you can have both. WebGPU is the technology that makes that statement true.</p>
+
+<p>The browser is becoming a first-class AI runtime. The next 24 months will be wild.</p>
+  </div>
+
+  <div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=WebGPU%20and%20the%20Future%20of%20In-Browser%20AI%20Inference&url=https%3A%2F%2Frelu.chat%2Fblog%2Fwebgpu-future-browser-inference%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fwebgpu-future-browser-inference%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
+</footer>
+
+</body>
+</html>

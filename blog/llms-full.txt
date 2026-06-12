@@ -1,0 +1,65 @@
+# ReLU.chat — Full Documentation
+
+> Free, browser-based, privacy-first open-source chatbots. No servers, no LLMs, no tracking.
+
+## What is ReLU.chat?
+
+ReLU.chat is an open-source platform for building and running interactive chatbots entirely in the browser. Unlike cloud-based AI services, ReLU.chat processes all natural language locally using quantized ONNX models, ensuring complete privacy and zero data transmission to external servers.
+
+## Technical Architecture
+
+### Embedding Layer
+The system uses the all-MiniLM-L6-v2 sentence transformer model, quantized to ONNX format (~22MB). It converts user queries and knowledge-base entries into 384-dimensional dense vectors for semantic similarity computation.
+
+### Signal Layer
+A multi-signal retrieval system combines:
+- **BM25 sparse retrieval**: Term-frequency based matching against the knowledge base
+- **Dense cosine similarity**: Semantic matching via embedding vectors
+- **Entity extraction**: Named entity recognition and boosting
+- **Intent classification**: Temperature-calibrated intent scoring
+- **Follow-up detection**: Context-aware follow-up query handling
+
+All signals are fused into a 25-feature decision packet.
+
+### Policy Network
+A multi-layer perceptron (MLP) with architecture 25→128→64→6 action heads, trained via reinforcement learning. The policy decides how to compose responses from fragment-based knowledge entries. Action heads control:
+- Fragment selection strategy
+- Response length and detail level
+- Connector and transition usage
+- Confidence scoring
+- Creative vs. factual balance
+- Follow-up prompt generation
+
+### Fragment Composition
+Responses are composed from knowledge-base fragments connected by linguistic connectors. The system supports LaTeX rendering (via KaTeX), code blocks, and structured data presentation.
+
+### Heuristic Fallback
+When the MLP is unavailable (cold start, weight load failure), a parameterized heuristic system provides fallback behavior using 15 decision thresholds.
+
+## Key Features
+
+1. **Complete Privacy**: Zero data leaves the browser. No API calls, no telemetry, no tracking.
+2. **Offline Capable**: Works without internet after initial load (PWA with service worker).
+3. **Fast Response**: Sub-100ms inference using quantized ONNX models.
+4. **Interactive Visualizations**: Built-in tools for data science, game theory, and more.
+5. **Extensible Knowledge Base**: Add custom fragments to create domain-specific chatbots.
+6. **Reinforcement Learning**: Continuously improving response quality through RL training.
+
+## Source Code Structure
+
+- `core/` — NLP engine, chatbot engine, session memory, BM25 scorer, signal layer
+- `policy/` — Feature extractor, MLP inference, action schema, policy runtime
+- `chat/` — Individual chatbot implementations (data science, game theory, etc.)
+- `data/` — Knowledge base fragments, bot configurations, manifest
+- `dev/scripts/` — PyTorch training, weight export, prompt augmentation
+- `assets/` — Models, fonts, styles, shared design system
+
+## Blog
+
+Technical articles and updates are published at https://relu.chat/blog/
+
+## Links
+
+- Source: https://github.com/yunusemrejr/relu-chat
+- License: MIT
+- How It Works: https://relu.chat/how-it-works.html

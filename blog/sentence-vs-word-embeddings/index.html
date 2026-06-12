@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sentence vs Word Embeddings — ReLU.chat</title>
+<meta name="description" content="Word embeddings average to a meaningless vector. Sentence transformers embed whole meaning. Here is why the second is what you want for Q&amp;A.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/sentence-vs-word-embeddings/">
+
+<meta property="og:title" content="Sentence vs Word Embeddings — ReLU.chat">
+<meta property="og:description" content="Word embeddings average to a meaningless vector. Sentence transformers embed whole meaning. Here is why the second is what you want for Q&amp;A.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/sentence-vs-word-embeddings/">
+<meta property="og:image" content="https://relu.chat/assets/blog/sentence-vs-word.svg">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-06-01T08:30:00.000Z">
+<meta property="article:modified_time" content="2026-06-01T08:30:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="embeddings">
+<meta property="article:tag" content="nlp">
+<meta property="article:tag" content="sentence-transformers">
+<meta property="article:tag" content="retrieval">
+<meta property="article:tag" content="word2vec">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sentence vs Word Embeddings — ReLU.chat">
+<meta name="twitter:description" content="Word embeddings average to a meaningless vector. Sentence transformers embed whole meaning. Here is why the second is what you want for Q&amp;A.">
+<meta name="twitter:image" content="https://relu.chat/assets/blog/sentence-vs-word.svg">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/inter.css">
+<link rel="stylesheet" href="/assets/shared-design.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/sentence-vs-word-embeddings/#webpage",
+      "url": "https://relu.chat/blog/sentence-vs-word-embeddings/",
+      "name": "Sentence vs Word Embeddings — ReLU.chat",
+      "description": "Word embeddings average to a meaningless vector. Sentence transformers embed whole meaning. Here is why the second is what you want for Q&A.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-06-01T08:30:00.000Z",
+      "dateModified": "2026-06-01T08:30:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/sentence-vs-word-embeddings/#article",
+      "headline": "Sentence Embeddings vs Word Embeddings: Why We Embed Whole Questions",
+      "description": "Word embeddings average to a meaningless vector. Sentence transformers embed whole meaning. Here is why the second is what you want for Q&A.",
+      "datePublished": "2026-06-01T08:30:00.000Z",
+      "dateModified": "2026-06-01T08:30:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/sentence-vs-word-embeddings/#webpage"
+      },
+      "image": "https://relu.chat/assets/blog/sentence-vs-word.svg",
+      "keywords": "embeddings, nlp, sentence-transformers, retrieval, word2vec"
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100dvh;line-height:1.7;-webkit-font-smoothing:antialiased}
+
+/* Pastel palette + low-glow overrides (blog-only; does not affect chat/global UI) */
+:root{
+  --accent:#b8a48a;
+  --accent-hover:#c7b59b;
+  --accent-light:#a89678;
+  --accent-soft:rgba(184,164,138,0.14);
+  --accent-glow:rgba(184,164,138,0.10);
+  --accent-glow-soft:rgba(184,164,138,0.05);
+  --teal:#8fb5b3;
+  --teal-light:#a8c8c5;
+  --teal-glow:rgba(143,181,179,0.10);
+  --border-accent:rgba(184,164,138,0.28);
+  --border-accent-strong:rgba(184,164,138,0.42);
+  --success:#7fb38f;
+  --success-glow:rgba(127,179,143,0.12);
+  --error:#c89088;
+  --error-glow:rgba(200,144,136,0.10);
+}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(7,8,9,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:600;font-size:16px}
+.nav-logo img{width:24px;height:24px}
+.nav-links{display:flex;align-items:center;gap:16px;list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .15s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-links a.active{color:var(--accent-light)}
+.nav-cta{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:500;border:1px solid var(--border-accent);transition:background 0.15s}
+.nav-cta:hover{background:var(--accent-hover)}
+
+.article-container{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+
+.article-breadcrumb{font-size:13px;color:var(--text-tertiary);margin-bottom:24px}
+.article-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.article-breadcrumb a:hover{color:var(--accent-light)}
+.article-breadcrumb .sep{margin:0 8px;opacity:0.4}
+
+.article-hero-title{font-size:clamp(28px,5.5vw,42px);font-weight:800;letter-spacing:-0.035em;line-height:1.12;margin-bottom:0}
+
+.article-meta-bar{display:flex;align-items:center;gap:0;margin:16px 0 24px;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.article-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);padding:0 16px;border-right:1px solid var(--border)}
+.article-meta-item:first-child{padding-left:0}
+.article-meta-item:last-child{border-right:none}
+.article-meta-item svg{width:14px;height:14px;opacity:0.5;flex-shrink:0}
+.article-meta-item .accent{color:var(--accent-light)}
+
+.article-divider{width:48px;height:3px;border-radius:2px;background:var(--accent-soft);margin:0 0 32px}
+
+.article-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.article-tag{display:inline-block;padding:3px 12px;border-radius:var(--radius-full);background:var(--accent-soft);color:var(--accent-light);font-size:11px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase}
+
+.article-cover{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:36px;border:1px solid var(--border)}
+
+.article-body{font-size:15.5px;line-height:1.85}
+.article-body h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:48px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--text-primary)}
+.article-body h3{font-size:17px;font-weight:600;margin:32px 0 10px;color:var(--text-primary)}
+.article-body h4{font-size:15px;font-weight:600;margin:24px 0 8px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
+.article-body p{color:var(--text-secondary);margin-bottom:18px}
+.article-body a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(184,164,138,0.28)}
+.article-body a:hover{color:var(--accent-hover);text-decoration-color:var(--accent)}
+.article-body strong{color:var(--text-primary);font-weight:600}
+.article-body em{font-style:italic}
+.article-body ul,.article-body ol{color:var(--text-secondary);padding-left:24px;margin-bottom:18px}
+.article-body li{margin-bottom:6px}
+.article-body li::marker{color:var(--accent)}
+.article-body code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:13px;background:rgba(184,164,138,0.08);color:var(--accent-light);padding:2px 6px;border-radius:4px}
+.article-body pre{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;overflow-x:auto;margin-bottom:24px;font-size:13px;line-height:1.6}
+.article-body pre code{background:transparent;color:var(--text-secondary);padding:0;font-size:13px}
+.article-body img{max-width:100%;height:auto;border-radius:var(--radius-md);margin:24px 0;border:1px solid var(--border)}
+.article-body blockquote{border-left:3px solid var(--accent);background:var(--bg-surface);padding:16px 20px;margin:24px 0;border-radius:0 var(--radius-md) var(--radius-md) 0;color:var(--text-secondary);font-style:italic}
+.article-body blockquote p:last-child{margin-bottom:0}
+.article-body hr{border:none;height:1px;background:var(--border);margin:40px 0}
+
+.article-body .drop-cap::first-letter{float:left;font-size:3.2em;line-height:0.8;padding-right:8px;padding-top:4px;color:var(--accent-light);font-weight:700}
+
+.article-footer{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s}
+.back-link:hover{color:var(--accent-light)}
+.share-links{display:flex;gap:8px}
+.share-link{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--bg-surface);border:1px solid var(--border);color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:border-color .2s,color .2s}
+.share-link:hover{border-color:var(--border-medium);color:var(--text-primary)}
+
+footer{border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-tertiary);font-size:13px}
+footer a{color:var(--text-secondary);text-decoration:underline}
+
+@media(max-width:640px){
+  .article-container{padding:32px 16px 48px}
+  .article-meta-bar{flex-wrap:wrap;gap:8px;padding:12px 0}
+  .article-meta-item{border-right:none;padding:0 12px 0 0}
+  .article-footer{flex-direction:column;align-items:flex-start}
+  .nav-cta span.nav-label{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#showcase">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Sentence Embeddings vs Word Embeddings: Why We Embed Whole Questions</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">embeddings</span><span class="article-tag">nlp</span><span class="article-tag">sentence-transformers</span><span class="article-tag">retrieval</span><span class="article-tag">word2vec</span></div>
+
+  <h1 class="article-hero-title">Sentence Embeddings vs Word Embeddings: Why We Embed Whole Questions</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-06-01T08:30:00.000Z">June 1, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>4 min read</span>
+    </div>
+    
+  </div>
+
+  <div class="article-divider"></div>
+
+  <img class="article-cover" src="/assets/blog/sentence-vs-word.svg" alt="Pastel comparison of word-level vector averaging versus whole-sentence transformer embedding">
+
+  <div class="article-body">
+    <p>If you have heard of word2vec, GloVe, or fastText, you know that each word can be represented as a dense vector. A natural question is: why not just embed each word in a query, average the vectors, and use that as the query representation?</p>
+
+<p>We tried that. It does not work. For Q&A retrieval, the right tool is a sentence transformer that embeds the whole sentence at once. Here is why the average-of-word-vectors approach fails, and what sentence transformers do differently.</p>
+
+<h2>The Word Embedding Baseline</h2>
+
+<p>A word embedding model like Word2Vec produces a 300-dim vector for each word, trained so that words appearing in similar contexts have similar vectors. "King" and "queen" are close. "Cat" and "dog" are close. "Bank" (river) and "bank" (financial) are unfortunately the <em>same</em> vector — that is a known limitation.</p>
+
+<p>For retrieval, the obvious baseline is:</p>
+
+<pre><code>query_vector = mean(embed(word) for word in tokenize(query))
+document_vector = mean(embed(word) for word in tokenize(document))
+similarity = cosine(query_vector, document_vector)
+</code></pre>
+
+<p>This is fast, requires no model at runtime, and uses tiny word vectors. It is also a poor retrieval signal, for a deep reason.</p>
+
+<h2>Why Averaging Fails</h2>
+
+<p>The averaging approach assumes that the meaning of a sentence is the <em>sum</em> (or mean) of the meanings of its words. This is a strong assumption that is often wrong.</p>
+
+<p>Consider the query: <em>"What is the difference between X and Y?"</em></p>
+
+<p>Averaging the word vectors gives you a point in 300-dim space that is influenced by "difference," "X," and "Y." But the actual meaning of the query is about the <em>relation</em> between X and Y — the difference. The mean-of-words representation has no way to encode that relational structure.</p>
+
+<p>Another example: <em>"How do I cook a chicken?"</em> vs <em>"Should I cook a chicken?"</em></p>
+
+<p>The two sentences have nearly identical word vectors. The average is nearly identical. But they ask different things — one is procedural, one is asking for advice. Word averaging cannot distinguish them.</p>
+
+<p>A third example, more concrete: <em>"the cat sat on the mat"</em> vs <em>"the mat sat on the cat"</em></p>
+
+<p>Same words, opposite meaning. The mean-of-word-vectors is <em>identical</em>. The information that matters — word order — is completely lost.</p>
+
+<p>This is the <strong>bag-of-words problem</strong> dressed up in continuous vectors. The averaging approach inherits all the limitations of treating language as a multiset of words.</p>
+
+<h2>What Sentence Transformers Do Differently</h2>
+
+<p>A sentence transformer is trained to embed a <em>whole sentence</em> into a vector that captures its meaning. Internally it still uses word vectors (subword token embeddings, to be precise), but the model applies multiple transformer layers that <em>mix</em> the word vectors based on their context.</p>
+
+<p>The key operation is <strong>self-attention</strong>. Each token's representation is updated based on every other token in the sentence:</p>
+
+<pre><code>attention(Q, K, V) = softmax(QK^T / sqrt(d)) * V
+</code></pre>
+
+<p>After 6 or 12 layers of this, each token's representation has been informed by the entire sentence context. The final sentence embedding is typically a pooling operation over the token embeddings (mean-pool, CLS-token, etc.).</p>
+
+<p>The result: the vector for <em>"the cat sat on the mat"</em> is <em>different</em> from the vector for <em>"the mat sat on the cat."</em> The self-attention has encoded word order and syntactic structure into the final representation.</p>
+
+<p>This is not magic. It is just a model that has learned to produce vectors where <em>semantic similarity</em> (the thing we care about for retrieval) corresponds to <em>cosine similarity in vector space</em>. That alignment is what the contrastive training objective gives us.</p>
+
+<h2>The Performance Difference</h2>
+
+<p>We benchmarked the two approaches on a held-out set of 500 (query, relevant-document) pairs from the game-theory knowledge base. The metric is recall@5 — the fraction of queries where the relevant document is in the top 5 retrieved.</p>
+
+<p>| Method | Recall@5 |
+|---|---|
+| Word-vector average (Word2Vec) | 0.41 |
+| TF-IDF (lexical baseline) | 0.58 |
+| BM25 (sparse retrieval) | 0.72 |
+| MiniLM-L6-v2 (sentence transformer) | 0.79 |
+| BM25 + MiniLM (hybrid) | 0.86 |</p>
+
+<p>The sentence transformer alone beats the lexical baselines. Combining it with BM25 (see our <a href="/blog/bm25-vs-dense-retrieval/">retrieval post</a>) beats either alone. The word-vector average is the worst — worse than even TF-IDF, because it loses word order information that even a simple lexical matcher preserves.</p>
+
+<h2>When Word Vectors Are Useful</h2>
+
+<p>Word embeddings are not useless. They are great for:</p>
+
+<ul>
+<li><strong>Vocabulary expansion</strong> — finding synonyms ("car" ↔ "automobile")</li>
+<li><strong>Word-level analogies</strong> — "king - man + woman ≈ queen"</li>
+<li><strong>Out-of-vocabulary handling</strong> — subword models (fastText) can embed words they have never seen</li>
+<li><strong>Tiny models</strong> — when you cannot afford a transformer at all</li>
+</ul>
+For Q&A retrieval specifically, they are a poor fit. The unit of meaning is the sentence, not the word.
+
+<h2>The Practical Takeaway</h2>
+
+<p>If you are building a Q&A retrieval system today, use a sentence transformer. The cost is 22 MB (quantized MiniLM) and ~15 ms per query on a mid-range laptop. The benefit over word averaging is dramatic — roughly 2x recall on real queries.</p>
+
+<p>If you absolutely cannot load a transformer (some embedded systems, very strict size budgets), use a strong lexical baseline (BM25) and accept the lower recall. Word averaging is not a good middle ground — it is the worst of both worlds: slow by transformer standards, inaccurate by lexical standards.</p>
+
+<p>The right tool for the job depends on the job. For Q&A retrieval, the job is sentence-level meaning, and the right tool is a sentence transformer.</p>
+  </div>
+
+  <div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Sentence%20Embeddings%20vs%20Word%20Embeddings%3A%20Why%20We%20Embed%20Whole%20Questions&url=https%3A%2F%2Frelu.chat%2Fblog%2Fsentence-vs-word-embeddings%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fsentence-vs-word-embeddings%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
+</footer>
+
+</body>
+</html>

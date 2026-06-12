@@ -1,0 +1,43 @@
+name: Train Policy
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'policy/**'
+      - 'dev/scripts/**'
+      - 'core/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'policy/**'
+      - 'dev/scripts/**'
+      - 'core/**'
+  schedule:
+    - cron: '0 0 * * *'  # nightly
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run JS test suite
+        run: node dev/scripts/test-policy-runtime.js
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python deps
+        run: |
+          pip install -r dev/scripts/requirements.txt
+      - name: Validate training pipeline (skip mode)
+        run: python dev/scripts/train-policy.py --bot game-theory --skip-train
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            dev/datasets/*.json
+            dev/exports/*.json

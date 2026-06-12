@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ONNX Runtime Web + INT8 Quantization — ReLU.chat</title>
+<meta name="description" content="How ONNX Runtime Web and INT8 quantization shrink a 90MB sentence transformer to 22MB while keeping accuracy high enough for browser NLP.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/onnx-runtime-web-quantization/">
+
+<meta property="og:title" content="ONNX Runtime Web + INT8 Quantization — ReLU.chat">
+<meta property="og:description" content="How ONNX Runtime Web and INT8 quantization shrink a 90MB sentence transformer to 22MB while keeping accuracy high enough for browser NLP.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/onnx-runtime-web-quantization/">
+<meta property="og:image" content="https://relu.chat/assets/blog/onnx-quantization.svg">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-06-10T09:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-10T09:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="onnx">
+<meta property="article:tag" content="quantization">
+<meta property="article:tag" content="performance">
+<meta property="article:tag" content="browser">
+<meta property="article:tag" content="machine-learning">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ONNX Runtime Web + INT8 Quantization — ReLU.chat">
+<meta name="twitter:description" content="How ONNX Runtime Web and INT8 quantization shrink a 90MB sentence transformer to 22MB while keeping accuracy high enough for browser NLP.">
+<meta name="twitter:image" content="https://relu.chat/assets/blog/onnx-quantization.svg">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/inter.css">
+<link rel="stylesheet" href="/assets/shared-design.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/onnx-runtime-web-quantization/#webpage",
+      "url": "https://relu.chat/blog/onnx-runtime-web-quantization/",
+      "name": "ONNX Runtime Web + INT8 Quantization — ReLU.chat",
+      "description": "How ONNX Runtime Web and INT8 quantization shrink a 90MB sentence transformer to 22MB while keeping accuracy high enough for browser NLP.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-06-10T09:00:00.000Z",
+      "dateModified": "2026-06-10T09:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/onnx-runtime-web-quantization/#article",
+      "headline": "ONNX Runtime Web and INT8 Quantization: How 90MB Models Become 22MB",
+      "description": "How ONNX Runtime Web and INT8 quantization shrink a 90MB sentence transformer to 22MB while keeping accuracy high enough for browser NLP.",
+      "datePublished": "2026-06-10T09:00:00.000Z",
+      "dateModified": "2026-06-10T09:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/onnx-runtime-web-quantization/#webpage"
+      },
+      "image": "https://relu.chat/assets/blog/onnx-quantization.svg",
+      "keywords": "onnx, quantization, performance, browser, machine-learning"
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100dvh;line-height:1.7;-webkit-font-smoothing:antialiased}
+
+/* Pastel palette + low-glow overrides (blog-only; does not affect chat/global UI) */
+:root{
+  --accent:#b8a48a;
+  --accent-hover:#c7b59b;
+  --accent-light:#a89678;
+  --accent-soft:rgba(184,164,138,0.14);
+  --accent-glow:rgba(184,164,138,0.10);
+  --accent-glow-soft:rgba(184,164,138,0.05);
+  --teal:#8fb5b3;
+  --teal-light:#a8c8c5;
+  --teal-glow:rgba(143,181,179,0.10);
+  --border-accent:rgba(184,164,138,0.28);
+  --border-accent-strong:rgba(184,164,138,0.42);
+  --success:#7fb38f;
+  --success-glow:rgba(127,179,143,0.12);
+  --error:#c89088;
+  --error-glow:rgba(200,144,136,0.10);
+}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(7,8,9,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:600;font-size:16px}
+.nav-logo img{width:24px;height:24px}
+.nav-links{display:flex;align-items:center;gap:16px;list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .15s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-links a.active{color:var(--accent-light)}
+.nav-cta{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:500;border:1px solid var(--border-accent);transition:background 0.15s}
+.nav-cta:hover{background:var(--accent-hover)}
+
+.article-container{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+
+.article-breadcrumb{font-size:13px;color:var(--text-tertiary);margin-bottom:24px}
+.article-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.article-breadcrumb a:hover{color:var(--accent-light)}
+.article-breadcrumb .sep{margin:0 8px;opacity:0.4}
+
+.article-hero-title{font-size:clamp(28px,5.5vw,42px);font-weight:800;letter-spacing:-0.035em;line-height:1.12;margin-bottom:0}
+
+.article-meta-bar{display:flex;align-items:center;gap:0;margin:16px 0 24px;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.article-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);padding:0 16px;border-right:1px solid var(--border)}
+.article-meta-item:first-child{padding-left:0}
+.article-meta-item:last-child{border-right:none}
+.article-meta-item svg{width:14px;height:14px;opacity:0.5;flex-shrink:0}
+.article-meta-item .accent{color:var(--accent-light)}
+
+.article-divider{width:48px;height:3px;border-radius:2px;background:var(--accent-soft);margin:0 0 32px}
+
+.article-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.article-tag{display:inline-block;padding:3px 12px;border-radius:var(--radius-full);background:var(--accent-soft);color:var(--accent-light);font-size:11px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase}
+
+.article-cover{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:36px;border:1px solid var(--border)}
+
+.article-body{font-size:15.5px;line-height:1.85}
+.article-body h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:48px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--text-primary)}
+.article-body h3{font-size:17px;font-weight:600;margin:32px 0 10px;color:var(--text-primary)}
+.article-body h4{font-size:15px;font-weight:600;margin:24px 0 8px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
+.article-body p{color:var(--text-secondary);margin-bottom:18px}
+.article-body a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(184,164,138,0.28)}
+.article-body a:hover{color:var(--accent-hover);text-decoration-color:var(--accent)}
+.article-body strong{color:var(--text-primary);font-weight:600}
+.article-body em{font-style:italic}
+.article-body ul,.article-body ol{color:var(--text-secondary);padding-left:24px;margin-bottom:18px}
+.article-body li{margin-bottom:6px}
+.article-body li::marker{color:var(--accent)}
+.article-body code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:13px;background:rgba(184,164,138,0.08);color:var(--accent-light);padding:2px 6px;border-radius:4px}
+.article-body pre{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;overflow-x:auto;margin-bottom:24px;font-size:13px;line-height:1.6}
+.article-body pre code{background:transparent;color:var(--text-secondary);padding:0;font-size:13px}
+.article-body img{max-width:100%;height:auto;border-radius:var(--radius-md);margin:24px 0;border:1px solid var(--border)}
+.article-body blockquote{border-left:3px solid var(--accent);background:var(--bg-surface);padding:16px 20px;margin:24px 0;border-radius:0 var(--radius-md) var(--radius-md) 0;color:var(--text-secondary);font-style:italic}
+.article-body blockquote p:last-child{margin-bottom:0}
+.article-body hr{border:none;height:1px;background:var(--border);margin:40px 0}
+
+.article-body .drop-cap::first-letter{float:left;font-size:3.2em;line-height:0.8;padding-right:8px;padding-top:4px;color:var(--accent-light);font-weight:700}
+
+.article-footer{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s}
+.back-link:hover{color:var(--accent-light)}
+.share-links{display:flex;gap:8px}
+.share-link{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--bg-surface);border:1px solid var(--border);color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:border-color .2s,color .2s}
+.share-link:hover{border-color:var(--border-medium);color:var(--text-primary)}
+
+footer{border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-tertiary);font-size:13px}
+footer a{color:var(--text-secondary);text-decoration:underline}
+
+@media(max-width:640px){
+  .article-container{padding:32px 16px 48px}
+  .article-meta-bar{flex-wrap:wrap;gap:8px;padding:12px 0}
+  .article-meta-item{border-right:none;padding:0 12px 0 0}
+  .article-footer{flex-direction:column;align-items:flex-start}
+  .nav-cta span.nav-label{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#showcase">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>ONNX Runtime Web and INT8 Quantization: How 90MB Models Become 22MB</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">onnx</span><span class="article-tag">quantization</span><span class="article-tag">performance</span><span class="article-tag">browser</span><span class="article-tag">machine-learning</span></div>
+
+  <h1 class="article-hero-title">ONNX Runtime Web and INT8 Quantization: How 90MB Models Become 22MB</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-06-10T09:00:00.000Z">June 10, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>3 min read</span>
+    </div>
+    
+  </div>
+
+  <div class="article-divider"></div>
+
+  <img class="article-cover" src="/assets/blog/onnx-quantization.svg" alt="Pastel illustration of an ONNX model graph with quantization nodes highlighted">
+
+  <div class="article-body">
+    <p>Running a transformer in the browser sounds impossible until you realize the model only needs to be <em>good enough</em> for a constrained domain. ReLU.chat ships a quantized <code>all-MiniLM-L6-v2</code> that is roughly <strong>22 MB</strong> on the wire but <strong>~90 MB</strong> in its original PyTorch form. Two technologies make that work: <strong>ONNX</strong> for a portable graph format, and <strong>INT8 post-training quantization</strong> for size and speed.</p>
+
+<h2>What ONNX Gives You</h2>
+
+<p>ONNX (Open Neural Network Exchange) is a graph IR. You export a model once from PyTorch or TensorFlow and the same file runs in C++, Python, JavaScript, and WebAssembly. For browser work the key targets are:</p>
+
+<ul>
+<li><strong>onnxruntime-web</strong> (WASM) — the safe baseline, runs everywhere</li>
+<li><strong>onnxruntime-web (WebGL/WebGPU EP)</strong> — hardware-accelerated when available</li>
+</ul>
+ReLU.chat currently uses the WASM execution provider because it is deterministic across browsers, has no GPU driver requirements, and ships in a small footprint.
+
+<h2>The Size Problem</h2>
+
+<p><code>all-MiniLM-L6-v2</code> in FP32 is about 90 MB. The original <code>bert-base</code> is 440 MB. If a user has to download 90 MB before the first response, they will leave. Mobile users on flaky connections will absolutely leave.</p>
+
+<p>The two levers are:</p>
+
+<ol>
+<li><strong>Architecture</strong>: MiniLM has 6 layers (vs 12 in BERT-base) and 384 hidden dim (vs 768). It is distilled to mimic a larger teacher. That alone gets us to ~90 MB.</li>
+<li><strong>Quantization</strong>: Convert FP32 weights to INT8 (8-bit integers). That cuts weight memory by 4x.</li>
+</ol>
+<h2>INT8 Post-Training Quantization</h2>
+
+<p>INT8 quantization maps each FP32 weight to a signed 8-bit integer using a per-tensor or per-channel scale:</p>
+
+<pre><code>q = round(x / scale)            # FP32 → INT8
+x_hat = dequantize(q, scale)    # INT8 → FP32 (during matmul)
+</code></pre>
+
+<p>The scale is calibrated on a small calibration set so that the <em>dynamic range</em> of each tensor is preserved. We use per-channel scales on the matmul weights and per-tensor scales on activations.</p>
+
+<p>What you give up:</p>
+
+<ul>
+<li><strong>Slight accuracy loss</strong> — typically <1% on downstream tasks for MiniLM</li>
+<li><strong>Some math stays in FP32</strong> — accumulators and softmax are usually FP32 for numerical stability</li>
+</ul>
+What you gain:
+
+<ul>
+<li><strong>~4x smaller weights</strong></li>
+<li><strong>~2-3x faster inference</strong> on WASM (INT8 matmul is a single SIMD instruction per element)</li>
+<li><strong>Lower memory bandwidth</strong> — fewer bytes to move</li>
+</ul>
+<h2>The Calibration Step</h2>
+
+<p>Naive quantization breaks models. The fix is calibration: feed ~500 representative sentences through the FP32 model, observe activation distributions per layer, and choose scales that minimize reconstruction error. The standard recipe is:</p>
+
+<ol>
+<li>Collect activation histograms on the calibration set</li>
+<li>Pick scales that minimize KL divergence between FP32 and INT8 distributions</li>
+<li>Freeze scales, quantize weights statically</li>
+</ol>
+For MiniLM-L6, this takes about 10 minutes on a laptop and produces a model that is indistinguishable from FP32 for retrieval use cases.
+
+<h2>Inference in the Browser</h2>
+
+<p>The runtime pipeline looks like this:</p>
+
+<pre><code>input_ids + attention_mask  →  tokenizer (WASM)
+                            →  ONNX session (WASM, INT8)
+                            →  mean-pool over token embeddings
+                            →  L2-normalize
+                            →  384-dim float32 vector
+</code></pre>
+
+<p>Mean pooling and L2 normalization are done in plain JS — they are trivial math, not worth a kernel. The expensive part is the transformer body, which is what INT8 speeds up.</p>
+
+<h2>When Quantization Hurts</h2>
+
+<p>INT8 is not free. We observed two failure modes during calibration:</p>
+
+<ul>
+<li><strong>Layer norm collapse</strong>: if a layer's activations have heavy tails, naive quantization kills the small values. Solution: per-channel scale on the layer-norm inputs.</li>
+<li><strong>Embedding outliers</strong>: the embedding layer has a few dimensions with very large magnitudes. Solution: keep the embedding layer in FP16 (it is small relative to the rest).</li>
+</ul>
+<h2>The Result</h2>
+
+<p>A 22 MB model that loads on a slow mobile connection in ~6 seconds, runs at ~15 ms per inference on a mid-range laptop, and is accurate enough to power a knowledge-base chatbot. The 4x size reduction and 2-3x speedup are what make the entire product viable.</p>
+
+<p>Quantization is not a hack. For domain-specific, retrieval-grounded systems, it is the right tool.</p>
+  </div>
+
+  <div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=ONNX%20Runtime%20Web%20and%20INT8%20Quantization%3A%20How%2090MB%20Models%20Become%2022MB&url=https%3A%2F%2Frelu.chat%2Fblog%2Fonnx-runtime-web-quantization%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fonnx-runtime-web-quantization%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
+</footer>
+
+</body>
+</html>

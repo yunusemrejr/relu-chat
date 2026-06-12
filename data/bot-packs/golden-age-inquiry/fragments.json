@@ -1,0 +1,542 @@
+{
+  "house_of_wisdom": {
+    "entry_id": "house_of_wisdom",
+    "name": "House of Wisdom",
+    "summary": "Major intellectual center in Abbasid Baghdad that housed a vast library and translation institute.",
+    "related": [
+      "al_khwarizmi",
+      "al_kindi",
+      "translation_movement",
+      "mamun"
+    ],
+    "fragmentCount": 10
+  },
+  "al_khwarizmi": {
+    "entry_id": "al_khwarizmi",
+    "name": "Al-Khwarizmi",
+    "summary": "Persian mathematician, astronomer, and geographer whose works founded algebra and introduced algorithms.",
+    "related": [
+      "house_of_wisdom",
+      "algebra",
+      "al_kindi",
+      "ibn_sina"
+    ],
+    "fragmentCount": 10
+  },
+  "algebra": {
+    "entry_id": "algebra",
+    "name": "Algebra",
+    "summary": "Mathematical discipline founded by Al-Khwarizmi for solving equations through systematic transformation.",
+    "related": [
+      "al_khwarizmi",
+      "omar_khayyam",
+      "ibn_sina"
+    ],
+    "fragmentCount": 10
+  },
+  "al_kindi": {
+    "entry_id": "al_kindi",
+    "name": "Al-Kindi",
+    "summary": "First major Islamic philosopher who synthesized Greek philosophy with Islamic thought.",
+    "related": [
+      "house_of_wisdom",
+      "al_khwarizmi",
+      "ibn_sina",
+      "translation_movement"
+    ],
+    "fragmentCount": 10
+  },
+  "ibn_sina": {
+    "entry_id": "ibn_sina",
+    "name": "Ibn Sina (Avicenna)",
+    "summary": "Persian polymath whose \"Canon of Medicine\" was the standard medical text in Europe and the Islamic world for 600 years.",
+    "related": [
+      "al_razI",
+      "al_khwarizmi",
+      "ibn_al_haytham",
+      "canon_of_medicine"
+    ],
+    "fragmentCount": 10
+  },
+  "canon_of_medicine": {
+    "entry_id": "canon_of_medicine",
+    "name": "Canon of Medicine",
+    "summary": "Ibn Sina\\'s medical encyclopedia that systematized all known medical knowledge and remained authoritative for six centuries.",
+    "related": [
+      "ibn_sina",
+      "al_razI",
+      "medicine"
+    ],
+    "fragmentCount": 10
+  },
+  "ibn_al_haytham": {
+    "entry_id": "ibn_al_haytham",
+    "name": "Ibn al-Haytham (Alhazen)",
+    "summary": "Arab scientist who founded optics as an experimental science and pioneered the scientific method.",
+    "related": [
+      "optics",
+      "camera_obscura",
+      "scientific_method",
+      "al_razI"
+    ],
+    "fragmentCount": 10
+  },
+  "optics": {
+    "entry_id": "optics",
+    "name": "Optics in the Golden Age",
+    "summary": "The science of light and vision as developed by Golden Age scholars, founded by Ibn al-Haytham.",
+    "related": [
+      "ibn_al_haytham",
+      "camera_obscura",
+      "ibn_sahl"
+    ],
+    "fragmentCount": 10
+  },
+  "translation_movement": {
+    "entry_id": "translation_movement",
+    "name": "Translation Movement",
+    "summary": "Massive project to translate Greek, Persian, Indian, and Syriac scientific works into Arabic.",
+    "related": [
+      "house_of_wisdom",
+      "al_kindi",
+      "hunayn_ibn_ishaq"
+    ],
+    "fragmentCount": 10
+  },
+  "al_razI": {
+    "entry_id": "al_razI",
+    "name": "Al-Razi (Rhazes)",
+    "summary": "Persian physician and alchemist who distinguished smallpox from measles and pioneered clinical observation.",
+    "related": [
+      "ibn_sina",
+      "canon_of_medicine",
+      "medicine",
+      "alchemy"
+    ],
+    "fragmentCount": 10
+  },
+  "astrolabe": {
+    "entry_id": "astrolabe",
+    "name": "Astrolabe",
+    "summary": "Sophisticated astronomical instrument for solving problems relating to time, position, and celestial motion.",
+    "related": [
+      "astronomy",
+      "al_zarqali",
+      "nasir_al_din_tusi"
+    ],
+    "fragmentCount": 10
+  },
+  "astronomy": {
+    "entry_id": "astronomy",
+    "name": "Astronomy in the Golden Age",
+    "summary": "Highly advanced astronomical science developed in the Islamic world, combining Greek, Persian, and Indian traditions.",
+    "related": [
+      "astrolabe",
+      "al_battani",
+      "maragha_school",
+      "ulugh_beg"
+    ],
+    "fragmentCount": 10
+  },
+  "algebra_development": {
+    "entry_id": "algebra_development",
+    "name": "Development of Algebra",
+    "summary": "The evolution of algebra from Al-Khwarizmi\\'s rhetorical algebra to symbolic notation.",
+    "related": [
+      "al_khwarizmi",
+      "omar_khayyam",
+      "algebra"
+    ],
+    "fragmentCount": 10
+  },
+  "maragha_school": {
+    "entry_id": "maragha_school",
+    "name": "Maragha School",
+    "summary": "School of astronomers at the Maragha Observatory who developed alternatives to Ptolemaic astronomy.",
+    "related": [
+      "astronomy",
+      "nasir_al_din_tusi",
+      "ibn_al_shatir"
+    ],
+    "fragmentCount": 10
+  },
+  "paper_making": {
+    "entry_id": "paper_making",
+    "name": "Paper Making",
+    "summary": "Introduction and spread of papermaking technology from China through the Islamic world to Europe.",
+    "related": [
+      "house_of_wisdom",
+      "translation_movement"
+    ],
+    "fragmentCount": 10
+  },
+  "ibn_rushd": {
+    "entry_id": "ibn_rushd",
+    "name": "Ibn Rushd (Averroes)",
+    "summary": "Andalusian philosopher and jurist whose commentaries on Aristotle shaped medieval European thought.",
+    "related": [
+      "al_ghazali",
+      "ibn_sina",
+      "philosophy"
+    ],
+    "fragmentCount": 10
+  },
+  "al_ghazali": {
+    "entry_id": "al_ghazali",
+    "name": "Al-Ghazali",
+    "summary": "Influential Islamic theologian, jurist, and mystic who critiqued excessive rationalism in philosophy.",
+    "related": [
+      "ibn_rushd",
+      "ibn_sina",
+      "philosophy"
+    ],
+    "fragmentCount": 10
+  },
+  "medicine_golden_age": {
+    "entry_id": "medicine_golden_age",
+    "name": "Medicine in the Golden Age",
+    "summary": "Medical science as practiced and advanced in the Islamic world, combining Greek theory with clinical observation.",
+    "related": [
+      "ibn_sina",
+      "al_razI",
+      "canon_of_medicine",
+      "al_zahrawi"
+    ],
+    "fragmentCount": 10
+  },
+  "al_biruni": {
+    "entry_id": "al_biruni",
+    "name": "Al-Biruni",
+    "summary": "Persian scholar who made groundbreaking contributions to astronomy, geography, and comparative religion.",
+    "related": [
+      "astronomy",
+      "al_khwarizmi"
+    ],
+    "fragmentCount": 10
+  },
+  "al_zahrawi": {
+    "entry_id": "al_zahrawi",
+    "name": "Al-Zahrawi (Abulcasis)",
+    "summary": "Andalusian surgeon whose medical encyclopedia was the standard surgical text in Europe for 500 years.",
+    "related": [
+      "medicine_golden_age",
+      "al_razI",
+      "ibn_sina"
+    ],
+    "fragmentCount": 10
+  },
+  "ibn_al_nafis": {
+    "entry_id": "ibn_al_nafis",
+    "name": "Ibn al-Nafis",
+    "summary": "Arab physician who discovered pulmonary circulation 300 years before William Harvey.",
+    "related": [
+      "medicine_golden_age",
+      "ibn_sina",
+      "canon_of_medicine"
+    ],
+    "fragmentCount": 10
+  },
+  "philosophy_golden_age": {
+    "entry_id": "philosophy_golden_age",
+    "name": "Philosophy in the Golden Age",
+    "summary": "The philosophical tradition that synthesized Greek philosophy with Islamic theology.",
+    "related": [
+      "al_kindi",
+      "ibn_sina",
+      "ibn_rushd",
+      "al_ghazali"
+    ],
+    "fragmentCount": 10
+  },
+  "al_farabi": {
+    "entry_id": "al_farabi",
+    "name": "Al-Farabi",
+    "summary": "Central Asian philosopher and political theorist who systematized Islamic philosophy and wrote on the ideal state.",
+    "related": [
+      "philosophy_golden_age",
+      "ibn_sina",
+      "ibn_rushd",
+      "al_kindi"
+    ],
+    "fragmentCount": 10
+  },
+  "omar_khayyam": {
+    "entry_id": "omar_khayyam",
+    "name": "Omar Khayyam",
+    "summary": "Persian polymath who solved cubic equations geometrically and is also renowned for his poetry.",
+    "related": [
+      "algebra_development",
+      "al_khwarizmi",
+      "al_biruni"
+    ],
+    "fragmentCount": 10
+  },
+  "al_zarqali": {
+    "entry_id": "al_zarqali",
+    "name": "Al-Zarqali",
+    "summary": "Andalusian astronomer and instrument maker who invented the universal astrolabe and improved astronomical tables.",
+    "related": [
+      "astrolabe",
+      "astronomy",
+      "al_farghani"
+    ],
+    "fragmentCount": 10
+  },
+  "nasir_al_din_tusi": {
+    "entry_id": "nasir_al_din_tusi",
+    "name": "Nasir al-Din al-Tusi",
+    "summary": "Persian polymath who founded the Maragha Observatory and developed the Tusi couple, influencing Copernican astronomy.",
+    "related": [
+      "maragha_school",
+      "astronomy",
+      "ibn_al_shatir",
+      "ulugh_beg"
+    ],
+    "fragmentCount": 10
+  },
+  "ibn_al_shatir": {
+    "entry_id": "ibn_al_shatir",
+    "name": "Ibn al-Shatir",
+    "summary": "Damascene astronomer whose lunar and planetary models were mathematically identical to Copernicus\\' later formulations.",
+    "related": [
+      "maragha_school",
+      "astronomy",
+      "nasir_al_din_tusi",
+      "al_battani"
+    ],
+    "fragmentCount": 10
+  },
+  "ulugh_beg": {
+    "entry_id": "ulugh_beg",
+    "name": "Ulugh Beg",
+    "summary": "Timurid sultan, mathematician, and astronomer who built the world\\'s largest observatory and compiled a stellar catalog of unprecedented accuracy.",
+    "related": [
+      "astronomy",
+      "maragha_school",
+      "nasir_al_din_tusi",
+      "al_battani"
+    ],
+    "fragmentCount": 10
+  },
+  "al_battani": {
+    "entry_id": "al_battani",
+    "name": "Al-Battani",
+    "summary": "Arab astronomer and mathematician who made remarkably accurate astronomical observations and improved Ptolemy\\'s star catalog.",
+    "related": [
+      "astronomy",
+      "astrolabe",
+      "al_farghani",
+      "ulugh_beg"
+    ],
+    "fragmentCount": 10
+  },
+  "hunayn_ibn_ishaq": {
+    "entry_id": "hunayn_ibn_ishaq",
+    "name": "Hunayn ibn Ishaq",
+    "summary": "Nestorian Christian translator, physician, and scholar who led the translation of Greek medical texts into Arabic.",
+    "related": [
+      "translation_movement",
+      "house_of_wisdom",
+      "al_kindi",
+      "medicine_golden_age"
+    ],
+    "fragmentCount": 10
+  },
+  "al_idrisi": {
+    "entry_id": "al_idrisi",
+    "name": "Al-Idrisi",
+    "summary": "Arab geographer and cartographer who created the most accurate world map and geographical encyclopedia of the pre-modern era.",
+    "related": [
+      "astronomy",
+      "paper_making",
+      "house_of_wisdom"
+    ],
+    "fragmentCount": 10
+  },
+  "ibn_khaldun": {
+    "entry_id": "ibn_khaldun",
+    "name": "Ibn Khaldun",
+    "summary": "Arab historian, philosopher, and social scientist whose Muqaddimah laid foundations for modern historiography and sociology.",
+    "related": [
+      "philosophy_golden_age",
+      "al_biruni",
+      "al_idrisi"
+    ],
+    "fragmentCount": 10
+  },
+  "al_jazari": {
+    "entry_id": "al_jazari",
+    "name": "Al-Jazari",
+    "summary": "Greatest mechanical engineer of the medieval Islamic world, known for his automata and programmable machines.",
+    "related": [
+      "paper_making",
+      "ibn_sina",
+      "house_of_wisdom"
+    ],
+    "fragmentCount": 10
+  },
+  "banu_musa": {
+    "entry_id": "banu_musa",
+    "name": "Banu Musa Brothers",
+    "summary": "Three Persian brothers who produced the \"Book of Ingenious Devices,\" a major work on mechanical engineering and automata.",
+    "related": [
+      "house_of_wisdom",
+      "al_jazari",
+      "translation_movement"
+    ],
+    "fragmentCount": 10
+  },
+  "thabit_ibn_qurra": {
+    "entry_id": "thabit_ibn_qurra",
+    "name": "Thabit ibn Qurra",
+    "summary": "Sabian mathematician, physician, and translator who made fundamental contributions to number theory and geometry.",
+    "related": [
+      "translation_movement",
+      "house_of_wisdom",
+      "algebra",
+      "al_khwarizmi"
+    ],
+    "fragmentCount": 10
+  },
+  "al_karaji": {
+    "entry_id": "al_karaji",
+    "name": "Al-Karaji",
+    "summary": "Persian mathematician who freed algebra from geometry by arithmetizing algebraic operations.",
+    "related": [
+      "algebra",
+      "algebra_development",
+      "al_khwarizmi",
+      "al_samawal"
+    ],
+    "fragmentCount": 10
+  },
+  "al_samawal": {
+    "entry_id": "al_samawal",
+    "name": "Al-Samawal",
+    "summary": "Arab mathematician who developed techniques for polynomial arithmetic and division.",
+    "related": [
+      "algebra",
+      "algebra_development",
+      "al_karaji",
+      "al_khwarizmi"
+    ],
+    "fragmentCount": 10
+  },
+  "ibn_sahl": {
+    "entry_id": "ibn_sahl",
+    "name": "Ibn Sahl",
+    "summary": "Persian mathematician and optician who discovered the law of refraction (Snell\\'s law) 600 years before Snell.",
+    "related": [
+      "optics",
+      "ibn_al_haytham",
+      "al_kindi"
+    ],
+    "fragmentCount": 10
+  },
+  "al_farghani": {
+    "entry_id": "al_farghani",
+    "name": "Al-Farghani",
+    "summary": "Central Asian astronomer whose summary of Ptolemaic astronomy became a standard textbook in Europe and the Islamic world.",
+    "related": [
+      "astronomy",
+      "al_battani",
+      "al_zarqali",
+      "astrolabe"
+    ],
+    "fragmentCount": 10
+  },
+  "qusta_ibn_luqa": {
+    "entry_id": "qusta_ibn_luqa",
+    "name": "Qusta ibn Luqa",
+    "summary": "Melkite Christian translator, physician, and philosopher who bridged Greek and Arabic medicine and science.",
+    "related": [
+      "translation_movement",
+      "house_of_wisdom",
+      "hunayn_ibn_ishaq",
+      "medicine_golden_age"
+    ],
+    "fragmentCount": 10
+  },
+  "al_majriti": {
+    "entry_id": "al_majriti",
+    "name": "Al-Majriti",
+    "summary": "Andalusian mathematician, astronomer, and alchemist who established science in Islamic Spain.",
+    "related": [
+      "astronomy",
+      "astrolabe",
+      "al_zarqali",
+      "al_farghani"
+    ],
+    "fragmentCount": 10
+  },
+  "fatima_al_fihri": {
+    "entry_id": "fatima_al_fihri",
+    "name": "Fatima al-Fihri",
+    "summary": "Arab woman who founded the University of al-Qarawiyyin, the oldest existing degree-granting university in the world.",
+    "related": [
+      "house_of_wisdom",
+      "paper_making",
+      "translation_movement"
+    ],
+    "fragmentCount": 10
+  },
+  "mariam_al_astrulabi": {
+    "entry_id": "mariam_al_astrulabi",
+    "name": "Mariam al-Astrulabi",
+    "summary": "10th-century Syrian female astronomer and astrolabe maker, one of the few known women scientists of the Golden Age.",
+    "related": [
+      "astrolabe",
+      "astronomy",
+      "al_zarqali"
+    ],
+    "fragmentCount": 10
+  },
+  "lubana": {
+    "entry_id": "lubana",
+    "name": "Lubana of Cordoba",
+    "summary": "Andalusian female mathematician and librarian who served at the Library of Cordoba.",
+    "related": [
+      "paper_making",
+      "house_of_wisdom",
+      "al_majriti",
+      "al_zarqali"
+    ],
+    "fragmentCount": 10
+  },
+  "abbas_ibn_firnas": {
+    "entry_id": "abbas_ibn_firnas",
+    "name": "Abbas ibn Firnas",
+    "summary": "Andalusian polymath who made the first recorded attempt at controlled human flight and invented various devices.",
+    "related": [
+      "al_majriti",
+      "astronomy",
+      "optics",
+      "al_jazari"
+    ],
+    "fragmentCount": 10
+  },
+  "ibn_bajjah": {
+    "entry_id": "ibn_bajjah",
+    "name": "Ibn Bajjah (Avempace)",
+    "summary": "Andalusian philosopher, astronomer, and physician who developed a naturalistic philosophy and anticipated Galilean motion.",
+    "related": [
+      "ibn_tufayl",
+      "ibn_rushd",
+      "philosophy_golden_age",
+      "al_farabi"
+    ],
+    "fragmentCount": 10
+  },
+  "ibn_tufayl": {
+    "entry_id": "ibn_tufayl",
+    "name": "Ibn Tufayl",
+    "summary": "Andalusian philosopher and physician whose novel \"Hayy ibn Yaqzan\" explored the nature of reason and revelation.",
+    "related": [
+      "ibn_bajjah",
+      "ibn_rushd",
+      "philosophy_golden_age",
+      "al_ghazali"
+    ],
+    "fragmentCount": 10
+  }
+}

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Service Workers + PWA for Offline AI — ReLU.chat</title>
+<meta name="description" content="How a service worker pre-caches an ONNX model, an embedding index, and a chatbot shell so the entire experience works without a network.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/service-workers-offline-ai/">
+
+<meta property="og:title" content="Service Workers + PWA for Offline AI — ReLU.chat">
+<meta property="og:description" content="How a service worker pre-caches an ONNX model, an embedding index, and a chatbot shell so the entire experience works without a network.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/service-workers-offline-ai/">
+<meta property="og:image" content="https://relu.chat/assets/blog/service-worker-pwa.svg">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-06-08T11:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-08T11:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="service-worker">
+<meta property="article:tag" content="pwa">
+<meta property="article:tag" content="offline">
+<meta property="article:tag" content="browser">
+<meta property="article:tag" content="caching">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Service Workers + PWA for Offline AI — ReLU.chat">
+<meta name="twitter:description" content="How a service worker pre-caches an ONNX model, an embedding index, and a chatbot shell so the entire experience works without a network.">
+<meta name="twitter:image" content="https://relu.chat/assets/blog/service-worker-pwa.svg">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/inter.css">
+<link rel="stylesheet" href="/assets/shared-design.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/service-workers-offline-ai/#webpage",
+      "url": "https://relu.chat/blog/service-workers-offline-ai/",
+      "name": "Service Workers + PWA for Offline AI — ReLU.chat",
+      "description": "How a service worker pre-caches an ONNX model, an embedding index, and a chatbot shell so the entire experience works without a network.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-06-08T11:00:00.000Z",
+      "dateModified": "2026-06-08T11:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/service-workers-offline-ai/#article",
+      "headline": "Service Workers and PWA Caching for Offline AI Chatbots",
+      "description": "How a service worker pre-caches an ONNX model, an embedding index, and a chatbot shell so the entire experience works without a network.",
+      "datePublished": "2026-06-08T11:00:00.000Z",
+      "dateModified": "2026-06-08T11:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/service-workers-offline-ai/#webpage"
+      },
+      "image": "https://relu.chat/assets/blog/service-worker-pwa.svg",
+      "keywords": "service-worker, pwa, offline, browser, caching"
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100dvh;line-height:1.7;-webkit-font-smoothing:antialiased}
+
+/* Pastel palette + low-glow overrides (blog-only; does not affect chat/global UI) */
+:root{
+  --accent:#b8a48a;
+  --accent-hover:#c7b59b;
+  --accent-light:#a89678;
+  --accent-soft:rgba(184,164,138,0.14);
+  --accent-glow:rgba(184,164,138,0.10);
+  --accent-glow-soft:rgba(184,164,138,0.05);
+  --teal:#8fb5b3;
+  --teal-light:#a8c8c5;
+  --teal-glow:rgba(143,181,179,0.10);
+  --border-accent:rgba(184,164,138,0.28);
+  --border-accent-strong:rgba(184,164,138,0.42);
+  --success:#7fb38f;
+  --success-glow:rgba(127,179,143,0.12);
+  --error:#c89088;
+  --error-glow:rgba(200,144,136,0.10);
+}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(7,8,9,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:600;font-size:16px}
+.nav-logo img{width:24px;height:24px}
+.nav-links{display:flex;align-items:center;gap:16px;list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .15s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-links a.active{color:var(--accent-light)}
+.nav-cta{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:500;border:1px solid var(--border-accent);transition:background 0.15s}
+.nav-cta:hover{background:var(--accent-hover)}
+
+.article-container{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+
+.article-breadcrumb{font-size:13px;color:var(--text-tertiary);margin-bottom:24px}
+.article-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.article-breadcrumb a:hover{color:var(--accent-light)}
+.article-breadcrumb .sep{margin:0 8px;opacity:0.4}
+
+.article-hero-title{font-size:clamp(28px,5.5vw,42px);font-weight:800;letter-spacing:-0.035em;line-height:1.12;margin-bottom:0}
+
+.article-meta-bar{display:flex;align-items:center;gap:0;margin:16px 0 24px;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.article-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);padding:0 16px;border-right:1px solid var(--border)}
+.article-meta-item:first-child{padding-left:0}
+.article-meta-item:last-child{border-right:none}
+.article-meta-item svg{width:14px;height:14px;opacity:0.5;flex-shrink:0}
+.article-meta-item .accent{color:var(--accent-light)}
+
+.article-divider{width:48px;height:3px;border-radius:2px;background:var(--accent-soft);margin:0 0 32px}
+
+.article-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.article-tag{display:inline-block;padding:3px 12px;border-radius:var(--radius-full);background:var(--accent-soft);color:var(--accent-light);font-size:11px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase}
+
+.article-cover{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:36px;border:1px solid var(--border)}
+
+.article-body{font-size:15.5px;line-height:1.85}
+.article-body h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:48px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--text-primary)}
+.article-body h3{font-size:17px;font-weight:600;margin:32px 0 10px;color:var(--text-primary)}
+.article-body h4{font-size:15px;font-weight:600;margin:24px 0 8px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
+.article-body p{color:var(--text-secondary);margin-bottom:18px}
+.article-body a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(184,164,138,0.28)}
+.article-body a:hover{color:var(--accent-hover);text-decoration-color:var(--accent)}
+.article-body strong{color:var(--text-primary);font-weight:600}
+.article-body em{font-style:italic}
+.article-body ul,.article-body ol{color:var(--text-secondary);padding-left:24px;margin-bottom:18px}
+.article-body li{margin-bottom:6px}
+.article-body li::marker{color:var(--accent)}
+.article-body code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:13px;background:rgba(184,164,138,0.08);color:var(--accent-light);padding:2px 6px;border-radius:4px}
+.article-body pre{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;overflow-x:auto;margin-bottom:24px;font-size:13px;line-height:1.6}
+.article-body pre code{background:transparent;color:var(--text-secondary);padding:0;font-size:13px}
+.article-body img{max-width:100%;height:auto;border-radius:var(--radius-md);margin:24px 0;border:1px solid var(--border)}
+.article-body blockquote{border-left:3px solid var(--accent);background:var(--bg-surface);padding:16px 20px;margin:24px 0;border-radius:0 var(--radius-md) var(--radius-md) 0;color:var(--text-secondary);font-style:italic}
+.article-body blockquote p:last-child{margin-bottom:0}
+.article-body hr{border:none;height:1px;background:var(--border);margin:40px 0}
+
+.article-body .drop-cap::first-letter{float:left;font-size:3.2em;line-height:0.8;padding-right:8px;padding-top:4px;color:var(--accent-light);font-weight:700}
+
+.article-footer{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s}
+.back-link:hover{color:var(--accent-light)}
+.share-links{display:flex;gap:8px}
+.share-link{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--bg-surface);border:1px solid var(--border);color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:border-color .2s,color .2s}
+.share-link:hover{border-color:var(--border-medium);color:var(--text-primary)}
+
+footer{border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-tertiary);font-size:13px}
+footer a{color:var(--text-secondary);text-decoration:underline}
+
+@media(max-width:640px){
+  .article-container{padding:32px 16px 48px}
+  .article-meta-bar{flex-wrap:wrap;gap:8px;padding:12px 0}
+  .article-meta-item{border-right:none;padding:0 12px 0 0}
+  .article-footer{flex-direction:column;align-items:flex-start}
+  .nav-cta span.nav-label{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#showcase">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Service Workers and PWA Caching for Offline AI Chatbots</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">service-worker</span><span class="article-tag">pwa</span><span class="article-tag">offline</span><span class="article-tag">browser</span><span class="article-tag">caching</span></div>
+
+  <h1 class="article-hero-title">Service Workers and PWA Caching for Offline AI Chatbots</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-06-08T11:00:00.000Z">June 8, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>3 min read</span>
+    </div>
+    
+  </div>
+
+  <div class="article-divider"></div>
+
+  <img class="article-cover" src="/assets/blog/service-worker-pwa.svg" alt="Pastel diagram of a service worker pre-caching a model and knowledge base for offline use">
+
+  <div class="article-body">
+    <p>The most surprising thing about a browser-based AI chatbot is that it can work without the internet. ReLU.chat is a Progressive Web App: after the first load, the service worker holds every asset required for inference. The user can close the tab, lose their connection, fly on a plane, and still have a working chatbot.</p>
+
+<h2>What a Service Worker Does</h2>
+
+<p>A service worker is a JavaScript file the browser runs in the background, separate from the page. It intercepts <code>fetch</code> requests and can return responses from a cache instead of the network. Once installed, it survives page reloads and tab closes.</p>
+
+<p>The lifecycle has three phases:</p>
+
+<ol>
+<li><strong>Install</strong> — runs once, downloads and caches critical assets</li>
+<li><strong>Activate</strong> — cleans up old caches, takes control of the page</li>
+<li><strong>Fetch</strong> — runs on every request, decides network vs cache</li>
+</ol>
+For an AI chatbot, the <em>install</em> step is the entire point. We pre-cache everything needed for inference.
+
+<h2>What We Cache</h2>
+
+<p>ReLU.chat's install handler caches:</p>
+
+<ul>
+<li><strong>HTML shell</strong> (<code>/</code>, <code>/blog/</code>, chat pages) — ~50 KB</li>
+<li><strong>CSS</strong> (<code>/assets/shared-design.css</code>, blog CSS) — ~25 KB</li>
+<li><strong>JavaScript</strong> (<code>/core/<em>.js</code>, <code>/chat/</em>.js</code>, <code>/data/bots/*.js</code>) — ~150 KB</li>
+<li><strong>Models</strong> (<code>/assets/models/mini-lm-onnx-quantized.onnx</code>) — ~22 MB</li>
+<li><strong>Knowledge base</strong> (<code>/data/bots/*/kb.json</code>, <code>/data/manifest.json</code>) — ~200 KB</li>
+<li><strong>Embeddings</strong> (precomputed KB embeddings) — ~500 KB</li>
+<li><strong>BM25 index</strong> (precomputed IDF, doc lengths) — ~30 KB</li>
+</ul>
+Total cached footprint: about <strong>23 MB</strong>. That is the entire experience, ready offline.
+
+<h2>The Caching Strategy</h2>
+
+<p>We use a <strong>cache-first with network fallback</strong> strategy for model and KB assets, and <strong>stale-while-revalidate</strong> for HTML and CSS. Concretely:</p>
+
+<pre><code>on fetch(request):
+  if request is in cache:
+    return cached_response
+  try:
+    response = await fetch(request)
+    if response.ok and request is cacheable:
+      cache.put(request, response.clone())
+    return response
+  except network_error:
+    return offline_fallback
+</code></pre>
+
+<p>The key detail is <strong>what is cacheable</strong>. We never cache:</p>
+
+<ul>
+<li>API endpoints (we have none — the chatbot is fully local)</li>
+<li>POST requests</li>
+<li>Responses with <code>Cache-Control: no-store</code></li>
+</ul>
+<h2>The 22 MB Problem</h2>
+
+<p>Caching a 22 MB model is the hard part. Service workers are designed for small assets; downloading and storing 22 MB on first install is heavy but feasible. The trick is to do it <em>progressively</em>:</p>
+
+<ol>
+<li>The page loads and the chatbot shell starts immediately</li>
+<li>The service worker install begins caching the model in the background</li>
+<li>The first user query uses a heuristic fallback (see our <a href="/blog/heuristic-fallback-cold-start/">architecture post</a>)</li>
+<li>When the model finishes downloading, the system hot-swaps to full transformer inference</li>
+</ol>
+The user never sees a spinner. They see a working chatbot that gets <em>smarter</em> over the first ~10 seconds.
+
+<h2>Versioning and Updates</h2>
+
+<p>Service workers persist across visits. When you ship a new model, you cannot rely on users clearing their cache. We use <strong>content-hashed filenames</strong> for the model:</p>
+
+<pre><code>/assets/models/mini-lm-onnx-quantized.onnx?v=2026-05-20
+</code></pre>
+
+<p>Bumping the version string forces a cache miss, the new file downloads, and the old one is evicted on activation.</p>
+
+<p>The <code>activate</code> handler cleans up old caches:</p>
+
+<pre><code>on activate(event):
+  for cache_name in caches.keys():
+    if cache_name != CURRENT_CACHE:
+      await caches.delete(cache_name)
+</code></pre>
+
+<h2>Storage Quotas</h2>
+
+<p>Browsers grant service workers a quota that depends on the user's engagement with the site. For a returning user on a site they use often, Chrome grants up to ~60% of free disk. Firefox is more conservative. We budget 30 MB to be safe, which gives us headroom for the model, KB, and JS.</p>
+
+<p>If storage is denied, the chatbot still works — it just won't be available offline. We surface a status indicator so the user knows.</p>
+
+<h2>What This Buys</h2>
+
+<ol>
+<li><strong>Offline-first</strong> — the chatbot works on planes, trains, and dead zones</li>
+<li><strong>Fast repeat visits</strong> — no network round trip for cached assets</li>
+<li><strong>Predictable performance</strong> — once the cache is warm, inference is the only bottleneck</li>
+<li><strong>Installable</strong> — the manifest lets users add ReLU.chat to their home screen like a native app</li>
+</ol>
+A service worker is not glamorous. It is 200 lines of JavaScript that quietly turns a web page into an offline-capable, installable application. For privacy-first AI, that property is not optional — it is the whole point.
+  </div>
+
+  <div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Service%20Workers%20and%20PWA%20Caching%20for%20Offline%20AI%20Chatbots&url=https%3A%2F%2Frelu.chat%2Fblog%2Fservice-workers-offline-ai%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fservice-workers-offline-ai%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>500 — Server Error | ReLU.chat</title>
+<link rel="stylesheet" href="../assets/fonts/inter.css">
+<link rel="stylesheet" href="../assets/shared-design.css">
+<link rel="icon" href="../assets/logo.png" type="image/png">
+<style>
+/* Error page overrides — layout tokens from shared-design.css */
+:root { --warning: #e67e22; --warning-glow: rgba(230,126,34,0.3); }
+body {
+  background:
+    radial-gradient(1200px 800px at 70% -10%, var(--accent-glow), var(--bg));
+  color: var(--text-primary);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-card {
+  max-width: 480px;
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 3.5rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04), 0 8px 16px -8px rgba(0,0,0,0.04);
+}
+
+.error-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(230,126,34,0.4), transparent);
+}
+
+.error-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(230,126,34,0.25), rgba(230,126,34,0.08));
+  border: 1px solid rgba(230,126,34,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(230,126,34,0.15);
+}
+
+.error-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--warning);
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(180deg, #ffffff 0%, #b0b8c8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+p {
+  color: var(--text-tertiary);
+  margin-bottom: 2rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  background: var(--accent);
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border: 1px solid var(--border-accent);
+  transition: background 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), transform 0.15s var(--ease-out);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 4px 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.06);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  letter-spacing: -0.01em;
+}
+
+.btn:hover {
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 8px 24px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s var(--ease-out);
+}
+
+.btn:hover svg {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+  <div class="error-card">
+    <div class="error-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <h1>500</h1>
+    <h2>Server error</h2>
+    <p>Something went wrong on our end. Please try again in a moment.</p>
+    <a href="/" class="btn">
+      Back to home
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</body>
+</html>
