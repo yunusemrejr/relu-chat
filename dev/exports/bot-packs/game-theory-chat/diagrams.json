@@ -1,0 +1,1546 @@
+{
+  "nodes": [
+    {
+      "id": "nash_eq",
+      "label": "Nash Equilibrium"
+    },
+    {
+      "id": "spe",
+      "label": "spe"
+    },
+    {
+      "id": "pbe",
+      "label": "pbe"
+    },
+    {
+      "id": "mixed_strat",
+      "label": "mixed_strat"
+    },
+    {
+      "id": "dom_strat",
+      "label": "dom_strat"
+    },
+    {
+      "id": "corr_eq",
+      "label": "corr_eq"
+    },
+    {
+      "id": "prisoners_dilemma",
+      "label": "Prisoner\\'s Dilemma"
+    },
+    {
+      "id": "repeated_game",
+      "label": "repeated_game"
+    },
+    {
+      "id": "tft",
+      "label": "tft"
+    },
+    {
+      "id": "folk",
+      "label": "folk"
+    },
+    {
+      "id": "ied",
+      "label": "ied"
+    },
+    {
+      "id": "vickrey",
+      "label": "vickrey"
+    },
+    {
+      "id": "mech_design",
+      "label": "mech_design"
+    },
+    {
+      "id": "pure_strat",
+      "label": "pure_strat"
+    },
+    {
+      "id": "matching_pennies",
+      "label": "matching_pennies"
+    },
+    {
+      "id": "extensive_form",
+      "label": "extensive_form"
+    },
+    {
+      "id": "battle_of_sexes",
+      "label": "battle_of_sexes"
+    },
+    {
+      "id": "zero_sum",
+      "label": "Zero-Sum Game"
+    },
+    {
+      "id": "minimax",
+      "label": "minimax"
+    },
+    {
+      "id": "coop_game",
+      "label": "Cooperative Game"
+    },
+    {
+      "id": "shapley",
+      "label": "shapley"
+    },
+    {
+      "id": "core",
+      "label": "core"
+    },
+    {
+      "id": "coalition",
+      "label": "coalition"
+    },
+    {
+      "id": "noncoop_game",
+      "label": "noncoop_game"
+    },
+    {
+      "id": "bayesian_game",
+      "label": "bayesian_game"
+    },
+    {
+      "id": "lp_duality",
+      "label": "lp_duality"
+    },
+    {
+      "id": "zermelo",
+      "label": "zermelo"
+    },
+    {
+      "id": "normal_form",
+      "label": "normal_form"
+    },
+    {
+      "id": "backward_induction",
+      "label": "backward_induction"
+    },
+    {
+      "id": "perfect_info",
+      "label": "perfect_info"
+    },
+    {
+      "id": "bimatrix",
+      "label": "bimatrix"
+    },
+    {
+      "id": "harsanyi",
+      "label": "harsanyi"
+    },
+    {
+      "id": "signaling",
+      "label": "signaling"
+    },
+    {
+      "id": "screening",
+      "label": "screening"
+    },
+    {
+      "id": "auction_theory",
+      "label": "auction_theory"
+    },
+    {
+      "id": "evo_gt",
+      "label": "Evolutionary Game Theory"
+    },
+    {
+      "id": "ess",
+      "label": "ess"
+    },
+    {
+      "id": "replicator",
+      "label": "replicator"
+    },
+    {
+      "id": "hawk_dove",
+      "label": "hawk_dove"
+    },
+    {
+      "id": "poa",
+      "label": "poa"
+    },
+    {
+      "id": "stackelberg",
+      "label": "Stackelberg Competition"
+    },
+    {
+      "id": "cournot",
+      "label": "cournot"
+    },
+    {
+      "id": "bertrand",
+      "label": "bertrand"
+    },
+    {
+      "id": "revelation",
+      "label": "revelation"
+    },
+    {
+      "id": "nash_bargaining",
+      "label": "nash_bargaining"
+    },
+    {
+      "id": "hedonic",
+      "label": "hedonic"
+    },
+    {
+      "id": "rubinstein",
+      "label": "rubinstein"
+    },
+    {
+      "id": "potential",
+      "label": "potential"
+    },
+    {
+      "id": "trembling",
+      "label": "Trembling-Hand Perfection"
+    },
+    {
+      "id": "trembling_hand",
+      "label": "trembling_hand"
+    },
+    {
+      "id": "stag_hunt",
+      "label": "stag_hunt"
+    },
+    {
+      "id": "chicken",
+      "label": "chicken"
+    },
+    {
+      "id": "coordination",
+      "label": "coordination"
+    },
+    {
+      "id": "ultimatum",
+      "label": "Ultimatum Game"
+    },
+    {
+      "id": "dictator_game",
+      "label": "dictator_game"
+    },
+    {
+      "id": "fairness",
+      "label": "fairness"
+    },
+    {
+      "id": "centipede",
+      "label": "Centipede Game"
+    },
+    {
+      "id": "common_knowledge",
+      "label": "common_knowledge"
+    },
+    {
+      "id": "public_goods",
+      "label": "Public-Goods Game"
+    },
+    {
+      "id": "tragedy_commons",
+      "label": "tragedy_commons"
+    },
+    {
+      "id": "principal_agent",
+      "label": "principal_agent"
+    },
+    {
+      "id": "rationalizability",
+      "label": "rationalizability"
+    },
+    {
+      "id": "congestion",
+      "label": "congestion"
+    },
+    {
+      "id": "pareto",
+      "label": "Pareto Efficiency"
+    },
+    {
+      "id": "social_choice",
+      "label": "social_choice"
+    },
+    {
+      "id": "sequential_eq",
+      "label": "Sequential Equilibrium"
+    },
+    {
+      "id": "proper_eq",
+      "label": "Proper Equilibrium"
+    },
+    {
+      "id": "quantal_response",
+      "label": "Quantal Response Equilibrium"
+    },
+    {
+      "id": "level_k",
+      "label": "level_k"
+    },
+    {
+      "id": "global_games",
+      "label": "Global Games"
+    },
+    {
+      "id": "supermodular",
+      "label": "supermodular"
+    },
+    {
+      "id": "wardrop",
+      "label": "Wardrop Equilibrium"
+    },
+    {
+      "id": "price_of_stability",
+      "label": "Price of Stability"
+    },
+    {
+      "id": "smoothed_poa",
+      "label": "Smoothed Analysis of Price of Anarchy"
+    },
+    {
+      "id": "no_regret",
+      "label": "No-Regret Learning"
+    },
+    {
+      "id": "fictitious_play",
+      "label": "fictitious_play"
+    },
+    {
+      "id": "evol_stable_sets",
+      "label": "Evolutionarily Stable Sets"
+    },
+    {
+      "id": "cheap_talk",
+      "label": "Cheap Talk"
+    },
+    {
+      "id": "berge_eq",
+      "label": "Berge Equilibrium"
+    },
+    {
+      "id": "mean_field",
+      "label": "Mean Field Game"
+    },
+    {
+      "id": "algo_mech_design",
+      "label": "Algorithmic Mechanism Design"
+    },
+    {
+      "id": "fair_division",
+      "label": "Fair Division"
+    },
+    {
+      "id": "voting_theory",
+      "label": "Voting Theory"
+    },
+    {
+      "id": "banzhaf",
+      "label": "Banzhaf Power Index"
+    },
+    {
+      "id": "core_selection",
+      "label": "Core Selection (Matching)"
+    }
+  ],
+  "edges": [
+    {
+      "source": "nash_eq",
+      "target": "spe"
+    },
+    {
+      "source": "nash_eq",
+      "target": "pbe"
+    },
+    {
+      "source": "nash_eq",
+      "target": "mixed_strat"
+    },
+    {
+      "source": "nash_eq",
+      "target": "dom_strat"
+    },
+    {
+      "source": "nash_eq",
+      "target": "corr_eq"
+    },
+    {
+      "source": "prisoners_dilemma",
+      "target": "repeated_game"
+    },
+    {
+      "source": "prisoners_dilemma",
+      "target": "tft"
+    },
+    {
+      "source": "prisoners_dilemma",
+      "target": "folk"
+    },
+    {
+      "source": "prisoners_dilemma",
+      "target": "dom_strat"
+    },
+    {
+      "source": "dom_strat",
+      "target": "nash_eq"
+    },
+    {
+      "source": "dom_strat",
+      "target": "ied"
+    },
+    {
+      "source": "dom_strat",
+      "target": "vickrey"
+    },
+    {
+      "source": "dom_strat",
+      "target": "mech_design"
+    },
+    {
+      "source": "mixed_strat",
+      "target": "nash_eq"
+    },
+    {
+      "source": "mixed_strat",
+      "target": "pure_strat"
+    },
+    {
+      "source": "mixed_strat",
+      "target": "matching_pennies"
+    },
+    {
+      "source": "pure_strat",
+      "target": "mixed_strat"
+    },
+    {
+      "source": "pure_strat",
+      "target": "nash_eq"
+    },
+    {
+      "source": "pure_strat",
+      "target": "extensive_form"
+    },
+    {
+      "source": "pure_strat",
+      "target": "battle_of_sexes"
+    },
+    {
+      "source": "zero_sum",
+      "target": "minimax"
+    },
+    {
+      "source": "zero_sum",
+      "target": "nash_eq"
+    },
+    {
+      "source": "zero_sum",
+      "target": "matching_pennies"
+    },
+    {
+      "source": "coop_game",
+      "target": "shapley"
+    },
+    {
+      "source": "coop_game",
+      "target": "core"
+    },
+    {
+      "source": "coop_game",
+      "target": "coalition"
+    },
+    {
+      "source": "coop_game",
+      "target": "noncoop_game"
+    },
+    {
+      "source": "noncoop_game",
+      "target": "coop_game"
+    },
+    {
+      "source": "noncoop_game",
+      "target": "nash_eq"
+    },
+    {
+      "source": "noncoop_game",
+      "target": "spe"
+    },
+    {
+      "source": "noncoop_game",
+      "target": "bayesian_game"
+    },
+    {
+      "source": "minimax",
+      "target": "zero_sum"
+    },
+    {
+      "source": "minimax",
+      "target": "nash_eq"
+    },
+    {
+      "source": "minimax",
+      "target": "lp_duality"
+    },
+    {
+      "source": "minimax",
+      "target": "zermelo"
+    },
+    {
+      "source": "extensive_form",
+      "target": "normal_form"
+    },
+    {
+      "source": "extensive_form",
+      "target": "spe"
+    },
+    {
+      "source": "extensive_form",
+      "target": "backward_induction"
+    },
+    {
+      "source": "extensive_form",
+      "target": "perfect_info"
+    },
+    {
+      "source": "normal_form",
+      "target": "extensive_form"
+    },
+    {
+      "source": "normal_form",
+      "target": "nash_eq"
+    },
+    {
+      "source": "normal_form",
+      "target": "bimatrix"
+    },
+    {
+      "source": "bayesian_game",
+      "target": "pbe"
+    },
+    {
+      "source": "bayesian_game",
+      "target": "harsanyi"
+    },
+    {
+      "source": "bayesian_game",
+      "target": "signaling"
+    },
+    {
+      "source": "bayesian_game",
+      "target": "screening"
+    },
+    {
+      "source": "bayesian_game",
+      "target": "auction_theory"
+    },
+    {
+      "source": "repeated_game",
+      "target": "folk"
+    },
+    {
+      "source": "repeated_game",
+      "target": "tft"
+    },
+    {
+      "source": "repeated_game",
+      "target": "prisoners_dilemma"
+    },
+    {
+      "source": "repeated_game",
+      "target": "spe"
+    },
+    {
+      "source": "evo_gt",
+      "target": "ess"
+    },
+    {
+      "source": "evo_gt",
+      "target": "replicator"
+    },
+    {
+      "source": "evo_gt",
+      "target": "hawk_dove"
+    },
+    {
+      "source": "evo_gt",
+      "target": "nash_eq"
+    },
+    {
+      "source": "ess",
+      "target": "evo_gt"
+    },
+    {
+      "source": "ess",
+      "target": "replicator"
+    },
+    {
+      "source": "ess",
+      "target": "nash_eq"
+    },
+    {
+      "source": "ess",
+      "target": "hawk_dove"
+    },
+    {
+      "source": "replicator",
+      "target": "evo_gt"
+    },
+    {
+      "source": "replicator",
+      "target": "ess"
+    },
+    {
+      "source": "replicator",
+      "target": "nash_eq"
+    },
+    {
+      "source": "replicator",
+      "target": "poa"
+    },
+    {
+      "source": "stackelberg",
+      "target": "cournot"
+    },
+    {
+      "source": "stackelberg",
+      "target": "nash_eq"
+    },
+    {
+      "source": "stackelberg",
+      "target": "spe"
+    },
+    {
+      "source": "stackelberg",
+      "target": "backward_induction"
+    },
+    {
+      "source": "cournot",
+      "target": "stackelberg"
+    },
+    {
+      "source": "cournot",
+      "target": "bertrand"
+    },
+    {
+      "source": "cournot",
+      "target": "nash_eq"
+    },
+    {
+      "source": "cournot",
+      "target": "poa"
+    },
+    {
+      "source": "bertrand",
+      "target": "cournot"
+    },
+    {
+      "source": "bertrand",
+      "target": "nash_eq"
+    },
+    {
+      "source": "bertrand",
+      "target": "poa"
+    },
+    {
+      "source": "bertrand",
+      "target": "mech_design"
+    },
+    {
+      "source": "auction_theory",
+      "target": "vickrey"
+    },
+    {
+      "source": "auction_theory",
+      "target": "mech_design"
+    },
+    {
+      "source": "auction_theory",
+      "target": "revelation"
+    },
+    {
+      "source": "auction_theory",
+      "target": "bayesian_game"
+    },
+    {
+      "source": "auction_theory",
+      "target": "dom_strat"
+    },
+    {
+      "source": "vickrey",
+      "target": "auction_theory"
+    },
+    {
+      "source": "vickrey",
+      "target": "mech_design"
+    },
+    {
+      "source": "vickrey",
+      "target": "dom_strat"
+    },
+    {
+      "source": "vickrey",
+      "target": "revelation"
+    },
+    {
+      "source": "mech_design",
+      "target": "revelation"
+    },
+    {
+      "source": "mech_design",
+      "target": "vickrey"
+    },
+    {
+      "source": "mech_design",
+      "target": "auction_theory"
+    },
+    {
+      "source": "mech_design",
+      "target": "dom_strat"
+    },
+    {
+      "source": "revelation",
+      "target": "mech_design"
+    },
+    {
+      "source": "revelation",
+      "target": "auction_theory"
+    },
+    {
+      "source": "revelation",
+      "target": "bayesian_game"
+    },
+    {
+      "source": "shapley",
+      "target": "core"
+    },
+    {
+      "source": "shapley",
+      "target": "coop_game"
+    },
+    {
+      "source": "shapley",
+      "target": "coalition"
+    },
+    {
+      "source": "shapley",
+      "target": "nash_bargaining"
+    },
+    {
+      "source": "core",
+      "target": "shapley"
+    },
+    {
+      "source": "core",
+      "target": "coop_game"
+    },
+    {
+      "source": "core",
+      "target": "coalition"
+    },
+    {
+      "source": "coalition",
+      "target": "core"
+    },
+    {
+      "source": "coalition",
+      "target": "shapley"
+    },
+    {
+      "source": "coalition",
+      "target": "coop_game"
+    },
+    {
+      "source": "coalition",
+      "target": "hedonic"
+    },
+    {
+      "source": "nash_bargaining",
+      "target": "rubinstein"
+    },
+    {
+      "source": "nash_bargaining",
+      "target": "core"
+    },
+    {
+      "source": "nash_bargaining",
+      "target": "nash_eq"
+    },
+    {
+      "source": "nash_bargaining",
+      "target": "coop_game"
+    },
+    {
+      "source": "rubinstein",
+      "target": "nash_bargaining"
+    },
+    {
+      "source": "rubinstein",
+      "target": "spe"
+    },
+    {
+      "source": "rubinstein",
+      "target": "backward_induction"
+    },
+    {
+      "source": "rubinstein",
+      "target": "coop_game"
+    },
+    {
+      "source": "corr_eq",
+      "target": "nash_eq"
+    },
+    {
+      "source": "corr_eq",
+      "target": "poa"
+    },
+    {
+      "source": "corr_eq",
+      "target": "potential"
+    },
+    {
+      "source": "spe",
+      "target": "nash_eq"
+    },
+    {
+      "source": "spe",
+      "target": "pbe"
+    },
+    {
+      "source": "spe",
+      "target": "backward_induction"
+    },
+    {
+      "source": "spe",
+      "target": "extensive_form"
+    },
+    {
+      "source": "pbe",
+      "target": "spe"
+    },
+    {
+      "source": "pbe",
+      "target": "bayesian_game"
+    },
+    {
+      "source": "pbe",
+      "target": "signaling"
+    },
+    {
+      "source": "pbe",
+      "target": "screening"
+    },
+    {
+      "source": "trembling",
+      "target": "nash_eq"
+    },
+    {
+      "source": "trembling",
+      "target": "spe"
+    },
+    {
+      "source": "trembling",
+      "target": "trembling_hand"
+    },
+    {
+      "source": "trembling",
+      "target": "ied"
+    },
+    {
+      "source": "battle_of_sexes",
+      "target": "stag_hunt"
+    },
+    {
+      "source": "battle_of_sexes",
+      "target": "chicken"
+    },
+    {
+      "source": "battle_of_sexes",
+      "target": "nash_eq"
+    },
+    {
+      "source": "battle_of_sexes",
+      "target": "corr_eq"
+    },
+    {
+      "source": "hawk_dove",
+      "target": "ess"
+    },
+    {
+      "source": "hawk_dove",
+      "target": "evo_gt"
+    },
+    {
+      "source": "hawk_dove",
+      "target": "chicken"
+    },
+    {
+      "source": "hawk_dove",
+      "target": "replicator"
+    },
+    {
+      "source": "stag_hunt",
+      "target": "battle_of_sexes"
+    },
+    {
+      "source": "stag_hunt",
+      "target": "nash_eq"
+    },
+    {
+      "source": "stag_hunt",
+      "target": "coordination"
+    },
+    {
+      "source": "stag_hunt",
+      "target": "repeated_game"
+    },
+    {
+      "source": "chicken",
+      "target": "hawk_dove"
+    },
+    {
+      "source": "chicken",
+      "target": "battle_of_sexes"
+    },
+    {
+      "source": "chicken",
+      "target": "nash_eq"
+    },
+    {
+      "source": "chicken",
+      "target": "corr_eq"
+    },
+    {
+      "source": "matching_pennies",
+      "target": "zero_sum"
+    },
+    {
+      "source": "matching_pennies",
+      "target": "mixed_strat"
+    },
+    {
+      "source": "matching_pennies",
+      "target": "minimax"
+    },
+    {
+      "source": "matching_pennies",
+      "target": "nash_eq"
+    },
+    {
+      "source": "ultimatum",
+      "target": "spe"
+    },
+    {
+      "source": "ultimatum",
+      "target": "dictator_game"
+    },
+    {
+      "source": "ultimatum",
+      "target": "prisoners_dilemma"
+    },
+    {
+      "source": "ultimatum",
+      "target": "fairness"
+    },
+    {
+      "source": "centipede",
+      "target": "spe"
+    },
+    {
+      "source": "centipede",
+      "target": "backward_induction"
+    },
+    {
+      "source": "centipede",
+      "target": "prisoners_dilemma"
+    },
+    {
+      "source": "centipede",
+      "target": "common_knowledge"
+    },
+    {
+      "source": "public_goods",
+      "target": "prisoners_dilemma"
+    },
+    {
+      "source": "public_goods",
+      "target": "tragedy_commons"
+    },
+    {
+      "source": "public_goods",
+      "target": "nash_eq"
+    },
+    {
+      "source": "public_goods",
+      "target": "poa"
+    },
+    {
+      "source": "tragedy_commons",
+      "target": "public_goods"
+    },
+    {
+      "source": "tragedy_commons",
+      "target": "prisoners_dilemma"
+    },
+    {
+      "source": "tragedy_commons",
+      "target": "nash_eq"
+    },
+    {
+      "source": "tragedy_commons",
+      "target": "poa"
+    },
+    {
+      "source": "signaling",
+      "target": "pbe"
+    },
+    {
+      "source": "signaling",
+      "target": "bayesian_game"
+    },
+    {
+      "source": "signaling",
+      "target": "screening"
+    },
+    {
+      "source": "signaling",
+      "target": "principal_agent"
+    },
+    {
+      "source": "screening",
+      "target": "signaling"
+    },
+    {
+      "source": "screening",
+      "target": "principal_agent"
+    },
+    {
+      "source": "screening",
+      "target": "bayesian_game"
+    },
+    {
+      "source": "screening",
+      "target": "mech_design"
+    },
+    {
+      "source": "principal_agent",
+      "target": "screening"
+    },
+    {
+      "source": "principal_agent",
+      "target": "signaling"
+    },
+    {
+      "source": "principal_agent",
+      "target": "mech_design"
+    },
+    {
+      "source": "principal_agent",
+      "target": "bayesian_game"
+    },
+    {
+      "source": "folk",
+      "target": "repeated_game"
+    },
+    {
+      "source": "folk",
+      "target": "tft"
+    },
+    {
+      "source": "folk",
+      "target": "prisoners_dilemma"
+    },
+    {
+      "source": "folk",
+      "target": "spe"
+    },
+    {
+      "source": "tft",
+      "target": "repeated_game"
+    },
+    {
+      "source": "tft",
+      "target": "folk"
+    },
+    {
+      "source": "tft",
+      "target": "prisoners_dilemma"
+    },
+    {
+      "source": "tft",
+      "target": "evo_gt"
+    },
+    {
+      "source": "backward_induction",
+      "target": "spe"
+    },
+    {
+      "source": "backward_induction",
+      "target": "extensive_form"
+    },
+    {
+      "source": "backward_induction",
+      "target": "zermelo"
+    },
+    {
+      "source": "backward_induction",
+      "target": "stackelberg"
+    },
+    {
+      "source": "ied",
+      "target": "dom_strat"
+    },
+    {
+      "source": "ied",
+      "target": "rationalizability"
+    },
+    {
+      "source": "ied",
+      "target": "nash_eq"
+    },
+    {
+      "source": "ied",
+      "target": "common_knowledge"
+    },
+    {
+      "source": "rationalizability",
+      "target": "ied"
+    },
+    {
+      "source": "rationalizability",
+      "target": "nash_eq"
+    },
+    {
+      "source": "rationalizability",
+      "target": "dom_strat"
+    },
+    {
+      "source": "rationalizability",
+      "target": "common_knowledge"
+    },
+    {
+      "source": "common_knowledge",
+      "target": "ied"
+    },
+    {
+      "source": "common_knowledge",
+      "target": "rationalizability"
+    },
+    {
+      "source": "common_knowledge",
+      "target": "bayesian_game"
+    },
+    {
+      "source": "common_knowledge",
+      "target": "harsanyi"
+    },
+    {
+      "source": "potential",
+      "target": "congestion"
+    },
+    {
+      "source": "potential",
+      "target": "poa"
+    },
+    {
+      "source": "potential",
+      "target": "nash_eq"
+    },
+    {
+      "source": "congestion",
+      "target": "potential"
+    },
+    {
+      "source": "congestion",
+      "target": "poa"
+    },
+    {
+      "source": "congestion",
+      "target": "nash_eq"
+    },
+    {
+      "source": "poa",
+      "target": "nash_eq"
+    },
+    {
+      "source": "poa",
+      "target": "congestion"
+    },
+    {
+      "source": "poa",
+      "target": "corr_eq"
+    },
+    {
+      "source": "zermelo",
+      "target": "backward_induction"
+    },
+    {
+      "source": "zermelo",
+      "target": "extensive_form"
+    },
+    {
+      "source": "zermelo",
+      "target": "minimax"
+    },
+    {
+      "source": "zermelo",
+      "target": "nash_eq"
+    },
+    {
+      "source": "harsanyi",
+      "target": "bayesian_game"
+    },
+    {
+      "source": "harsanyi",
+      "target": "pbe"
+    },
+    {
+      "source": "harsanyi",
+      "target": "common_knowledge"
+    },
+    {
+      "source": "pareto",
+      "target": "nash_eq"
+    },
+    {
+      "source": "pareto",
+      "target": "prisoners_dilemma"
+    },
+    {
+      "source": "pareto",
+      "target": "nash_bargaining"
+    },
+    {
+      "source": "pareto",
+      "target": "social_choice"
+    },
+    {
+      "source": "sequential_eq",
+      "target": "pbe"
+    },
+    {
+      "source": "sequential_eq",
+      "target": "trembling"
+    },
+    {
+      "source": "sequential_eq",
+      "target": "signaling"
+    },
+    {
+      "source": "sequential_eq",
+      "target": "spe"
+    },
+    {
+      "source": "proper_eq",
+      "target": "trembling"
+    },
+    {
+      "source": "proper_eq",
+      "target": "nash_eq"
+    },
+    {
+      "source": "proper_eq",
+      "target": "sequential_eq"
+    },
+    {
+      "source": "quantal_response",
+      "target": "nash_eq"
+    },
+    {
+      "source": "quantal_response",
+      "target": "level_k"
+    },
+    {
+      "source": "quantal_response",
+      "target": "centipede"
+    },
+    {
+      "source": "quantal_response",
+      "target": "corr_eq"
+    },
+    {
+      "source": "level_k",
+      "target": "ied"
+    },
+    {
+      "source": "level_k",
+      "target": "quantal_response"
+    },
+    {
+      "source": "level_k",
+      "target": "centipede"
+    },
+    {
+      "source": "level_k",
+      "target": "rationalizability"
+    },
+    {
+      "source": "global_games",
+      "target": "supermodular"
+    },
+    {
+      "source": "global_games",
+      "target": "nash_eq"
+    },
+    {
+      "source": "global_games",
+      "target": "pbe"
+    },
+    {
+      "source": "global_games",
+      "target": "common_knowledge"
+    },
+    {
+      "source": "supermodular",
+      "target": "global_games"
+    },
+    {
+      "source": "supermodular",
+      "target": "nash_eq"
+    },
+    {
+      "source": "supermodular",
+      "target": "potential"
+    },
+    {
+      "source": "supermodular",
+      "target": "poa"
+    },
+    {
+      "source": "wardrop",
+      "target": "congestion"
+    },
+    {
+      "source": "wardrop",
+      "target": "poa"
+    },
+    {
+      "source": "wardrop",
+      "target": "potential"
+    },
+    {
+      "source": "wardrop",
+      "target": "nash_eq"
+    },
+    {
+      "source": "price_of_stability",
+      "target": "poa"
+    },
+    {
+      "source": "price_of_stability",
+      "target": "congestion"
+    },
+    {
+      "source": "price_of_stability",
+      "target": "nash_eq"
+    },
+    {
+      "source": "price_of_stability",
+      "target": "potential"
+    },
+    {
+      "source": "smoothed_poa",
+      "target": "poa"
+    },
+    {
+      "source": "smoothed_poa",
+      "target": "congestion"
+    },
+    {
+      "source": "smoothed_poa",
+      "target": "wardrop"
+    },
+    {
+      "source": "smoothed_poa",
+      "target": "nash_eq"
+    },
+    {
+      "source": "no_regret",
+      "target": "corr_eq"
+    },
+    {
+      "source": "no_regret",
+      "target": "fictitious_play"
+    },
+    {
+      "source": "no_regret",
+      "target": "nash_eq"
+    },
+    {
+      "source": "no_regret",
+      "target": "quantal_response"
+    },
+    {
+      "source": "fictitious_play",
+      "target": "no_regret"
+    },
+    {
+      "source": "fictitious_play",
+      "target": "nash_eq"
+    },
+    {
+      "source": "fictitious_play",
+      "target": "quantal_response"
+    },
+    {
+      "source": "fictitious_play",
+      "target": "corr_eq"
+    },
+    {
+      "source": "evol_stable_sets",
+      "target": "ess"
+    },
+    {
+      "source": "evol_stable_sets",
+      "target": "evo_gt"
+    },
+    {
+      "source": "evol_stable_sets",
+      "target": "replicator"
+    },
+    {
+      "source": "evol_stable_sets",
+      "target": "nash_eq"
+    },
+    {
+      "source": "cheap_talk",
+      "target": "signaling"
+    },
+    {
+      "source": "cheap_talk",
+      "target": "pbe"
+    },
+    {
+      "source": "cheap_talk",
+      "target": "common_knowledge"
+    },
+    {
+      "source": "cheap_talk",
+      "target": "screening"
+    },
+    {
+      "source": "berge_eq",
+      "target": "nash_eq"
+    },
+    {
+      "source": "berge_eq",
+      "target": "pareto"
+    },
+    {
+      "source": "berge_eq",
+      "target": "coop_game"
+    },
+    {
+      "source": "berge_eq",
+      "target": "nash_bargaining"
+    },
+    {
+      "source": "mean_field",
+      "target": "nash_eq"
+    },
+    {
+      "source": "mean_field",
+      "target": "evo_gt"
+    },
+    {
+      "source": "mean_field",
+      "target": "potential"
+    },
+    {
+      "source": "mean_field",
+      "target": "repeated_game"
+    },
+    {
+      "source": "algo_mech_design",
+      "target": "mech_design"
+    },
+    {
+      "source": "algo_mech_design",
+      "target": "auction_theory"
+    },
+    {
+      "source": "algo_mech_design",
+      "target": "revelation"
+    },
+    {
+      "source": "algo_mech_design",
+      "target": "vickrey"
+    },
+    {
+      "source": "fair_division",
+      "target": "coop_game"
+    },
+    {
+      "source": "fair_division",
+      "target": "shapley"
+    },
+    {
+      "source": "fair_division",
+      "target": "core"
+    },
+    {
+      "source": "fair_division",
+      "target": "nash_bargaining"
+    },
+    {
+      "source": "voting_theory",
+      "target": "social_choice"
+    },
+    {
+      "source": "voting_theory",
+      "target": "mech_design"
+    },
+    {
+      "source": "voting_theory",
+      "target": "dom_strat"
+    },
+    {
+      "source": "voting_theory",
+      "target": "revelation"
+    },
+    {
+      "source": "social_choice",
+      "target": "voting_theory"
+    },
+    {
+      "source": "social_choice",
+      "target": "mech_design"
+    },
+    {
+      "source": "social_choice",
+      "target": "pareto"
+    },
+    {
+      "source": "social_choice",
+      "target": "fair_division"
+    },
+    {
+      "source": "banzhaf",
+      "target": "core"
+    },
+    {
+      "source": "banzhaf",
+      "target": "shapley"
+    },
+    {
+      "source": "banzhaf",
+      "target": "coalition"
+    },
+    {
+      "source": "banzhaf",
+      "target": "voting_theory"
+    },
+    {
+      "source": "core_selection",
+      "target": "coalition"
+    },
+    {
+      "source": "core_selection",
+      "target": "core"
+    },
+    {
+      "source": "core_selection",
+      "target": "mech_design"
+    },
+    {
+      "source": "core_selection",
+      "target": "fair_division"
+    }
+  ]
+}

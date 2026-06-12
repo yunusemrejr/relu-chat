@@ -1,0 +1,128 @@
+#!/bin/bash
+
+# OPC UA Connection Test Script
+# This script tests connectivity to an OPC UA server
+
+echo "========================================"
+echo "    OPC UA Connection Test Script"
+echo "========================================"
+
+# Get IP address from user
+read -p "Enter OPC UA server IP address: " IP_ADDRESS
+
+# Get port from user (with default)
+read -p "Enter OPC UA server port [default: 4840]: " PORT
+PORT=${PORT:-4840}
+
+echo ""
+echo "Testing connection to: opc.tcp://$IP_ADDRESS:$PORT"
+echo ""
+
+# Inline Python script for OPC UA connection test
+python3 - << EOF
+import sys
+import asyncio
+from asyncua import Client
+import socket
+
+async def test_opcua_connection():
+    url = f"opc.tcp://$IP_ADDRESS:$PORT"
+    
+    # First, test basic network connectivity
+    try:
+        # Test if we can establish a TCP connection
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(5)
+        result = sock.connect_ex(('$IP_ADDRESS', $PORT))
+        sock.close()
+        
+        if result != 0:
+            print("❌ Network connection failed - cannot reach host/port")
+            return False
+    except Exception as e:
+        print(f"❌ Network error: {e}")
+        return False
+    
+    # Now test OPC UA connection
+    client = None
+    try:
+        print(f"🔗 Attempting OPC UA connection to {url}...")
+        client = Client(url=url)
+        client.set_security_string("Basic256Sha256,SignAndEncrypt,certificate.pem,private_key.pem")
+        
+        # Set timeout for connection
+        async with client as connected_client:
+            # Try to read the root node to verify connection
+            root = connected_client.get_root_node()
+            root_id = await root.read_browse_name()
+            print("✅ Successfully connected to OPC UA server!")
+            print(f"   Server Root: {root_id}")
+            return True
+            
+    except asyncio.TimeoutError:
+        print("❌ Connection timeout - server may be unreachable or not responding")
+        return False
+    except ConnectionRefusedError:
+        print("❌ Connection refused - OPC UA server may not be running on specified port")
+        return False
+    except Exception as e:
+        print(f"❌ OPC UA connection failed: {e}")
+        return False
+    finally:
+        if client:
+            try:
+                client.disconnect()
+            except:
+                pass
+
+# For simpler synchronous version (if async doesn't work)
+def test_opcua_sync():
+    try:
+        from opcua import Client
+        url = f"opc.tcp://$IP_ADDRESS:$PORT"
+        print(f"🔗 Attempting OPC UA connection to {url}...")
+        
+        client = Client(url)
+        client.set_security_string("Basic256Sha256,SignAndEncrypt,certificate.pem,private_key.pem")
+        client.application_uri = "urn:localhost:OPCUA:ConnectionTest"
+        client.connect_timeout = 5000  # 5 seconds
+        
+        try:
+            client.connect()
+            root = client.get_root_node()
+            print("✅ Successfully connected to OPC UA server!")
+            print(f"   Server Root: {root.get_browse_name()}")
+            client.disconnect()
+            return True
+        except Exception as e:
+            print(f"❌ OPC UA connection failed: {e}")
+            return False
+            
+    except ImportError:
+        print("⚠️  OPC UA library not available. Installing required packages...")
+        return False
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
+
+# Try async first, then fall back to sync
+try:
+    # Try async version
+    result = asyncio.run(test_opcua_connection())
+    sys.exit(0 if result else 1)
+except:
+    # Fall back to sync version
+    result = test_opcua_sync()
+    sys.exit(0 if result else 1)
+EOF
+
+# Capture the exit code from Python
+RESULT=$?
+
+echo ""
+if [ $RESULT -eq 0 ]; then
+    echo "🎉 Connection test: SUCCESS"
+else
+    echo "💥 Connection test: FAILED"
+fi
+echo "========================================"

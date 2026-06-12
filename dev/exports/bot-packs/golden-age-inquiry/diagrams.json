@@ -1,0 +1,874 @@
+{
+  "nodes": [
+    {
+      "id": "house_of_wisdom",
+      "label": "House of Wisdom"
+    },
+    {
+      "id": "al_khwarizmi",
+      "label": "al_khwarizmi"
+    },
+    {
+      "id": "al_kindi",
+      "label": "al_kindi"
+    },
+    {
+      "id": "translation_movement",
+      "label": "translation_movement"
+    },
+    {
+      "id": "mamun",
+      "label": "mamun"
+    },
+    {
+      "id": "algebra",
+      "label": "algebra"
+    },
+    {
+      "id": "ibn_sina",
+      "label": "ibn_sina"
+    },
+    {
+      "id": "omar_khayyam",
+      "label": "omar_khayyam"
+    },
+    {
+      "id": "al_razI",
+      "label": "al_razI"
+    },
+    {
+      "id": "ibn_al_haytham",
+      "label": "ibn_al_haytham"
+    },
+    {
+      "id": "canon_of_medicine",
+      "label": "canon_of_medicine"
+    },
+    {
+      "id": "medicine",
+      "label": "medicine"
+    },
+    {
+      "id": "optics",
+      "label": "optics"
+    },
+    {
+      "id": "camera_obscura",
+      "label": "camera_obscura"
+    },
+    {
+      "id": "scientific_method",
+      "label": "scientific_method"
+    },
+    {
+      "id": "ibn_sahl",
+      "label": "ibn_sahl"
+    },
+    {
+      "id": "hunayn_ibn_ishaq",
+      "label": "hunayn_ibn_ishaq"
+    },
+    {
+      "id": "alchemy",
+      "label": "alchemy"
+    },
+    {
+      "id": "astrolabe",
+      "label": "Astrolabe"
+    },
+    {
+      "id": "astronomy",
+      "label": "astronomy"
+    },
+    {
+      "id": "al_zarqali",
+      "label": "al_zarqali"
+    },
+    {
+      "id": "nasir_al_din_tusi",
+      "label": "nasir_al_din_tusi"
+    },
+    {
+      "id": "al_battani",
+      "label": "al_battani"
+    },
+    {
+      "id": "maragha_school",
+      "label": "maragha_school"
+    },
+    {
+      "id": "ulugh_beg",
+      "label": "ulugh_beg"
+    },
+    {
+      "id": "algebra_development",
+      "label": "Development of Algebra"
+    },
+    {
+      "id": "ibn_al_shatir",
+      "label": "ibn_al_shatir"
+    },
+    {
+      "id": "paper_making",
+      "label": "Paper Making"
+    },
+    {
+      "id": "ibn_rushd",
+      "label": "Ibn Rushd (Averroes)"
+    },
+    {
+      "id": "al_ghazali",
+      "label": "al_ghazali"
+    },
+    {
+      "id": "philosophy",
+      "label": "philosophy"
+    },
+    {
+      "id": "medicine_golden_age",
+      "label": "Medicine in the Golden Age"
+    },
+    {
+      "id": "al_zahrawi",
+      "label": "al_zahrawi"
+    },
+    {
+      "id": "al_biruni",
+      "label": "Al-Biruni"
+    },
+    {
+      "id": "ibn_al_nafis",
+      "label": "Ibn al-Nafis"
+    },
+    {
+      "id": "philosophy_golden_age",
+      "label": "Philosophy in the Golden Age"
+    },
+    {
+      "id": "al_farabi",
+      "label": "Al-Farabi"
+    },
+    {
+      "id": "al_farghani",
+      "label": "al_farghani"
+    },
+    {
+      "id": "al_idrisi",
+      "label": "Al-Idrisi"
+    },
+    {
+      "id": "ibn_khaldun",
+      "label": "Ibn Khaldun"
+    },
+    {
+      "id": "al_jazari",
+      "label": "Al-Jazari"
+    },
+    {
+      "id": "banu_musa",
+      "label": "Banu Musa Brothers"
+    },
+    {
+      "id": "thabit_ibn_qurra",
+      "label": "Thabit ibn Qurra"
+    },
+    {
+      "id": "al_karaji",
+      "label": "Al-Karaji"
+    },
+    {
+      "id": "al_samawal",
+      "label": "al_samawal"
+    },
+    {
+      "id": "qusta_ibn_luqa",
+      "label": "Qusta ibn Luqa"
+    },
+    {
+      "id": "al_majriti",
+      "label": "Al-Majriti"
+    },
+    {
+      "id": "fatima_al_fihri",
+      "label": "Fatima al-Fihri"
+    },
+    {
+      "id": "mariam_al_astrulabi",
+      "label": "Mariam al-Astrulabi"
+    },
+    {
+      "id": "lubana",
+      "label": "Lubana of Cordoba"
+    },
+    {
+      "id": "abbas_ibn_firnas",
+      "label": "Abbas ibn Firnas"
+    },
+    {
+      "id": "ibn_bajjah",
+      "label": "Ibn Bajjah (Avempace)"
+    },
+    {
+      "id": "ibn_tufayl",
+      "label": "ibn_tufayl"
+    }
+  ],
+  "edges": [
+    {
+      "source": "house_of_wisdom",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "house_of_wisdom",
+      "target": "al_kindi"
+    },
+    {
+      "source": "house_of_wisdom",
+      "target": "translation_movement"
+    },
+    {
+      "source": "house_of_wisdom",
+      "target": "mamun"
+    },
+    {
+      "source": "al_khwarizmi",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "al_khwarizmi",
+      "target": "algebra"
+    },
+    {
+      "source": "al_khwarizmi",
+      "target": "al_kindi"
+    },
+    {
+      "source": "al_khwarizmi",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "algebra",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "algebra",
+      "target": "omar_khayyam"
+    },
+    {
+      "source": "algebra",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "al_kindi",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "al_kindi",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "al_kindi",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "al_kindi",
+      "target": "translation_movement"
+    },
+    {
+      "source": "ibn_sina",
+      "target": "al_razI"
+    },
+    {
+      "source": "ibn_sina",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "ibn_sina",
+      "target": "ibn_al_haytham"
+    },
+    {
+      "source": "ibn_sina",
+      "target": "canon_of_medicine"
+    },
+    {
+      "source": "canon_of_medicine",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "canon_of_medicine",
+      "target": "al_razI"
+    },
+    {
+      "source": "canon_of_medicine",
+      "target": "medicine"
+    },
+    {
+      "source": "ibn_al_haytham",
+      "target": "optics"
+    },
+    {
+      "source": "ibn_al_haytham",
+      "target": "camera_obscura"
+    },
+    {
+      "source": "ibn_al_haytham",
+      "target": "scientific_method"
+    },
+    {
+      "source": "ibn_al_haytham",
+      "target": "al_razI"
+    },
+    {
+      "source": "optics",
+      "target": "ibn_al_haytham"
+    },
+    {
+      "source": "optics",
+      "target": "camera_obscura"
+    },
+    {
+      "source": "optics",
+      "target": "ibn_sahl"
+    },
+    {
+      "source": "translation_movement",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "translation_movement",
+      "target": "al_kindi"
+    },
+    {
+      "source": "translation_movement",
+      "target": "hunayn_ibn_ishaq"
+    },
+    {
+      "source": "al_razI",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "al_razI",
+      "target": "canon_of_medicine"
+    },
+    {
+      "source": "al_razI",
+      "target": "medicine"
+    },
+    {
+      "source": "al_razI",
+      "target": "alchemy"
+    },
+    {
+      "source": "astrolabe",
+      "target": "astronomy"
+    },
+    {
+      "source": "astrolabe",
+      "target": "al_zarqali"
+    },
+    {
+      "source": "astrolabe",
+      "target": "nasir_al_din_tusi"
+    },
+    {
+      "source": "astronomy",
+      "target": "astrolabe"
+    },
+    {
+      "source": "astronomy",
+      "target": "al_battani"
+    },
+    {
+      "source": "astronomy",
+      "target": "maragha_school"
+    },
+    {
+      "source": "astronomy",
+      "target": "ulugh_beg"
+    },
+    {
+      "source": "algebra_development",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "algebra_development",
+      "target": "omar_khayyam"
+    },
+    {
+      "source": "algebra_development",
+      "target": "algebra"
+    },
+    {
+      "source": "maragha_school",
+      "target": "astronomy"
+    },
+    {
+      "source": "maragha_school",
+      "target": "nasir_al_din_tusi"
+    },
+    {
+      "source": "maragha_school",
+      "target": "ibn_al_shatir"
+    },
+    {
+      "source": "paper_making",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "paper_making",
+      "target": "translation_movement"
+    },
+    {
+      "source": "ibn_rushd",
+      "target": "al_ghazali"
+    },
+    {
+      "source": "ibn_rushd",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "ibn_rushd",
+      "target": "philosophy"
+    },
+    {
+      "source": "al_ghazali",
+      "target": "ibn_rushd"
+    },
+    {
+      "source": "al_ghazali",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "al_ghazali",
+      "target": "philosophy"
+    },
+    {
+      "source": "medicine_golden_age",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "medicine_golden_age",
+      "target": "al_razI"
+    },
+    {
+      "source": "medicine_golden_age",
+      "target": "canon_of_medicine"
+    },
+    {
+      "source": "medicine_golden_age",
+      "target": "al_zahrawi"
+    },
+    {
+      "source": "al_biruni",
+      "target": "astronomy"
+    },
+    {
+      "source": "al_biruni",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "al_zahrawi",
+      "target": "medicine_golden_age"
+    },
+    {
+      "source": "al_zahrawi",
+      "target": "al_razI"
+    },
+    {
+      "source": "al_zahrawi",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "ibn_al_nafis",
+      "target": "medicine_golden_age"
+    },
+    {
+      "source": "ibn_al_nafis",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "ibn_al_nafis",
+      "target": "canon_of_medicine"
+    },
+    {
+      "source": "philosophy_golden_age",
+      "target": "al_kindi"
+    },
+    {
+      "source": "philosophy_golden_age",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "philosophy_golden_age",
+      "target": "ibn_rushd"
+    },
+    {
+      "source": "philosophy_golden_age",
+      "target": "al_ghazali"
+    },
+    {
+      "source": "al_farabi",
+      "target": "philosophy_golden_age"
+    },
+    {
+      "source": "al_farabi",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "al_farabi",
+      "target": "ibn_rushd"
+    },
+    {
+      "source": "al_farabi",
+      "target": "al_kindi"
+    },
+    {
+      "source": "omar_khayyam",
+      "target": "algebra_development"
+    },
+    {
+      "source": "omar_khayyam",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "omar_khayyam",
+      "target": "al_biruni"
+    },
+    {
+      "source": "al_zarqali",
+      "target": "astrolabe"
+    },
+    {
+      "source": "al_zarqali",
+      "target": "astronomy"
+    },
+    {
+      "source": "al_zarqali",
+      "target": "al_farghani"
+    },
+    {
+      "source": "nasir_al_din_tusi",
+      "target": "maragha_school"
+    },
+    {
+      "source": "nasir_al_din_tusi",
+      "target": "astronomy"
+    },
+    {
+      "source": "nasir_al_din_tusi",
+      "target": "ibn_al_shatir"
+    },
+    {
+      "source": "nasir_al_din_tusi",
+      "target": "ulugh_beg"
+    },
+    {
+      "source": "ibn_al_shatir",
+      "target": "maragha_school"
+    },
+    {
+      "source": "ibn_al_shatir",
+      "target": "astronomy"
+    },
+    {
+      "source": "ibn_al_shatir",
+      "target": "nasir_al_din_tusi"
+    },
+    {
+      "source": "ibn_al_shatir",
+      "target": "al_battani"
+    },
+    {
+      "source": "ulugh_beg",
+      "target": "astronomy"
+    },
+    {
+      "source": "ulugh_beg",
+      "target": "maragha_school"
+    },
+    {
+      "source": "ulugh_beg",
+      "target": "nasir_al_din_tusi"
+    },
+    {
+      "source": "ulugh_beg",
+      "target": "al_battani"
+    },
+    {
+      "source": "al_battani",
+      "target": "astronomy"
+    },
+    {
+      "source": "al_battani",
+      "target": "astrolabe"
+    },
+    {
+      "source": "al_battani",
+      "target": "al_farghani"
+    },
+    {
+      "source": "al_battani",
+      "target": "ulugh_beg"
+    },
+    {
+      "source": "hunayn_ibn_ishaq",
+      "target": "translation_movement"
+    },
+    {
+      "source": "hunayn_ibn_ishaq",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "hunayn_ibn_ishaq",
+      "target": "al_kindi"
+    },
+    {
+      "source": "hunayn_ibn_ishaq",
+      "target": "medicine_golden_age"
+    },
+    {
+      "source": "al_idrisi",
+      "target": "astronomy"
+    },
+    {
+      "source": "al_idrisi",
+      "target": "paper_making"
+    },
+    {
+      "source": "al_idrisi",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "ibn_khaldun",
+      "target": "philosophy_golden_age"
+    },
+    {
+      "source": "ibn_khaldun",
+      "target": "al_biruni"
+    },
+    {
+      "source": "ibn_khaldun",
+      "target": "al_idrisi"
+    },
+    {
+      "source": "al_jazari",
+      "target": "paper_making"
+    },
+    {
+      "source": "al_jazari",
+      "target": "ibn_sina"
+    },
+    {
+      "source": "al_jazari",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "banu_musa",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "banu_musa",
+      "target": "al_jazari"
+    },
+    {
+      "source": "banu_musa",
+      "target": "translation_movement"
+    },
+    {
+      "source": "thabit_ibn_qurra",
+      "target": "translation_movement"
+    },
+    {
+      "source": "thabit_ibn_qurra",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "thabit_ibn_qurra",
+      "target": "algebra"
+    },
+    {
+      "source": "thabit_ibn_qurra",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "al_karaji",
+      "target": "algebra"
+    },
+    {
+      "source": "al_karaji",
+      "target": "algebra_development"
+    },
+    {
+      "source": "al_karaji",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "al_karaji",
+      "target": "al_samawal"
+    },
+    {
+      "source": "al_samawal",
+      "target": "algebra"
+    },
+    {
+      "source": "al_samawal",
+      "target": "algebra_development"
+    },
+    {
+      "source": "al_samawal",
+      "target": "al_karaji"
+    },
+    {
+      "source": "al_samawal",
+      "target": "al_khwarizmi"
+    },
+    {
+      "source": "ibn_sahl",
+      "target": "optics"
+    },
+    {
+      "source": "ibn_sahl",
+      "target": "ibn_al_haytham"
+    },
+    {
+      "source": "ibn_sahl",
+      "target": "al_kindi"
+    },
+    {
+      "source": "al_farghani",
+      "target": "astronomy"
+    },
+    {
+      "source": "al_farghani",
+      "target": "al_battani"
+    },
+    {
+      "source": "al_farghani",
+      "target": "al_zarqali"
+    },
+    {
+      "source": "al_farghani",
+      "target": "astrolabe"
+    },
+    {
+      "source": "qusta_ibn_luqa",
+      "target": "translation_movement"
+    },
+    {
+      "source": "qusta_ibn_luqa",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "qusta_ibn_luqa",
+      "target": "hunayn_ibn_ishaq"
+    },
+    {
+      "source": "qusta_ibn_luqa",
+      "target": "medicine_golden_age"
+    },
+    {
+      "source": "al_majriti",
+      "target": "astronomy"
+    },
+    {
+      "source": "al_majriti",
+      "target": "astrolabe"
+    },
+    {
+      "source": "al_majriti",
+      "target": "al_zarqali"
+    },
+    {
+      "source": "al_majriti",
+      "target": "al_farghani"
+    },
+    {
+      "source": "fatima_al_fihri",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "fatima_al_fihri",
+      "target": "paper_making"
+    },
+    {
+      "source": "fatima_al_fihri",
+      "target": "translation_movement"
+    },
+    {
+      "source": "mariam_al_astrulabi",
+      "target": "astrolabe"
+    },
+    {
+      "source": "mariam_al_astrulabi",
+      "target": "astronomy"
+    },
+    {
+      "source": "mariam_al_astrulabi",
+      "target": "al_zarqali"
+    },
+    {
+      "source": "lubana",
+      "target": "paper_making"
+    },
+    {
+      "source": "lubana",
+      "target": "house_of_wisdom"
+    },
+    {
+      "source": "lubana",
+      "target": "al_majriti"
+    },
+    {
+      "source": "lubana",
+      "target": "al_zarqali"
+    },
+    {
+      "source": "abbas_ibn_firnas",
+      "target": "al_majriti"
+    },
+    {
+      "source": "abbas_ibn_firnas",
+      "target": "astronomy"
+    },
+    {
+      "source": "abbas_ibn_firnas",
+      "target": "optics"
+    },
+    {
+      "source": "abbas_ibn_firnas",
+      "target": "al_jazari"
+    },
+    {
+      "source": "ibn_bajjah",
+      "target": "ibn_tufayl"
+    },
+    {
+      "source": "ibn_bajjah",
+      "target": "ibn_rushd"
+    },
+    {
+      "source": "ibn_bajjah",
+      "target": "philosophy_golden_age"
+    },
+    {
+      "source": "ibn_bajjah",
+      "target": "al_farabi"
+    },
+    {
+      "source": "ibn_tufayl",
+      "target": "ibn_bajjah"
+    },
+    {
+      "source": "ibn_tufayl",
+      "target": "ibn_rushd"
+    },
+    {
+      "source": "ibn_tufayl",
+      "target": "philosophy_golden_age"
+    },
+    {
+      "source": "ibn_tufayl",
+      "target": "al_ghazali"
+    }
+  ]
+}

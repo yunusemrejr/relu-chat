@@ -1,0 +1,918 @@
+{
+  "nash_eq": {
+    "entry_id": "nash_eq",
+    "name": "Nash Equilibrium",
+    "summary": "A profile of strategies where no player can profit by unilateral deviation.",
+    "related": [
+      "spe",
+      "pbe",
+      "mixed_strat",
+      "dom_strat",
+      "corr_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "prisoners_dilemma": {
+    "entry_id": "prisoners_dilemma",
+    "name": "Prisoner\\'s Dilemma",
+    "summary": "Canonical 2x2 game where individually rational defection leads to a Pareto-inferior outcome.",
+    "related": [
+      "repeated_game",
+      "tft",
+      "folk",
+      "dom_strat"
+    ],
+    "fragmentCount": 10
+  },
+  "dom_strat": {
+    "entry_id": "dom_strat",
+    "name": "Dominant Strategy",
+    "summary": "A strategy that yields at least as high a payoff as any alternative regardless of others\\' play.",
+    "related": [
+      "nash_eq",
+      "ied",
+      "vickrey",
+      "mech_design"
+    ],
+    "fragmentCount": 10
+  },
+  "mixed_strat": {
+    "entry_id": "mixed_strat",
+    "name": "Mixed Strategy",
+    "summary": "A probability distribution over a player\\'s pure strategies.",
+    "related": [
+      "nash_eq",
+      "pure_strat",
+      "matching_pennies"
+    ],
+    "fragmentCount": 10
+  },
+  "pure_strat": {
+    "entry_id": "pure_strat",
+    "name": "Pure Strategy",
+    "summary": "A deterministic choice of an action from a player\\'s strategy set.",
+    "related": [
+      "mixed_strat",
+      "nash_eq",
+      "extensive_form",
+      "battle_of_sexes"
+    ],
+    "fragmentCount": 10
+  },
+  "zero_sum": {
+    "entry_id": "zero_sum",
+    "name": "Zero-Sum Game",
+    "summary": "A game in which one player\\'s gain exactly offsets the others\\' losses.",
+    "related": [
+      "minimax",
+      "nash_eq",
+      "matching_pennies"
+    ],
+    "fragmentCount": 10
+  },
+  "coop_game": {
+    "entry_id": "coop_game",
+    "name": "Cooperative Game",
+    "summary": "A game where binding agreements among coalitions are allowed; analysis focuses on joint payoffs.",
+    "related": [
+      "shapley",
+      "core",
+      "coalition",
+      "noncoop_game"
+    ],
+    "fragmentCount": 10
+  },
+  "noncoop_game": {
+    "entry_id": "noncoop_game",
+    "name": "Non-Cooperative Game",
+    "summary": "A game in which binding agreements are not possible; each player chooses independently.",
+    "related": [
+      "coop_game",
+      "nash_eq",
+      "spe",
+      "bayesian_game"
+    ],
+    "fragmentCount": 10
+  },
+  "minimax": {
+    "entry_id": "minimax",
+    "name": "Minimax Theorem",
+    "summary": "In any finite two-player zero-sum game, max-min and min-max values coincide in mixed strategies.",
+    "related": [
+      "zero_sum",
+      "nash_eq",
+      "lp_duality",
+      "zermelo"
+    ],
+    "fragmentCount": 10
+  },
+  "extensive_form": {
+    "entry_id": "extensive_form",
+    "name": "Extensive-Form Game",
+    "summary": "A representation of sequential play using a rooted tree with information sets.",
+    "related": [
+      "normal_form",
+      "spe",
+      "backward_induction",
+      "perfect_info"
+    ],
+    "fragmentCount": 10
+  },
+  "normal_form": {
+    "entry_id": "normal_form",
+    "name": "Normal-Form Game",
+    "summary": "A simultaneous-move representation via strategy sets and payoff functions.",
+    "related": [
+      "extensive_form",
+      "nash_eq",
+      "bimatrix"
+    ],
+    "fragmentCount": 10
+  },
+  "bayesian_game": {
+    "entry_id": "bayesian_game",
+    "name": "Bayesian Game",
+    "summary": "A game in which players have private information (types) drawn from a common prior.",
+    "related": [
+      "pbe",
+      "harsanyi",
+      "signaling",
+      "screening",
+      "auction_theory"
+    ],
+    "fragmentCount": 10
+  },
+  "repeated_game": {
+    "entry_id": "repeated_game",
+    "name": "Repeated Game",
+    "summary": "A stage game played repeatedly, allowing histories to influence future play.",
+    "related": [
+      "folk",
+      "tft",
+      "prisoners_dilemma",
+      "spe"
+    ],
+    "fragmentCount": 10
+  },
+  "evo_gt": {
+    "entry_id": "evo_gt",
+    "name": "Evolutionary Game Theory",
+    "summary": "Studies strategy frequencies in large populations under selection and mutation.",
+    "related": [
+      "ess",
+      "replicator",
+      "hawk_dove",
+      "nash_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "ess": {
+    "entry_id": "ess",
+    "name": "Evolutionarily Stable Strategy",
+    "summary": "A strategy that, if adopted by the population, cannot be invaded by any rare mutant.",
+    "related": [
+      "evo_gt",
+      "replicator",
+      "nash_eq",
+      "hawk_dove"
+    ],
+    "fragmentCount": 10
+  },
+  "replicator": {
+    "entry_id": "replicator",
+    "name": "Replicator Dynamics",
+    "summary": "ODEs describing how strategy frequencies evolve under selection proportional to fitness.",
+    "related": [
+      "evo_gt",
+      "ess",
+      "nash_eq",
+      "poa"
+    ],
+    "fragmentCount": 10
+  },
+  "stackelberg": {
+    "entry_id": "stackelberg",
+    "name": "Stackelberg Competition",
+    "summary": "A sequential duopoly in which a leader commits to an output and the follower best-responds.",
+    "related": [
+      "cournot",
+      "nash_eq",
+      "spe",
+      "backward_induction"
+    ],
+    "fragmentCount": 10
+  },
+  "cournot": {
+    "entry_id": "cournot",
+    "name": "Cournot Competition",
+    "summary": "A simultaneous-move duopoly/oligopoly with quantity as the strategic variable.",
+    "related": [
+      "stackelberg",
+      "bertrand",
+      "nash_eq",
+      "poa"
+    ],
+    "fragmentCount": 10
+  },
+  "bertrand": {
+    "entry_id": "bertrand",
+    "name": "Bertrand Competition",
+    "summary": "Simultaneous price-setting competition among firms producing a homogeneous good.",
+    "related": [
+      "cournot",
+      "nash_eq",
+      "poa",
+      "mech_design"
+    ],
+    "fragmentCount": 10
+  },
+  "auction_theory": {
+    "entry_id": "auction_theory",
+    "name": "Auction Theory",
+    "summary": "Study of resource allocation via bidding mechanisms.",
+    "related": [
+      "vickrey",
+      "mech_design",
+      "revelation",
+      "bayesian_game",
+      "dom_strat"
+    ],
+    "fragmentCount": 10
+  },
+  "vickrey": {
+    "entry_id": "vickrey",
+    "name": "Vickrey Auction",
+    "summary": "A sealed-bid auction where the highest bidder wins and pays the second-highest bid.",
+    "related": [
+      "auction_theory",
+      "mech_design",
+      "dom_strat",
+      "revelation"
+    ],
+    "fragmentCount": 10
+  },
+  "mech_design": {
+    "entry_id": "mech_design",
+    "name": "Mechanism Design",
+    "summary": "Designing the rules of a game so that equilibrium behavior yields desired outcomes.",
+    "related": [
+      "revelation",
+      "vickrey",
+      "auction_theory",
+      "dom_strat"
+    ],
+    "fragmentCount": 10
+  },
+  "revelation": {
+    "entry_id": "revelation",
+    "name": "Revelation Principle",
+    "summary": "Any equilibrium outcome of any mechanism can be reproduced by a direct truthful mechanism.",
+    "related": [
+      "mech_design",
+      "auction_theory",
+      "bayesian_game"
+    ],
+    "fragmentCount": 10
+  },
+  "shapley": {
+    "entry_id": "shapley",
+    "name": "Shapley Value",
+    "summary": "A unique fair allocation in cooperative games satisfying efficiency, symmetry, dummy, and additivity.",
+    "related": [
+      "core",
+      "coop_game",
+      "coalition",
+      "nash_bargaining"
+    ],
+    "fragmentCount": 10
+  },
+  "core": {
+    "entry_id": "core",
+    "name": "Core (of a Cooperative Game)",
+    "summary": "The set of coalition-stable payoff allocations.",
+    "related": [
+      "shapley",
+      "coop_game",
+      "coalition"
+    ],
+    "fragmentCount": 10
+  },
+  "coalition": {
+    "entry_id": "coalition",
+    "name": "Coalition Formation",
+    "summary": "Study of which coalitions form and how they share surplus.",
+    "related": [
+      "core",
+      "shapley",
+      "coop_game",
+      "hedonic"
+    ],
+    "fragmentCount": 10
+  },
+  "nash_bargaining": {
+    "entry_id": "nash_bargaining",
+    "name": "Nash Bargaining Solution",
+    "summary": "The unique allocation satisfying Pareto-efficiency, symmetry, scale invariance, and IIA.",
+    "related": [
+      "rubinstein",
+      "core",
+      "nash_eq",
+      "coop_game"
+    ],
+    "fragmentCount": 10
+  },
+  "rubinstein": {
+    "entry_id": "rubinstein",
+    "name": "Rubinstein Bargaining",
+    "summary": "A non-cooperative alternating-offers model of bargaining with a unique subgame-perfect outcome.",
+    "related": [
+      "nash_bargaining",
+      "spe",
+      "backward_induction",
+      "coop_game"
+    ],
+    "fragmentCount": 10
+  },
+  "corr_eq": {
+    "entry_id": "corr_eq",
+    "name": "Correlated Equilibrium",
+    "summary": "An equilibrium in which players obey recommendations from a common randomization device.",
+    "related": [
+      "nash_eq",
+      "poa",
+      "potential"
+    ],
+    "fragmentCount": 10
+  },
+  "spe": {
+    "entry_id": "spe",
+    "name": "Subgame Perfect Equilibrium",
+    "summary": "A Nash equilibrium that also prescribes a Nash equilibrium in every subgame.",
+    "related": [
+      "nash_eq",
+      "pbe",
+      "backward_induction",
+      "extensive_form"
+    ],
+    "fragmentCount": 10
+  },
+  "pbe": {
+    "entry_id": "pbe",
+    "name": "Perfect Bayesian Equilibrium",
+    "summary": "A refinement for dynamic games of incomplete information pairing strategies with beliefs.",
+    "related": [
+      "spe",
+      "bayesian_game",
+      "signaling",
+      "screening"
+    ],
+    "fragmentCount": 10
+  },
+  "trembling": {
+    "entry_id": "trembling",
+    "name": "Trembling-Hand Perfection",
+    "summary": "An equilibrium robust to small probabilities of mistakes.",
+    "related": [
+      "nash_eq",
+      "spe",
+      "trembling_hand",
+      "ied"
+    ],
+    "fragmentCount": 10
+  },
+  "battle_of_sexes": {
+    "entry_id": "battle_of_sexes",
+    "name": "Battle of the Sexes",
+    "summary": "A coordination game with asymmetric preferences over the two coordinated outcomes.",
+    "related": [
+      "stag_hunt",
+      "chicken",
+      "nash_eq",
+      "corr_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "hawk_dove": {
+    "entry_id": "hawk_dove",
+    "name": "Hawk-Dove Game",
+    "summary": "A symmetric 2x2 conflict game used to model animal contests.",
+    "related": [
+      "ess",
+      "evo_gt",
+      "chicken",
+      "replicator"
+    ],
+    "fragmentCount": 10
+  },
+  "stag_hunt": {
+    "entry_id": "stag_hunt",
+    "name": "Stag Hunt",
+    "summary": "A coordination game where mutual cooperation on the risky action maximizes welfare.",
+    "related": [
+      "battle_of_sexes",
+      "nash_eq",
+      "coordination",
+      "repeated_game"
+    ],
+    "fragmentCount": 10
+  },
+  "chicken": {
+    "entry_id": "chicken",
+    "name": "Chicken Game",
+    "summary": "An anti-coordination game where both players prefer to yield if the other stays the course.",
+    "related": [
+      "hawk_dove",
+      "battle_of_sexes",
+      "nash_eq",
+      "corr_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "matching_pennies": {
+    "entry_id": "matching_pennies",
+    "name": "Matching Pennies",
+    "summary": "A zero-sum $2\\\\times 2$ game with no pure equilibrium and a unique uniform mixed equilibrium.",
+    "related": [
+      "zero_sum",
+      "mixed_strat",
+      "minimax",
+      "nash_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "ultimatum": {
+    "entry_id": "ultimatum",
+    "name": "Ultimatum Game",
+    "summary": "A two-stage bargaining game highlighting the gap between rational prediction and observed fairness.",
+    "related": [
+      "spe",
+      "dictator_game",
+      "prisoners_dilemma",
+      "fairness"
+    ],
+    "fragmentCount": 10
+  },
+  "centipede": {
+    "entry_id": "centipede",
+    "name": "Centipede Game",
+    "summary": "A multi-stage game where backward induction predicts immediate termination despite cooperative gains.",
+    "related": [
+      "spe",
+      "backward_induction",
+      "prisoners_dilemma",
+      "common_knowledge"
+    ],
+    "fragmentCount": 10
+  },
+  "public_goods": {
+    "entry_id": "public_goods",
+    "name": "Public-Goods Game",
+    "summary": "A game in which individuals contribute to a shared good; the efficient outcome is not individually rational.",
+    "related": [
+      "prisoners_dilemma",
+      "tragedy_commons",
+      "nash_eq",
+      "poa"
+    ],
+    "fragmentCount": 10
+  },
+  "tragedy_commons": {
+    "entry_id": "tragedy_commons",
+    "name": "Tragedy of the Commons",
+    "summary": "Overuse of a shared resource when individual users ignore the externality they impose on others.",
+    "related": [
+      "public_goods",
+      "prisoners_dilemma",
+      "nash_eq",
+      "poa"
+    ],
+    "fragmentCount": 10
+  },
+  "signaling": {
+    "entry_id": "signaling",
+    "name": "Signaling Games",
+    "summary": "Dynamic incomplete-information games where an informed sender chooses a signal that a receiver observes.",
+    "related": [
+      "pbe",
+      "bayesian_game",
+      "screening",
+      "principal_agent"
+    ],
+    "fragmentCount": 10
+  },
+  "screening": {
+    "entry_id": "screening",
+    "name": "Screening Games",
+    "summary": "Games where an uninformed principal offers a menu of contracts to sort informed agents.",
+    "related": [
+      "signaling",
+      "principal_agent",
+      "bayesian_game",
+      "mech_design"
+    ],
+    "fragmentCount": 10
+  },
+  "principal_agent": {
+    "entry_id": "principal_agent",
+    "name": "Principal-Agent Problem",
+    "summary": "A contracting problem where an agent\\'s action is unobservable to the principal.",
+    "related": [
+      "screening",
+      "signaling",
+      "mech_design",
+      "bayesian_game"
+    ],
+    "fragmentCount": 10
+  },
+  "folk": {
+    "entry_id": "folk",
+    "name": "Folk Theorem",
+    "summary": "Any individually rational feasible payoff can be sustained in an infinitely repeated game with patient enough players.",
+    "related": [
+      "repeated_game",
+      "tft",
+      "prisoners_dilemma",
+      "spe"
+    ],
+    "fragmentCount": 10
+  },
+  "tft": {
+    "entry_id": "tft",
+    "name": "Tit-for-Tat",
+    "summary": "A simple reciprocal strategy — cooperate first, then mimic the opponent\\'s previous action.",
+    "related": [
+      "repeated_game",
+      "folk",
+      "prisoners_dilemma",
+      "evo_gt"
+    ],
+    "fragmentCount": 10
+  },
+  "backward_induction": {
+    "entry_id": "backward_induction",
+    "name": "Backward Induction",
+    "summary": "Algorithm for solving finite perfect-information games by reasoning from terminal nodes back to the root.",
+    "related": [
+      "spe",
+      "extensive_form",
+      "zermelo",
+      "stackelberg"
+    ],
+    "fragmentCount": 10
+  },
+  "ied": {
+    "entry_id": "ied",
+    "name": "Iterated Elimination of Dominated Strategies",
+    "summary": "Iteratively removing strategies that are strictly dominated.",
+    "related": [
+      "dom_strat",
+      "rationalizability",
+      "nash_eq",
+      "common_knowledge"
+    ],
+    "fragmentCount": 10
+  },
+  "rationalizability": {
+    "entry_id": "rationalizability",
+    "name": "Rationalizability",
+    "summary": "The set of strategies surviving iterated elimination of strategies that are never a best response.",
+    "related": [
+      "ied",
+      "nash_eq",
+      "dom_strat",
+      "common_knowledge"
+    ],
+    "fragmentCount": 10
+  },
+  "common_knowledge": {
+    "entry_id": "common_knowledge",
+    "name": "Common Knowledge",
+    "summary": "An event is common knowledge if everyone knows it, everyone knows that everyone knows it, and so on ad infinitum.",
+    "related": [
+      "ied",
+      "rationalizability",
+      "bayesian_game",
+      "harsanyi"
+    ],
+    "fragmentCount": 10
+  },
+  "potential": {
+    "entry_id": "potential",
+    "name": "Potential Games",
+    "summary": "Games where all unilateral payoff changes are captured by a single real-valued function.",
+    "related": [
+      "congestion",
+      "poa",
+      "nash_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "congestion": {
+    "entry_id": "congestion",
+    "name": "Congestion Games",
+    "summary": "Games where each player\\'s payoff depends on the load each facility carries.",
+    "related": [
+      "potential",
+      "poa",
+      "nash_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "poa": {
+    "entry_id": "poa",
+    "name": "Price of Anarchy",
+    "summary": "The worst-case ratio between the social cost of a Nash equilibrium and the social optimum.",
+    "related": [
+      "nash_eq",
+      "congestion",
+      "corr_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "zermelo": {
+    "entry_id": "zermelo",
+    "name": "Zermelo\\'s Theorem",
+    "summary": "In finite two-player zero-sum games of perfect information without chance and draws allowed, either one player has a winning strategy or both can force a draw.",
+    "related": [
+      "backward_induction",
+      "extensive_form",
+      "minimax",
+      "nash_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "harsanyi": {
+    "entry_id": "harsanyi",
+    "name": "Harsanyi Transformation",
+    "summary": "Transforms games of incomplete information into games of imperfect information via a type space.",
+    "related": [
+      "bayesian_game",
+      "pbe",
+      "common_knowledge"
+    ],
+    "fragmentCount": 10
+  },
+  "pareto": {
+    "entry_id": "pareto",
+    "name": "Pareto Efficiency",
+    "summary": "An allocation is Pareto efficient if no player can be made strictly better off without making someone else worse off.",
+    "related": [
+      "nash_eq",
+      "prisoners_dilemma",
+      "nash_bargaining",
+      "social_choice"
+    ],
+    "fragmentCount": 10
+  },
+  "sequential_eq": {
+    "entry_id": "sequential_eq",
+    "name": "Sequential Equilibrium",
+    "summary": "A refinement of PBE requiring beliefs to be limits of fully mixed strategy perturbations.",
+    "related": [
+      "pbe",
+      "trembling",
+      "signaling",
+      "spe"
+    ],
+    "fragmentCount": 10
+  },
+  "proper_eq": {
+    "entry_id": "proper_eq",
+    "name": "Proper Equilibrium",
+    "summary": "A refinement of trembling-hand perfection where more costly mistakes are infinitely less likely.",
+    "related": [
+      "trembling",
+      "nash_eq",
+      "sequential_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "quantal_response": {
+    "entry_id": "quantal_response",
+    "name": "Quantal Response Equilibrium",
+    "summary": "An equilibrium where players best-respond noisily with choice probabilities increasing in expected payoff.",
+    "related": [
+      "nash_eq",
+      "level_k",
+      "centipede",
+      "corr_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "level_k": {
+    "entry_id": "level_k",
+    "name": "Level-k Reasoning",
+    "summary": "A bounded-rationality model where players best-respond to lower-level opponents in a hierarchy of strategic depth.",
+    "related": [
+      "ied",
+      "quantal_response",
+      "centipede",
+      "rationalizability"
+    ],
+    "fragmentCount": 10
+  },
+  "global_games": {
+    "entry_id": "global_games",
+    "name": "Global Games",
+    "summary": "Games of incomplete information where players observe noisy signals of an underlying state, often producing unique equilibrium.",
+    "related": [
+      "supermodular",
+      "nash_eq",
+      "pbe",
+      "common_knowledge"
+    ],
+    "fragmentCount": 10
+  },
+  "supermodular": {
+    "entry_id": "supermodular",
+    "name": "Supermodular Games",
+    "summary": "A game in which a player\\'s incentive to raise their action increases with opponents\\' actions (strategic complements).",
+    "related": [
+      "global_games",
+      "nash_eq",
+      "potential",
+      "poa"
+    ],
+    "fragmentCount": 10
+  },
+  "wardrop": {
+    "entry_id": "wardrop",
+    "name": "Wardrop Equilibrium",
+    "summary": "A flow assignment in which every used path has equal cost and no unused path has lower cost.",
+    "related": [
+      "congestion",
+      "poa",
+      "potential",
+      "nash_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "price_of_stability": {
+    "entry_id": "price_of_stability",
+    "name": "Price of Stability",
+    "summary": "The best-case ratio between the social cost of a Nash equilibrium and the social optimum.",
+    "related": [
+      "poa",
+      "congestion",
+      "nash_eq",
+      "potential"
+    ],
+    "fragmentCount": 10
+  },
+  "smoothed_poa": {
+    "entry_id": "smoothed_poa",
+    "name": "Smoothed Analysis of Price of Anarchy",
+    "summary": "A framework showing that worst-case PoA bounds can be overly pessimistic — typical-case bounds are often dramatically better.",
+    "related": [
+      "poa",
+      "congestion",
+      "wardrop",
+      "nash_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "no_regret": {
+    "entry_id": "no_regret",
+    "name": "No-Regret Learning",
+    "summary": "Learning dynamics where a player\\'s cumulative payoff is no worse than the best fixed action in hindsight, up to a vanishing average error.",
+    "related": [
+      "corr_eq",
+      "fictitious_play",
+      "nash_eq",
+      "quantal_response"
+    ],
+    "fragmentCount": 10
+  },
+  "fictitious_play": {
+    "entry_id": "fictitious_play",
+    "name": "Fictitious Play",
+    "summary": "A learning process in which players best-respond to the empirical distribution of past opponent play.",
+    "related": [
+      "no_regret",
+      "nash_eq",
+      "quantal_response",
+      "corr_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "evol_stable_sets": {
+    "entry_id": "evol_stable_sets",
+    "name": "Evolutionarily Stable Sets",
+    "summary": "A set of strategies such that every strategy in the set resists invasion by any outside mutant.",
+    "related": [
+      "ess",
+      "evo_gt",
+      "replicator",
+      "nash_eq"
+    ],
+    "fragmentCount": 10
+  },
+  "cheap_talk": {
+    "entry_id": "cheap_talk",
+    "name": "Cheap Talk",
+    "summary": "Costless, non-binding, and verifiable communication prior to play that can influence equilibrium selection.",
+    "related": [
+      "signaling",
+      "pbe",
+      "common_knowledge",
+      "screening"
+    ],
+    "fragmentCount": 10
+  },
+  "berge_eq": {
+    "entry_id": "berge_eq",
+    "name": "Berge Equilibrium",
+    "summary": "An equilibrium where each player maximizes the payoff of all others, assuming they do not deviate from their Berge strategies.",
+    "related": [
+      "nash_eq",
+      "pareto",
+      "coop_game",
+      "nash_bargaining"
+    ],
+    "fragmentCount": 10
+  },
+  "mean_field": {
+    "entry_id": "mean_field",
+    "name": "Mean Field Game",
+    "summary": "A game with a continuum of players where each player\\'s influence on aggregate is negligible, simplifying equilibrium to a PDE system.",
+    "related": [
+      "nash_eq",
+      "evo_gt",
+      "potential",
+      "repeated_game"
+    ],
+    "fragmentCount": 10
+  },
+  "algo_mech_design": {
+    "entry_id": "algo_mech_design",
+    "name": "Algorithmic Mechanism Design",
+    "summary": "The interface of mechanism design and computer science, concerned with computational tractability of incentive-compatible outcomes.",
+    "related": [
+      "mech_design",
+      "auction_theory",
+      "revelation",
+      "vickrey"
+    ],
+    "fragmentCount": 10
+  },
+  "fair_division": {
+    "entry_id": "fair_division",
+    "name": "Fair Division",
+    "summary": "The study of how to divide resources among agents so that each receives a fair share according to some criterion.",
+    "related": [
+      "coop_game",
+      "shapley",
+      "core",
+      "nash_bargaining"
+    ],
+    "fragmentCount": 10
+  },
+  "voting_theory": {
+    "entry_id": "voting_theory",
+    "name": "Voting Theory",
+    "summary": "The study of procedures for aggregating individual preferences into a collective decision.",
+    "related": [
+      "social_choice",
+      "mech_design",
+      "dom_strat",
+      "revelation"
+    ],
+    "fragmentCount": 10
+  },
+  "social_choice": {
+    "entry_id": "social_choice",
+    "name": "Social Choice Theory",
+    "summary": "The theoretical study of how individual preferences and judgments can be aggregated into collective decisions.",
+    "related": [
+      "voting_theory",
+      "mech_design",
+      "pareto",
+      "fair_division"
+    ],
+    "fragmentCount": 10
+  },
+  "banzhaf": {
+    "entry_id": "banzhaf",
+    "name": "Banzhaf Power Index",
+    "summary": "A measure of a voter\\'s ability to influence the outcome of a vote, calculated as the number of coalitions in which they are pivotal.",
+    "related": [
+      "core",
+      "shapley",
+      "coalition",
+      "voting_theory"
+    ],
+    "fragmentCount": 10
+  },
+  "core_selection": {
+    "entry_id": "core_selection",
+    "name": "Core Selection (Matching)",
+    "summary": "The selection of an allocation from the core of a matching market, typically via deferred-acceptance algorithms.",
+    "related": [
+      "coalition",
+      "core",
+      "mech_design",
+      "fair_division"
+    ],
+    "fragmentCount": 10
+  }
+}

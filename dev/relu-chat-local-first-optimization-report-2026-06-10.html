@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ReLU.chat Local-First Optimization Report - 2026-06-10</title>
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #5a6472;
+      --line: #d8dde5;
+      --soft: #f5f7fa;
+      --accent: #9b5a1a;
+      --accent2: #0c6b6e;
+      --warn: #9a4b00;
+      --bad: #8a1f1f;
+      --good: #17643a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #fff;
+      font: 13px/1.55 Arial, Helvetica, sans-serif;
+    }
+    @page {
+      size: A4;
+      margin: 16mm 14mm 18mm 14mm;
+    }
+    h1, h2, h3, h4 { line-height: 1.18; color: #0c1320; break-after: avoid; }
+    h1 { font-size: 30px; margin: 0 0 10px; letter-spacing: -0.02em; }
+    h2 {
+      font-size: 21px;
+      margin: 28px 0 10px;
+      padding-top: 10px;
+      border-top: 2px solid var(--ink);
+    }
+    h3 { font-size: 16px; margin: 18px 0 8px; }
+    h4 { font-size: 13px; margin: 12px 0 5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+    p { margin: 0 0 8px; }
+    a { color: var(--accent2); }
+    code {
+      font-family: "DejaVu Sans Mono", Consolas, monospace;
+      font-size: 11px;
+      background: #f0f3f6;
+      border: 1px solid #e3e7ed;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+    pre {
+      font-family: "DejaVu Sans Mono", Consolas, monospace;
+      font-size: 10.5px;
+      line-height: 1.38;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      padding: 9px;
+      border-radius: 6px;
+      margin: 8px 0 12px;
+      break-inside: avoid;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 13px;
+      break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 6px 7px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #eef2f6;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    ul, ol { margin: 7px 0 12px 19px; padding: 0; }
+    li { margin: 3px 0; }
+    .page-break { break-before: page; }
+    .cover {
+      min-height: 246mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border: 2px solid #111827;
+      padding: 22mm 18mm;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 630px;
+      margin-bottom: 22px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .meta-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: var(--soft);
+    }
+    .meta-card strong { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+    .pill {
+      display: inline-block;
+      padding: 2px 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      margin: 1px 2px 1px 0;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .callout {
+      border-left: 4px solid var(--accent2);
+      background: #eefafa;
+      padding: 9px 11px;
+      margin: 10px 0 12px;
+      break-inside: avoid;
+    }
+    .warn { border-left-color: var(--warn); background: #fff8eb; }
+    .bad { border-left-color: var(--bad); background: #fff1f1; }
+    .good { border-left-color: var(--good); background: #eefaf3; }
+    .small { font-size: 11px; color: var(--muted); }
+    .score {
+      font-weight: bold;
+      text-align: center;
+      border-radius: 4px;
+      color: #fff;
+      padding: 2px 4px;
+      display: inline-block;
+      min-width: 32px;
+    }
+    .p0 { background: #8a1f1f; }
+    .p1 { background: #9a4b00; }
+    .p2 { background: #0c6b6e; }
+    .p3 { background: #5a6472; }
+    .diagram {
+      margin: 10px 0 14px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      break-inside: avoid;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      padding: 9px;
+      break-inside: avoid;
+    }
+    .toc li { margin-bottom: 2px; }
+    .footer-note { color: var(--muted); font-size: 11px; margin-top: 18px; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <h1>ReLU.chat Local-First Optimization Report</h1>
+    <p class="subtitle">
+      A development-only technical audit and roadmap for making ReLU.chat more useful, faster,
+      more intelligent, more conversation-aware, more adaptive in answer length and style, and
+      capable of rendering safe local SVG/HTML diagrams while keeping all user data inside the
+      browser on desktop and mobile.
+    </p>
+    <div class="meta-grid">
+      <div class="meta-card"><strong>Generated</strong>2026-06-10, Europe/Istanbul</div>
+      <div class="meta-card"><strong>Workspace</strong><code>/home/yemre/Desktop/FTPSites-personal/relu.chat</code></div>
+      <div class="meta-card"><strong>Delivery</strong>PDF saved under ignored local <code>dev/</code></div>
+      <div class="meta-card"><strong>Boundary</strong>No production code, no deployment, no GitHub push</div>
+    </div>
+    <div class="callout">
+      <strong>Bottom line:</strong> ReLU.chat already has a strong privacy-first architecture:
+      static hosting, local MiniLM embeddings, BOW fallback, BM25, dense-sparse ranking, MLP
+      policy planning, service-worker caching, and session memory. The largest gains now come
+      from a bot-pack asset format, workerized inference, true indexed retrieval, deterministic
+      composition, local feedback/personalization, diagram AST rendering, and a tighter training
+      and evaluation loop for the policy network.
+    </div>
+    <p class="footer-note">
+      This file is intentionally development-only. The root <code>.gitignore</code> ignores
+      <code>dev/</code> and <code>dev/**</code>; <code>git ls-files dev</code> returned 0 tracked files.
+    </p>
+  </section>
+
+  <section class="page-break">
+    <h2>Table Of Contents</h2>
+    <ol class="toc">
+      <li>Audit Evidence</li>
+      <li>Current System Map</li>
+      <li>Priority Roadmap</li>
+      <li>Algorithm Optimizations</li>
+      <li>Conversation Awareness</li>
+      <li>Answer Variation And Length Control</li>
+      <li>Visual SVG/HTML Diagram Layer</li>
+      <li>RL And Policy Pipeline Improvements</li>
+      <li>Asset Loading And Mobile/Desktop Performance</li>
+      <li>Local-Only Data Model</li>
+      <li>Separation Of Concerns And Maintainability</li>
+      <li>Testing, Benchmarks, And Observability</li>
+      <li>Implementation Tracks</li>
+      <li>Completion Checklist</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>1. Audit Evidence</h2>
+    <p>
+      The report is based on live inspection of the current worktree, source files,
+      development notes, unit tests, dev scripts, asset sizes, and git ignore state.
+      I did not rely on public marketing claims alone.
+    </p>
+    <table>
+      <tr><th>Evidence</th><th>Observed Result</th><th>Why It Matters</th></tr>
+      <tr>
+        <td>Git state before report generation</td>
+        <td><code>git status --short</code> returned clean before creating dev-only report files.</td>
+        <td>Establishes that the report work did not mask unrelated source changes.</td>
+      </tr>
+      <tr>
+        <td>Git tracking for <code>dev/</code></td>
+        <td><code>git ls-files dev | wc -l</code> returned <code>0</code>; <code>git check-ignore -v dev/...</code> points to root <code>.gitignore:28 dev/</code>.</td>
+        <td>The PDF can live under <code>dev/</code> without entering GitHub or production by normal git flow.</td>
+      </tr>
+      <tr>
+        <td>Relevant runtime/config files</td>
+        <td>43 source/config/model JSON files under <code>chat/</code>, <code>data/</code>, <code>core/</code>, <code>policy/</code>, and <code>assets/models/policy/</code>.</td>
+        <td>Shows the engine is compact enough to reorganize into a clearer bot-pack model.</td>
+      </tr>
+      <tr>
+        <td>Knowledge base coverage</td>
+        <td>Game theory: 77 entries / 770 fragments. Golden Age: 47 / 470. Data science: 38 / 380.</td>
+        <td>Current KB size is small enough that simple algorithms work today, but the next scalable format should be prepared before adding many bots.</td>
+      </tr>
+      <tr>
+        <td>Largest cold-start assets</td>
+        <td>Quantized ONNX model 22.97 MB; four ONNX Runtime WASM variants total about 38 MB; Transformers.js 898 KB; KaTeX 1.5 MB; hero videos about 2.48 MB each.</td>
+        <td>Cold-start optimization is mostly asset scheduling and model packaging, not policy MLP speed.</td>
+      </tr>
+      <tr>
+        <td>Focused unit tests</td>
+        <td>Cache 50 pass; BM25 34 pass; NLP utils 89 pass; session 53 pass; feature extractor 54 pass; action schema 53 pass. Total focused tests: 333 pass, 0 fail.</td>
+        <td>Core helper behavior is covered and currently healthy.</td>
+      </tr>
+      <tr>
+        <td>Signal layer dev test</td>
+        <td><code>node dev/scripts/test-signal-layer.js</code>: 67 pass, 0 fail.</td>
+        <td>DecisionPacket shape, BM25, ensemble ranking, and follow-up plumbing have working test coverage.</td>
+      </tr>
+      <tr>
+        <td>Policy runtime dev test</td>
+        <td><code>node dev/scripts/test-policy-runtime.js</code>: 145 pass, 0 fail.</td>
+        <td>Plan validation, feature packing, heuristic planning, and MLP inference validate in Node.</td>
+      </tr>
+      <tr>
+        <td>Quality test</td>
+        <td><code>node dev/scripts/test-quality.js</code>: 139 pass, 0 fail across KB, MLP, session, policy, edge, cross-bot.</td>
+        <td>Broad dev-only harness confirms structural health across all bots.</td>
+      </tr>
+      <tr>
+        <td>Follow-up benchmark</td>
+        <td><code>node dev/benchmarks/test-followup.js</code>: 97 pass, 3 fail. <code>how?</code> and <code>why?</code> are typed as <code>elaborate</code> in direct/session detection, while feature extractor expects distinct <code>how</code>/<code>why</code> codes.</td>
+        <td>Concrete conversation-awareness bug: type mapping currently loses nuance for some important one-word follow-ups.</td>
+      </tr>
+      <tr>
+        <td>Policy behavior benchmark</td>
+        <td>Trained MLP on 10 hand-authored scenarios: 70% mode accuracy, 30% intent accuracy. Random baseline: 10%/10%.</td>
+        <td>The policy improves mode choice but intent training/evaluation needs much better calibration and data.</td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>2. Current System Map</h2>
+    <p>
+      ReLU.chat is a static, browser-only chatbot platform. There is no backend in the
+      conversation path. The browser loads bot-specific KB files and shared engine modules,
+      computes embeddings locally, ranks fragments locally, plans the response with a small
+      local MLP policy, and renders text with local KaTeX.
+    </p>
+    <div class="diagram">
+      <svg width="100%" height="210" viewBox="0 0 900 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Current ReLU.chat architecture">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#0c6b6e"/>
+          </marker>
+        </defs>
+        <rect x="15" y="20" width="120" height="50" rx="8" fill="#eefafa" stroke="#0c6b6e"/>
+        <text x="75" y="43" text-anchor="middle" font-size="13" font-weight="700">User Query</text>
+        <text x="75" y="59" text-anchor="middle" font-size="10">desktop / mobile</text>
+        <line x1="135" y1="45" x2="185" y2="45" stroke="#0c6b6e" stroke-width="2" marker-end="url(#arrow)"/>
+        <rect x="185" y="20" width="125" height="50" rx="8" fill="#fff8eb" stroke="#9a4b00"/>
+        <text x="247" y="38" text-anchor="middle" font-size="13" font-weight="700">Embed</text>
+        <text x="247" y="54" text-anchor="middle" font-size="10">BOW first, MiniLM hot-swap</text>
+        <line x1="310" y1="45" x2="360" y2="45" stroke="#0c6b6e" stroke-width="2" marker-end="url(#arrow)"/>
+        <rect x="360" y="20" width="145" height="50" rx="8" fill="#f5f7fa" stroke="#5a6472"/>
+        <text x="432" y="37" text-anchor="middle" font-size="13" font-weight="700">Signal Layer</text>
+        <text x="432" y="54" text-anchor="middle" font-size="10">BM25 + dense + entities</text>
+        <line x1="505" y1="45" x2="555" y2="45" stroke="#0c6b6e" stroke-width="2" marker-end="url(#arrow)"/>
+        <rect x="555" y="20" width="135" height="50" rx="8" fill="#eefaf3" stroke="#17643a"/>
+        <text x="622" y="37" text-anchor="middle" font-size="13" font-weight="700">Policy</text>
+        <text x="622" y="54" text-anchor="middle" font-size="10">25 features -> 6 heads</text>
+        <line x1="690" y1="45" x2="740" y2="45" stroke="#0c6b6e" stroke-width="2" marker-end="url(#arrow)"/>
+        <rect x="740" y="20" width="140" height="50" rx="8" fill="#f5f7fa" stroke="#5a6472"/>
+        <text x="810" y="37" text-anchor="middle" font-size="13" font-weight="700">Compose</text>
+        <text x="810" y="54" text-anchor="middle" font-size="10">fragments + connectors</text>
+
+        <rect x="125" y="120" width="140" height="50" rx="8" fill="#f8fafc" stroke="#d8dde5"/>
+        <text x="195" y="139" text-anchor="middle" font-size="12" font-weight="700">Bot KB</text>
+        <text x="195" y="155" text-anchor="middle" font-size="10">77 / 47 / 38 topics</text>
+        <line x1="195" y1="120" x2="247" y2="70" stroke="#5a6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+        <rect x="365" y="120" width="145" height="50" rx="8" fill="#f8fafc" stroke="#d8dde5"/>
+        <text x="437" y="139" text-anchor="middle" font-size="12" font-weight="700">Session Memory</text>
+        <text x="437" y="155" text-anchor="middle" font-size="10">turns, entities, fragments, EMA</text>
+        <line x1="437" y1="120" x2="432" y2="70" stroke="#5a6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+        <rect x="585" y="120" width="145" height="50" rx="8" fill="#f8fafc" stroke="#d8dde5"/>
+        <text x="657" y="139" text-anchor="middle" font-size="12" font-weight="700">Policy Weights</text>
+        <text x="657" y="155" text-anchor="middle" font-size="10">362 KB JSON / 52 KB bin</text>
+        <line x1="657" y1="120" x2="622" y2="70" stroke="#5a6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+      </svg>
+    </div>
+
+    <h3>Strong Current Design Choices</h3>
+    <ul>
+      <li>Static hosting and no server-side inference: the privacy story is simple and defensible.</li>
+      <li>Local model files under <code>assets/models/</code> with <code>env.allowRemoteModels = false</code>.</li>
+      <li>Progressive BOW bootstrap lets early turns happen before MiniLM finishes loading.</li>
+      <li>BM25 and dense ranking are fused before policy planning.</li>
+      <li>The policy contract is explicit through <code>AnswerPlan</code> validation.</li>
+      <li>Session memory tracks history, recent entities, fragment usage, ambiguity, engagement, and an EMA query vector.</li>
+      <li>Service worker already handles model caching and Range requests.</li>
+    </ul>
+
+    <h3>Current Gaps To Treat As Product Opportunities</h3>
+    <ul>
+      <li>Follow-up type drift: <code>how?</code> and <code>why?</code> are currently collapsed to <code>elaborate</code> in one path.</li>
+      <li>Seeded composition is only partially wired. <code>Math.random()</code> and unseeded <code>pick()</code> remain in shared and legacy paths.</li>
+      <li>Legacy <code>chat/*/js/nlp.js</code> files are still present even though current chat wrappers import <code>core/chatbot-engine.js</code>.</li>
+      <li>Knowledge, fragment metadata, policy weights, and config are split across several shapes instead of a single bot-pack manifest.</li>
+      <li>Policy accuracy is not yet strong enough for high-confidence claims about intent choice.</li>
+      <li>Answer length is mostly a side effect of fragment count rather than an explicit budget chosen by policy.</li>
+      <li>There is no safe diagram AST, no diagram metadata in fragments, and no renderer contract for visual answers.</li>
+      <li>MiniLM and ONNX Runtime loading still dominate cold-start time, especially on mobile.</li>
+    </ul>
+  </section>
+
+  <section class="page-break">
+    <h2>3. Priority Roadmap</h2>
+    <p>
+      Priorities are ranked by user impact, local-first fit, implementation risk, and
+      how much each unlocks later work.
+    </p>
+    <table>
+      <tr><th>Priority</th><th>Work</th><th>Impact</th><th>Key Files / Area</th></tr>
+      <tr>
+        <td><span class="score p0">P0</span></td>
+        <td>Fix follow-up type precedence for <code>how?</code> and <code>why?</code>; add regression tests.</td>
+        <td>Directly improves conversation awareness and unlocks different answers for mechanism vs reason questions.</td>
+        <td><code>core/session.js</code>, <code>dev/benchmarks/test-followup.js</code>, <code>tests/test-session.js</code></td>
+      </tr>
+      <tr>
+        <td><span class="score p0">P0</span></td>
+        <td>Create an explicit answer budget in the policy: <code>short</code>, <code>medium</code>, <code>long</code>, <code>auto</code>, and <code>diagram_plus_text</code>.</td>
+        <td>Meets the requirement for automatic response lengths and variation without user prompting.</td>
+        <td><code>policy/action-schema.js</code>, <code>policy/feature-extractor.js</code>, <code>policy/mlp-inference.js</code>, <code>core/nlp.js</code></td>
+      </tr>
+      <tr>
+        <td><span class="score p0">P0</span></td>
+        <td>Replace remaining unseeded randomness with a deterministic per-turn seed.</td>
+        <td>Allows reproducible variation, better tests, and stable local personalization.</td>
+        <td><code>core/nlp.js</code>, <code>policy/policy-runtime.js</code>, legacy <code>chat/*/js/nlp.js</code></td>
+      </tr>
+      <tr>
+        <td><span class="score p1">P1</span></td>
+        <td>Introduce <code>bot.pack.json</code> per bot containing KB metadata, fragment vectors, alias index, diagram hints, config, and policy pointers.</td>
+        <td>Faster loading, fewer requests, cleaner separation of concerns, easier offline caching.</td>
+        <td><code>data/bots/*</code>, <code>dev/scripts/*</code>, <code>core/chatbot-engine.js</code></td>
+      </tr>
+      <tr>
+        <td><span class="score p1">P1</span></td>
+        <td>Move embedding, ranking, and policy planning into a Web Worker with streaming status messages.</td>
+        <td>Desktop and mobile UI remain responsive while MiniLM and ranking work run off the main thread.</td>
+        <td>New <code>core/engine-worker.js</code>, <code>core/chatbot-engine.js</code></td>
+      </tr>
+      <tr>
+        <td><span class="score p1">P1</span></td>
+        <td>Build a safe diagram AST renderer and add diagram candidates to fragment metadata.</td>
+        <td>Adds SVG/HTML diagrams next to text while preserving local-only and XSS-safe rendering.</td>
+        <td>New <code>core/diagram-renderer.js</code>, <code>data/fragment-meta-schema.json</code>, <code>core/ui.js</code></td>
+      </tr>
+      <tr>
+        <td><span class="score p1">P1</span></td>
+        <td>Replace per-entry BM25 rescoring with an inverted index and top-k accumulator.</td>
+        <td>Turns current small-KB approach into scalable retrieval as bots grow.</td>
+        <td><code>core/bm25.js</code>, bot-pack exporter</td>
+      </tr>
+      <tr>
+        <td><span class="score p1">P1</span></td>
+        <td>Unify policy training scripts and ship a repeatable eval report per weights file.</td>
+        <td>Prevents mode/intent regressions and makes model quality measurable.</td>
+        <td><code>dev/scripts/train-policy.py</code>, <code>dev/scripts/train_real.py</code>, <code>dev/benchmarks/*</code></td>
+      </tr>
+      <tr>
+        <td><span class="score p2">P2</span></td>
+        <td>Local feedback loop in IndexedDB: thumbs, answer length preference, diagram preference, per-topic mastery.</td>
+        <td>More useful and adaptive without sending data anywhere.</td>
+        <td>New <code>core/local-profile.js</code>, <code>core/session.js</code>, policy features</td>
+      </tr>
+      <tr>
+        <td><span class="score p2">P2</span></td>
+        <td>Document drift cleanup and single docs source of truth.</td>
+        <td>Prevents stale architecture claims and improves maintainability.</td>
+        <td><code>docs/*.md</code>, <code>how-it-works.html</code>, <code>README.md</code>, <code>llms*.txt</code></td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>4. Algorithm Optimizations</h2>
+
+    <h3>4.1 Retrieval: Replace O(N*k) BM25 Top-K With An Inverted Index</h3>
+    <p>
+      Current <code>BM25Scorer.scoreTopK()</code> performs repeated scans to find the best unused
+      document. That is acceptable for 38 to 77 topics, but it recomputes scores repeatedly and
+      will become wasteful when KBs grow or when fragments become independently searchable.
+    </p>
+    <table>
+      <tr><th>Current</th><th>Replacement</th><th>Benefit</th></tr>
+      <tr>
+        <td>Compute score for each doc repeatedly while selecting top K.</td>
+        <td>Build term -> posting list at pack time; score only docs touched by query terms.</td>
+        <td>For sparse queries, ranking cost becomes proportional to matching postings, not all documents.</td>
+      </tr>
+      <tr>
+        <td>Name/alias boosting through text repetition.</td>
+        <td>Store field weights explicitly: title 4.0, alias 3.0, summary 1.5, fragment 1.0.</td>
+        <td>Cleaner ranking, no inflated doc length side effects.</td>
+      </tr>
+      <tr>
+        <td>Bigram bonus checked against doc bigram set.</td>
+        <td>Index bigrams as postings with lower weight.</td>
+        <td>Consistent phrase scoring with no per-doc set allocation.</td>
+      </tr>
+    </table>
+    <pre>Proposed pack-time index:
+{
+  "terms": {
+    "nash": [[entryId, tfTitle, tfAlias, tfBody], ...],
+    "nash_equilibrium": [[entryId, tfPhrase], ...]
+  },
+  "idf": { "nash": 1.92, "nash_equilibrium": 2.43 },
+  "docLen": [...],
+  "avgDocLen": 123.4
+}</pre>
+
+    <h3>4.2 Entity Extraction: Alias Regex To Automaton + BK-Tree</h3>
+    <p>
+      <code>compileAliasRegex()</code> precompiles regexes per entry and <code>extractEntities()</code>
+      loops through the KB. This is workable now, but adding bots, synonyms, and multilingual
+      variants will increase cost and ambiguity.
+    </p>
+    <ul>
+      <li>Build an Aho-Corasick or FlashText-style alias automaton at pack time for exact multi-token aliases.</li>
+      <li>Keep a small BK-tree or SymSpell table for typo correction over aliases.</li>
+      <li>Normalize accents, punctuation, Greek letters, formula tokens, and hyphen variants in one tokenizer.</li>
+      <li>Emit entity candidates with spans and scores: <code>{kbId, spanStart, spanEnd, alias, score, method}</code>.</li>
+      <li>Resolve overlapping aliases with longest-span-first plus graph centrality.</li>
+    </ul>
+
+    <h3>4.3 Dense Retrieval: Precompute And Pack Entry/Fragment Embeddings</h3>
+    <p>
+      On first dense load, the runtime encodes the KB in batches after MiniLM loads. That is a
+      good progressive step, but it still burns CPU on every first visit per bot. For static
+      KBs, entry and fragment vectors should be generated offline and shipped in the bot pack.
+    </p>
+    <table>
+      <tr><th>Vector Type</th><th>Current</th><th>Recommended</th></tr>
+      <tr><td>Entry embeddings</td><td>Computed in browser after model load.</td><td>Ship Float16 or Int8 normalized vectors per bot.</td></tr>
+      <tr><td>Fragment embeddings</td><td>Computed lazily through <code>embedCached()</code>.</td><td>Pack fragment vectors, then use query-only embedding at runtime.</td></tr>
+      <tr><td>Domain prototypes</td><td>Embedded at init if configured.</td><td>Pack domain prototype vectors with versioned model hash.</td></tr>
+      <tr><td>Compression</td><td>JSON + ONNX assets.</td><td>Use binary <code>.bin</code> vectors with header: magic, modelHash, dim, dtype, count.</td></tr>
+    </table>
+    <p>
+      This keeps all inference local while reducing first dense-ready time. The browser still
+      embeds the user query locally, but does not re-embed static KB text.
+    </p>
+
+    <h3>4.4 Ranking Fusion: Move From Fixed Weighted Sum To RRF + Learned Ranker</h3>
+    <p>
+      The current ensemble uses dense 0.7 and sparse 0.3 plus a simple rerank. Better local
+      ranking can be achieved with:
+    </p>
+    <ul>
+      <li>Reciprocal Rank Fusion (RRF) as a robust default when sparse and dense score scales disagree.</li>
+      <li>A tiny learning-to-rank MLP or logistic calibrator over features: dense sim, BM25, entity hit, title hit, follow-up boost, fragment freshness.</li>
+      <li>MMR for diversity: choose high-scoring topics while penalizing near-duplicates.</li>
+      <li>Topic graph expansion after top-1 only when confidence is high or the user asks "what else".</li>
+      <li>Confidence thresholds calibrated per bot, not globally copied across all bot configs.</li>
+    </ul>
+
+    <h3>4.5 Fragment Selection: Use Metadata And Diversity Earlier</h3>
+    <p>
+      Fragment selection currently embeds and softmaxes candidate fragments with a recent-fragment
+      penalty. Stronger selection should combine:
+    </p>
+    <ul>
+      <li>Semantic match: query/fragment cosine.</li>
+      <li>Answer budget: short mode picks one high-density fragment; long mode picks def + int + ex + app/form.</li>
+      <li>Difficulty fit: user asks "simple" -> lower difficulty; "prove" -> formal and higher difficulty.</li>
+      <li>Freshness: penalize exact fragment repetition and semantically similar paraphrase repetition.</li>
+      <li>Truth/source confidence: prefer high-confidence fragments when challenged or asked for evidence.</li>
+      <li>Diagram availability: if a concept has a visual template and the user would benefit, reserve room for it.</li>
+    </ul>
+
+    <h3>4.6 Query Understanding: Local Expansion Without LLMs</h3>
+    <p>
+      ReLU.chat can become more intelligent without a cloud LLM by adding deterministic local
+      understanding layers:
+    </p>
+    <ul>
+      <li>Per-bot synonym maps built from aliases and related concepts.</li>
+      <li>Local spelling correction against alias vocabulary.</li>
+      <li>Question operator classification: what, why, how, when, compare, example, prove, summarize, challenge.</li>
+      <li>Formula/token recognizers for game matrices, probability notation, ML metric names, and historical date ranges.</li>
+      <li>Graph-aware expansion: if top topic is "Nash equilibrium" and intent is example, include "Prisoner's Dilemma" only when helpful.</li>
+      <li>Contradiction/rejection detection: "not that", "I meant X", "wrong topic", "no just X".</li>
+    </ul>
+  </section>
+
+  <section class="page-break">
+    <h2>5. Conversation Awareness</h2>
+
+    <h3>5.1 Fix The Verified Follow-Up Bug</h3>
+    <div class="callout bad">
+      <strong>Observed failure:</strong> <code>dev/benchmarks/test-followup.js</code> expects
+      <code>how?</code> -> <code>how</code> and <code>why?</code> -> <code>why</code>, but the current
+      simple detector returns <code>elaborate</code> in three assertions. The feature extractor and
+      MLP support distinct codes 9 and 10, so the lost nuance is in session detection precedence.
+    </div>
+    <p>Recommended fix:</p>
+    <ul>
+      <li>Change <code>singleWordMap.how</code> to <code>how</code> and <code>singleWordMap.why</code> to <code>why</code>.</li>
+      <li>Move short phrase patterns for <code>why</code> and <code>how</code> before generic <code>more/elaborate</code> patterns.</li>
+      <li>Add test cases for punctuation variants: <code>how?</code>, <code>how</code>, <code>how so?</code>, <code>why?</code>, <code>why so?</code>.</li>
+      <li>Confirm MLP decision path uses <code>followup:override-how</code> and <code>followup:override-why</code>.</li>
+    </ul>
+
+    <h3>5.2 Session Memory Should Become A Structured Local State Machine</h3>
+    <p>
+      <code>SessionMemory</code> already tracks turns, entities, fragments, ambiguity, summaries,
+      engagement signals, and an EMA embedding. The next step is to make this state explicit and
+      queryable by policy and renderer.
+    </p>
+    <pre>{
+  "turn": 12,
+  "activeTopic": "nash_eq",
+  "topicStack": ["nash_eq", "prisoners_dilemma"],
+  "lastIntent": "example",
+  "userDepthPreference": "medium",
+  "diagramPreference": "auto",
+  "activeEntities": [{"id":"nash_eq","weight":0.91}],
+  "recentFragments": ["nash_eq:def", "nash_eq:int"],
+  "unresolvedClarification": null,
+  "localFeedback": {"shortAnswers": 3, "diagramsOpened": 2}
+}</pre>
+    <p>
+      All of this should remain in memory by default. If persistence is enabled, store it in
+      IndexedDB behind a local-only profile switch and provide a "clear local learning" action.
+    </p>
+
+    <h3>5.3 Wire The EMA Summary Vector Into Real Features</h3>
+    <p>
+      The session currently maintains <code>getSummaryEmbedding()</code>, but the policy feature
+      contract does not yet include it directly. Instead of expanding the 25-feature vector
+      immediately, add derived scalar features first:
+    </p>
+    <ul>
+      <li><code>queryToSessionSim</code>: cosine of current query to EMA vector.</li>
+      <li><code>sessionTopicStability</code>: how stable recent top topics are.</li>
+      <li><code>fragmentNoveltyPressure</code>: fraction of candidate fragments recently used.</li>
+      <li><code>engagementDepth</code>: rolling measure from deepening/challenging/clarifying signals.</li>
+      <li><code>answerBudgetPreference</code>: local profile or inferred short/medium/long preference.</li>
+    </ul>
+    <p>
+      If keeping exactly 25 features is important for current weights, create policy v0.5 with
+      versioned feature schema rather than silently changing the vector.
+    </p>
+
+    <h3>5.4 Clarification Should Be An Answer Mode, Not Just A Fallback</h3>
+    <p>
+      The action schema already has <code>mode: clarify</code>. Use it more aggressively when:
+    </p>
+    <ul>
+      <li>Dense and sparse disagree strongly and no entity is found.</li>
+      <li>Top two topics are close and the user query is short.</li>
+      <li>The user uses pronouns without a stable previous topic.</li>
+      <li>A correction target cannot be matched with high confidence.</li>
+    </ul>
+    <p>
+      Clarification should be concise, with 2 to 4 local options, and should update session state
+      so the next answer resolves the pending ambiguity.
+    </p>
+  </section>
+
+  <section>
+    <h2>6. Answer Variation And Length Control</h2>
+    <p>
+      The current system varies answers through fragment choice, connectors, openers, closers,
+      and policy-selected fragment counts. The user request needs a more explicit automatic
+      length and variation system.
+    </p>
+
+    <h3>6.1 Add Answer Budget To AnswerPlan</h3>
+    <table>
+      <tr><th>Budget</th><th>Policy Meaning</th><th>Renderer Contract</th></tr>
+      <tr><td><code>micro</code></td><td>Greeting, quick correction, direct definition.</td><td>1 fragment, no related topics, no closer unless useful.</td></tr>
+      <tr><td><code>short</code></td><td>User asks quick/simple, mobile, low confidence, or repeated topic.</td><td>1 to 2 fragments, max 80 words, optional tiny diagram.</td></tr>
+      <tr><td><code>medium</code></td><td>Default for most desktop and first educational answers.</td><td>2 to 3 fragments, max 170 words, one related topic.</td></tr>
+      <tr><td><code>long</code></td><td>User asks deep, formal, evidence, or "tell me more".</td><td>3 to 5 fragments, sectioned answer, example or formula.</td></tr>
+      <tr><td><code>diagram_plus_text</code></td><td>Concept has a strong visual representation.</td><td>Text plus safe SVG/HTML diagram AST.</td></tr>
+    </table>
+
+    <h3>6.2 Infer Budget Locally</h3>
+    <ul>
+      <li>Lexical cues: "brief", "tl;dr", "short", "summary" -> short.</li>
+      <li>Depth cues: "prove", "derive", "why", "how exactly", "detailed" -> long.</li>
+      <li>Device hints: small screen, low memory, or Save-Data -> start short unless user asks deep.</li>
+      <li>Conversation state: if user repeatedly asks follow-ups, increase detail gradually.</li>
+      <li>Local feedback: thumbs up on short answers raises prior for short answers on that device.</li>
+      <li>Uncertainty: low confidence should trigger clarify or short answer with "I may be reading this as...".</li>
+    </ul>
+
+    <h3>6.3 Deterministic Variation</h3>
+    <p>
+      Variation should be reproducible for the same local state so tests and user experience are
+      stable. Use a seed based on bot id, KB version, normalized query, selected topics, turn
+      number, answer budget, and creativity bucket.
+    </p>
+    <pre>seed = hash32(botId + kbVersion + normalizedQuery + topics.join(",") + turn + budget + creativityBucket)
+setCompositionSeed(seed)
+renderer picks opener, connectors, examples, and closers from seeded RNG only</pre>
+    <p>
+      This also lets the user request "another version" by incrementing a local variant counter
+      without changing the semantic plan.
+    </p>
+  </section>
+
+  <section class="page-break">
+    <h2>7. Visual SVG/HTML Diagram Layer</h2>
+    <p>
+      The safest way to add visual answers is not to let fragments contain raw HTML. Instead,
+      add a diagram AST schema that the renderer turns into DOM/SVG nodes. This keeps everything
+      local, inspectable, and XSS-resistant.
+    </p>
+
+    <div class="diagram">
+      <svg width="100%" height="250" viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram rendering pipeline">
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#9b5a1a"/>
+          </marker>
+        </defs>
+        <rect x="25" y="35" width="155" height="58" rx="8" fill="#f5f7fa" stroke="#5a6472"/>
+        <text x="102" y="58" text-anchor="middle" font-size="13" font-weight="700">KB Fragment</text>
+        <text x="102" y="75" text-anchor="middle" font-size="10">text + visual hints</text>
+        <line x1="180" y1="64" x2="235" y2="64" stroke="#9b5a1a" stroke-width="2" marker-end="url(#arrow2)"/>
+        <rect x="235" y="35" width="155" height="58" rx="8" fill="#fff8eb" stroke="#9a4b00"/>
+        <text x="312" y="58" text-anchor="middle" font-size="13" font-weight="700">Diagram Planner</text>
+        <text x="312" y="75" text-anchor="middle" font-size="10">policy selects visual mode</text>
+        <line x1="390" y1="64" x2="445" y2="64" stroke="#9b5a1a" stroke-width="2" marker-end="url(#arrow2)"/>
+        <rect x="445" y="35" width="155" height="58" rx="8" fill="#eefafa" stroke="#0c6b6e"/>
+        <text x="522" y="58" text-anchor="middle" font-size="13" font-weight="700">Safe AST</text>
+        <text x="522" y="75" text-anchor="middle" font-size="10">typed JSON, no raw HTML</text>
+        <line x1="600" y1="64" x2="655" y2="64" stroke="#9b5a1a" stroke-width="2" marker-end="url(#arrow2)"/>
+        <rect x="655" y="35" width="190" height="58" rx="8" fill="#eefaf3" stroke="#17643a"/>
+        <text x="750" y="58" text-anchor="middle" font-size="13" font-weight="700">Renderer</text>
+        <text x="750" y="75" text-anchor="middle" font-size="10">createElementNS / DOM APIs</text>
+
+        <rect x="70" y="155" width="120" height="45" rx="8" fill="#ffffff" stroke="#d8dde5"/>
+        <text x="130" y="181" text-anchor="middle" font-size="12">Game matrix</text>
+        <rect x="230" y="155" width="120" height="45" rx="8" fill="#ffffff" stroke="#d8dde5"/>
+        <text x="290" y="181" text-anchor="middle" font-size="12">Decision tree</text>
+        <rect x="390" y="155" width="120" height="45" rx="8" fill="#ffffff" stroke="#d8dde5"/>
+        <text x="450" y="181" text-anchor="middle" font-size="12">Timeline</text>
+        <rect x="550" y="155" width="120" height="45" rx="8" fill="#ffffff" stroke="#d8dde5"/>
+        <text x="610" y="181" text-anchor="middle" font-size="12">Flowchart</text>
+        <rect x="710" y="155" width="120" height="45" rx="8" fill="#ffffff" stroke="#d8dde5"/>
+        <text x="770" y="181" text-anchor="middle" font-size="12">Metric chart</text>
+      </svg>
+    </div>
+
+    <h3>7.1 Diagram Types To Add First</h3>
+    <table>
+      <tr><th>Bot</th><th>Diagram Type</th><th>Examples</th><th>Why It Helps</th></tr>
+      <tr>
+        <td>Game theory</td>
+        <td>2x2 payoff matrix, extensive-form tree, equilibrium marker, auction flow.</td>
+        <td>Prisoner's Dilemma, Chicken, Stag Hunt, Nash equilibrium, minimax.</td>
+        <td>Game theory is inherently visual; a matrix often explains faster than paragraphs.</td>
+      </tr>
+      <tr>
+        <td>Data science</td>
+        <td>Confusion matrix, bias-variance curve, train/test split bar, pipeline DAG, decision tree.</td>
+        <td>Precision/recall, cross-validation, leakage, PCA, ensembles.</td>
+        <td>Many ML concepts are process or matrix concepts; diagrams reduce cognitive load.</td>
+      </tr>
+      <tr>
+        <td>Golden Age</td>
+        <td>Timeline, scholar influence graph, invention flow, map-lite schematic.</td>
+        <td>House of Wisdom, translation movement, optics, algebra, astronomy.</td>
+        <td>Historical relationships are easier to understand with chronology and influence.</td>
+      </tr>
+    </table>
+
+    <h3>7.2 Diagram AST Example</h3>
+    <pre>{
+  "type": "payoff_matrix",
+  "title": "Prisoner's Dilemma",
+  "players": ["Player 1", "Player 2"],
+  "rows": ["Cooperate", "Defect"],
+  "cols": ["Cooperate", "Defect"],
+  "cells": [
+    {"payoff": [3,3], "label": "mutual cooperation"},
+    {"payoff": [0,5], "label": "P1 exploited"},
+    {"payoff": [5,0], "label": "P2 exploited"},
+    {"payoff": [1,1], "label": "Nash equilibrium", "highlight": true}
+  ],
+  "caption": "Defect/defect is stable even though cooperate/cooperate is better for both."
+}</pre>
+
+    <h3>7.3 Renderer Safety Rules</h3>
+    <ul>
+      <li>Never inject raw diagram HTML from KB strings.</li>
+      <li>Use typed AST objects validated against a JSON schema.</li>
+      <li>Create SVG nodes with <code>document.createElementNS</code> and text nodes with <code>textContent</code>.</li>
+      <li>Allow only known style tokens: color roles, emphasis, highlight, muted.</li>
+      <li>Render responsively: diagrams must fit within chat width on mobile and support horizontal scroll only for wide matrices.</li>
+      <li>Cache rendered diagram AST by fragment id and theme.</li>
+      <li>For accessibility, include title, caption, and text table fallback.</li>
+    </ul>
+
+    <h3>7.4 Policy Integration</h3>
+    <p>Add new fields to <code>AnswerPlan</code>:</p>
+    <pre>{
+  "visualMode": "none | inline | card | expandable",
+  "visualType": "payoff_matrix | tree | timeline | flow | chart",
+  "visualRef": "fragment-or-topic-diagram-id",
+  "visualPlacement": "before_text | after_intro | after_text",
+  "visualBudget": "tiny | standard | detailed"
+}</pre>
+    <p>
+      The policy should choose visuals when a diagram is available, confidence is high, and the
+      answer budget permits it. Mobile can default to <code>expandable</code>; desktop can render
+      inline.
+    </p>
+  </section>
+
+  <section>
+    <h2>8. RL And Policy Pipeline Improvements</h2>
+
+    <h3>8.1 Current Policy State</h3>
+    <ul>
+      <li>The runtime policy is a local pure-JS MLP with 25 inputs, 128 and 64 hidden units, and six action heads.</li>
+      <li>The shipped runtime manifest is version 0.4.0 and the active JSON weights file is about 362 KB.</li>
+      <li>A 43-byte policy WASM exists as a stub-like artifact; the JS MLP is the real practical path today.</li>
+      <li>Policy dev tests pass, but the 10-scenario benchmark reports only 30% intent accuracy.</li>
+      <li>Training scripts include both a broad <code>train-policy.py</code> pipeline and a newer <code>train_real.py</code> pipeline with anti-collapse measures.</li>
+    </ul>
+
+    <h3>8.2 Make Training One Reproducible Pipeline</h3>
+    <p>
+      Merge the useful parts of <code>train-policy.py</code> and <code>train_real.py</code> into a
+      single command that produces a signed artifact directory:
+    </p>
+    <pre>dev/exports/policy-runs/2026-06-10Txx/
+  config.json
+  dataset-summary.json
+  train-metrics.jsonl
+  validation-report.json
+  confusion-matrix.json
+  policy.weights.json
+  policy.weights.bin
+  policy.manifest.json
+  eval.html
+</pre>
+    <p>
+      The manifest should include feature schema version, reward weights, dataset hash, KB hash,
+      model hash, and evaluation scores. Runtime should refuse mismatched feature schemas.
+    </p>
+
+    <h3>8.3 Improve Rewards</h3>
+    <table>
+      <tr><th>Reward Component</th><th>Current Need</th><th>Proposed Signal</th></tr>
+      <tr><td>Intent match</td><td>Intent accuracy is weak in benchmark.</td><td>Supervised pretraining plus RL reward for exact and compatible intent.</td></tr>
+      <tr><td>Topic precision</td><td>Topicality matters more than stylistic variation.</td><td>Reward exact gold topic, related-topic fallback, and penalize unrelated additions.</td></tr>
+      <tr><td>Answer budget</td><td>No explicit short/medium/long control.</td><td>Reward budget matching based on query labels and local preference labels.</td></tr>
+      <tr><td>Diagram choice</td><td>No visual answer policy yet.</td><td>Reward diagram use only when a validated diagram exists and query type benefits.</td></tr>
+      <tr><td>Follow-up continuity</td><td>Needs strong behavior for "how", "why", "what else".</td><td>Reward continuity with prior topic when follow-up type is nonzero.</td></tr>
+      <tr><td>Correction handling</td><td>Topic correction is valuable.</td><td>Large reward for corrected topic top-1 and concise apology-free refocus.</td></tr>
+      <tr><td>Repetition penalty</td><td>Fragment repetition degrades user trust.</td><td>Use local session fragment history to penalize repeats unless user asks to repeat.</td></tr>
+      <tr><td>Confidence calibration</td><td>Need reliable clarify vs answer decisions.</td><td>Brier/ECE penalty on confidence bins in validation.</td></tr>
+    </table>
+
+    <h3>8.4 Add Offline Golden Tests</h3>
+    <p>
+      Create a per-bot golden set with at least these buckets:
+    </p>
+    <ul>
+      <li>Direct definitions for every topic alias.</li>
+      <li>Examples for every topic that has example fragments.</li>
+      <li>Formal questions for formula-heavy topics.</li>
+      <li>Application questions for practical topics.</li>
+      <li>Comparison pairs from related topic graph.</li>
+      <li>Short follow-ups: how, why, example, simplify, summarize, what else, prove it, compare.</li>
+      <li>Topic corrections and rejections.</li>
+      <li>Off-topic and ambiguous queries.</li>
+      <li>Mobile style queries: terse, typo-heavy, punctuation-only.</li>
+    </ul>
+    <p>
+      A policy build should fail if mode, intent, topic, or answer budget regression exceeds a
+      threshold. This matters more than total reward curves.
+    </p>
+
+    <h3>8.5 Do Not Over-Optimize The Tiny MLP First</h3>
+    <p>
+      The policy model is about 13K parameters. Optimizing the MLP into WASM is not the top
+      performance opportunity compared with MiniLM, ONNX Runtime, KB encoding, and main-thread
+      scheduling. Prioritize model/asset loading and retrieval packaging first.
+    </p>
+  </section>
+
+  <section class="page-break">
+    <h2>9. Asset Loading And Mobile/Desktop Performance</h2>
+
+    <h3>9.1 Current Load Cost</h3>
+    <table>
+      <tr><th>Asset / Area</th><th>Observed Size</th><th>Recommendation</th></tr>
+      <tr><td><code>assets/models/all-MiniLM-L6-v2/onnx/model_quantized.onnx</code></td><td>22.97 MB</td><td>Keep local, but do not force on low-end mobile before user intent. Precompute KB vectors so only query embedding needs runtime model.</td></tr>
+      <tr><td>ONNX Runtime WASM variants</td><td>Four files, about 38 MB total.</td><td>Serve only the likely-needed variant for the browser, or let Transformers.js request it on demand instead of pre-caching all variants.</td></tr>
+      <tr><td><code>assets/transformers/transformers.js</code></td><td>898 KB</td><td>Lazy load only inside chat pages; keep landing page free of ML bundles.</td></tr>
+      <tr><td>KaTeX</td><td>1.5 MB folder plus CSS/fonts.</td><td>Load on demand when a response contains math, or split math-heavy bots from non-math bots.</td></tr>
+      <tr><td>Hero videos</td><td>About 2.48 MB each.</td><td>Use <code>preload="metadata"</code> or adaptive loading on mobile and Save-Data; keep poster meaningful.</td></tr>
+      <tr><td>Policy weights JSON</td><td>362 KB global; per-bot weights also present.</td><td>Use per-bot binary or compressed JSON; avoid loading unused per-bot variants.</td></tr>
+      <tr><td>Dev logs/backups</td><td><code>dev/logs</code> 23 MB, <code>dev/_backups</code> 82 MB.</td><td>Already ignored; keep out of deploys and consider local pruning/archival.</td></tr>
+    </table>
+
+    <h3>9.2 Workerized Load Plan</h3>
+    <p>
+      The chat UI should become usable immediately and never freeze. Recommended sequence:
+    </p>
+    <ol>
+      <li>Main thread renders chat shell, suggestions, local cached history, and input.</li>
+      <li>Worker loads bot pack and sparse indexes.</li>
+      <li>Worker returns <code>basic_ready</code>: BOW/BM25 answers available.</li>
+      <li>Worker loads policy JSON/bin and returns <code>policy_ready</code>.</li>
+      <li>Worker loads MiniLM/ONNX runtime when needed and returns progress events.</li>
+      <li>Worker hot-swaps dense vectors and returns <code>dense_ready</code>.</li>
+      <li>All later query requests use worker messages with cancel tokens.</li>
+    </ol>
+
+    <h3>9.3 Mobile-Specific Rules</h3>
+    <ul>
+      <li>If <code>navigator.connection.saveData</code> is true, default to sparse/BOW mode until the user asks for richer answers.</li>
+      <li>If <code>navigator.deviceMemory</code> is low, avoid caching all fragment embeddings and diagrams at once.</li>
+      <li>Use short answer budget by default on narrow screens unless the query asks for depth.</li>
+      <li>Make large diagrams expandable with a text fallback and no layout shift.</li>
+      <li>Do not preload the 22.97 MB model on the landing page; wait for chat page or explicit install/warm-up.</li>
+      <li>Throttle background model preloads while the tab is hidden or battery saver is active.</li>
+    </ul>
+
+    <h3>9.4 Service Worker Improvements</h3>
+    <ul>
+      <li>Use a manifest-driven cache list from bot packs instead of hardcoded model paths.</li>
+      <li>Separate app shell cache, bot pack cache, model cache, and generated local user data.</li>
+      <li>Add cache size accounting and a "clear model cache" UI action.</li>
+      <li>Use stale-while-revalidate for code, cache-first for versioned bot packs and model files.</li>
+      <li>Cache only one ONNX Runtime variant after feature detection.</li>
+      <li>Include policy and bot-pack manifest hashes in cache keys to avoid stale weights.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>10. Local-Only Data Model</h2>
+    <p>
+      The user requirement is clear: make the system smarter while keeping all data locally in
+      the user's browser. That is feasible if personalization is implemented as optional local
+      state and never syncs.
+    </p>
+
+    <h3>10.1 What Can Be Stored Locally</h3>
+    <table>
+      <tr><th>Local Data</th><th>Purpose</th><th>Storage</th><th>Privacy Rule</th></tr>
+      <tr><td>Recent sessions</td><td>Continue context after reload.</td><td>IndexedDB, capped by turns and age.</td><td>Off by default or clear opt-in; user can delete.</td></tr>
+      <tr><td>Local preferences</td><td>Short vs long answers, diagrams, tone.</td><td>IndexedDB/localStorage small profile.</td><td>No account identity.</td></tr>
+      <tr><td>Feedback events</td><td>Local reranking and budget tuning.</td><td>IndexedDB event log, capped.</td><td>Never sent; export/delete buttons.</td></tr>
+      <tr><td>Model/bot caches</td><td>Offline and faster repeat visits.</td><td>Cache API + IndexedDB.</td><td>Versioned, clearable.</td></tr>
+      <tr><td>Per-topic mastery</td><td>Adapt explanation level.</td><td>Small local map.</td><td>No external analytics.</td></tr>
+    </table>
+
+    <h3>10.2 Local Adaptation Without Retraining</h3>
+    <ul>
+      <li>Adjust answer budget priors from local feedback.</li>
+      <li>Boost fragments the user expanded or marked useful.</li>
+      <li>Penalize fragments the user downvoted, only on the same device.</li>
+      <li>Remember that the user prefers diagrams for a bot or topic.</li>
+      <li>Prefer simpler fragments if the user often asks "simpler".</li>
+      <li>Keep an on-device "local profile vector" of preferences, not raw sensitive transcripts.</li>
+    </ul>
+
+    <h3>10.3 Local-Only UX Requirements</h3>
+    <ul>
+      <li>Settings panel: "Local learning: on/off", "Clear local chat memory", "Clear downloaded models".</li>
+      <li>Per-chat banner: "This preference is stored only in this browser."</li>
+      <li>Export local profile as JSON for user-controlled backup.</li>
+      <li>Do not add telemetry endpoints or remote feedback calls.</li>
+      <li>Tests should assert no external network URLs are used for model or feedback data.</li>
+    </ul>
+  </section>
+
+  <section class="page-break">
+    <h2>11. Separation Of Concerns And Maintainability</h2>
+
+    <h3>11.1 Proposed Module Boundaries</h3>
+    <table>
+      <tr><th>Layer</th><th>Responsibility</th><th>Should Not Know About</th></tr>
+      <tr><td>Bot pack loader</td><td>Fetch/cache bot data, indexes, vectors, config.</td><td>DOM rendering.</td></tr>
+      <tr><td>Tokenizer/entity layer</td><td>Normalize text, aliases, spans, fuzzy matches.</td><td>Policy heads or CSS.</td></tr>
+      <tr><td>Retriever</td><td>BM25, dense ranking, fusion, MMR.</td><td>Chat DOM or welcome copy.</td></tr>
+      <tr><td>Session memory</td><td>Local turn state, user preferences, feedback.</td><td>Model loading details.</td></tr>
+      <tr><td>Policy runtime</td><td>Feature extraction and AnswerPlan generation.</td><td>Raw HTML or SVG nodes.</td></tr>
+      <tr><td>Composer</td><td>Text/diagram plan assembly from safe fragments.</td><td>Network/cache APIs.</td></tr>
+      <tr><td>Renderer</td><td>DOM, markdown subset, KaTeX, diagram AST.</td><td>Ranking algorithms.</td></tr>
+    </table>
+
+    <h3>11.2 Remove Or Quarantine Legacy Chat NLP</h3>
+    <p>
+      Current app wrappers import the shared engine, but legacy files
+      <code>chat/game-theory-chat/js/nlp.js</code> and <code>chat/golden-age-inquiry/js/nlp.js</code>
+      still contain old composition logic and unseeded randomness. Options:
+    </p>
+    <ul>
+      <li>Delete after verifying no HTML imports them.</li>
+      <li>Move to <code>dev/_quarantine</code> with an explanation if historical reference matters.</li>
+      <li>Or convert them into thin re-exports from <code>core/nlp.js</code> until all references are gone.</li>
+    </ul>
+
+    <h3>11.3 Bot Pack Shape</h3>
+    <pre>{
+  "botId": "game-theory-chat",
+  "kbVersion": "1.3.0",
+  "model": {"embedding": "all-MiniLM-L6-v2", "dim": 384, "vectorDtype": "float16"},
+  "config": {"thresholds": "...", "composition": "..."},
+  "entries": "entries.json",
+  "fragments": "fragments.json",
+  "aliasIndex": "aliases.bin",
+  "bm25Index": "bm25.bin",
+  "entryVectors": "entry-vectors.f16",
+  "fragmentVectors": "fragment-vectors.f16",
+  "diagrams": "diagrams.json",
+  "policy": {"weights": "policy.weights.bin", "manifest": "policy.manifest.json"}
+}</pre>
+    <p>
+      This format lets a chat page fetch one manifest, then exactly the assets needed for that
+      bot and device.
+    </p>
+
+    <h3>11.4 Documentation Source Of Truth</h3>
+    <p>
+      The live HTML docs and Markdown docs are not fully aligned. For example, one Markdown doc
+      still describes a first query as 2 to 8 seconds and 55+ game-theory concepts, while current
+      architecture has progressive first-turn handling and the manifest reports 77 game-theory
+      topics. Generate public docs from a single architecture data file or add a doc drift test.
+    </p>
+  </section>
+
+  <section>
+    <h2>12. Testing, Benchmarks, And Observability</h2>
+    <p>
+      The current test footprint is solid for helpers and schemas. The next step is behavior and
+      performance proof.
+    </p>
+
+    <h3>12.1 Tests To Add</h3>
+    <ul>
+      <li>Browser smoke test per chat page: shell renders, welcome shown once, suggestions work, first BOW answer works, dense hot-swap occurs.</li>
+      <li>Service worker cache test: model cache, Range handling, stale cache upgrade, offline repeat visit.</li>
+      <li>Answer budget tests: short/medium/long query labels produce expected fragment counts and word caps.</li>
+      <li>Diagram renderer tests: AST validation rejects unsafe keys and renders accessible SVG.</li>
+      <li>Policy golden tests: per-bot mode/intent/topic/budget/diagram decisions.</li>
+      <li>Mobile viewport tests: input remains visible, diagrams fit, no content overlap, no giant first-paint downloads on landing page.</li>
+      <li>Network guard test: no remote model URLs, no telemetry, no feedback uploads.</li>
+    </ul>
+
+    <h3>12.2 Performance Metrics To Track</h3>
+    <table>
+      <tr><th>Metric</th><th>Target</th><th>How To Measure</th></tr>
+      <tr><td>Chat shell time to interactive</td><td>&lt; 500 ms desktop, &lt; 1000 ms mobile</td><td>Playwright performance marks.</td></tr>
+      <tr><td>First basic answer</td><td>&lt; 500 ms after submit once app shell loaded</td><td>Instrument BOW/BM25 path.</td></tr>
+      <tr><td>Dense ready</td><td>Background, no UI freeze</td><td>Worker progress and long-task observer.</td></tr>
+      <tr><td>Query embedding cache hit</td><td>&gt; 60% for repeated/local follow-ups</td><td>Local debug counters.</td></tr>
+      <tr><td>Policy inference</td><td>&lt; 5 ms</td><td>Performance marks in <code>planAnswer</code>.</td></tr>
+      <tr><td>Diagram render</td><td>&lt; 16 ms for standard diagrams</td><td>Renderer microbench.</td></tr>
+      <tr><td>Main-thread long tasks</td><td>0 during model load and answer generation</td><td>PerformanceObserver.</td></tr>
+    </table>
+
+    <h3>12.3 Local Debug Panel</h3>
+    <p>
+      Add a dev-only debug drawer, gated by query param or localStorage flag, that shows:
+      selected mode, intent, answer budget, visual mode, topic ids, sparse/dense scores,
+      confidence, follow-up type, policy decision path, cache state, and timings. This helps
+      tune behavior without sending telemetry.
+    </p>
+  </section>
+
+  <section class="page-break">
+    <h2>13. Implementation Tracks</h2>
+
+    <h3>Track A: Conversation And Answer Control (Fastest High-Impact)</h3>
+    <ol>
+      <li>Fix <code>how?</code>/<code>why?</code> follow-up mapping and tests.</li>
+      <li>Add <code>answerBudget</code> to <code>AnswerPlan</code> schema with validation.</li>
+      <li>Add local heuristic budget classifier before retraining MLP.</li>
+      <li>Make renderer enforce word/fragment caps by budget.</li>
+      <li>Wire deterministic composition seed and remove remaining <code>Math.random()</code> from active code.</li>
+      <li>Add golden tests for short/medium/long and "another version".</li>
+    </ol>
+
+    <h3>Track B: Bot Pack And Loading Speed</h3>
+    <ol>
+      <li>Create a dev exporter that builds <code>bot.pack.json</code> plus vectors/indexes for one bot.</li>
+      <li>Load bot pack from <code>core/chatbot-engine.js</code> while keeping old shape as fallback.</li>
+      <li>Precompute entry and fragment vectors; stop embedding static KB in browser.</li>
+      <li>Add feature-detected ONNX Runtime variant selection.</li>
+      <li>Move model loading and ranking to a Worker.</li>
+      <li>Update service worker to cache manifest-driven assets only.</li>
+    </ol>
+
+    <h3>Track C: Visual Diagrams</h3>
+    <ol>
+      <li>Define diagram JSON schema and renderer for payoff matrix, confusion matrix, timeline, flowchart.</li>
+      <li>Add 10 diagram ASTs manually to high-value topics.</li>
+      <li>Extend fragment metadata with <code>visual_refs</code> and <code>visual_fit</code>.</li>
+      <li>Add <code>visualMode</code> and <code>visualRef</code> to policy plan.</li>
+      <li>Test mobile rendering and accessibility text fallback.</li>
+      <li>Expand with generator scripts once schema is stable.</li>
+    </ol>
+
+    <h3>Track D: Policy And RL Quality</h3>
+    <ol>
+      <li>Unify training scripts and artifact manifests.</li>
+      <li>Add per-bot golden evaluation with confusion matrix.</li>
+      <li>Label answer budget and diagram use in training samples.</li>
+      <li>Train policy v0.5 with feature schema versioning.</li>
+      <li>Fail CI if mode/intent/topic/budget regress beyond thresholds.</li>
+      <li>Use local shadow compare to collect dev-only mismatch logs, not production telemetry.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>14. Detailed Recommendation Backlog</h2>
+    <table>
+      <tr><th>#</th><th>Recommendation</th><th>Category</th><th>Local-First Constraint</th></tr>
+      <tr><td>1</td><td>Fix <code>how</code>/<code>why</code> follow-up mapping.</td><td>Conversation</td><td>No storage/network needed.</td></tr>
+      <tr><td>2</td><td>Add answer budget to <code>AnswerPlan</code>.</td><td>Policy</td><td>Decision remains local.</td></tr>
+      <tr><td>3</td><td>Implement deterministic seeded composition for all active render paths.</td><td>Renderer</td><td>Seed derived from local state only.</td></tr>
+      <tr><td>4</td><td>Remove or quarantine legacy per-chat NLP files.</td><td>Maintenance</td><td>No runtime data impact.</td></tr>
+      <tr><td>5</td><td>Export precomputed entry vectors.</td><td>Loading</td><td>Static local model artifacts.</td></tr>
+      <tr><td>6</td><td>Export precomputed fragment vectors.</td><td>Loading</td><td>Static local model artifacts.</td></tr>
+      <tr><td>7</td><td>Use Float16/Int8 vector packs instead of JSON arrays.</td><td>Loading</td><td>Served as same-origin static assets.</td></tr>
+      <tr><td>8</td><td>Build a BM25 inverted index in bot pack.</td><td>Retrieval</td><td>No server search.</td></tr>
+      <tr><td>9</td><td>Replace alias regex loop with alias automaton.</td><td>Entity</td><td>Index ships in pack.</td></tr>
+      <tr><td>10</td><td>Add BK-tree typo correction for aliases.</td><td>Entity</td><td>Runs in browser memory.</td></tr>
+      <tr><td>11</td><td>Add reciprocal rank fusion as a retrieval mode.</td><td>Retrieval</td><td>Uses local sparse/dense scores.</td></tr>
+      <tr><td>12</td><td>Add MMR topic diversification.</td><td>Retrieval</td><td>Uses local vectors and graph.</td></tr>
+      <tr><td>13</td><td>Train tiny local learning-to-rank head.</td><td>Retrieval</td><td>Weights ship statically.</td></tr>
+      <tr><td>14</td><td>Expose confidence bins and calibration metrics.</td><td>Quality</td><td>Dev-only local metrics.</td></tr>
+      <tr><td>15</td><td>Persist optional local profile in IndexedDB.</td><td>Personalization</td><td>No sync; clear/export controls.</td></tr>
+      <tr><td>16</td><td>Add local feedback controls per answer.</td><td>Personalization</td><td>Events stay on device.</td></tr>
+      <tr><td>17</td><td>Build diagram AST schema.</td><td>Visual</td><td>No raw remote HTML.</td></tr>
+      <tr><td>18</td><td>Add payoff matrix SVG renderer.</td><td>Visual</td><td>DOM/SVG only.</td></tr>
+      <tr><td>19</td><td>Add confusion matrix SVG renderer.</td><td>Visual</td><td>DOM/SVG only.</td></tr>
+      <tr><td>20</td><td>Add timeline renderer for historical bot.</td><td>Visual</td><td>DOM/SVG only.</td></tr>
+      <tr><td>21</td><td>Lazy-load KaTeX only when needed.</td><td>Loading</td><td>Same local files.</td></tr>
+      <tr><td>22</td><td>Stop preloading full ONNX on Save-Data/mobile until needed.</td><td>Mobile</td><td>No network beyond static model when requested.</td></tr>
+      <tr><td>23</td><td>Move inference/ranking to Web Worker.</td><td>Performance</td><td>Worker uses same-origin assets.</td></tr>
+      <tr><td>24</td><td>Add cancel tokens for stale query work.</td><td>Performance</td><td>Local worker protocol.</td></tr>
+      <tr><td>25</td><td>Add Playwright mobile/desktop smoke tests.</td><td>Testing</td><td>Local browser tests.</td></tr>
+      <tr><td>26</td><td>Add no-remote-model network guard test.</td><td>Privacy</td><td>Asserts local-only model path.</td></tr>
+      <tr><td>27</td><td>Make docs generated from architecture metadata.</td><td>Docs</td><td>No runtime effect.</td></tr>
+      <tr><td>28</td><td>Add per-bot threshold tuning exports.</td><td>Policy</td><td>Static config.</td></tr>
+      <tr><td>29</td><td>Use binary policy weights in runtime.</td><td>Loading</td><td>Same-origin static file.</td></tr>
+      <tr><td>30</td><td>Prune or archive oversized dev logs locally.</td><td>Maintenance</td><td>Keep ignored and never deploy.</td></tr>
+      <tr><td>31</td><td>Add local debug panel for decision packets.</td><td>Observability</td><td>Dev-only, no telemetry.</td></tr>
+      <tr><td>32</td><td>Train answer budget and visual selection heads.</td><td>RL</td><td>Weights static/local.</td></tr>
+      <tr><td>33</td><td>Add topic mastery features from local profile.</td><td>Personalization</td><td>Opt-in local profile.</td></tr>
+      <tr><td>34</td><td>Add "another version" variant counter.</td><td>UX</td><td>Local deterministic seed increment.</td></tr>
+      <tr><td>35</td><td>Add source/fragment citations in answers.</td><td>Usefulness</td><td>Cites local KB fragments.</td></tr>
+      <tr><td>36</td><td>Add "show why this answer" explanation in dev mode.</td><td>Trust</td><td>Local policy trace.</td></tr>
+      <tr><td>37</td><td>Add offline install warm-up flow.</td><td>PWA</td><td>User-controlled cache fill.</td></tr>
+      <tr><td>38</td><td>Add cache quota and model clear controls.</td><td>PWA</td><td>Local cache only.</td></tr>
+      <tr><td>39</td><td>Split landing assets from chat assets strictly.</td><td>Loading</td><td>No change to privacy.</td></tr>
+      <tr><td>40</td><td>Use responsive diagram placement by viewport.</td><td>Mobile</td><td>Local render only.</td></tr>
+    </table>
+  </section>
+
+  <section class="page-break">
+    <h2>15. Completion Checklist For This Report</h2>
+    <table>
+      <tr><th>Requirement From User</th><th>Evidence In This Deliverable</th></tr>
+      <tr><td>Inspect everything about relu.chat.</td><td>Repo structure, docs, dev notes, core engine, policy runtime, session, BM25, UI, service worker, chat wrappers, configs, KBs, assets, training scripts, tests, and git ignore state were inspected.</td></tr>
+      <tr><td>Create a PDF under <code>dev/</code>.</td><td>This HTML source is under <code>dev/</code> and is intended to be rendered to <code>dev/relu-chat-local-first-optimization-report-2026-06-10.pdf</code>.</td></tr>
+      <tr><td>List tons of details that would make ReLU.chat more useful.</td><td>Backlog includes answer budgets, local feedback, citations, diagrams, topic mastery, better clarification, and "another version".</td></tr>
+      <tr><td>Make it faster/loading much faster.</td><td>Asset sizes, bot packs, precomputed vectors, workerization, service worker cache strategy, mobile load policy.</td></tr>
+      <tr><td>Make it more intelligent and conversation-aware.</td><td>Follow-up bug, session state machine, EMA features, clarification, local profile, ranking improvements.</td></tr>
+      <tr><td>Keep all data locally in user's browser.</td><td>IndexedDB/Cache API local-only model, no telemetry, clear/export controls, no remote feedback.</td></tr>
+      <tr><td>Cover desktop and mobile devices.</td><td>Separate mobile rules, Save-Data, device memory, responsive diagrams, desktop inline diagrams.</td></tr>
+      <tr><td>Answer in variations and lengths automatically.</td><td>Explicit <code>answerBudget</code> plan, deterministic variation, budget inference rules.</td></tr>
+      <tr><td>Answer with visual SVG/HTML diagrams alongside text.</td><td>Safe diagram AST, render pipeline, diagram types per bot, schema and policy fields.</td></tr>
+      <tr><td>Focus on algorithm optimizations.</td><td>Inverted BM25, alias automaton, BK-tree, packed embeddings, RRF, learned ranker, MMR.</td></tr>
+      <tr><td>Focus on RL pipeline optimizations.</td><td>Unified training pipeline, reward improvements, golden eval, artifact manifests, feature schema versioning.</td></tr>
+      <tr><td>Focus on asset loading and separation of concerns.</td><td>Bot packs, worker protocol, service worker plan, module boundaries, legacy cleanup.</td></tr>
+      <tr><td>Dev-only, do not push PDF to prod or GitHub.</td><td>Root <code>.gitignore</code> ignores <code>dev/</code>; no deploy or git push is part of this work.</td></tr>
+    </table>
+  </section>
+</body>
+</html>

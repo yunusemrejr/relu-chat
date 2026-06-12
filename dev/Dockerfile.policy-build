@@ -1,0 +1,40 @@
+FROM python:3.11-slim AS train
+
+WORKDIR /app
+COPY scripts/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /app
+
+FROM emscripten/emsdk:3.1.58 AS wasm
+
+WORKDIR /build
+COPY --from=train /app /app
+
+RUN apt-get update && apt-get install -y wget && \
+    wget https://github.com/WebAssembly/binaryen/releases/download/version_116/binaryen-version_116-x86_64-linux.tar.gz && \
+    tar xzf binaryen-version_116-x86_64-linux.tar.gz && \
+    cp binaryen-*/bin/wasm-opt /usr/local/bin/ && \
+    rm -rf binaryen-*
+
+RUN cd /app && if [ -f checkpoints/final.pt ]; then \
+        python scripts/train-policy.py --export-only checkpoints/final.pt --output /build/out/models/policy; \
+    else \
+        echo "No checkpoint found. Running training pipeline in data-prep mode..."; \
+        python scripts/train-policy.py --bot game-theory --skip-train --output /build/out/models/policy; \
+    fi
+
+RUN if [ -f /build/out/models/policy/policy.wasm ]; then \
+        wasm-opt /build/out/models/policy/policy.wasm -O3 -o /build/out/models/policy/policy.wasm || true; \
+    else \
+        wasm-opt /build/out/models/policy/policy/policy.wasm -O3 -o /build/out/models/policy/policy/policy.wasm || true; \
+    fi
+
+# If no WASM was produced, create placeholder for dev testing
+RUN if [ ! -f /build/out/models/policy/policy.wasm ] && [ ! -f /build/out/models/policy/policy/policy.wasm ]; then \
+        mkdir -p /build/out/models/policy/policy && \
+        touch /build/out/models/policy/policy/policy.wasm; \
+        echo '{"weights": {"fc1": [[0]]}}' > /build/out/models/policy/policy/policy.weights.json; \
+    fi
+
+CMD ["cp", "-r", "/build/out/models/policy", "/output"]

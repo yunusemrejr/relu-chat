@@ -1,0 +1,1606 @@
+{
+  "nash equilibrium": [
+    [
+      0,
+      1
+    ]
+  ],
+  "nash": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "ne": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "nash eq": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "d d": [
+    [
+      0,
+      0.9
+    ],
+    [
+      1,
+      0.9
+    ]
+  ],
+  "prisoner s dilemma": [
+    [
+      1,
+      1
+    ]
+  ],
+  "pd": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "prisoners dilemma": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "prisoner dilemma": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "c c": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "mutual defection": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "defection": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "cooperate defect": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "defect defect": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "dominant strategy": [
+    [
+      2,
+      1
+    ]
+  ],
+  "dominance": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "strictly dominant": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "weakly dominant": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "mixed strategy": [
+    [
+      3,
+      1
+    ]
+  ],
+  "mixed": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "randomized strategy": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "mixing": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "pure strategy": [
+    [
+      4,
+      1
+    ]
+  ],
+  "pure": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "zero sum game": [
+    [
+      5,
+      1
+    ]
+  ],
+  "zerosum": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "zero sum": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "constant sum": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "strictly competitive": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "cooperative game": [
+    [
+      6,
+      1
+    ]
+  ],
+  "coalitional": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "tu game": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "characteristic function": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "non cooperative game": [
+    [
+      7,
+      1
+    ]
+  ],
+  "non cooperative": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "minimax theorem": [
+    [
+      8,
+      1
+    ]
+  ],
+  "von neumann theorem": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "max min": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "minmax": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "extensive form game": [
+    [
+      9,
+      1
+    ]
+  ],
+  "game tree": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "sequential": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "extensive form": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "normal form game": [
+    [
+      10,
+      1
+    ]
+  ],
+  "strategic form": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "matrix game": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "bayesian game": [
+    [
+      11,
+      1
+    ]
+  ],
+  "games of incomplete information": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "bayes nash": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "type space": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "repeated game": [
+    [
+      12,
+      1
+    ]
+  ],
+  "iterated game": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "supergame": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "evolutionary game theory": [
+    [
+      13,
+      1
+    ]
+  ],
+  "egt": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "evolution": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "evolutionarily stable strategy": [
+    [
+      14,
+      1
+    ]
+  ],
+  "ess": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "evolutionary stable": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "replicator dynamics": [
+    [
+      15,
+      1
+    ]
+  ],
+  "replicator equation": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "stackelberg competition": [
+    [
+      16,
+      1
+    ]
+  ],
+  "stackelberg": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "leader follower": [
+    [
+      16,
+      0.9
+    ]
+  ],
+  "cournot competition": [
+    [
+      17,
+      1
+    ]
+  ],
+  "cournot": [
+    [
+      17,
+      0.9
+    ]
+  ],
+  "quantity competition": [
+    [
+      17,
+      0.9
+    ]
+  ],
+  "bertrand competition": [
+    [
+      18,
+      1
+    ]
+  ],
+  "bertrand": [
+    [
+      18,
+      0.9
+    ]
+  ],
+  "price competition": [
+    [
+      18,
+      0.9
+    ]
+  ],
+  "auction theory": [
+    [
+      19,
+      1
+    ]
+  ],
+  "auctions": [
+    [
+      19,
+      0.9
+    ]
+  ],
+  "vickrey auction": [
+    [
+      20,
+      1
+    ]
+  ],
+  "second price": [
+    [
+      20,
+      0.9
+    ]
+  ],
+  "second price sealed bid": [
+    [
+      20,
+      0.9
+    ]
+  ],
+  "mechanism design": [
+    [
+      21,
+      1
+    ]
+  ],
+  "reverse game theory": [
+    [
+      21,
+      0.9
+    ]
+  ],
+  "social choice mechanism": [
+    [
+      21,
+      0.9
+    ]
+  ],
+  "revelation principle": [
+    [
+      22,
+      1
+    ]
+  ],
+  "revelation": [
+    [
+      22,
+      0.9
+    ]
+  ],
+  "shapley value": [
+    [
+      23,
+      1
+    ]
+  ],
+  "shapley": [
+    [
+      23,
+      0.9
+    ]
+  ],
+  "fair allocation": [
+    [
+      23,
+      0.9
+    ]
+  ],
+  "core of a cooperative game": [
+    [
+      24,
+      1
+    ]
+  ],
+  "core": [
+    [
+      24,
+      0.9
+    ]
+  ],
+  "coalition formation": [
+    [
+      25,
+      1
+    ]
+  ],
+  "coalitions": [
+    [
+      25,
+      0.9
+    ]
+  ],
+  "partition function": [
+    [
+      25,
+      0.9
+    ]
+  ],
+  "nash bargaining solution": [
+    [
+      26,
+      1
+    ]
+  ],
+  "nash bargaining": [
+    [
+      26,
+      0.9
+    ]
+  ],
+  "bargaining solution": [
+    [
+      26,
+      0.9
+    ]
+  ],
+  "rubinstein bargaining": [
+    [
+      27,
+      1
+    ]
+  ],
+  "alternating offers": [
+    [
+      27,
+      0.9
+    ]
+  ],
+  "rubinstein stahl": [
+    [
+      27,
+      0.9
+    ]
+  ],
+  "correlated equilibrium": [
+    [
+      28,
+      1
+    ]
+  ],
+  "aumann correlated": [
+    [
+      28,
+      0.9
+    ]
+  ],
+  "subgame perfect equilibrium": [
+    [
+      29,
+      1
+    ]
+  ],
+  "spe": [
+    [
+      29,
+      0.9
+    ]
+  ],
+  "subgame perfection": [
+    [
+      29,
+      0.9
+    ]
+  ],
+  "subgame perfect": [
+    [
+      29,
+      0.9
+    ]
+  ],
+  "backward induction": [
+    [
+      29,
+      0.9
+    ],
+    [
+      46,
+      1
+    ]
+  ],
+  "perfect bayesian equilibrium": [
+    [
+      30,
+      1
+    ]
+  ],
+  "pbe": [
+    [
+      30,
+      0.9
+    ]
+  ],
+  "perfect bayesian": [
+    [
+      30,
+      0.9
+    ]
+  ],
+  "trembling hand perfection": [
+    [
+      31,
+      1
+    ]
+  ],
+  "trembling hand": [
+    [
+      31,
+      0.9
+    ]
+  ],
+  "selten perfect": [
+    [
+      31,
+      0.9
+    ]
+  ],
+  "battle of the sexes": [
+    [
+      32,
+      1
+    ]
+  ],
+  "bos": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "battle of sexes": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "o o": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "f f": [
+    [
+      32,
+      0.9
+    ]
+  ],
+  "hawk dove game": [
+    [
+      33,
+      1
+    ]
+  ],
+  "hawk dove": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "chicken in biology": [
+    [
+      33,
+      0.9
+    ]
+  ],
+  "stag hunt": [
+    [
+      34,
+      1
+    ]
+  ],
+  "assurance game": [
+    [
+      34,
+      0.9
+    ]
+  ],
+  "chicken game": [
+    [
+      35,
+      1
+    ]
+  ],
+  "chicken": [
+    [
+      35,
+      0.9
+    ]
+  ],
+  "hawk dove economic": [
+    [
+      35,
+      0.9
+    ]
+  ],
+  "matching pennies": [
+    [
+      36,
+      1
+    ]
+  ],
+  "odd even": [
+    [
+      36,
+      0.9
+    ]
+  ],
+  "matching pennies game": [
+    [
+      36,
+      0.9
+    ]
+  ],
+  "ultimatum game": [
+    [
+      37,
+      1
+    ]
+  ],
+  "ultimatum": [
+    [
+      37,
+      0.9
+    ]
+  ],
+  "centipede game": [
+    [
+      38,
+      1
+    ]
+  ],
+  "centipede": [
+    [
+      38,
+      0.9
+    ]
+  ],
+  "public goods game": [
+    [
+      39,
+      1
+    ]
+  ],
+  "public good": [
+    [
+      39,
+      0.9
+    ]
+  ],
+  "voluntary contribution": [
+    [
+      39,
+      0.9
+    ]
+  ],
+  "tragedy of the commons": [
+    [
+      40,
+      1
+    ]
+  ],
+  "commons": [
+    [
+      40,
+      0.9
+    ]
+  ],
+  "common pool": [
+    [
+      40,
+      0.9
+    ]
+  ],
+  "signaling games": [
+    [
+      41,
+      1
+    ]
+  ],
+  "signaling": [
+    [
+      41,
+      0.9
+    ]
+  ],
+  "spence": [
+    [
+      41,
+      0.9
+    ]
+  ],
+  "screening games": [
+    [
+      42,
+      1
+    ]
+  ],
+  "screening": [
+    [
+      42,
+      0.9
+    ]
+  ],
+  "rothschild stiglitz": [
+    [
+      42,
+      0.9
+    ]
+  ],
+  "principal agent problem": [
+    [
+      43,
+      1
+    ]
+  ],
+  "agency": [
+    [
+      43,
+      0.9
+    ]
+  ],
+  "moral hazard": [
+    [
+      43,
+      0.9
+    ]
+  ],
+  "hidden action": [
+    [
+      43,
+      0.9
+    ]
+  ],
+  "folk theorem": [
+    [
+      44,
+      1
+    ]
+  ],
+  "repeated games folk": [
+    [
+      44,
+      0.9
+    ]
+  ],
+  "tit for tat": [
+    [
+      45,
+      1
+    ]
+  ],
+  "tft": [
+    [
+      45,
+      0.9
+    ]
+  ],
+  "axelrod": [
+    [
+      45,
+      0.9
+    ]
+  ],
+  "reciprocity": [
+    [
+      45,
+      0.9
+    ]
+  ],
+  "iterated elimination of dominated strategies": [
+    [
+      47,
+      1
+    ]
+  ],
+  "ieds": [
+    [
+      47,
+      0.9
+    ]
+  ],
+  "iesds": [
+    [
+      47,
+      0.9
+    ]
+  ],
+  "dominance solvable": [
+    [
+      47,
+      0.9
+    ]
+  ],
+  "rationalizability": [
+    [
+      48,
+      1
+    ]
+  ],
+  "rationalizable": [
+    [
+      48,
+      0.9
+    ]
+  ],
+  "common knowledge": [
+    [
+      49,
+      1
+    ]
+  ],
+  "aumann": [
+    [
+      49,
+      0.9
+    ]
+  ],
+  "potential games": [
+    [
+      50,
+      1
+    ]
+  ],
+  "potential game": [
+    [
+      50,
+      0.9
+    ]
+  ],
+  "monderer shapley": [
+    [
+      50,
+      0.9
+    ]
+  ],
+  "congestion games": [
+    [
+      51,
+      1
+    ]
+  ],
+  "congestion": [
+    [
+      51,
+      0.9
+    ]
+  ],
+  "rosenthal": [
+    [
+      51,
+      0.9
+    ]
+  ],
+  "routing games": [
+    [
+      51,
+      0.9
+    ]
+  ],
+  "price of anarchy": [
+    [
+      52,
+      1
+    ]
+  ],
+  "poa": [
+    [
+      52,
+      0.9
+    ]
+  ],
+  "zermelo s theorem": [
+    [
+      53,
+      1
+    ]
+  ],
+  "zermelo": [
+    [
+      53,
+      0.9
+    ]
+  ],
+  "harsanyi transformation": [
+    [
+      54,
+      1
+    ]
+  ],
+  "harsanyi doctrine": [
+    [
+      54,
+      0.9
+    ]
+  ],
+  "type space transformation": [
+    [
+      54,
+      0.9
+    ]
+  ],
+  "pareto efficiency": [
+    [
+      55,
+      1
+    ]
+  ],
+  "pareto optimality": [
+    [
+      55,
+      0.9
+    ]
+  ],
+  "pareto improvement": [
+    [
+      55,
+      0.9
+    ]
+  ],
+  "pareto frontier": [
+    [
+      55,
+      0.9
+    ]
+  ],
+  "sequential equilibrium": [
+    [
+      56,
+      1
+    ]
+  ],
+  "kreps wilson": [
+    [
+      56,
+      0.9
+    ]
+  ],
+  "consistent assessment": [
+    [
+      56,
+      0.9
+    ]
+  ],
+  "proper equilibrium": [
+    [
+      57,
+      1
+    ]
+  ],
+  "myerson proper": [
+    [
+      57,
+      0.9
+    ]
+  ],
+  "trembling perfection refinement": [
+    [
+      57,
+      0.9
+    ]
+  ],
+  "quantal response equilibrium": [
+    [
+      58,
+      1
+    ]
+  ],
+  "qre": [
+    [
+      58,
+      0.9
+    ]
+  ],
+  "mckelvey palfrey": [
+    [
+      58,
+      0.9
+    ]
+  ],
+  "stochastic choice": [
+    [
+      58,
+      0.9
+    ]
+  ],
+  "logit equilibrium": [
+    [
+      58,
+      0.9
+    ]
+  ],
+  "level k reasoning": [
+    [
+      59,
+      1
+    ]
+  ],
+  "level k": [
+    [
+      59,
+      0.9
+    ]
+  ],
+  "cognitive hierarchy": [
+    [
+      59,
+      0.9
+    ]
+  ],
+  "depth of reasoning": [
+    [
+      59,
+      0.9
+    ]
+  ],
+  "iterated best response": [
+    [
+      59,
+      0.9
+    ]
+  ],
+  "global games": [
+    [
+      60,
+      1
+    ]
+  ],
+  "global game": [
+    [
+      60,
+      0.9
+    ]
+  ],
+  "carlsson van damme": [
+    [
+      60,
+      0.9
+    ]
+  ],
+  "noisy signals": [
+    [
+      60,
+      0.9
+    ]
+  ],
+  "incomplete information coordination": [
+    [
+      60,
+      0.9
+    ]
+  ],
+  "supermodular games": [
+    [
+      61,
+      1
+    ]
+  ],
+  "supermodular game": [
+    [
+      61,
+      0.9
+    ]
+  ],
+  "strategic complements": [
+    [
+      61,
+      0.9
+    ]
+  ],
+  "topkis monotonicity": [
+    [
+      61,
+      0.9
+    ]
+  ],
+  "lattice game": [
+    [
+      61,
+      0.9
+    ]
+  ],
+  "wardrop equilibrium": [
+    [
+      62,
+      1
+    ]
+  ],
+  "user equilibrium": [
+    [
+      62,
+      0.9
+    ]
+  ],
+  "wardrop principle": [
+    [
+      62,
+      0.9
+    ]
+  ],
+  "selfish routing": [
+    [
+      62,
+      0.9
+    ]
+  ],
+  "price of stability": [
+    [
+      63,
+      1
+    ]
+  ],
+  "pos": [
+    [
+      63,
+      0.9
+    ]
+  ],
+  "smoothed analysis of price of anarchy": [
+    [
+      64,
+      1
+    ]
+  ],
+  "smoothed analysis": [
+    [
+      64,
+      0.9
+    ]
+  ],
+  "roughgarden": [
+    [
+      64,
+      0.9
+    ]
+  ],
+  "near tightness poa": [
+    [
+      64,
+      0.9
+    ]
+  ],
+  "no regret learning": [
+    [
+      65,
+      1
+    ]
+  ],
+  "no regret": [
+    [
+      65,
+      0.9
+    ]
+  ],
+  "regret minimization": [
+    [
+      65,
+      0.9
+    ]
+  ],
+  "hannan consistency": [
+    [
+      65,
+      0.9
+    ]
+  ],
+  "calibrated learning": [
+    [
+      65,
+      0.9
+    ]
+  ],
+  "fictitious play": [
+    [
+      66,
+      1
+    ]
+  ],
+  "brown robustson": [
+    [
+      66,
+      0.9
+    ]
+  ],
+  "best response dynamics": [
+    [
+      66,
+      0.9
+    ]
+  ],
+  "evolutionarily stable sets": [
+    [
+      67,
+      1
+    ]
+  ],
+  "evolutionarily stable set": [
+    [
+      67,
+      0.9
+    ]
+  ],
+  "ess set": [
+    [
+      67,
+      0.9
+    ]
+  ],
+  "equilibrium selection egt": [
+    [
+      67,
+      0.9
+    ]
+  ],
+  "neutrally stable": [
+    [
+      67,
+      0.9
+    ]
+  ],
+  "cheap talk": [
+    [
+      68,
+      1
+    ]
+  ],
+  "crawford sobel": [
+    [
+      68,
+      0.9
+    ]
+  ],
+  "costless communication": [
+    [
+      68,
+      0.9
+    ]
+  ],
+  "pre play communication": [
+    [
+      68,
+      0.9
+    ]
+  ],
+  "berge equilibrium": [
+    [
+      69,
+      1
+    ]
+  ],
+  "altruistic equilibrium": [
+    [
+      69,
+      0.9
+    ]
+  ],
+  "social stability": [
+    [
+      69,
+      0.9
+    ]
+  ],
+  "zhukovskii": [
+    [
+      69,
+      0.9
+    ]
+  ],
+  "mean field game": [
+    [
+      70,
+      1
+    ]
+  ],
+  "mfg": [
+    [
+      70,
+      0.9
+    ]
+  ],
+  "large population game": [
+    [
+      70,
+      0.9
+    ]
+  ],
+  "lasry lions": [
+    [
+      70,
+      0.9
+    ]
+  ],
+  "continuous population": [
+    [
+      70,
+      0.9
+    ]
+  ],
+  "algorithmic mechanism design": [
+    [
+      71,
+      1
+    ]
+  ],
+  "amd": [
+    [
+      71,
+      0.9
+    ]
+  ],
+  "nisan": [
+    [
+      71,
+      0.9
+    ]
+  ],
+  "computationally efficient mechanisms": [
+    [
+      71,
+      0.9
+    ]
+  ],
+  "fair division": [
+    [
+      72,
+      1
+    ]
+  ],
+  "cake cutting": [
+    [
+      72,
+      0.9
+    ]
+  ],
+  "envy freeness": [
+    [
+      72,
+      0.9
+    ]
+  ],
+  "proportionality": [
+    [
+      72,
+      0.9
+    ]
+  ],
+  "equitable division": [
+    [
+      72,
+      0.9
+    ]
+  ],
+  "voting theory": [
+    [
+      73,
+      1
+    ]
+  ],
+  "voting rules": [
+    [
+      73,
+      0.9
+    ]
+  ],
+  "social choice function": [
+    [
+      73,
+      0.9
+    ]
+  ],
+  "plurality": [
+    [
+      73,
+      0.9
+    ]
+  ],
+  "ranked choice": [
+    [
+      73,
+      0.9
+    ]
+  ],
+  "social choice theory": [
+    [
+      74,
+      1
+    ]
+  ],
+  "social choice": [
+    [
+      74,
+      0.9
+    ]
+  ],
+  "aggregation of preferences": [
+    [
+      74,
+      0.9
+    ]
+  ],
+  "arrow theorem": [
+    [
+      74,
+      0.9
+    ]
+  ],
+  "collective decision": [
+    [
+      74,
+      0.9
+    ]
+  ],
+  "banzhaf power index": [
+    [
+      75,
+      1
+    ]
+  ],
+  "banzhaf index": [
+    [
+      75,
+      0.9
+    ]
+  ],
+  "banzhaf power": [
+    [
+      75,
+      0.9
+    ]
+  ],
+  "voting power": [
+    [
+      75,
+      0.9
+    ]
+  ],
+  "pivotal index": [
+    [
+      75,
+      0.9
+    ]
+  ],
+  "core selection matching": [
+    [
+      76,
+      1
+    ]
+  ],
+  "stable matching": [
+    [
+      76,
+      0.9
+    ]
+  ],
+  "gale shapley": [
+    [
+      76,
+      0.9
+    ]
+  ],
+  "deferred acceptance": [
+    [
+      76,
+      0.9
+    ]
+  ],
+  "matching theory": [
+    [
+      76,
+      0.9
+    ]
+  ]
+}

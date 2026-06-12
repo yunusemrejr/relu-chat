@@ -1,0 +1,9 @@
+# Generated annotation artifacts
+*-annotated.json
+
+# Training outputs (copied to assets/models/policy/ when complete)
+*.onnx
+
+# Temporary files
+*.tmp
+*.swp
