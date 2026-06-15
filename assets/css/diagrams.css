@@ -9,9 +9,9 @@
   max-width: 100%;
   overflow-x: auto;
   margin: 1rem 0;
-  border: 1px solid var(--border, rgba(255,255,255,0.09));
-  border-radius: 10px;
-  background: var(--bg-elevated, #0b0b0d);
+  border: 1px solid var(--border, #1f2937);
+  border-radius: var(--radius, 6px);
+  background: var(--bg-elevated, #151b23);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +27,7 @@
 
 /* ----- Caption ----- */
 .relu-diagram .caption {
-  color: var(--text-muted, rgba(243,239,231,0.52));
+  color: var(--text-muted, #6b7280);
   font-size: 0.8125rem;
   font-style: italic;
   margin-top: 0.5rem;
@@ -41,10 +41,10 @@
   font-family: monospace, 'Courier New', Courier;
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: var(--text-secondary, rgba(243,239,231,0.72));
+  color: var(--text-secondary, #9ca3af);
   padding: 1rem;
-  background: var(--bg-surface, rgba(243,239,231,0.02));
-  border-radius: 6px;
+  background: var(--bg-surface, #1f2937);
+  border-radius: var(--radius, 6px);
   white-space: pre-wrap;
   overflow-x: auto;
   width: 100%;
@@ -62,39 +62,39 @@
 .relu-diagram table th,
 .relu-diagram table td {
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border, rgba(255,255,255,0.09));
+  border: 1px solid var(--border, #1f2937);
   text-align: center;
-  color: var(--text-primary, #f3efe7);
+  color: var(--text-primary, #f9fafb);
 }
 
 .relu-diagram table th {
-  background: var(--bg-surface, rgba(243,239,231,0.02));
+  background: var(--bg-surface, #1f2937);
   font-weight: 600;
-  color: var(--text-secondary, rgba(243,239,231,0.72));
+  color: var(--text-secondary, #9ca3af);
 }
 
 .relu-diagram table .highlight {
-  border: 2px solid var(--accent, #5b8def);
-  background: var(--bg-surface, #1a1a1d);
+  border: 2px solid var(--accent, #3b82f6);
+  background: var(--bg-surface, #1f2937);
   font-weight: 600;
 }
 
 /* ----- Highlight styling (payoff matrices) ----- */
 .relu-diagram .highlight {
-  border-color: var(--accent, #5b8def) !important;
-  background: var(--bg-surface, #1a1a1d) !important;
+  border-color: var(--accent, #3b82f6) !important;
+  background: var(--bg-surface, #1f2937) !important;
 }
 
 /* ----- SVG text label classes ----- */
 .relu-diagram-cell-label {
   text-anchor: middle;
-  fill: var(--text-muted, rgba(243,239,231,0.52));
+  fill: var(--text-muted, #6b7280);
   font-size: 11px;
 }
 
 .relu-diagram-edge-label {
   text-anchor: middle;
-  fill: var(--text-muted, rgba(243,239,231,0.52));
+  fill: var(--text-muted, #6b7280);
   font-size: 11px;
 }
 
@@ -150,7 +150,7 @@
   height: 100vh;
   z-index: 9999;
   overflow: auto;
-  background: var(--bg, #050506);
+  background: var(--bg, #0d1117);
   border: none;
   border-radius: 0;
   padding: 2rem;

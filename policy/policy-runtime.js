@@ -986,6 +986,15 @@ function _succeedResult() {
       : null,
   };
 }
+
+/**
+ * Allocate a buffer in WASM memory.
+ * Uses _malloc if available, otherwise a simple static offset.
+ */
+function _allocBuffer(instance, len) {
+  if (instance && instance.exports && typeof instance.exports._malloc === 'function') {
+    return instance.exports._malloc(len);
+  }
   // Otherwise, use a simple static offset (works for small, single-call buffers)
   // This is a best-effort fallback; real WASM modules export _malloc.
   return 1024; // start of heap in most emscripten builds
@@ -1033,18 +1042,6 @@ function validateManifest(m) {
   if (typeof m.weightsSize !== 'number') return 'manifest.weightsSize must be a number';
   if (!Array.isArray(m.botProfiles)) return 'manifest.botProfiles must be an array';
   return null;
-}
-
-/** Return the success result object. */
-function _succeedResult() {
-  ready = true;
-  loadError = null;
-  return {
-    ready: true,
-    planAnswer,
-    manifest: cachedManifest,
-    error: null,
-  };
 }
 
 /** Return a rejection result (WASM mandatory but unavailable). */

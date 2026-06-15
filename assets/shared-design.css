@@ -1,27 +1,27 @@
 /* ============================================================
-   ReLU.chat — Shared Design System v5
-   DeepSeek-leaning · low color variance · no glow · no glass
+   ReLU.chat — Shared Design System v6
+   DeepSeek · blue / dark gray / black only · no glow · no glass
    ============================================================ */
 
 :root {
   /* Surface */
-  --bg:            #0a0a0b;
-  --bg-elevated:   #131316;
-  --bg-surface:    #1a1a1d;
-  --bg-input:      #0f0f12;
+  --bg:            #0d1117;
+  --bg-elevated:   #151b23;
+  --bg-surface:    #1f2937;
+  --bg-input:      #0f1419;
 
   /* Borders — single low-variance scale */
-  --border:        #232328;
-  --border-strong: #2e2e34;
+  --border:        #1f2937;
+  --border-strong: #374151;
 
   /* Text — neutral, no warm cream */
-  --text-primary:  #e6e6e6;
-  --text-secondary:#a0a0a8;
-  --text-muted:    #6e6e76;
-  --text-tertiary: #4a4a52;
+  --text-primary:  #f9fafb;
+  --text-secondary:#9ca3af;
+  --text-muted:    #6b7280;
+  --text-tertiary: #4b5563;
 
   /* Single cool accent — borders, focus rings, active state only */
-  --accent:        #5b8def;
+  --accent:        #3b82f6;
 
   /* Status — dot/label only, never as fills */
   --success:       #2d9e5a;
@@ -182,29 +182,29 @@ a:hover { color: var(--accent); }
   cursor: pointer;
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
 
-.btn:hover { border-color: var(--border-strong); }
+.btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
 
 .btn-primary {
-  background: var(--accent);
-  color: #0a0a0b;
+  background: transparent;
+  color: var(--accent);
   border-color: var(--accent);
 }
 
 .btn-primary:hover {
-  background: #6f9bf5;
-  border-color: #6f9bf5;
-  color: #0a0a0b;
+  background: rgba(59, 130, 246, 0.10);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-.btn-secondary { background: var(--bg-elevated); }
+.btn-secondary { background: transparent; color: var(--text-secondary); }
 
-.btn-secondary:hover { background: var(--bg-surface); }
+.btn-secondary:hover { background: transparent; color: var(--text-primary); }
 
 .btn-sm {
   height: 32px;
@@ -212,31 +212,7 @@ a:hover { color: var(--accent); }
   font-size: 0.8125rem;
 }
 
-/* ----- BADGES / CHIPS ----- */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: 2px var(--space-2);
-  border-radius: var(--radius);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  white-space: nowrap;
-  transition: color 0.15s ease, border-color 0.15s ease;
-}
-
-.badge:hover { color: var(--text-secondary); border-color: var(--border-strong); }
-
-.badge svg {
-  width: 12px;
-  height: 12px;
-  stroke: currentColor;
-  flex-shrink: 0;
-}
-
+/* ----- CHIPS ----- */
 .chip {
   font-size: 0.6875rem;
   padding: 2px var(--space-2);

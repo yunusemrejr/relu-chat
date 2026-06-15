@@ -57,15 +57,15 @@ nav {
   gap: 6px;
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius);
-  background: var(--bg-elevated);
-  color: var(--text-primary);
+  background: transparent;
+  color: var(--accent);
   text-decoration: none;
   font-size: 0.8125rem;
   font-weight: 500;
-  border: 1px solid var(--border);
-  transition: border-color 0.15s ease;
+  border: 1px solid var(--accent);
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
-.nav-cta:hover { border-color: var(--accent); color: var(--accent); }
+.nav-cta:hover { background: rgba(59, 130, 246, 0.10); color: var(--accent); }
 
 .container {
   max-width: 900px;
