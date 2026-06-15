@@ -33,63 +33,38 @@ var EbookPromo = (function () {
       .ebook-promo-inner {
         position: relative;
         overflow: hidden;
-        border-radius: 20px;
-        background: rgba(20, 22, 28, 0.78);
-        border: 1px solid rgba(255,255,255,0.08);
-        box-shadow: 
-          0 10px 40px rgba(0,0,0,0.35),
-          inset 0 1px 0 rgba(255,255,255,0.06);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        border-radius: 6px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
         display: grid;
         grid-template-columns: 260px 1fr;
         gap: 2.25rem;
-        padding: 2.25rem 2.5rem 2.25rem 2.25rem;
+        padding: 2.25rem 2.5rem;
         align-items: center;
-        transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
-                    box-shadow 0.2s cubic-bezier(0.23, 1, 0.32, 1),
-                    border-color 0.2s ease;
+        transition: border-color 0.15s ease;
       }
 
       .ebook-promo-inner:hover {
-        transform: translateY(-2px);
-        box-shadow: 
-          0 20px 60px rgba(0,0,0,0.45),
-          inset 0 1px 0 rgba(255,255,255,0.08);
-        border-color: rgba(201, 133, 58, 0.25);
+        border-color: var(--border-strong);
       }
 
       .ebook-promo-cover {
         position: relative;
-        border-radius: 12px;
+        border-radius: 6px;
         overflow: hidden;
-        box-shadow: 
-          0 8px 30px rgba(0,0,0,0.45),
-          0 0 0 1px rgba(255,255,255,0.08);
-        background: #111;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
       }
 
       .ebook-promo-cover img {
         display: block;
         width: 100%;
         height: auto;
-        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        transition: transform 0.3s ease;
       }
 
       .ebook-promo-inner:hover .ebook-promo-cover img {
-        transform: scale(1.04);
-      }
-
-      .ebook-promo-cover::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          to bottom,
-          rgba(0,0,0,0.0) 40%,
-          rgba(0,0,0,0.35) 100%
-        );
-        pointer-events: none;
+        transform: scale(1.02);
       }
 
       .ebook-promo-body {
@@ -100,11 +75,11 @@ var EbookPromo = (function () {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        font-size: 0.625rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: #c9853a;
+        color: var(--text-muted);
         margin-bottom: 0.6rem;
       }
 
@@ -113,31 +88,30 @@ var EbookPromo = (function () {
         display: block;
         width: 18px;
         height: 1px;
-        background: linear-gradient(to right, #c9853a, transparent);
+        background: var(--border-strong);
       }
 
       .ebook-promo-title {
-        font-size: clamp(1.35rem, 2.1vw, 1.65rem);
-        font-weight: 700;
+        font-size: clamp(1.25rem, 2.1vw, 1.5rem);
+        font-weight: 600;
         line-height: 1.15;
-        letter-spacing: -0.025em;
-        color: #f5f5f7;
+        letter-spacing: -0.02em;
+        color: var(--text-primary);
         margin-bottom: 0.35rem;
       }
 
       .ebook-promo-subtitle {
-        font-size: 0.95rem;
+        font-size: 0.9375rem;
         font-weight: 500;
-        color: #c9853a;
+        color: var(--text-secondary);
         letter-spacing: -0.005em;
         margin-bottom: 1rem;
-        opacity: 0.95;
       }
 
       .ebook-promo-desc {
         font-size: 0.875rem;
-        line-height: 1.65;
-        color: rgba(245, 245, 247, 0.78);
+        line-height: 1.6;
+        color: var(--text-secondary);
         margin-bottom: 1.15rem;
         max-width: 52ch;
       }
@@ -150,65 +124,54 @@ var EbookPromo = (function () {
       }
 
       .ebook-promo-tag {
-        font-size: 0.625rem;
-        padding: 0.2rem 0.7rem;
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 9999px;
-        color: rgba(245,245,247,0.65);
+        font-size: 0.6875rem;
+        padding: 2px 6px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text-muted);
         font-weight: 500;
         white-space: nowrap;
-        transition: all 0.15s ease;
+        transition: color 0.15s ease, border-color 0.15s ease;
       }
 
       .ebook-promo-inner:hover .ebook-promo-tag {
-        border-color: rgba(201, 133, 58, 0.3);
-        color: rgba(245,245,247,0.85);
+        border-color: var(--border-strong);
+        color: var(--text-secondary);
       }
 
       .ebook-promo-cta {
         display: inline-flex;
         align-items: center;
         gap: 0.6rem;
-        height: 46px;
-        padding: 0 1.65rem;
-        background: linear-gradient(145deg, #c9853a, #a36a2e);
-        color: white;
-        border: none;
-        border-radius: 10px;
+        height: 40px;
+        padding: 0 1rem;
+        background: var(--accent);
+        color: #0a0a0b;
+        border: 1px solid var(--accent);
+        border-radius: 6px;
         font-size: 0.875rem;
-        font-weight: 600;
+        font-weight: 500;
         text-decoration: none;
         letter-spacing: -0.01em;
-        box-shadow: 
-          0 1px 2px rgba(0,0,0,0.2),
-          0 4px 12px rgba(201, 133, 58, 0.25);
-        transition: all 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+        transition: background 0.15s ease, border-color 0.15s ease;
       }
 
       .ebook-promo-cta:hover {
-        transform: translateY(-1px);
-        box-shadow: 
-          0 1px 2px rgba(0,0,0,0.2),
-          0 8px 24px rgba(201, 133, 58, 0.35);
-        background: linear-gradient(145deg, #d99a50, #b87a37);
-      }
-
-      .ebook-promo-cta:active {
-        transform: scale(0.985);
+        background: #6f9bf5;
+        border-color: #6f9bf5;
       }
 
       .ebook-promo-cta svg {
-        width: 15px;
-        height: 15px;
-        transition: transform 0.2s ease;
+        width: 14px;
+        height: 14px;
+        transition: transform 0.15s ease;
       }
 
       .ebook-promo-cta:hover svg {
         transform: translateX(2px);
       }
 
-      /* Mobile */
       @media (max-width: 720px) {
         .ebook-promo-inner {
           grid-template-columns: 1fr;

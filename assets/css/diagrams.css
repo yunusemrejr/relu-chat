@@ -74,15 +74,15 @@
 }
 
 .relu-diagram table .highlight {
-  border: 2px solid var(--accent, #c9853a);
-  background: var(--accent-soft, rgba(201,133,58,0.16));
+  border: 2px solid var(--accent, #5b8def);
+  background: var(--bg-surface, #1a1a1d);
   font-weight: 600;
 }
 
 /* ----- Highlight styling (payoff matrices) ----- */
 .relu-diagram .highlight {
-  border-color: var(--accent, #c9853a) !important;
-  background: var(--accent-soft, rgba(201,133,58,0.16)) !important;
+  border-color: var(--accent, #5b8def) !important;
+  background: var(--bg-surface, #1a1a1d) !important;
 }
 
 /* ----- SVG text label classes ----- */
