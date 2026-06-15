@@ -1,0 +1,107 @@
+/* ============================================================
+   ReLU.chat — Error pages (403 / 404 / 500)
+   v5 tokens from shared-design.css. No glow, no gradient text, no shadow.
+   ============================================================ */
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8);
+}
+
+.error-card {
+  max-width: 480px;
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-12) var(--space-8);
+}
+
+.error-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-6);
+}
+
+.error-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--text-secondary);
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  line-height: 1;
+}
+
+h2 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-3);
+  letter-spacing: -0.01em;
+}
+
+p {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-8);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 40px;
+  padding: 0 var(--space-5);
+  background: var(--accent);
+  color: #0a0a0b;
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: 1px solid var(--accent);
+  transition: background 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+  font-family: var(--font);
+  letter-spacing: -0.01em;
+}
+
+.btn:hover {
+  background: #6f9bf5;
+  border-color: #6f9bf5;
+}
+
+.btn svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.15s ease;
+}
+
+.btn:hover svg { transform: translateX(2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
