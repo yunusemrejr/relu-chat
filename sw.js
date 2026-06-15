@@ -1,13 +1,13 @@
-const CACHE_VERSION = 6;
+const CACHE_VERSION = 7;
 const CACHE_PREFIX = 'relu-chat';
 const APP_CACHE = `${CACHE_PREFIX}-v${CACHE_VERSION}`;
 const MODEL_CACHE = `${CACHE_PREFIX}-models-v${CACHE_VERSION}`;
 
 const APP_ASSETS = [
   '/',
-  '/assets/logo.png?v=6',
+  '/assets/logo.png?v=7',
   '/assets/fonts/inter.css',
-  '/assets/shared-design.css?v=6',
+  '/assets/shared-design.css?v=7',
   '/assets/katex/katex.min.css',
   '/assets/katex/katex.min.js',
   '/assets/katex/auto-render.min.js',

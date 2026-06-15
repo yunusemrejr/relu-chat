@@ -87,7 +87,7 @@ p {
 }
 
 .btn:hover {
-  background: rgba(59, 130, 246, 0.10);
+  background: rgba(20, 184, 166, 0.10);
   color: var(--accent);
 }
 

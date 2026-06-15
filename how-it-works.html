@@ -7,7 +7,7 @@
 <meta name="description" content="Complete technical architecture of ReLU.chat: field-weighted BM25 with bigram phrase matching, fuzzy entity extraction, transformer embeddings, dense-sparse ensemble ranking, topic correction, session-aware fragment diversity, 25-feature MLP policy network, RL training pipeline, and fragment-based response composition.">
 <link rel="stylesheet" href="assets/fonts/inter.css">
 <link rel="canonical" href="https://relu.chat/how-it-works.html">
-<link rel="stylesheet" href="assets/shared-design.css?v=6">
+<link rel="stylesheet" href="assets/shared-design.css?v=7">
 <style>
 /* Doc page — uses v5 tokens from shared-design.css */
 
@@ -65,14 +65,14 @@ nav {
   border: 1px solid var(--accent);
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
-.nav-cta:hover { background: rgba(59, 130, 246, 0.10); color: var(--accent); }
+.nav-cta:hover { background: rgba(20, 184, 166, 0.10); color: var(--accent); }
 
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding: var(--space-12) var(--space-6) var(--space-16);
+  padding: var(--space-16) var(--space-6) var(--space-20);
 }
-.hero { margin-bottom: var(--space-16); }
+.hero { margin-bottom: var(--space-14); }
 .hero h1 {
   font-size: clamp(1.75rem, 5vw, 2.75rem);
   font-weight: 600;
@@ -91,8 +91,8 @@ h2 {
   font-size: 1.375rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin: var(--space-12) 0 var(--space-3);
-  padding-bottom: var(--space-2);
+  margin: var(--space-14) 0 var(--space-4);
+  padding-bottom: var(--space-3);
   border-bottom: 1px solid var(--border);
 }
 h3 {
@@ -114,8 +114,8 @@ p {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: var(--space-6);
-  margin: var(--space-6) 0;
+  padding: var(--space-7);
+  margin: var(--space-8) 0;
 }
 .arch-flow {
   display: flex;
@@ -141,7 +141,7 @@ p {
 .arch-block span { font-size: 0.6875rem; color: var(--text-muted); }
 .arch-arrow { color: var(--text-muted); font-size: 1rem; }
 
-.table-wrap { overflow-x: auto; margin-bottom: var(--space-4); }
+.table-wrap { overflow-x: auto; margin: var(--space-6) 0 var(--space-5); }
 table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
 th, td {
   padding: var(--space-2) var(--space-3);
@@ -170,8 +170,8 @@ ol, ul {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: var(--space-4) var(--space-5);
-  margin-bottom: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  margin-bottom: var(--space-4);
 }
 .step-card .num {
   display: inline-block;
@@ -189,7 +189,7 @@ ol, ul {
 
 footer {
   border-top: 1px solid var(--border);
-  padding: var(--space-6);
+  padding: var(--space-8) var(--space-6);
   text-align: center;
   color: var(--text-muted);
   font-size: 0.8125rem;
@@ -199,7 +199,9 @@ footer a { color: var(--text-secondary); text-decoration: underline; }
 footer a:hover { color: var(--accent); }
 
 @media (max-width: 640px) {
-  .container { padding: var(--space-6) var(--space-4) var(--space-12); }
+  .container { padding: var(--space-10) var(--space-4) var(--space-12); }
+  .hero { margin-bottom: var(--space-10); }
+  h2 { margin: var(--space-10) 0 var(--space-3); }
   .arch-flow { flex-direction: column; }
   .arch-arrow { transform: rotate(90deg); }
   .nav-cta span.nav-label { display: none; }
@@ -210,7 +212,7 @@ footer a:hover { color: var(--accent); }
 
 <nav>
   <div class="nav-inner">
-    <a href="/" class="nav-logo"><img src="assets/logo.png?v=6" alt="">ReLU.chat</a>
+    <a href="/" class="nav-logo"><img src="assets/logo.png?v=7" alt="">ReLU.chat</a>
     <ul class="nav-links">
       <li><a href="/#features">Features</a></li>
       <li><a href="/#showcase">Chat</a></li>

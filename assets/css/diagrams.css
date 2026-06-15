@@ -74,14 +74,14 @@
 }
 
 .relu-diagram table .highlight {
-  border: 2px solid var(--accent, #3b82f6);
+  border: 2px solid var(--accent, #14b8a6);
   background: var(--bg-surface, #1f2937);
   font-weight: 600;
 }
 
 /* ----- Highlight styling (payoff matrices) ----- */
 .relu-diagram .highlight {
-  border-color: var(--accent, #3b82f6) !important;
+  border-color: var(--accent, #14b8a6) !important;
   background: var(--bg-surface, #1f2937) !important;
 }
 
