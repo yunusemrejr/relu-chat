@@ -9,63 +9,200 @@
 <link rel="canonical" href="https://relu.chat/how-it-works.html">
 <link rel="stylesheet" href="assets/shared-design.css">
 <style>
-/* Doc page overrides — tokens from shared-design.css */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{font-size:16px;scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100dvh;line-height:1.7;-webkit-font-smoothing:antialiased;font-feature-settings:"cv01","ss03"}
+/* Doc page — uses v5 tokens from shared-design.css */
 
-nav{position:sticky;top:0;z-index:100;background:rgba(7,8,9,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
-.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
-.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:600;font-size:16px}
-.nav-logo img{width:24px;height:24px}
-.nav-links{display:flex;align-items:center;gap:16px;list-style:none}
-.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .15s}
-.nav-links a:hover{color:var(--text-primary)}
-.nav-cta{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:500;border:1px solid var(--border-accent);transition:background 0.15s}
-.nav-cta:hover{background:var(--accent-hover)}
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0 var(--space-6);
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+.nav-logo img { width: 24px; height: 24px; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  list-style: none;
+}
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.15s ease;
+}
+.nav-links a:hover { color: var(--text-primary); }
+.nav-links a.active { color: var(--text-primary); }
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  transition: border-color 0.15s ease;
+}
+.nav-cta:hover { border-color: var(--accent); color: var(--accent); }
 
-.container{max-width:900px;margin:0 auto;padding:48px 24px 80px}
-.hero{margin-bottom:64px}
-.hero h1{font-size:clamp(28px,5vw,44px);font-weight:700;letter-spacing:-0.03em;line-height:1.15;margin-bottom:12px}
-.hero p{color:var(--text-secondary);font-size:17px;max-width:640px}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-6) var(--space-16);
+}
+.hero { margin-bottom: var(--space-16); }
+.hero h1 {
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: var(--space-3);
+}
+.hero p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  max-width: 640px;
+  line-height: 1.6;
+}
 
-h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:56px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-h3{font-size:17px;font-weight:600;margin:28px 0 10px;color:var(--text-primary)}
-h2:first-of-type{margin-top:0}
+h2 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: var(--space-12) 0 var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: var(--space-6) 0 var(--space-2);
+  color: var(--text-primary);
+}
+h2:first-of-type { margin-top: 0; }
 
-p{color:var(--text-secondary);font-size:15px;margin-bottom:16px}
+p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin-bottom: var(--space-3);
+  line-height: 1.7;
+}
 
-code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:13px;background:rgba(228,174,93,0.08);color:var(--accent-light);padding:2px 6px;border-radius:4px}
-pre{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 20px;overflow-x:auto;margin-bottom:20px;font-size:13px;line-height:1.55}
-pre code{background:transparent;color:var(--text-secondary);padding:0}
+.arch-diagram {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  margin: var(--space-6) 0;
+}
+.arch-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+}
+.arch-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  text-align: center;
+  min-width: 100px;
+}
+.arch-block strong {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+.arch-block span { font-size: 0.6875rem; color: var(--text-muted); }
+.arch-arrow { color: var(--text-muted); font-size: 1rem; }
 
-.arch-diagram{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin:28px 0}
-.arch-flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
-.arch-block{background:rgba(228,174,93,0.06);border:1px solid var(--border-accent);border-radius:var(--radius-md);padding:12px 18px;text-align:center;min-width:100px}
-.arch-block strong{display:block;font-size:13px;color:var(--text-primary);margin-bottom:4px}
-.arch-block span{font-size:11px;color:var(--text-tertiary)}
-.arch-arrow{color:var(--accent-light);font-size:18px;font-weight:700}
+.table-wrap { overflow-x: auto; margin-bottom: var(--space-4); }
+table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+th, td {
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+td { color: var(--text-primary); }
+td code { font-size: 0.75rem; }
 
-.table-wrap{overflow-x:auto;margin-bottom:24px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
-th{color:var(--text-secondary);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
-td{color:var(--text-primary)}
-td code{font-size:12px}
+ol, ul {
+  color: var(--text-secondary);
+  padding-left: var(--space-5);
+  margin-bottom: var(--space-4);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
 
-.step-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;margin-bottom:16px}
-.step-card .num{display:inline-block;background:rgba(228,174,93,0.1);color:var(--accent-light);font-size:13px;font-weight:700;padding:2px 10px;border-radius:var(--radius-sm);margin-bottom:8px}
-.step-card h3{margin-top:0}
-.step-card p{font-size:14px;margin-bottom:0}
+.step-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-3);
+}
+.step-card .num {
+  display: inline-block;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-2);
+  border: 1px solid var(--border);
+}
+.step-card h3 { margin-top: 0; }
+.step-card p { font-size: 0.875rem; margin-bottom: 0; }
 
-footer{border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-tertiary);font-size:13px}
-footer a{color:var(--text-secondary);text-decoration:underline}
+footer {
+  border-top: 1px solid var(--border);
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+footer p { margin-bottom: var(--space-1); font-size: 0.8125rem; }
+footer a { color: var(--text-secondary); text-decoration: underline; }
+footer a:hover { color: var(--accent); }
 
-@media(max-width:640px){
-  .container{padding:32px 16px 48px}
-  .arch-flow{flex-direction:column}
-  .arch-arrow{transform:rotate(90deg)}
-  .nav-cta span.nav-label{display:none}
+@media (max-width: 640px) {
+  .container { padding: var(--space-6) var(--space-4) var(--space-12); }
+  .arch-flow { flex-direction: column; }
+  .arch-arrow { transform: rotate(90deg); }
+  .nav-cta span.nav-label { display: none; }
 }
 </style>
 </head>
@@ -77,7 +214,7 @@ footer a{color:var(--text-secondary);text-decoration:underline}
     <ul class="nav-links">
       <li><a href="/#features">Features</a></li>
       <li><a href="/#showcase">Chat</a></li>
-      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/how-it-works.html" class="active">How It Works</a></li>
       <li><a href="/blog/">Blog</a></li>
     </ul>
     <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
@@ -115,7 +252,7 @@ footer a{color:var(--text-secondary);text-decoration:underline}
 <h2>2. Signal Layer</h2>
 <p>After embedding, a lightweight signal layer prepares a structured <strong>DecisionPacket</strong> for the policy network. It combines multiple retrieval and classification signals into a coherent pre-policy feature bundle.</p>
 
-<ol style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+<ol>
   <li><strong>BM25 Sparse Retrieval</strong> — Field-weighted term-frequency scoring (k1=1.5, b=0.75). Entry names are repeated 3× and aliases 2× during indexing, so name-matched terms naturally score higher via TF boosting. <strong>Bigram phrase matching</strong> catches multi-word queries like "Nash equilibrium" as a single token (<code>nash_equilibrium</code>), with an IDF-weighted bonus that complements unigram scoring.</li>
   <li><strong>Entity Extraction</strong> — Three-pass extraction: (1) exact alias regex matching, (2) <strong>fuzzy word-overlap scoring</strong> using Levenshtein distance and substring containment for typo tolerance, (3) <strong>notation pattern matching</strong> for game-theory expressions like <code>(D,D)</code> and <code>(C,C)</code>. Session context enriches entities from recent turns with decay weighting.</li>
   <li><strong>Intent Classification</strong> — Cosine similarity against <strong>19 intent prototypes per category</strong> (definition, example, formal, application, comparison), scored with a <strong>70/30 blend of best-match and weighted-average</strong> to prevent one lucky prototype from dominating. Calibrated with temperature=1.5 softmax for reliable confidence estimates.</li>
@@ -162,7 +299,7 @@ footer a{color:var(--text-secondary);text-decoration:underline}
 
 <h2>4. Policy Network (MLP)</h2>
 <p>The policy is a <strong>multilayer perceptron</strong> trained via reinforcement learning to select the optimal response parameters given the 25-dim feature context. Practical cold-start tiers (what users actually experience):</p>
-<ol style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+<ol>
   <li>Heuristic + sparse/BOW immediately (usable shell before any heavy assets).</li>
   <li>Policy MLP once small weights load (decisions become policy-driven).</li>
   <li>Dense MiniLM once the ~22 MB transformer finishes (full embeddings + reranking active; hot-swap from progressive bootstrap).</li>
@@ -189,7 +326,7 @@ Version: 0.4.0 (25-feature input, field-weighted BM25, fuzzy entity extraction, 
 
 <h3>Multi-Engine Inference</h3>
 <p>The policy runtime (<code>policy/policy-runtime.js</code>) uses this order for the tiny 13k-param policy (WASM asset is optional/stub-like until a real compiled policy is shipped; MLP is the real, validated, always-available path):</p>
-<ol style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+<ol>
   <li><strong>MLP Engine (primary)</strong> — Pure-JS float32 math (<code>policy/mlp-inference.js</code>). No dependencies. Same architecture and weights as the PyTorch-trained model. Fast and always available for this small policy.</li>
   <li><strong>WASM Engine (secondary/optional)</strong> — Only if a real compiled policy WASM is provided. Not the main target until the asset is real (a 13k-param MLP is not the runtime bottleneck).</li>
   <li><strong>Heuristic Fallback</strong> — 15 parameterized decision thresholds. Used when neither MLP weights nor WASM are ready. Ensures the system is always functional.</li>
@@ -233,7 +370,7 @@ Version: 0.4.0 (25-feature input, field-weighted BM25, fuzzy entity extraction, 
 <p>Each knowledge-base entry contains categorized fragments (<code>def</code>, <code>int</code>, <code>ex</code>, <code>form</code>, <code>app</code>) with metadata fields: <code>truth_confidence</code>, <code>source_confidence</code>, <code>difficulty</code>, <code>style</code>, <code>avoid_with</code>.</p>
 
 <p>The policy produces an <code>AnswerPlan</code> specifying:</p>
-<ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+<ul>
   <li><strong>Mode</strong> — normal, comparison, greeting, help, off_topic</li>
   <li><strong>Intent</strong> — definition, example, formal, application, comparison</li>
   <li><strong>Topics</strong> — which KB entries to include</li>
@@ -250,7 +387,7 @@ Version: 0.4.0 (25-feature input, field-weighted BM25, fuzzy entity extraction, 
 
 <h2>7. Action Schema &amp; Validation</h2>
 <p>Every <code>AnswerPlan</code> passes through <code>validatePlan()</code> (<code>policy/action-schema.js</code>) which enforces:</p>
-<ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+<ul>
   <li>Type checking on all 10 top-level fields</li>
   <li>Enum membership (mode, intent, tone)</li>
   <li>Range validation (creativity ∈ [0,1], topics ≤ maxTopics)</li>
@@ -279,8 +416,8 @@ Uint8Array layout:
 <p>When the MLP policy engine is unavailable (e.g., during cold start or weight load failure), <code>planAnswerHeuristic()</code> generates the same AnswerPlan structure using 15 parameterized decision thresholds covering greeting detection, off-topic handling, comparison fallback, entity boost, and creativity defaults. This ensures the system is always functional even without trained weights.</p>
 
 <h2>10. Open Source</h2>
-<p>The full codebase is available at <a href="https://github.com/yunusemrejr/relu-chat" style="color:var(--accent-light)">github.com/yunusemrejr/relu-chat</a> under the MIT license. This includes:</p>
-<ul style="color:var(--text-secondary);padding-left:20px;margin-bottom:20px;font-size:14px;line-height:2">
+<p>The full codebase is available at <a href="https://github.com/yunusemrejr/relu-chat">github.com/yunusemrejr/relu-chat</a> under the MIT license. This includes:</p>
+<ul>
   <li><code>core/</code> — NLP engine, chatbot engine, session memory, BM25 scorer, signal layer</li>
   <li><code>policy/</code> — Feature extractor, MLP inference, action schema, policy runtime</li>
   <li><code>dev/scripts/</code> — PyTorch training, weight export, prompt augmentation</li>
@@ -290,7 +427,7 @@ Uint8Array layout:
 
 <footer>
   <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
-  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
+  <p><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
 </footer>
 
 </body>
