@@ -79,6 +79,58 @@
   justify-content: center;
 }
 
+/* Ebook promo */
+.ebook-banner {
+  padding: 0 var(--space-6) var(--space-12);
+  background: var(--bg);
+}
+
+.ebook-banner-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.ebook-banner-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.ebook-banner-label {
+  color: var(--accent);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ebook-banner-title {
+  color: var(--text-primary);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.ebook-banner-text {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.ebook-banner .btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 /* How it works */
 #how-it-works { padding: var(--space-20) 0 var(--space-16); }
 
@@ -611,6 +663,13 @@
   .nav-cta.desktop-only { display: none; }
   .nav-toggle { display: flex; }
 
+  .ebook-banner-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ebook-banner .btn { width: 100%; }
+
   .showcase-card {
     grid-template-columns: 1fr;
     gap: var(--space-6);
@@ -627,6 +686,8 @@
 
 @media (max-width: 480px) {
   .hero { padding: var(--space-16) var(--space-4) var(--space-12); }
+  .ebook-banner { padding: 0 var(--space-4) var(--space-10); }
+  .ebook-banner-card { padding: var(--space-4); }
   #how-it-works,
   #features,
   #showcase,
@@ -694,6 +755,18 @@
         </a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ==================== EBOOK BANNER ==================== -->
+<section class="ebook-banner" aria-label="Fringe Learning ebook">
+  <div class="ebook-banner-card reveal">
+    <div class="ebook-banner-copy">
+      <span class="ebook-banner-label">New ebook</span>
+      <div class="ebook-banner-title">Get Fringe Learning: Resource-Efficient RL for Edge ML for $1</div>
+      <p class="ebook-banner-text">Build your own custom AI systems with practical reinforcement learning methods designed for resource-constrained edge machine learning.</p>
+    </div>
+    <a href="https://elroystar8.gumroad.com/l/ecvuf" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Get the ebook</a>
   </div>
 </section>
 
