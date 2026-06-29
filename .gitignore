@@ -5,10 +5,10 @@
 .DS_Store
 
 docs/
+media/
 
 _backups/
 backups/
-media/
 dev/_backups/
 dev/.agent_memory/
 dev/_work/

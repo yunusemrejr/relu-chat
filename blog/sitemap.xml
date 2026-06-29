@@ -19,66 +19,6 @@
     
   </url>
   <url>
-    <loc>https://relu.chat/blog/onnx-runtime-web-quantization/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-10</lastmod>
-  </url>
-  <url>
-    <loc>https://relu.chat/blog/bm25-vs-dense-retrieval/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-09</lastmod>
-  </url>
-  <url>
-    <loc>https://relu.chat/blog/service-workers-offline-ai/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-08</lastmod>
-  </url>
-  <url>
-    <loc>https://relu.chat/blog/webgpu-future-browser-inference/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-07</lastmod>
-  </url>
-  <url>
-    <loc>https://relu.chat/blog/knowledge-fragment-composition/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-06</lastmod>
-  </url>
-  <url>
-    <loc>https://relu.chat/blog/sentence-embeddings-384-dim-minilm/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-05</lastmod>
-  </url>
-  <url>
-    <loc>https://relu.chat/blog/ppo-reward-design-policy-network/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-04</lastmod>
-  </url>
-  <url>
-    <loc>https://relu.chat/blog/heuristic-fallback-cold-start/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-03</lastmod>
-  </url>
-  <url>
-    <loc>https://relu.chat/blog/linguistic-connectors-naturalness/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-02</lastmod>
-  </url>
-  <url>
-    <loc>https://relu.chat/blog/sentence-vs-word-embeddings/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>2026-06-01</lastmod>
-  </url>
-  <url>
     <loc>https://relu.chat/blog/privacy-first-ai-browsers/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
