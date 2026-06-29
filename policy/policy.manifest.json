@@ -1,5 +1,6 @@
 {
   "version": "0.4.0",
+  "featureSchemaVersion": "0.5.0",
   "inputFeatures": 25,
   "inputBytes": 107,
   "outputSchema": "AnswerPlan.v1",

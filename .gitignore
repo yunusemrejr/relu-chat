@@ -4,8 +4,11 @@
 *.log
 .DS_Store
 
+docs/
+
 _backups/
 backups/
+media/
 dev/_backups/
 dev/.agent_memory/
 dev/_work/
