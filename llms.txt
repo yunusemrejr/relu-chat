@@ -17,9 +17,9 @@ ReLU.chat is an open-source platform for interactive on-device chatbots. All NLP
 - **Loading**: Progressive — heuristic/BOW fallback + memoization for instant first turns; ~22 MB MiniLM + KB embeddings hot-swap once ready (Service Worker pre-caches)
 - **Embedding**: all-MiniLM-L6-v2 (quantized ONNX, 384-dim) with query embedding LRU
 - **Retrieval**: BM25 sparse + dense cosine similarity ensemble + top-k ranking (no full sort)
-- **Policy**: MLP 25→128→64→6 action heads, RL-trained; local shadow compare vs heuristic
-- **Composition**: Fragment assembly with linguistic connectors + cross-fragment semantic dedup
-- **Session**: Rich history + EMA summary vector for multi-turn context + follow-up/topic correction
+- **Policy**: MLP 25→128→64→6 action heads, RL-trained, auto-int8-quantized; local shadow compare vs heuristic
+- **Composition**: Fragment assembly with linguistic connectors + cross-fragment semantic dedup + progressive streaming rendering
+- **Session**: Rich history (30 turns) + EMA summary vector for multi-turn context + follow-up/topic correction
 - **Runtime**: Pure browser JavaScript, WebAssembly, ONNX Runtime, Service Worker + Cache API
 - **Storage**: Client-side only (IndexedDB + Cache API, no server state)
 

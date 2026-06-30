@@ -356,24 +356,31 @@ export async function createChatbot(config) {
       typingEl.remove();
 
       // Stream-render: reveal response in progressive chunks for native chat feel
+      // Respect prefers-reduced-motion: show full response instantly when set
       const stream = pushMessageStream('bot', meta);
       const rendered = md(text);
-      const CHUNK = 40;
-      let pos = 0;
-      const reveal = () => {
-        if (pos < rendered.length) {
-          pos = Math.min(pos + CHUNK, rendered.length);
-          stream.update(rendered.slice(0, pos));
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) {
+        stream.update(rendered);
+        stream.done();
+      } else {
+        const CHUNK = 40;
+        let pos = 0;
+        const reveal = () => {
           if (pos < rendered.length) {
-            requestAnimationFrame(reveal);
+            pos = Math.min(pos + CHUNK, rendered.length);
+            stream.update(rendered.slice(0, pos));
+            if (pos < rendered.length) {
+              requestAnimationFrame(reveal);
+            } else {
+              stream.done();
+            }
           } else {
             stream.done();
           }
-        } else {
-          stream.done();
-        }
-      };
-      requestAnimationFrame(reveal);
+        };
+        requestAnimationFrame(reveal);
+      }
 
       // W1: Render diagram if available
       if (result.diagramAst) {
