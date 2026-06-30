@@ -744,7 +744,7 @@ pre code {
   align-items: center;
   gap: var(--space-1);
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: #8b95a3;
   font-weight: 500;
   background: var(--bg-elevated);
   padding: 2px var(--space-2) 2px 6px;
