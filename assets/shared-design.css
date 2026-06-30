@@ -148,6 +148,8 @@ a:hover { color: var(--accent); }
   font-weight: 600;
   font-size: 0.9375rem;
   flex-shrink: 0;
+  padding: var(--space-2) 0;
+  min-height: 44px;
 }
 
 .nav-logo img {
@@ -621,7 +623,7 @@ pre code {
 
 .suggestion {
   font-size: 0.8125rem;
-  padding: 7px var(--space-4);
+  padding: var(--space-3) var(--space-4);
   border-radius: 20px;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
