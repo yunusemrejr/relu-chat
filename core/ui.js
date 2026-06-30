@@ -116,3 +116,63 @@ export function pushMessage(role, html, meta) {
   }
   return div;
 }
+
+/**
+ * Push a bot message and render its HTML progressively in chunks.
+ * Returns { element, update(html), done() }.
+ * update() replaces innerHTML incrementally; done() finalizes and renders math.
+ */
+export function pushMessageStream(role, meta) {
+  const messagesEl = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+
+  const content = document.createElement('div');
+  content.className = 'msg-content';
+
+  const roleLabel = document.createElement('div');
+  roleLabel.className = 'msg-role';
+  roleLabel.textContent = role === 'bot' ? 'ReLU' : 'You';
+  content.appendChild(roleLabel);
+
+  const body = document.createElement('div');
+  body.className = 'msg-body';
+
+  if (meta && meta.length) {
+    const m = document.createElement('div');
+    m.className = 'meta';
+    for (const c of meta) {
+      const chip = document.createElement('span');
+      chip.className = 'chip ' + (c.type || '');
+      chip.textContent = c.text;
+      m.appendChild(chip);
+    }
+    body.appendChild(m);
+  }
+
+  const c = document.createElement('div');
+  body.appendChild(c);
+  content.appendChild(body);
+  div.appendChild(content);
+  messagesEl.appendChild(div);
+
+  return {
+    element: div,
+    update(html) {
+      c.innerHTML = html;
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    },
+    done() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      if (window.renderMathInElement) {
+        const target = div.querySelector('.msg-body > div:not(.meta)');
+        if (target) {
+          renderMathInElement(target, {
+            delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],
+            throwOnError: false
+          });
+        }
+      }
+    }
+  };
+}

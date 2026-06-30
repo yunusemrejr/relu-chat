@@ -291,7 +291,7 @@ export class SessionMemory {
     // Provides multi-turn context beyond lastTopicSim/lastTopicAge without new policy features.
     /** @type {number[]|null} */
     this._emaVector = null;
-    this._emaAlpha = 0.65; // decay toward older context (higher = more weight on history)
+    this._emaAlpha = 0.75; // decay toward older context (higher = more weight on history)
   }
 
   // -------------------------------------------------------------------------

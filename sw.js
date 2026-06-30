@@ -1,4 +1,4 @@
-const CACHE_VERSION = 7;
+const CACHE_VERSION = 8;
 const CACHE_PREFIX = 'relu-chat';
 const APP_CACHE = `${CACHE_PREFIX}-v${CACHE_VERSION}`;
 const MODEL_CACHE = `${CACHE_PREFIX}-models-v${CACHE_VERSION}`;
@@ -17,6 +17,8 @@ const APP_ASSETS = [
   '/core/bm25.js',
   '/core/signal-layer.js',
   '/core/chatbot-engine.js',
+  '/core/bot-pack-loader.js',
+  '/core/math-utils.js',
   '/assets/transformers/transformers.js',
   '/manifest.webmanifest'
 ];

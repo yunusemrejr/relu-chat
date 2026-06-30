@@ -1,7 +1,7 @@
 import { LRUCache } from './cache.js';
 import { SessionMemory } from './session.js';
 import { composeV2, setCompositionSeed, tokens, bowVec, compileAliasRegex } from './nlp.js';
-import { pushMessage, setStatus, escapeHTML, md, renderDiagramElement } from './ui.js';
+import { pushMessage, pushMessageStream, setStatus, escapeHTML, md, renderDiagramElement } from './ui.js';
 import { loadPolicyRuntime, planAnswer, isPolicyLoaded } from '../policy/policy-runtime.js';
 import { SignalLayer } from './signal-layer.js';
 import { BotPackLoader } from './bot-pack-loader.js';
@@ -77,7 +77,7 @@ export async function createChatbot(config) {
   let extractor = null, entryEmb = [], intentEmb = {}, domainPrototypeEmbs = [];
   let ready = false, busy = false;
   // Session memory: replaces single `lastTopic` with full turn-based tracking
-  const session = new SessionMemory(CONFIG?.SESSION?.maxHistory || 20);
+  const session = new SessionMemory(CONFIG?.SESSION?.maxHistory || 30);
   const fragEmbCache = new LRUCache(CONFIG?.CACHE?.MAX_SIZE || 500);
   const signalLayer = new SignalLayer();
   let bowVocab = null;
@@ -354,7 +354,26 @@ export async function createChatbot(config) {
       meta = result.meta;
 
       typingEl.remove();
-      pushMessage('bot', md(text), meta);
+
+      // Stream-render: reveal response in progressive chunks for native chat feel
+      const stream = pushMessageStream('bot', meta);
+      const rendered = md(text);
+      const CHUNK = 40;
+      let pos = 0;
+      const reveal = () => {
+        if (pos < rendered.length) {
+          pos = Math.min(pos + CHUNK, rendered.length);
+          stream.update(rendered.slice(0, pos));
+          if (pos < rendered.length) {
+            requestAnimationFrame(reveal);
+          } else {
+            stream.done();
+          }
+        } else {
+          stream.done();
+        }
+      };
+      requestAnimationFrame(reveal);
 
       // W1: Render diagram if available
       if (result.diagramAst) {

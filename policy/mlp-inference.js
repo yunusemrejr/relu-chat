@@ -257,6 +257,7 @@ export class MLPPolicy {
     this._qWeights = null; // { scale, w1q: Int8Array, w2q: Int8Array, headQ: [...] }
     this._totalParams = this._countParams();
     this._quantizedBytes = 0;
+    this.loadQuantized();
   }
 
   /**
@@ -565,7 +566,7 @@ export class MLPPolicy {
    */
   planAnswer(features, context = {}, botProfile = {}, overrides = {}) {
     const f32 = featuresToF32(features, this._version);
-    const probs = this.forward(f32);
+    const probs = this._qWeights ? this.forwardQuantized(f32) : this.forward(f32);
     const decisionPath = ['mlp'];
 
     // ---- Mode ----
