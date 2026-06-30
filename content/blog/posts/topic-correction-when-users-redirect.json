@@ -1,0 +1,24 @@
+{
+  "id": "topic-correction-when-users-redirect",
+  "slug": "topic-correction-when-users-redirect",
+  "title": "Topic Correction: When Users Say 'No, I Meant X'",
+  "meta_title": "Topic Correction: When Users Say 'No, I Meant X'",
+  "meta_description": "How explicit topic correction detection prevents chatbot topic drift when users redirect the conversation mid-turn.",
+  "status": "published",
+  "published_at": "2026-06-30T20:55:53.668Z",
+  "updated_at": "2026-06-30T20:55:53.668Z",
+  "author": "ReLU.chat",
+  "content": "# Topic Correction: When Users Say 'No, I Meant X'\n\nOne of the most frustrating chatbot experiences is when the bot misunderstands your topic and won't let you correct it. \"No, I asked about Nash equilibrium, not Shapley value.\" ReLU.chat has explicit topic correction detection.\n\n## The Problem\n\nStandard follow-up detection assumes the user is building on the previous response. But sometimes the user is explicitly rejecting it:\n- \"I asked about X actually\"\n- \"no, just X\"\n- \"not subgame stuff\"\n- \"wrong topic\"\n\nThese require a different response strategy — not elaboration, but redirection.\n\n## Detection Patterns\n\nThree categories of correction:\n\n1. **Explicit correction**: \"I asked about X\", \"I meant X\" — regex captures the target topic\n2. **Rejection with alternative**: \"no, just X\", \"not Y, X\" — extracts X as the new target\n3. **Rejection without alternative**: \"not that\", \"wrong\" — signals topic rejection\n\n```javascript\nconst askedAbout = query.match(\n  /\\b(i (?:was )?asked about|i meant)\\s+(.+)/i\n);\n```\n\n## Signal Layer Integration\n\nWhen a correction is detected:\n1. The corrected topic is forced to the top of the ranking with a +0.8 boost\n2. The rejected topic is demoted by -0.4\n3. The follow-up type is set to `topic_correction` or `topic_rejection`\n4. The policy response uses definition intent, neutral tone, low creativity\n\n## Why This Matters\n\nWithout correction handling, the chatbot would treat \"no, I meant game theory\" as a normal follow-up and try to elaborate on whatever it just said. The correction system ensures the user stays in control of the conversation direction.\n\n## Key Takeaway\n\nTopic correction is a distinct conversational act from follow-up. Detecting it requires explicit patterns, not just similarity matching. Three regex categories cover the common cases.",
+  "excerpt": "How explicit topic correction detection prevents chatbot topic drift when users redirect the conversation mid-turn.",
+  "canonical": "https://relu.chat/blog/topic-correction-when-users-redirect/",
+  "cover_image": "",
+  "cover_image_alt": "Topic Correction: When Users Say 'No, I Meant X'",
+  "tags": [
+    "nlp",
+    "correction",
+    "conversation",
+    "topic",
+    "chat"
+  ],
+  "redirects": []
+}

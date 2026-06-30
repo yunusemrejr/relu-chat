@@ -1,0 +1,24 @@
+{
+  "id": "session-memory-architecture-30-turns",
+  "slug": "session-memory-architecture-30-turns",
+  "title": "Session Memory Architecture: 30 Turns of Context Without a Server",
+  "meta_title": "Session Memory Architecture: 30 Turns of Context Without a S",
+  "meta_description": "How importance-based eviction, response compression, and EMA summary vectors maintain long conversation context entirely in the browser.",
+  "status": "published",
+  "published_at": "2026-06-30T20:55:41.769Z",
+  "updated_at": "2026-06-30T20:55:41.769Z",
+  "author": "ReLU.chat",
+  "content": "# Session Memory Architecture: 30 Turns of Context Without a Server\n\nBrowser-based chatbots face a fundamental constraint: no server means no persistent memory. Everything must fit in the client's RAM and survive only for the session. ReLU.chat's `SessionMemory` class solves this with a multi-layered approach.\n\n## Turn Storage\n\nEach turn records: query, response, entities, topics, fragments used, ambiguity flag, and timestamp. History is capped at 30 turns with importance-based eviction — the 5 most recent turns are always protected.\n\n## Importance-Based Eviction\n\nWhen the buffer is full, the system doesn't just drop the oldest turn. It computes an importance score for each non-protected turn based on:\n- Whether the turn had entities (topic richness)\n- Whether the turn was ambiguous (needs context)\n- Fragment diversity (how many different fragments were shown)\n\nThe least important turn is evicted. This preserves conversation threads that are contextually valuable.\n\n## Response Compression\n\nAfter 5 turns, full response text is compressed to 120-character summaries. This reduces memory pressure without losing the gist of old exchanges. The compression is irreversible — it's a deliberate trade of fidelity for longevity.\n\n## EMA Summary Vector\n\nThe most powerful mechanism is the Exponential Moving Average (EMA) summary vector. After each turn, the query embedding (384-dimensional) is blended into a running average:\n\n```\nema_new = α * ema_old + (1 - α) * new_embedding\n```\n\nWith α = 0.75, the vector retains 75% of historical context and 25% of the current turn. This 384-d vector is passed to the policy network as dense multi-turn context — no additional feature extraction needed.\n\n## Entity Decay\n\nEntity mentions are tracked with a half-life of 5 turns. An entity mentioned 10 turns ago has ~25% of its original relevance weight. This prevents stale topics from dominating while keeping recent context alive.\n\n## Fragment Diversity\n\nThe system tracks how many times each knowledge fragment has been shown. After 2 presentations, a quadratic penalty score increases — preventing the chatbot from repeating the same explanations.\n\n## Engagement Tracking\n\nEach follow-up is classified as one of: deepening, challenging, clarifying, acknowledging, new_topic, or redirecting. The last 5 signals determine the engagement trend (deepening, broadening, or neutral), which influences the policy's response strategy.\n\n## Key Takeaway\n\nRich session memory doesn't require a server. With importance-based eviction, response compression, EMA vectors, and entity decay, a browser chatbot can maintain coherent 30-turn conversations entirely in client-side memory.",
+  "excerpt": "How importance-based eviction, response compression, and EMA summary vectors maintain long conversation context entirely in the browser.",
+  "canonical": "https://relu.chat/blog/session-memory-architecture-30-turns/",
+  "cover_image": "",
+  "cover_image_alt": "Session Memory Architecture: 30 Turns of Context Without a Server",
+  "tags": [
+    "session",
+    "memory",
+    "context",
+    "architecture",
+    "nlp"
+  ],
+  "redirects": []
+}

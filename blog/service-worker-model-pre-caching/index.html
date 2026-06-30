@@ -3,30 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>384-dim Sentence Embeddings — ReLU.chat</title>
-<meta name="description" content="Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.">
+<title>Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading</title>
+<meta name="description" content="How service workers pre-cache the 22MB transformer model and policy weights for instant chatbot startup.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://relu.chat/blog/sentence-embeddings-384-dim-minilm/">
+<link rel="canonical" href="https://relu.chat/blog/service-worker-model-pre-caching/">
 
-<meta property="og:title" content="384-dim Sentence Embeddings — ReLU.chat">
-<meta property="og:description" content="Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.">
+<meta property="og:title" content="Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading">
+<meta property="og:description" content="How service workers pre-cache the 22MB transformer model and policy weights for instant chatbot startup.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://relu.chat/blog/sentence-embeddings-384-dim-minilm/">
-<meta property="og:image" content="https://relu.chat/assets/blog/sentence-embeddings.svg">
+<meta property="og:url" content="https://relu.chat/blog/service-worker-model-pre-caching/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
 <meta property="og:site_name" content="ReLU.chat">
-<meta property="article:published_time" content="2026-06-05T10:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-05T10:00:00.000Z">
+<meta property="article:published_time" content="2026-06-30T20:55:49.448Z">
+<meta property="article:modified_time" content="2026-06-30T20:55:49.448Z">
 <meta property="article:author" content="ReLU.chat">
-<meta property="article:tag" content="embeddings">
-<meta property="article:tag" content="nlp">
-<meta property="article:tag" content="sentence-transformers">
-<meta property="article:tag" content="machine-learning">
-<meta property="article:tag" content="minilm">
+<meta property="article:tag" content="service-worker">
+<meta property="article:tag" content="caching">
+<meta property="article:tag" content="performance">
+<meta property="article:tag" content="pwa">
+<meta property="article:tag" content="loading">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="384-dim Sentence Embeddings — ReLU.chat">
-<meta name="twitter:description" content="Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.">
-<meta name="twitter:image" content="https://relu.chat/assets/blog/sentence-embeddings.svg">
+<meta name="twitter:title" content="Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading">
+<meta name="twitter:description" content="How service workers pre-cache the 22MB transformer model and policy weights for instant chatbot startup.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
 
 <meta name="theme-color" content="#060708">
 <link rel="apple-touch-icon" href="/assets/logo.png">
@@ -47,24 +47,24 @@
     },
     {
       "@type": "WebPage",
-      "@id": "https://relu.chat/blog/sentence-embeddings-384-dim-minilm/#webpage",
-      "url": "https://relu.chat/blog/sentence-embeddings-384-dim-minilm/",
-      "name": "384-dim Sentence Embeddings — ReLU.chat",
-      "description": "Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.",
+      "@id": "https://relu.chat/blog/service-worker-model-pre-caching/#webpage",
+      "url": "https://relu.chat/blog/service-worker-model-pre-caching/",
+      "name": "Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading",
+      "description": "How service workers pre-cache the 22MB transformer model and policy weights for instant chatbot startup.",
       "inLanguage": "en",
       "isPartOf": {
         "@id": "https://relu.chat/#website"
       },
-      "datePublished": "2026-06-05T10:00:00.000Z",
-      "dateModified": "2026-06-05T10:00:00.000Z"
+      "datePublished": "2026-06-30T20:55:49.448Z",
+      "dateModified": "2026-06-30T20:55:49.448Z"
     },
     {
       "@type": "Article",
-      "@id": "https://relu.chat/blog/sentence-embeddings-384-dim-minilm/#article",
-      "headline": "Sentence Embeddings Explained: Why 384 Dimensions and What They Mean",
-      "description": "Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.",
-      "datePublished": "2026-06-05T10:00:00.000Z",
-      "dateModified": "2026-06-05T10:00:00.000Z",
+      "@id": "https://relu.chat/blog/service-worker-model-pre-caching/#article",
+      "headline": "Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading",
+      "description": "How service workers pre-cache the 22MB transformer model and policy weights for instant chatbot startup.",
+      "datePublished": "2026-06-30T20:55:49.448Z",
+      "dateModified": "2026-06-30T20:55:49.448Z",
       "author": {
         "@type": "Person",
         "name": "ReLU.chat"
@@ -79,10 +79,10 @@
         }
       },
       "mainEntityOfPage": {
-        "@id": "https://relu.chat/blog/sentence-embeddings-384-dim-minilm/#webpage"
+        "@id": "https://relu.chat/blog/service-worker-model-pre-caching/#webpage"
       },
-      "image": "https://relu.chat/assets/blog/sentence-embeddings.svg",
-      "keywords": "embeddings, nlp, sentence-transformers, machine-learning, minilm"
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "service-worker, caching, performance, pwa, loading"
     }
   ]
 }
@@ -185,12 +185,12 @@ footer a{color:var(--text-secondary);text-decoration:underline}
 
 <article class="article-container">
   <div class="article-breadcrumb">
-    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Sentence Embeddings Explained: Why 384 Dimensions and What They Mean</span>
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading</span>
   </div>
 
-  <div class="article-tags"><span class="article-tag">embeddings</span><span class="article-tag">nlp</span><span class="article-tag">sentence-transformers</span><span class="article-tag">machine-learning</span><span class="article-tag">minilm</span></div>
+  <div class="article-tags"><span class="article-tag">service-worker</span><span class="article-tag">caching</span><span class="article-tag">performance</span><span class="article-tag">pwa</span><span class="article-tag">loading</span></div>
 
-  <h1 class="article-hero-title">Sentence Embeddings Explained: Why 384 Dimensions and What They Mean</h1>
+  <h1 class="article-hero-title">Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading</h1>
 
   <div class="article-meta-bar">
     <div class="article-meta-item">
@@ -199,106 +199,81 @@ footer a{color:var(--text-secondary);text-decoration:underline}
     </div>
     <div class="article-meta-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-      <time datetime="2026-06-05T10:00:00.000Z">June 5, 2026</time>
+      <time datetime="2026-06-30T20:55:49.448Z">June 30, 2026</time>
     </div>
     <div class="article-meta-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <span>3 min read</span>
+      <span>1 min read</span>
     </div>
     
   </div>
 
   <div class="article-divider"></div>
 
-  <img class="article-cover" src="/assets/blog/sentence-embeddings.svg" alt="Pastel illustration of a 384-dimensional vector space with semantically related sentences clustered together">
+  
 
   <div class="article-body">
-    <p>When we say ReLU.chat embeds text into "384 dimensions," it sounds arbitrary. It is not. The 384-dim output is a deliberate design choice for <code>all-MiniLM-L6-v2</code>, the sentence transformer we use. This post explains what those numbers mean, why the dimension count is what it is, and what that implies for browser deployment.</p>
+    <p>The biggest barrier to browser-based AI is load time. A 22MB transformer model doesn't load instantly, especially on mobile. ReLU.chat uses service workers to eliminate this friction.</p>
 
-<h2>What a Sentence Embedding Is</h2>
+<h2>The Loading Strategy</h2>
 
-<p>A sentence embedding is a fixed-length vector of real numbers that represents the <em>meaning</em> of a sentence. Two sentences with similar meaning should have similar vectors. The similarity is measured by cosine distance:</p>
+<p>On first visit, the service worker installs and pre-caches critical assets:</p>
 
-<pre><code>similarity(A, B) = (A · B) / (||A|| * ||B||)
+<ol>
+<li><strong>App shell</strong>: HTML, CSS, JS modules, fonts (~200 KB)</li>
+<li><strong>Model files</strong>: MiniLM ONNX quantized (22 MB), policy weights (363 KB), WASM runtimes</li>
+<li><strong>Transformers.js</strong>: The ONNX runtime library</li>
+</ol>
+On subsequent visits, all assets are served from Cache API — zero network requests.
+
+<h2>Cache Architecture</h2>
+
+<p>Two separate caches:
+<ul>
+<li><code>relu-chat-v8</code>: App assets (HTML, CSS, JS, fonts)</li>
+<li><code>relu-chat-models-v8</code>: Model files (ONNX, weights, WASM)</li>
+</ul>
+Model files use cache-first strategy: if cached, serve immediately. Static assets use stale-while-revalidate: serve cached, update in background.</p>
+
+<h2>Range Request Support</h2>
+
+<p>Large model files (22 MB) benefit from partial loading. The service worker handles <code>Range</code> headers by slicing cached full responses into 206 Partial Content responses. This allows the ONNX runtime to stream-load models efficiently.</p>
+
+<h2>Background Preloading</h2>
+
+<p>After activation, the service worker preloads model assets in the background:</p>
+
+<pre><code class="lang-javascript">e.waitUntil(
+  caches.open(MODEL_CACHE).then(c =&gt;
+    Promise.allSettled(MODEL_PRELOAD_ASSETS.map(asset =&gt; c.add(asset)))
+  )
+);
 </code></pre>
 
-<p>The vector lives in a high-dimensional space. Cosine similarity ranges from -1 (opposite) to 1 (identical). For semantically related sentences, you typically see 0.6-0.9.</p>
+<p>This means the model is cached before the user even opens a chat page.</p>
 
-<p>A 384-dimensional vector is just 384 numbers. For the sentence "A Nash equilibrium is a strategy profile where no player wants to deviate," one dimension might loosely correspond to "game theory," another to "stability," another to "multi-agent," and so on. But it is misleading to assign labels to dimensions — they are learned, not interpretable, and the meaning is distributed across them.</p>
+<h2>Progressive Loading Stages</h2>
 
-<h2>Why 384 Specifically</h2>
+<p>The chatbot doesn't wait for everything to load:</p>
 
-<p>The choice of 384 is the result of three competing pressures:</p>
+<ol>
+<li><strong>Immediate</strong>: BOW + heuristic fallback (instant, uses built-in vocabulary)</li>
+<li><strong>Fast</strong>: MLP policy loads (~100ms, JSON fetch)</li>
+<li><strong>Medium</strong>: Transformer model loads (~5-15s, 22 MB)</li>
+<li><strong>Background</strong>: WASM acceleration (optional)</li>
+</ol>
+The user can start chatting at stage 1. The system hot-swaps to better engines as they load.
 
-<p><strong>Accuracy</strong> — more dimensions means more capacity to encode nuance. BERT-base uses 768, BERT-large uses 1024. Larger vectors discriminate better between similar concepts.</p>
+<h2>Key Takeaway</h2>
 
-<p><strong>Storage</strong> — a 384-dim FP32 vector is 1.5 KB. For a knowledge base of 10,000 fragments, that is 15 MB. At 768 dims it would be 30 MB. At 1024 dims, 40 MB.</p>
-
-<p><strong>Latency</strong> — every dimension requires work in the transformer. 384 dims of computation is roughly half of 768. For browser inference this matters.</p>
-
-<p>MiniLM-L6-v2 chose 384 because the original <code>all-MiniLM-L12-v2</code> (12-layer) at 384 dim was already nearly as accurate as BERT-base at 768 dim for sentence-similarity benchmarks. The number 384 is not fundamental — it is the point where the model is "good enough" for the size and speed budget.</p>
-
-<h2>How It Is Learned</h2>
-
-<p>A sentence transformer is trained with a contrastive objective. The model sees pairs of sentences and learns to:</p>
-
-<ul>
-<li>Make similar sentences have similar embeddings</li>
-<li>Make dissimilar sentences have dissimilar embeddings</li>
-</ul>
-The training data is huge — typically 1B+ sentence pairs from web crawl, Q&A sites, and paraphrase databases. The loss function is something like:
-
-<pre><code>L = max(0, margin - cos(A, A_positive) + cos(A, A_negative))
-</code></pre>
-
-<p>Or, in the more modern setup, a softmax over in-batch negatives scaled by a temperature. Either way, the model is rewarded for pulling similar sentences together and pushing dissimilar ones apart in the embedding space.</p>
-
-<p>The "L6" in MiniLM-L6-v2 means 6 transformer layers. The original BERT-base has 12. The L6 model is smaller and faster but slightly less accurate. For a retrieval system that already uses BM25 as a complement, the L6 accuracy is sufficient.</p>
-
-<h2>What 384 Dimensions Actually Encode</h2>
-
-<p>The dimensions are not labeled. But we can probe them. If you train a linear probe on dimension 47 (or whatever), you might find that it correlates with the <em>presence of a named entity</em>, or <em>sentiment polarity</em>, or <em>tense of the main verb</em>. The model has learned to allocate dimensions to whatever signals help minimize the contrastive loss.</p>
-
-<p>Empirically, MiniLM-L6-v2's dimensions encode a mix of:</p>
-
-<ul>
-<li><strong>Topical signals</strong> — what the sentence is about</li>
-<li><strong>Syntactic signals</strong> — grammar, structure, length</li>
-<li><strong>Semantic relations</strong> — synonymy, entailment, contradiction</li>
-<li><strong>Style markers</strong> — formal vs informal, technical vs general</li>
-</ul>
-But the encoding is <strong>entangled</strong> — a single dimension participates in multiple concepts. That is why you cannot interpret individual dimensions in isolation.
-
-<h2>The Practical Sweet Spot</h2>
-
-<p>For a browser-deployed retrieval system, 384 dim hits a sweet spot:</p>
-
-<ul>
-<li><strong>Accuracy</strong>: 90-95% of full BERT-base for sentence similarity tasks</li>
-<li><strong>Size</strong>: 22 MB quantized, fits on a phone in seconds</li>
-<li><strong>Latency</strong>: ~15ms per embedding on a mid-range laptop, ~3ms on WebGPU</li>
-<li><strong>Storage</strong>: 15 MB for 10,000 KB fragments — acceptable</li>
-</ul>
-If you go to 768 dim, the storage doubles and the inference is ~2x slower. If you go to 128 dim, you lose too much accuracy. 384 is the local minimum of the pain curve.
-
-<h2>What This Means for Users</h2>
-
-<p>The user does not see "384 dimensions." They see a chatbot that:</p>
-
-<ul>
-<li>Recognizes paraphrases ("how do I split profits fairly" → finds "Shapley value")</li>
-<li>Handles synonyms ("auction" ↔ "sealed-bid mechanism")</li>
-<li>Tolerates typos and slight rewordings</li>
-<li>Fails gracefully on out-of-domain queries (low similarity → no good match)</li>
-</ul>
-That is what 384 numbers buy you. Not magic — careful engineering and a model trained on more text than any human can read in a lifetime.
+<p>Service workers transform a 22 MB model from a blocking download into a one-time cost. After the first visit, chatbot startup is instant.</p>
   </div>
 
   <div class="article-footer">
     <a href="/blog/" class="back-link">&larr; Back to Blog</a>
     <div class="share-links">
-      <a href="https://twitter.com/intent/tweet?text=Sentence%20Embeddings%20Explained%3A%20Why%20384%20Dimensions%20and%20What%20They%20Mean&url=https%3A%2F%2Frelu.chat%2Fblog%2Fsentence-embeddings-384-dim-minilm%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fsentence-embeddings-384-dim-minilm%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+      <a href="https://twitter.com/intent/tweet?text=Service%20Worker%20Model%20Pre-Caching%3A%20Zero-Wait%20Chatbot%20Loading&url=https%3A%2F%2Frelu.chat%2Fblog%2Fservice-worker-model-pre-caching%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fservice-worker-model-pre-caching%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
     </div>
   </div>
 </article>

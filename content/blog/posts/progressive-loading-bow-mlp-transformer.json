@@ -1,0 +1,24 @@
+{
+  "id": "progressive-loading-bow-mlp-transformer",
+  "slug": "progressive-loading-bow-mlp-transformer",
+  "title": "Progressive Loading: BOW to MLP to Transformer in 3 Stages",
+  "meta_title": "Progressive Loading: BOW to MLP to Transformer in 3 Stages",
+  "meta_description": "The three-stage loading strategy that gives usable answers instantly while the 22MB transformer model streams in.",
+  "status": "published",
+  "published_at": "2026-06-30T20:56:01.233Z",
+  "updated_at": "2026-06-30T20:56:01.233Z",
+  "author": "ReLU.chat",
+  "content": "# Progressive Loading: BOW to MLP to Transformer in 3 Stages\n\nA 22MB transformer model takes time to load. Users shouldn't stare at a loading bar. ReLU.chat uses a three-stage progressive loading strategy that gives usable answers instantly.\n\n## Stage 1: BOW + Heuristic (Immediate)\n\nBefore any model loads, the system builds a Bag-of-Words vocabulary from the knowledge base:\n\n```javascript\nconst voc = new Set();\nfor (const e of KB) for (const t of tokens(entryText(e))) voc.add(t);\nbowVocab = new Map();\n[...voc].forEach((w, i) => bowVocab.set(w, i));\n```\n\nBOW vectors are sparse binary representations — each dimension is 1 if the word appears, 0 otherwise. Combined with the heuristic policy fallback, the system can answer basic queries within milliseconds of page load.\n\n## Stage 2: MLP Policy (Fast)\n\nThe MLP weights (363 KB JSON) load in parallel with the transformer. Once loaded, the system switches from heuristic to policy-driven responses. This happens within ~100ms.\n\nThe MLP provides:\n- Intent classification (definition, example, formal, application, comparison)\n- Mode detection (normal, greeting, help, off-topic, comparison)\n- Topic and fragment count decisions\n- Tone and creativity calibration\n\n## Stage 3: Dense Transformer (Medium)\n\nThe MiniLM model (~22 MB, quantized ONNX) streams in via the service worker's cache. Once loaded:\n1. All knowledge base entries are re-encoded with dense embeddings\n2. BOW vectors are hot-swapped with 384-dimensional dense vectors\n3. BM25 index is rebuilt with proper tokenization\n4. The signal layer switches to dense-sparse ensemble ranking\n\nThe hot-swap is invisible to the user — they keep chatting while the system improves in the background.\n\n## Bot-Pack Fast Path\n\nWhen a bot-pack is available (precomputed BM25 index + entry vectors), stages 1-3 are faster:\n- BM25 index loads from JSON instead of being computed client-side\n- Entry vectors load from JSON instead of being encoded at runtime\n\n## Key Takeaway\n\nProgressive loading turns a blocking 22 MB download into a non-blocking upgrade. Users get instant answers that improve as the model loads. The key insight: BOW is good enough for first turns, and the hot-swap is invisible.",
+  "excerpt": "The three-stage loading strategy that gives usable answers instantly while the 22MB transformer model streams in.",
+  "canonical": "https://relu.chat/blog/progressive-loading-bow-mlp-transformer/",
+  "cover_image": "",
+  "cover_image_alt": "Progressive Loading: BOW to MLP to Transformer in 3 Stages",
+  "tags": [
+    "loading",
+    "progressive",
+    "architecture",
+    "performance",
+    "boot"
+  ],
+  "redirects": []
+}

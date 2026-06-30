@@ -1,0 +1,24 @@
+{
+  "id": "service-worker-model-pre-caching",
+  "slug": "service-worker-model-pre-caching",
+  "title": "Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading",
+  "meta_title": "Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading",
+  "meta_description": "How service workers pre-cache the 22MB transformer model and policy weights for instant chatbot startup.",
+  "status": "published",
+  "published_at": "2026-06-30T20:55:49.448Z",
+  "updated_at": "2026-06-30T20:55:49.448Z",
+  "author": "ReLU.chat",
+  "content": "# Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading\n\nThe biggest barrier to browser-based AI is load time. A 22MB transformer model doesn't load instantly, especially on mobile. ReLU.chat uses service workers to eliminate this friction.\n\n## The Loading Strategy\n\nOn first visit, the service worker installs and pre-caches critical assets:\n\n1. **App shell**: HTML, CSS, JS modules, fonts (~200 KB)\n2. **Model files**: MiniLM ONNX quantized (22 MB), policy weights (363 KB), WASM runtimes\n3. **Transformers.js**: The ONNX runtime library\n\nOn subsequent visits, all assets are served from Cache API — zero network requests.\n\n## Cache Architecture\n\nTwo separate caches:\n- `relu-chat-v8`: App assets (HTML, CSS, JS, fonts)\n- `relu-chat-models-v8`: Model files (ONNX, weights, WASM)\n\nModel files use cache-first strategy: if cached, serve immediately. Static assets use stale-while-revalidate: serve cached, update in background.\n\n## Range Request Support\n\nLarge model files (22 MB) benefit from partial loading. The service worker handles `Range` headers by slicing cached full responses into 206 Partial Content responses. This allows the ONNX runtime to stream-load models efficiently.\n\n## Background Preloading\n\nAfter activation, the service worker preloads model assets in the background:\n\n```javascript\ne.waitUntil(\n  caches.open(MODEL_CACHE).then(c =>\n    Promise.allSettled(MODEL_PRELOAD_ASSETS.map(asset => c.add(asset)))\n  )\n);\n```\n\nThis means the model is cached before the user even opens a chat page.\n\n## Progressive Loading Stages\n\nThe chatbot doesn't wait for everything to load:\n\n1. **Immediate**: BOW + heuristic fallback (instant, uses built-in vocabulary)\n2. **Fast**: MLP policy loads (~100ms, JSON fetch)\n3. **Medium**: Transformer model loads (~5-15s, 22 MB)\n4. **Background**: WASM acceleration (optional)\n\nThe user can start chatting at stage 1. The system hot-swaps to better engines as they load.\n\n## Key Takeaway\n\nService workers transform a 22 MB model from a blocking download into a one-time cost. After the first visit, chatbot startup is instant.",
+  "excerpt": "How service workers pre-cache the 22MB transformer model and policy weights for instant chatbot startup.",
+  "canonical": "https://relu.chat/blog/service-worker-model-pre-caching/",
+  "cover_image": "",
+  "cover_image_alt": "Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading",
+  "tags": [
+    "service-worker",
+    "caching",
+    "performance",
+    "pwa",
+    "loading"
+  ],
+  "redirects": []
+}

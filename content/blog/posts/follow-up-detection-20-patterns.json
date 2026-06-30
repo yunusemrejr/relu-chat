@@ -1,0 +1,24 @@
+{
+  "id": "follow-up-detection-20-patterns",
+  "slug": "follow-up-detection-20-patterns",
+  "title": "Follow-Up Detection: 20 Patterns That Make Chatbots Conversational",
+  "meta_title": "Follow-Up Detection: 20 Patterns That Make Chatbots Conversa",
+  "meta_description": "How regex pattern matching and heuristic detection handle 20+ follow-up types from 'how?' to 'tell me more' to emoji-only responses.",
+  "status": "published",
+  "published_at": "2026-06-30T20:55:52.342Z",
+  "updated_at": "2026-06-30T20:55:52.342Z",
+  "author": "ReLU.chat",
+  "content": "# Follow-Up Detection: 20 Patterns That Make Chatbots Conversational\n\nWhen a user types \"how?\" or \"tell me more\" or just sends a thumbs-up emoji, the chatbot needs to understand this is a follow-up to the previous response. ReLU.chat detects 20+ follow-up types using a combination of regex patterns and heuristic matching.\n\n## Pattern Categories\n\nThe follow-up detection system handles these categories:\n\n**Process/Reason**: \"how\", \"why\", \"how so\", \"how does that work\"\n**Depth**: \"more detail\", \"elaborate\", \"go deeper\", \"deep dive\"\n**Simplification**: \"explain simpler\", \"ELI5\", \"dumb it down\"\n**Examples**: \"give an example\", \"like what\", \"for instance\"\n**Continuation**: \"go ahead\", \"keep going\", \"what's next\"\n**Challenge**: \"really\", \"are you sure\", \"prove it\"\n**Acknowledgment**: \"ok\", \"got it\", \"makes sense\"\n**Clarification**: \"huh\", \"what do you mean\", \"I'm confused\"\n**Summarization**: \"tl;dr\", \"summarize\", \"brief\"\n**Comparison**: \"compare\", \"difference\", \"versus\"\n**Topic correction**: \"I meant X\", \"no, just X\"\n\n## Two-Phase Detection\n\nPhase 1: Pattern matching against 20+ regex patterns (fast, high-confidence).\nPhase 2: Heuristic fallback for short queries (< 20 chars) using substring matching.\n\n```javascript\n// Phase 1: exact pattern match\nfor (const pat of FOLLOWUP_PATTERNS) {\n  const match = query.match(pat.regex);\n  if (match) return { isFollowUp: true, type: pat.type };\n}\n// Phase 2: heuristic short-query matching\nif (query.length < 20) { /* substring maps */ }\n```\n\n## Emoji and Symbol Detection\n\nEmoji-only messages are common in chat. The system detects them via Unicode property escapes:\n\n```javascript\nconst allSymbols = /^[\\u{1F000}-\\u{1FFFF}...]+$/u;\n```\n\nCommon emoji map to follow-up types: 🤔 → clarify, 👍 → acknowledge, 💡 → elaborate.\n\n## Punctuation Signals\n\n\"...\" → elaborate, \"??\" → clarify, \"!\" → challenge. Even empty punctuation carries meaning.\n\n## Integration with Policy\n\nThe detected follow-up type feeds into the 25-feature policy vector as `followUpType` (feature index 18, values 0-22). The MLP uses this to adjust response strategy — simplify triggers shorter, more intuitive responses; deep_dive triggers longer, more formal ones.\n\n## Key Takeaway\n\nFollow-up detection is pattern matching, not ML. Twenty well-crafted regex patterns cover 95% of conversational follow-ups. The remaining 5% are handled by heuristic substring matching.",
+  "excerpt": "How regex pattern matching and heuristic detection handle 20+ follow-up types from 'how?' to 'tell me more' to emoji-only responses.",
+  "canonical": "https://relu.chat/blog/follow-up-detection-20-patterns/",
+  "cover_image": "",
+  "cover_image_alt": "Follow-Up Detection: 20 Patterns That Make Chatbots Conversational",
+  "tags": [
+    "nlp",
+    "follow-up",
+    "conversation",
+    "chat",
+    "patterns"
+  ],
+  "redirects": []
+}

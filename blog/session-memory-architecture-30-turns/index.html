@@ -3,30 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>384-dim Sentence Embeddings — ReLU.chat</title>
-<meta name="description" content="Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.">
+<title>Session Memory Architecture: 30 Turns of Context Without a S</title>
+<meta name="description" content="How importance-based eviction, response compression, and EMA summary vectors maintain long conversation context entirely in the browser.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://relu.chat/blog/sentence-embeddings-384-dim-minilm/">
+<link rel="canonical" href="https://relu.chat/blog/session-memory-architecture-30-turns/">
 
-<meta property="og:title" content="384-dim Sentence Embeddings — ReLU.chat">
-<meta property="og:description" content="Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.">
+<meta property="og:title" content="Session Memory Architecture: 30 Turns of Context Without a S">
+<meta property="og:description" content="How importance-based eviction, response compression, and EMA summary vectors maintain long conversation context entirely in the browser.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://relu.chat/blog/sentence-embeddings-384-dim-minilm/">
-<meta property="og:image" content="https://relu.chat/assets/blog/sentence-embeddings.svg">
+<meta property="og:url" content="https://relu.chat/blog/session-memory-architecture-30-turns/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
 <meta property="og:site_name" content="ReLU.chat">
-<meta property="article:published_time" content="2026-06-05T10:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-05T10:00:00.000Z">
+<meta property="article:published_time" content="2026-06-30T20:55:41.769Z">
+<meta property="article:modified_time" content="2026-06-30T20:55:41.769Z">
 <meta property="article:author" content="ReLU.chat">
-<meta property="article:tag" content="embeddings">
+<meta property="article:tag" content="session">
+<meta property="article:tag" content="memory">
+<meta property="article:tag" content="context">
+<meta property="article:tag" content="architecture">
 <meta property="article:tag" content="nlp">
-<meta property="article:tag" content="sentence-transformers">
-<meta property="article:tag" content="machine-learning">
-<meta property="article:tag" content="minilm">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="384-dim Sentence Embeddings — ReLU.chat">
-<meta name="twitter:description" content="Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.">
-<meta name="twitter:image" content="https://relu.chat/assets/blog/sentence-embeddings.svg">
+<meta name="twitter:title" content="Session Memory Architecture: 30 Turns of Context Without a S">
+<meta name="twitter:description" content="How importance-based eviction, response compression, and EMA summary vectors maintain long conversation context entirely in the browser.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
 
 <meta name="theme-color" content="#060708">
 <link rel="apple-touch-icon" href="/assets/logo.png">
@@ -47,24 +47,24 @@
     },
     {
       "@type": "WebPage",
-      "@id": "https://relu.chat/blog/sentence-embeddings-384-dim-minilm/#webpage",
-      "url": "https://relu.chat/blog/sentence-embeddings-384-dim-minilm/",
-      "name": "384-dim Sentence Embeddings — ReLU.chat",
-      "description": "Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.",
+      "@id": "https://relu.chat/blog/session-memory-architecture-30-turns/#webpage",
+      "url": "https://relu.chat/blog/session-memory-architecture-30-turns/",
+      "name": "Session Memory Architecture: 30 Turns of Context Without a S",
+      "description": "How importance-based eviction, response compression, and EMA summary vectors maintain long conversation context entirely in the browser.",
       "inLanguage": "en",
       "isPartOf": {
         "@id": "https://relu.chat/#website"
       },
-      "datePublished": "2026-06-05T10:00:00.000Z",
-      "dateModified": "2026-06-05T10:00:00.000Z"
+      "datePublished": "2026-06-30T20:55:41.769Z",
+      "dateModified": "2026-06-30T20:55:41.769Z"
     },
     {
       "@type": "Article",
-      "@id": "https://relu.chat/blog/sentence-embeddings-384-dim-minilm/#article",
-      "headline": "Sentence Embeddings Explained: Why 384 Dimensions and What They Mean",
-      "description": "Why sentence transformers use 384 dimensions, what those numbers actually represent, and why MiniLM-L6 is a sweet spot for browser NLP.",
-      "datePublished": "2026-06-05T10:00:00.000Z",
-      "dateModified": "2026-06-05T10:00:00.000Z",
+      "@id": "https://relu.chat/blog/session-memory-architecture-30-turns/#article",
+      "headline": "Session Memory Architecture: 30 Turns of Context Without a Server",
+      "description": "How importance-based eviction, response compression, and EMA summary vectors maintain long conversation context entirely in the browser.",
+      "datePublished": "2026-06-30T20:55:41.769Z",
+      "dateModified": "2026-06-30T20:55:41.769Z",
       "author": {
         "@type": "Person",
         "name": "ReLU.chat"
@@ -79,10 +79,10 @@
         }
       },
       "mainEntityOfPage": {
-        "@id": "https://relu.chat/blog/sentence-embeddings-384-dim-minilm/#webpage"
+        "@id": "https://relu.chat/blog/session-memory-architecture-30-turns/#webpage"
       },
-      "image": "https://relu.chat/assets/blog/sentence-embeddings.svg",
-      "keywords": "embeddings, nlp, sentence-transformers, machine-learning, minilm"
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "session, memory, context, architecture, nlp"
     }
   ]
 }
@@ -185,12 +185,12 @@ footer a{color:var(--text-secondary);text-decoration:underline}
 
 <article class="article-container">
   <div class="article-breadcrumb">
-    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Sentence Embeddings Explained: Why 384 Dimensions and What They Mean</span>
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Session Memory Architecture: 30 Turns of Context Without a Server</span>
   </div>
 
-  <div class="article-tags"><span class="article-tag">embeddings</span><span class="article-tag">nlp</span><span class="article-tag">sentence-transformers</span><span class="article-tag">machine-learning</span><span class="article-tag">minilm</span></div>
+  <div class="article-tags"><span class="article-tag">session</span><span class="article-tag">memory</span><span class="article-tag">context</span><span class="article-tag">architecture</span><span class="article-tag">nlp</span></div>
 
-  <h1 class="article-hero-title">Sentence Embeddings Explained: Why 384 Dimensions and What They Mean</h1>
+  <h1 class="article-hero-title">Session Memory Architecture: 30 Turns of Context Without a Server</h1>
 
   <div class="article-meta-bar">
     <div class="article-meta-item">
@@ -199,106 +199,71 @@ footer a{color:var(--text-secondary);text-decoration:underline}
     </div>
     <div class="article-meta-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-      <time datetime="2026-06-05T10:00:00.000Z">June 5, 2026</time>
+      <time datetime="2026-06-30T20:55:41.769Z">June 30, 2026</time>
     </div>
     <div class="article-meta-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <span>3 min read</span>
+      <span>2 min read</span>
     </div>
     
   </div>
 
   <div class="article-divider"></div>
 
-  <img class="article-cover" src="/assets/blog/sentence-embeddings.svg" alt="Pastel illustration of a 384-dimensional vector space with semantically related sentences clustered together">
+  
 
   <div class="article-body">
-    <p>When we say ReLU.chat embeds text into "384 dimensions," it sounds arbitrary. It is not. The 384-dim output is a deliberate design choice for <code>all-MiniLM-L6-v2</code>, the sentence transformer we use. This post explains what those numbers mean, why the dimension count is what it is, and what that implies for browser deployment.</p>
+    <p>Browser-based chatbots face a fundamental constraint: no server means no persistent memory. Everything must fit in the client's RAM and survive only for the session. ReLU.chat's <code>SessionMemory</code> class solves this with a multi-layered approach.</p>
 
-<h2>What a Sentence Embedding Is</h2>
+<h2>Turn Storage</h2>
 
-<p>A sentence embedding is a fixed-length vector of real numbers that represents the <em>meaning</em> of a sentence. Two sentences with similar meaning should have similar vectors. The similarity is measured by cosine distance:</p>
+<p>Each turn records: query, response, entities, topics, fragments used, ambiguity flag, and timestamp. History is capped at 30 turns with importance-based eviction — the 5 most recent turns are always protected.</p>
 
-<pre><code>similarity(A, B) = (A · B) / (||A|| * ||B||)
+<h2>Importance-Based Eviction</h2>
+
+<p>When the buffer is full, the system doesn't just drop the oldest turn. It computes an importance score for each non-protected turn based on:
+<ul>
+<li>Whether the turn had entities (topic richness)</li>
+<li>Whether the turn was ambiguous (needs context)</li>
+<li>Fragment diversity (how many different fragments were shown)</li>
+</ul>
+The least important turn is evicted. This preserves conversation threads that are contextually valuable.</p>
+
+<h2>Response Compression</h2>
+
+<p>After 5 turns, full response text is compressed to 120-character summaries. This reduces memory pressure without losing the gist of old exchanges. The compression is irreversible — it's a deliberate trade of fidelity for longevity.</p>
+
+<h2>EMA Summary Vector</h2>
+
+<p>The most powerful mechanism is the Exponential Moving Average (EMA) summary vector. After each turn, the query embedding (384-dimensional) is blended into a running average:</p>
+
+<pre><code>ema_new = α <em> ema_old + (1 - α) </em> new_embedding
 </code></pre>
 
-<p>The vector lives in a high-dimensional space. Cosine similarity ranges from -1 (opposite) to 1 (identical). For semantically related sentences, you typically see 0.6-0.9.</p>
+<p>With α = 0.75, the vector retains 75% of historical context and 25% of the current turn. This 384-d vector is passed to the policy network as dense multi-turn context — no additional feature extraction needed.</p>
 
-<p>A 384-dimensional vector is just 384 numbers. For the sentence "A Nash equilibrium is a strategy profile where no player wants to deviate," one dimension might loosely correspond to "game theory," another to "stability," another to "multi-agent," and so on. But it is misleading to assign labels to dimensions — they are learned, not interpretable, and the meaning is distributed across them.</p>
+<h2>Entity Decay</h2>
 
-<h2>Why 384 Specifically</h2>
+<p>Entity mentions are tracked with a half-life of 5 turns. An entity mentioned 10 turns ago has ~25% of its original relevance weight. This prevents stale topics from dominating while keeping recent context alive.</p>
 
-<p>The choice of 384 is the result of three competing pressures:</p>
+<h2>Fragment Diversity</h2>
 
-<p><strong>Accuracy</strong> — more dimensions means more capacity to encode nuance. BERT-base uses 768, BERT-large uses 1024. Larger vectors discriminate better between similar concepts.</p>
+<p>The system tracks how many times each knowledge fragment has been shown. After 2 presentations, a quadratic penalty score increases — preventing the chatbot from repeating the same explanations.</p>
 
-<p><strong>Storage</strong> — a 384-dim FP32 vector is 1.5 KB. For a knowledge base of 10,000 fragments, that is 15 MB. At 768 dims it would be 30 MB. At 1024 dims, 40 MB.</p>
+<h2>Engagement Tracking</h2>
 
-<p><strong>Latency</strong> — every dimension requires work in the transformer. 384 dims of computation is roughly half of 768. For browser inference this matters.</p>
+<p>Each follow-up is classified as one of: deepening, challenging, clarifying, acknowledging, new_topic, or redirecting. The last 5 signals determine the engagement trend (deepening, broadening, or neutral), which influences the policy's response strategy.</p>
 
-<p>MiniLM-L6-v2 chose 384 because the original <code>all-MiniLM-L12-v2</code> (12-layer) at 384 dim was already nearly as accurate as BERT-base at 768 dim for sentence-similarity benchmarks. The number 384 is not fundamental — it is the point where the model is "good enough" for the size and speed budget.</p>
+<h2>Key Takeaway</h2>
 
-<h2>How It Is Learned</h2>
-
-<p>A sentence transformer is trained with a contrastive objective. The model sees pairs of sentences and learns to:</p>
-
-<ul>
-<li>Make similar sentences have similar embeddings</li>
-<li>Make dissimilar sentences have dissimilar embeddings</li>
-</ul>
-The training data is huge — typically 1B+ sentence pairs from web crawl, Q&A sites, and paraphrase databases. The loss function is something like:
-
-<pre><code>L = max(0, margin - cos(A, A_positive) + cos(A, A_negative))
-</code></pre>
-
-<p>Or, in the more modern setup, a softmax over in-batch negatives scaled by a temperature. Either way, the model is rewarded for pulling similar sentences together and pushing dissimilar ones apart in the embedding space.</p>
-
-<p>The "L6" in MiniLM-L6-v2 means 6 transformer layers. The original BERT-base has 12. The L6 model is smaller and faster but slightly less accurate. For a retrieval system that already uses BM25 as a complement, the L6 accuracy is sufficient.</p>
-
-<h2>What 384 Dimensions Actually Encode</h2>
-
-<p>The dimensions are not labeled. But we can probe them. If you train a linear probe on dimension 47 (or whatever), you might find that it correlates with the <em>presence of a named entity</em>, or <em>sentiment polarity</em>, or <em>tense of the main verb</em>. The model has learned to allocate dimensions to whatever signals help minimize the contrastive loss.</p>
-
-<p>Empirically, MiniLM-L6-v2's dimensions encode a mix of:</p>
-
-<ul>
-<li><strong>Topical signals</strong> — what the sentence is about</li>
-<li><strong>Syntactic signals</strong> — grammar, structure, length</li>
-<li><strong>Semantic relations</strong> — synonymy, entailment, contradiction</li>
-<li><strong>Style markers</strong> — formal vs informal, technical vs general</li>
-</ul>
-But the encoding is <strong>entangled</strong> — a single dimension participates in multiple concepts. That is why you cannot interpret individual dimensions in isolation.
-
-<h2>The Practical Sweet Spot</h2>
-
-<p>For a browser-deployed retrieval system, 384 dim hits a sweet spot:</p>
-
-<ul>
-<li><strong>Accuracy</strong>: 90-95% of full BERT-base for sentence similarity tasks</li>
-<li><strong>Size</strong>: 22 MB quantized, fits on a phone in seconds</li>
-<li><strong>Latency</strong>: ~15ms per embedding on a mid-range laptop, ~3ms on WebGPU</li>
-<li><strong>Storage</strong>: 15 MB for 10,000 KB fragments — acceptable</li>
-</ul>
-If you go to 768 dim, the storage doubles and the inference is ~2x slower. If you go to 128 dim, you lose too much accuracy. 384 is the local minimum of the pain curve.
-
-<h2>What This Means for Users</h2>
-
-<p>The user does not see "384 dimensions." They see a chatbot that:</p>
-
-<ul>
-<li>Recognizes paraphrases ("how do I split profits fairly" → finds "Shapley value")</li>
-<li>Handles synonyms ("auction" ↔ "sealed-bid mechanism")</li>
-<li>Tolerates typos and slight rewordings</li>
-<li>Fails gracefully on out-of-domain queries (low similarity → no good match)</li>
-</ul>
-That is what 384 numbers buy you. Not magic — careful engineering and a model trained on more text than any human can read in a lifetime.
+<p>Rich session memory doesn't require a server. With importance-based eviction, response compression, EMA vectors, and entity decay, a browser chatbot can maintain coherent 30-turn conversations entirely in client-side memory.</p>
   </div>
 
   <div class="article-footer">
     <a href="/blog/" class="back-link">&larr; Back to Blog</a>
     <div class="share-links">
-      <a href="https://twitter.com/intent/tweet?text=Sentence%20Embeddings%20Explained%3A%20Why%20384%20Dimensions%20and%20What%20They%20Mean&url=https%3A%2F%2Frelu.chat%2Fblog%2Fsentence-embeddings-384-dim-minilm%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fsentence-embeddings-384-dim-minilm%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+      <a href="https://twitter.com/intent/tweet?text=Session%20Memory%20Architecture%3A%2030%20Turns%20of%20Context%20Without%20a%20Server&url=https%3A%2F%2Frelu.chat%2Fblog%2Fsession-memory-architecture-30-turns%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fsession-memory-architecture-30-turns%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
     </div>
   </div>
 </article>

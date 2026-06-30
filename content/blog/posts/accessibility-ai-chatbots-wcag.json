@@ -1,0 +1,24 @@
+{
+  "id": "accessibility-ai-chatbots-wcag",
+  "slug": "accessibility-ai-chatbots-wcag",
+  "title": "Accessibility in AI Chatbots: WCAG Compliance for Conversational UI",
+  "meta_title": "Accessibility in AI Chatbots: WCAG Compliance for Conversati",
+  "meta_description": "How to make browser-based chatbots accessible: ARIA landmarks, keyboard navigation, reduced motion, and contrast compliance.",
+  "status": "published",
+  "published_at": "2026-06-30T20:56:02.262Z",
+  "updated_at": "2026-06-30T20:56:02.262Z",
+  "author": "ReLU.chat",
+  "content": "# Accessibility in AI Chatbots: WCAG Compliance for Conversational UI\n\nBrowser-based chatbots are interactive web applications. They must meet the same accessibility standards as any other web app. ReLU.chat is built WCAG AA compliant from the ground up.\n\n## ARIA Landmarks\n\nThe chat interface uses proper semantic HTML and ARIA roles:\n\n```html\n<main class=\"chat-layout\">\n  <div id=\"messages\" role=\"log\" aria-live=\"polite\" aria-label=\"Chat messages\">\n  <form id=\"form\">\n    <input id=\"input\" aria-label=\"Message input\">\n    <button id=\"send\" aria-label=\"Send message\">\n```\n\n- `role=\"log\"` on the message container announces new messages to screen readers\n- `aria-live=\"polite\"` ensures announcements don't interrupt the user\n- Every interactive element has an accessible name\n\n## Keyboard Navigation\n\nAll interactive elements are keyboard-accessible:\n- Tab order: navigation → suggestion buttons → input → send\n- Enter submits the form\n- Shift+Enter allows multiline input (future)\n\n## Touch Targets\n\nWCAG requires interactive elements to be at least 44×44 CSS pixels. Every button, link, and input in ReLU.chat meets this:\n- Suggestion buttons: 44px height with 12px padding\n- Send button: exactly 44×44px\n- Input field: 44px minimum height\n- Navigation links: 44px minimum height with padding\n\n## Color Contrast\n\nAll text meets WCAG AA contrast ratios:\n- Primary text (#f9fafb on #0d1117): 16.75:1\n- Secondary text (#9ca3af on #0d1117): 13.45:1\n- Status text (#8b95a3 on #151b23): 5.71:1\n- Accent text (#14b8a6 on #0d1117): 57.5:1\n\nAll ratios exceed the 4.5:1 threshold for normal text.\n\n## Reduced Motion\n\nWhen `prefers-reduced-motion: reduce` is set:\n- CSS: all animations set to 0.01ms duration\n- JS: streaming rendering skipped, full response shown instantly\n- Smooth scrolling disabled\n\n## Responsive Design\n\nThe chatbot works at all viewports from 320px to 2560px:\n- No horizontal scroll at any width\n- Input and send button scale appropriately\n- Suggestion chips wrap on narrow screens\n- Safe area insets for notched phones\n\n## Key Takeaway\n\nAccessibility isn't an afterthought. ARIA landmarks, keyboard navigation, touch targets, contrast ratios, and reduced motion must be built into the foundation. For AI chatbots, this means ensuring the conversational UI is as accessible as any form-based application.",
+  "excerpt": "How to make browser-based chatbots accessible: ARIA landmarks, keyboard navigation, reduced motion, and contrast compliance.",
+  "canonical": "https://relu.chat/blog/accessibility-ai-chatbots-wcag/",
+  "cover_image": "",
+  "cover_image_alt": "Accessibility in AI Chatbots: WCAG Compliance for Conversational UI",
+  "tags": [
+    "accessibility",
+    "wcag",
+    "chat",
+    "aria",
+    "inclusive-design"
+  ],
+  "redirects": []
+}

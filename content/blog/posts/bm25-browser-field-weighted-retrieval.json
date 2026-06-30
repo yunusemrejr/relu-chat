@@ -1,0 +1,24 @@
+{
+  "id": "bm25-browser-field-weighted-retrieval",
+  "slug": "bm25-browser-field-weighted-retrieval",
+  "title": "BM25 in the Browser: Field-Weighted Sparse Retrieval Without a Server",
+  "meta_title": "BM25 in the Browser: Field-Weighted Sparse Retrieval Without",
+  "meta_description": "Implementing field-weighted BM25 with bigram phrase matching entirely in JavaScript for real-time knowledge retrieval.",
+  "status": "published",
+  "published_at": "2026-06-30T20:55:50.883Z",
+  "updated_at": "2026-06-30T20:55:50.883Z",
+  "author": "ReLU.chat",
+  "content": "# BM25 in the Browser: Field-Weighted Sparse Retrieval Without a Server\n\nDense embeddings (like MiniLM's 384-dimensional vectors) capture semantic similarity. But for exact term matching — searching for \"Nash equilibrium\" or \"Shapley value\" — sparse retrieval is superior. ReLU.chat implements BM25 entirely in JavaScript.\n\n## Why BM25?\n\nBM25 (Best Matching 25) is the workhorse of information retrieval. It scores documents based on term frequency (TF) and inverse document frequency (IDF). Unlike cosine similarity, it excels at:\n- Exact keyword matching\n- Rare term boosting (\"Shapley\" scores higher than \"the\")\n- Field-aware scoring (name matches matter more than body matches)\n\n## Field-Weighted Indexing\n\nDuring indexing, we boost important fields by repeating them:\n\n```javascript\nconst text = `${name} ${name} ${name} ${aliases} ${aliases} ${summary} ${summary} ${def} ${int} ${ex}`;\n```\n\nEntry names appear 3× and aliases 2×. This means a query matching an entry's name gets a naturally higher BM25 score via term frequency — no explicit boosting logic needed.\n\n## Bigram Phrase Matching\n\nStandard BM25 treats \"Nash equilibrium\" as two separate tokens. We add bigram phrase matching:\n\n1. Generate bigrams: `[\"nash\", \"equilibrium\"]` → `\"nash_equilibrium\"`\n2. Add bigrams to the document index\n3. Score bigram matches with an IDF-weighted bonus\n\nThis catches multi-word concepts that unigram scoring misses.\n\n## Ensemble Ranking\n\nBM25 scores are fused with dense cosine similarity at 70/30 weights:\n\n```javascript\nconst blended = 0.7 * denseScore + 0.3 * bm25Score;\n```\n\nThe 70/30 split was determined empirically — dense similarity captures semantic meaning, BM25 captures lexical precision. Neither alone is sufficient.\n\n## Performance\n\nBM25 scoring is O(n) where n is the number of documents. For a 100-entry knowledge base, this takes ~0.1ms. The inverted index is built once at initialization and reused for every query.\n\n## Key Takeaway\n\nBM25 is simple to implement, fast to run, and complementary to dense retrieval. Implementing it in the browser gives you hybrid search without any server dependency.",
+  "excerpt": "Implementing field-weighted BM25 with bigram phrase matching entirely in JavaScript for real-time knowledge retrieval.",
+  "canonical": "https://relu.chat/blog/bm25-browser-field-weighted-retrieval/",
+  "cover_image": "",
+  "cover_image_alt": "BM25 in the Browser: Field-Weighted Sparse Retrieval Without a Server",
+  "tags": [
+    "bm25",
+    "retrieval",
+    "search",
+    "nlp",
+    "browser"
+  ],
+  "redirects": []
+}

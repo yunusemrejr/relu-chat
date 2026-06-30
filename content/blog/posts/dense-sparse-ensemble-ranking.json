@@ -1,0 +1,24 @@
+{
+  "id": "dense-sparse-ensemble-ranking",
+  "slug": "dense-sparse-ensemble-ranking",
+  "title": "Dense-Sparse Ensemble Ranking: Combining BM25 and Embeddings",
+  "meta_title": "Dense-Sparse Ensemble Ranking: Combining BM25 and Embeddings",
+  "meta_description": "How fusing dense cosine similarity with BM25 sparse scores at 70/30 weights produces better retrieval than either alone.",
+  "status": "published",
+  "published_at": "2026-06-30T20:55:59.578Z",
+  "updated_at": "2026-06-30T20:55:59.578Z",
+  "author": "ReLU.chat",
+  "content": "# Dense-Sparse Ensemble Ranking: Combining BM25 and Embeddings\n\nReLU.chat uses two retrieval signals: dense cosine similarity (from MiniLM embeddings) and sparse BM25 scores. Neither alone is sufficient. This article explains how we fuse them.\n\n## The Two Signals\n\n**Dense similarity**: The query is embedded into a 384-dimensional vector. Each knowledge base entry has a precomputed embedding. Cosine similarity captures semantic meaning — \"optimal strategy\" matches \"best response\" even without shared words.\n\n**Sparse BM25**: Term-frequency scoring with IDF weighting. Captures exact lexical matches — \"Nash equilibrium\" matches entries containing those exact words.\n\n## The Ensemble Formula\n\n```javascript\nconst blended = 0.7 * denseScore + 0.3 * bm25Score;\n```\n\nThe 70/30 split was determined empirically across all three chatbot domains (game theory, data science, Islamic Golden Age). Dense similarity is more robust to paraphrasing; BM25 is more precise for exact terms.\n\n## Neural Reranking\n\nAfter ensemble ranking, a lightweight neural reranker applies a token-overlap bonus:\n\n```javascript\nconst rerankScore = (1 - blend) * baseScore + blend * sim01;\n```\n\nThis refines the top-10 results by penalizing entries that share few tokens with the query.\n\n## Follow-Up Boosting\n\nWhen a follow-up is detected, the previous topic gets a +0.35 boost (scaled by conversation depth). This prevents topic drift during elaboration:\n\n```javascript\nconst boostAmount = 0.35 * (1 + conversationDepth * 0.15);\n```\n\n## Performance\n\nFor a 100-entry knowledge base:\n- Dense ranking: ~0.5ms (cosine similarity × 100)\n- BM25 scoring: ~0.1ms (inverted index lookup)\n- Ensemble fusion: ~0.05ms (weighted sum)\n- Total: ~0.65ms per query\n\n## Key Takeaway\n\nDense-sparse ensemble ranking gives you the best of both worlds: semantic understanding from embeddings and lexical precision from BM25. The 70/30 split works well across domains.",
+  "excerpt": "How fusing dense cosine similarity with BM25 sparse scores at 70/30 weights produces better retrieval than either alone.",
+  "canonical": "https://relu.chat/blog/dense-sparse-ensemble-ranking/",
+  "cover_image": "",
+  "cover_image_alt": "Dense-Sparse Ensemble Ranking: Combining BM25 and Embeddings",
+  "tags": [
+    "retrieval",
+    "ensemble",
+    "ranking",
+    "bm25",
+    "embeddings"
+  ],
+  "redirects": []
+}

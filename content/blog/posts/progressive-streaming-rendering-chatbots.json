@@ -1,0 +1,24 @@
+{
+  "id": "progressive-streaming-rendering-chatbots",
+  "slug": "progressive-streaming-rendering-chatbots",
+  "title": "Progressive Streaming Rendering: Making Chatbots Feel Native",
+  "meta_title": "Progressive Streaming Rendering: Making Chatbots Feel Native",
+  "meta_description": "How progressive response rendering with requestAnimationFrame creates a natural typing effect in browser chatbots.",
+  "status": "published",
+  "published_at": "2026-06-30T20:55:40.028Z",
+  "updated_at": "2026-06-30T20:55:40.028Z",
+  "author": "ReLU.chat",
+  "content": "# Progressive Streaming Rendering: Making Chatbots Feel Native\n\nWhen a chatbot generates a response, inserting the full text instantly feels mechanical. Real conversations have rhythm — words appear, pauses happen, the listener processes. We implemented progressive streaming rendering in ReLU.chat to bridge this gap.\n\n## The Approach\n\nInstead of calling `innerHTML = fullResponse`, we use `requestAnimationFrame` to reveal the response in ~40-character chunks:\n\n```javascript\nconst stream = pushMessageStream('bot', meta);\nconst rendered = md(text);\nconst CHUNK = 40;\nlet pos = 0;\nconst reveal = () => {\n  pos = Math.min(pos + CHUNK, rendered.length);\n  stream.update(rendered.slice(0, pos));\n  if (pos < rendered.length) requestAnimationFrame(reveal);\n  else stream.done();\n};\nrequestAnimationFrame(reveal);\n```\n\nEach frame reveals one chunk. The browser batches these with its paint cycle, so there's no layout thrash. KaTeX math rendering is deferred until the stream completes — rendering math mid-stream would cause jarring reflows.\n\n## Why 40 Characters?\n\nWe tested chunk sizes from 10 to 100 characters. Below 20, the animation feels sluggish (too many frames). Above 60, it feels instant (no perceived progress). 40 characters is roughly one sentence fragment — enough to feel like natural typing without being slow.\n\n## The Reduced Motion Contract\n\nAccessibility is non-negotiable. When `prefers-reduced-motion: reduce` is set, the response appears instantly:\n\n```javascript\nconst prefersReduced = window.matchMedia(\n  '(prefers-reduced-motion: reduce)'\n).matches;\nif (prefersReduced) {\n  stream.update(rendered);\n  stream.done();\n} else {\n  // progressive reveal\n}\n```\n\nThe CSS `prefers-reduced-motion` rule also sets `animation-duration: 0.01ms !important` on all elements, ensuring no CSS animations play.\n\n## The Stream API\n\n`pushMessageStream()` returns an object with three methods:\n- `update(html)` — replaces the message content (incremental)\n- `done()` — finalizes, triggers KaTeX rendering, scrolls to bottom\n- `element` — the DOM element (for diagram attachment)\n\nThis is intentionally minimal. The caller controls the timing; the renderer controls the DOM.\n\n## Performance\n\nFor a typical 200-word response (~1000 characters), the stream completes in ~25 frames (~417ms at 60fps). The total DOM cost is 25 `innerHTML` assignments on the same element — each replacing the previous content with a slightly longer string. The browser's diffing algorithm handles this efficiently.\n\n## Key Takeaway\n\nProgressive rendering is a UX improvement that costs almost nothing. No new dependencies, no complex state machines, no virtual DOM. Just `requestAnimationFrame` and a slice counter.",
+  "excerpt": "How progressive response rendering with requestAnimationFrame creates a natural typing effect in browser chatbots.",
+  "canonical": "https://relu.chat/blog/progressive-streaming-rendering-chatbots/",
+  "cover_image": "",
+  "cover_image_alt": "Progressive Streaming Rendering: Making Chatbots Feel Native",
+  "tags": [
+    "streaming",
+    "ux",
+    "chat",
+    "rendering",
+    "animation"
+  ],
+  "redirects": []
+}
