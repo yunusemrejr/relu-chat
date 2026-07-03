@@ -717,11 +717,12 @@
     </a>
     <ul class="nav-links">
       <li><a href="#features">Features</a></li>
-      <li><a href="#showcase">Chat</a></li>
+      <li><a href="#showcase">Chatbots</a></li>
+      <li><a href="/tools/">Tools</a></li>
       <li><a href="/how-it-works.html">How It Works</a></li>
       <li><a href="/blog/">Blog</a></li>
     </ul>
-    <a href="#showcase" class="btn btn-secondary btn-sm nav-cta desktop-only">Try Chat</a>
+    <a href="/tools/" class="btn btn-secondary btn-sm nav-cta desktop-only">ML Tools</a>
     <label for="nav-toggle-input" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span>
       <span></span>
@@ -733,7 +734,8 @@
 <!-- Mobile overlay nav -->
 <div class="mobile-nav" aria-hidden="true">
   <a href="#features" onclick="document.getElementById('nav-toggle-input').checked=false">Features</a>
-  <a href="#showcase" onclick="document.getElementById('nav-toggle-input').checked=false">Chat</a>
+  <a href="#showcase" onclick="document.getElementById('nav-toggle-input').checked=false">Chatbots</a>
+  <a href="/tools/" onclick="document.getElementById('nav-toggle-input').checked=false">ML Tools</a>
   <a href="/how-it-works.html" onclick="document.getElementById('nav-toggle-input').checked=false">How It Works</a>
   <a href="/blog/" onclick="document.getElementById('nav-toggle-input').checked=false">Blog</a>
   <a href="chat/game-theory-chat/" class="btn btn-primary" onclick="document.getElementById('nav-toggle-input').checked=false">Get Started</a>
@@ -749,6 +751,7 @@
         <a href="chat/game-theory-chat/" class="btn btn-primary">Game Theory Chat</a>
         <a href="chat/golden-age-inquiry/" class="btn btn-primary">Golden Age Inquiry</a>
         <a href="chat/data-science-chat/" class="btn btn-primary">Data Science Chat</a>
+        <a href="/tools/" class="btn btn-secondary">ML Tools</a>
         <a href="https://github.com/yunusemrejr/relu-chat" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
           Source
@@ -958,6 +961,37 @@
         </div>
       </div>
 
+      <!-- ML Tools -->
+      <div class="showcase-card" id="showcase-card-tools">
+        <div class="showcase-content">
+          <h3 class="showcase-title">Interactive ML Tools</h3>
+          <p class="showcase-desc">Explore the math behind machine learning with interactive visualizations. Neural network explorer, gradient descent lab, and backpropagation visualizer — all running in your browser.</p>
+          <div class="showcase-tags">
+            <span class="chip">Neural Networks</span>
+            <span class="chip">Gradient Descent</span>
+            <span class="chip">Backpropagation</span>
+            <span class="chip">On-device</span>
+          </div>
+          <a href="/tools/" class="showcase-cta">
+            Explore Tools
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="showcase-visual">
+          <div class="chat-mockup">
+            <div class="chat-mockup-header">
+              <span class="chat-mockup-dot"></span>
+              <span class="chat-mockup-dot"></span>
+              <span class="chat-mockup-dot"></span>
+              <span class="chat-mockup-title">Neural Network Explorer</span>
+            </div>
+            <div class="chat-mockup-body" style="min-height:140px;align-items:center;justify-content:center">
+              <svg viewBox="0 0 200 120" width="100%" style="max-width:180px"><circle cx="30" cy="30" r="10" fill="none" stroke="#14b8a6" stroke-width="1.5"/><circle cx="30" cy="60" r="10" fill="none" stroke="#14b8a6" stroke-width="1.5"/><circle cx="30" cy="90" r="10" fill="none" stroke="#374151" stroke-width="1.5"/><circle cx="100" cy="25" r="10" fill="none" stroke="#14b8a6" stroke-width="1.5"/><circle cx="100" cy="50" r="10" fill="none" stroke="#14b8a6" stroke-width="1.5"/><circle cx="100" cy="75" r="10" fill="none" stroke="#14b8a6" stroke-width="1.5"/><circle cx="100" cy="100" r="10" fill="none" stroke="#374151" stroke-width="1.5"/><circle cx="170" cy="60" r="14" fill="none" stroke="#14b8a6" stroke-width="1.5"/><line x1="40" y1="30" x2="90" y2="25" stroke="#1f2937" stroke-width="1"/><line x1="40" y1="30" x2="90" y2="50" stroke="#1f2937" stroke-width="1"/><line x1="40" y1="60" x2="90" y2="25" stroke="#1f2937" stroke-width="1"/><line x1="40" y1="60" x2="90" y2="50" stroke="#1f2937" stroke-width="1"/><line x1="110" y1="25" x2="156" y2="60" stroke="#1f2937" stroke-width="1"/><line x1="110" y1="50" x2="156" y2="60" stroke="#374151" stroke-width="1.5"/><line x1="110" y1="75" x2="156" y2="60" stroke="#374151" stroke-width="1.5"/><text x="30" y="115" fill="#6b7280" font-size="7" text-anchor="middle" font-family="Inter,sans-serif">Input</text><text x="100" y="118" fill="#6b7280" font-size="7" text-anchor="middle" font-family="Inter,sans-serif">Hidden</text><text x="170" y="95" fill="#6b7280" font-size="7" text-anchor="middle" font-family="Inter,sans-serif">Output</text></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Data Science Chat -->
       <div class="showcase-card" id="showcase-card-3">
         <div class="showcase-content">
@@ -1066,7 +1100,7 @@
 
   document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
 
-  ['showcase-card', 'showcase-card-2', 'showcase-card-3'].forEach(function(id) {
+  ['showcase-card', 'showcase-card-2', 'showcase-card-tools', 'showcase-card-3'].forEach(function(id) {
     var card = document.getElementById(id);
     if (!card) return;
     var obs = new IntersectionObserver(function(entries) {

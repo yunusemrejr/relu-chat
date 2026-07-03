@@ -1,0 +1,387 @@
+/* ReLU.chat — Interactive Tools Shared Styles
+   Extends shared-design.css v6 for interactive ML visualization tools */
+
+/* Tool layout */
+.tool-body {
+  background: var(--bg);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.tool-main {
+  flex: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.tool-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.tool-header h1 {
+  font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tool-header p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+/* Tool card */
+.tool-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.tool-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.tool-card-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Canvas container */
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  background: var(--bg);
+  min-height: 300px;
+}
+
+.canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: none;
+}
+
+/* Controls panel */
+.controls {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-3);
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.control-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.control-value {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.control-group input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-elevated);
+  cursor: pointer;
+}
+
+.control-group input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-elevated);
+  cursor: pointer;
+}
+
+/* Select */
+.tool-select {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.8125rem;
+  font-family: var(--font);
+  cursor: pointer;
+  outline: none;
+  min-height: 36px;
+}
+
+.tool-select:focus {
+  border-color: var(--accent);
+}
+
+/* Buttons */
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 36px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius);
+  font-family: var(--font);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.tool-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.tool-btn.primary {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.tool-btn.primary:hover {
+  background: rgba(20, 184, 166, 0.1);
+}
+
+.tool-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Output / metrics */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-2);
+}
+
+.metric {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.metric-label {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-1);
+}
+
+.metric-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.metric-value.accent { color: var(--accent); }
+
+/* Info box */
+.info-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.info-box strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.info-box code {
+  font-size: 0.8em;
+}
+
+/* Formula display */
+.formula {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--accent);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Tool listing on hub page */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.tool-listing {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-5);
+  transition: border-color 0.15s ease;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tool-listing:hover {
+  border-color: var(--border-strong);
+}
+
+.tool-listing-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-1);
+}
+
+.tool-listing-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--accent);
+}
+
+.tool-listing h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tool-listing p {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.tool-listing-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+.tool-listing .chip {
+  font-size: 0.625rem;
+}
+
+/* Step display (backpropagation) */
+.step-display {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  min-height: 60px;
+}
+
+.step-display .step-line {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.step-display .step-line .hl { color: var(--accent); font-weight: 600; }
+.step-display .step-line .dim { color: var(--text-muted); }
+.step-display .step-line .error { color: var(--error); }
+
+/* Node value indicators */
+.node-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .tool-main {
+    padding: var(--space-4) var(--space-3) var(--space-6);
+    gap: var(--space-4);
+  }
+
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas-wrap canvas {
+    transition: none;
+  }
+}
