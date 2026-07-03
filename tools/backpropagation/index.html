@@ -109,6 +109,14 @@
       </div>
     </div>
   </div>
+
+  <div class="tool-card">
+    <div class="controls">
+      <div class="info-box">
+        <strong>What's happening here?</strong> Think of the network as a team of coworkers passing a message down a chain. <strong>Forward pass:</strong> the message starts at the inputs (x₁, x₂), each person multiplies it by their own importance factor (weight), adds their personal bias, and passes it to the next person. At the end, the output comes out — and we compare it to what we WANTED (the target). The difference is the <strong>loss</strong> (the mistake). <strong>Backward pass:</strong> now each person asks: "How much of this mistake was MY fault?" They figure it out by looking backward at who passed them the message and how much they amplified it. That's the <strong>chain rule</strong> — like figuring out who in the chain dropped the ball. The redder a connection, the more that weight contributed to the error. The greener it is, the more it helped. Click "Forward Pass" first to see the numbers flow, then "Backward Pass" to see who gets blamed.
+      </div>
+    </div>
+  </div>
 </main>
 
 <script type="module" src="js/app.js"></script>
