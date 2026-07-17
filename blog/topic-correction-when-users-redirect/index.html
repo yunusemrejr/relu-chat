@@ -142,14 +142,14 @@
 
 <h2>The Problem</h2>
 
-<p>Standard follow-up detection assumes the user is building on the previous response. But sometimes the user is explicitly rejecting it:
+<p>Standard follow-up detection assumes the user is building on the previous response. But sometimes the user is explicitly rejecting it:</p>
 <ul>
 <li>"I asked about X actually"</li>
 <li>"no, just X"</li>
 <li>"not subgame stuff"</li>
 <li>"wrong topic"</li>
 </ul>
-These require a different response strategy — not elaboration, but redirection.</p>
+<p>These require a different response strategy — not elaboration, but redirection.</p>
 
 <h2>Detection Patterns</h2>
 
@@ -167,14 +167,14 @@ These require a different response strategy — not elaboration, but redirection
 
 <h2>Signal Layer Integration</h2>
 
-<p>When a correction is detected:
+<p>When a correction is detected:</p>
 <ol>
 <li>The corrected topic is forced to the top of the ranking with a +0.8 boost</li>
 <li>The rejected topic is demoted by -0.4</li>
 <li>The follow-up type is set to <code>topic_correction</code> or <code>topic_rejection</code></li>
 <li>The policy response uses definition intent, neutral tone, low creativity</li>
 </ol>
-<h2>Why This Matters</h2></p>
+<h2>Why This Matters</h2>
 
 <p>Without correction handling, the chatbot would treat "no, I meant game theory" as a normal follow-up and try to elaborate on whatever it just said. The correction system ensures the user stays in control of the conversation direction.</p>
 

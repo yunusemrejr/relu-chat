@@ -18,6 +18,7 @@
 |---------|-------------|
 | [Game Theory Chat](chat/game-theory-chat/) | On-device assistant for game theory concepts: Nash equilibrium, Shapley value, auctions, and more (55+ topics) |
 | [Golden Age Inquiry](chat/golden-age-inquiry/) | On-device assistant for the scientific and philosophical discoveries of the Islamic Golden Age (8th–14th centuries) |
+| [Data Science Chat](chat/data-science-chat/) | On-device assistant for data science and ML concepts: pandas, NumPy, statistics, classification, clustering |
 
 ## How It Works
 

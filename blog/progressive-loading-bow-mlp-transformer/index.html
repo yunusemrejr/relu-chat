@@ -156,32 +156,32 @@ bowVocab = new Map();
 
 <p>The MLP weights (363 KB JSON) load in parallel with the transformer. Once loaded, the system switches from heuristic to policy-driven responses. This happens within ~100ms.</p>
 
-<p>The MLP provides:
+<p>The MLP provides:</p>
 <ul>
 <li>Intent classification (definition, example, formal, application, comparison)</li>
 <li>Mode detection (normal, greeting, help, off-topic, comparison)</li>
 <li>Topic and fragment count decisions</li>
 <li>Tone and creativity calibration</li>
 </ul>
-<h2>Stage 3: Dense Transformer (Medium)</h2></p>
+<h2>Stage 3: Dense Transformer (Medium)</h2>
 
-<p>The MiniLM model (~22 MB, quantized ONNX) streams in via the service worker's cache. Once loaded:
+<p>The MiniLM model (~22 MB, quantized ONNX) streams in via the service worker's cache. Once loaded:</p>
 <ol>
 <li>All knowledge base entries are re-encoded with dense embeddings</li>
 <li>BOW vectors are hot-swapped with 384-dimensional dense vectors</li>
 <li>BM25 index is rebuilt with proper tokenization</li>
 <li>The signal layer switches to dense-sparse ensemble ranking</li>
 </ol>
-The hot-swap is invisible to the user — they keep chatting while the system improves in the background.</p>
+<p>The hot-swap is invisible to the user — they keep chatting while the system improves in the background.</p>
 
 <h2>Bot-Pack Fast Path</h2>
 
-<p>When a bot-pack is available (precomputed BM25 index + entry vectors), stages 1-3 are faster:
+<p>When a bot-pack is available (precomputed BM25 index + entry vectors), stages 1-3 are faster:</p>
 <ul>
 <li>BM25 index loads from JSON instead of being computed client-side</li>
 <li>Entry vectors load from JSON instead of being encoded at runtime</li>
 </ul>
-<h2>Key Takeaway</h2></p>
+<h2>Key Takeaway</h2>
 
 <p>Progressive loading turns a blocking 22 MB download into a non-blocking upgrade. Users get instant answers that improve as the model loads. The key insight: BOW is good enough for first turns, and the hot-swap is invisible.</p>
   </div>

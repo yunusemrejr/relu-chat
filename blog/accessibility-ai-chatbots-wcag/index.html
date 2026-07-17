@@ -158,50 +158,50 @@
 </ul>
 <h2>Keyboard Navigation</h2>
 
-<p>All interactive elements are keyboard-accessible:
+<p>All interactive elements are keyboard-accessible:</p>
 <ul>
 <li>Tab order: navigation → suggestion buttons → input → send</li>
 <li>Enter submits the form</li>
 <li>Shift+Enter allows multiline input (future)</li>
 </ul>
-<h2>Touch Targets</h2></p>
+<h2>Touch Targets</h2>
 
-<p>WCAG requires interactive elements to be at least 44×44 CSS pixels. Every button, link, and input in ReLU.chat meets this:
+<p>WCAG requires interactive elements to be at least 44×44 CSS pixels. Every button, link, and input in ReLU.chat meets this:</p>
 <ul>
 <li>Suggestion buttons: 44px height with 12px padding</li>
 <li>Send button: exactly 44×44px</li>
 <li>Input field: 44px minimum height</li>
 <li>Navigation links: 44px minimum height with padding</li>
 </ul>
-<h2>Color Contrast</h2></p>
+<h2>Color Contrast</h2>
 
-<p>All text meets WCAG AA contrast ratios:
+<p>All text meets WCAG AA contrast ratios:</p>
 <ul>
 <li>Primary text (#f9fafb on #0d1117): 16.75:1</li>
 <li>Secondary text (#9ca3af on #0d1117): 13.45:1</li>
 <li>Status text (#8b95a3 on #151b23): 5.71:1</li>
 <li>Accent text (#14b8a6 on #0d1117): 57.5:1</li>
 </ul>
-All ratios exceed the 4.5:1 threshold for normal text.</p>
+<p>All ratios exceed the 4.5:1 threshold for normal text.</p>
 
 <h2>Reduced Motion</h2>
 
-<p>When <code>prefers-reduced-motion: reduce</code> is set:
+<p>When <code>prefers-reduced-motion: reduce</code> is set:</p>
 <ul>
 <li>CSS: all animations set to 0.01ms duration</li>
 <li>JS: streaming rendering skipped, full response shown instantly</li>
 <li>Smooth scrolling disabled</li>
 </ul>
-<h2>Responsive Design</h2></p>
+<h2>Responsive Design</h2>
 
-<p>The chatbot works at all viewports from 320px to 2560px:
+<p>The chatbot works at all viewports from 320px to 2560px:</p>
 <ul>
 <li>No horizontal scroll at any width</li>
 <li>Input and send button scale appropriately</li>
 <li>Suggestion chips wrap on narrow screens</li>
 <li>Safe area insets for notched phones</li>
 </ul>
-<h2>Key Takeaway</h2></p>
+<h2>Key Takeaway</h2>
 
 <p>Accessibility isn't an afterthought. ARIA landmarks, keyboard navigation, touch targets, contrast ratios, and reduced motion must be built into the foundation. For AI chatbots, this means ensuring the conversational UI is as accessible as any form-based application.</p>
   </div>

@@ -149,16 +149,16 @@
 <li><strong>Model files</strong>: MiniLM ONNX quantized (22 MB), policy weights (363 KB), WASM runtimes</li>
 <li><strong>Transformers.js</strong>: The ONNX runtime library</li>
 </ol>
-On subsequent visits, all assets are served from Cache API — zero network requests.
+<p>On subsequent visits, all assets are served from Cache API — zero network requests.</p>
 
 <h2>Cache Architecture</h2>
 
-<p>Two separate caches:
+<p>Two separate caches:</p>
 <ul>
 <li><code>relu-chat-v8</code>: App assets (HTML, CSS, JS, fonts)</li>
 <li><code>relu-chat-models-v8</code>: Model files (ONNX, weights, WASM)</li>
 </ul>
-Model files use cache-first strategy: if cached, serve immediately. Static assets use stale-while-revalidate: serve cached, update in background.</p>
+<p>Model files use cache-first strategy: if cached, serve immediately. Static assets use stale-while-revalidate: serve cached, update in background.</p>
 
 <h2>Range Request Support</h2>
 
@@ -187,7 +187,7 @@ Model files use cache-first strategy: if cached, serve immediately. Static asset
 <li><strong>Medium</strong>: Transformer model loads (~5-15s, 22 MB)</li>
 <li><strong>Background</strong>: WASM acceleration (optional)</li>
 </ol>
-The user can start chatting at stage 1. The system hot-swaps to better engines as they load.
+<p>The user can start chatting at stage 1. The system hot-swaps to better engines as they load.</p>
 
 <h2>Key Takeaway</h2>
 

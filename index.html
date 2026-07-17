@@ -1134,6 +1134,14 @@ document.addEventListener('DOMContentLoaded', function() {
       throwOnError: false
     });
   }
+
+  var navToggleInput = document.getElementById('nav-toggle-input');
+  var navToggleLabel = navToggleInput ? document.querySelector('label[for="nav-toggle-input"]') : null;
+  if (navToggleInput && navToggleLabel) {
+    navToggleInput.addEventListener('change', function() {
+      navToggleLabel.setAttribute('aria-expanded', String(navToggleInput.checked));
+    });
+  }
 });
 </script>
 
