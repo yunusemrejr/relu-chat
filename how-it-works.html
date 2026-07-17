@@ -11,6 +11,23 @@
 <style>
 /* Doc page — uses v5 tokens from shared-design.css */
 
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 200;
+  padding: var(--space-2) var(--space-4);
+  background: var(--accent);
+  color: #0d1117;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: var(--space-2); }
+
 nav {
   position: sticky;
   top: 0;
@@ -209,8 +226,9 @@ footer a:hover { color: var(--accent); }
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-<nav>
+<nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a href="/" class="nav-logo"><img src="assets/logo.png?v=7" alt="">ReLU.chat</a>
     <ul class="nav-links">
@@ -223,7 +241,7 @@ footer a:hover { color: var(--accent); }
   </div>
 </nav>
 
-<div class="container">
+<main id="main-content" class="container">
 
 <div class="hero">
   <h1>How ReLU.chat Works</h1>
@@ -432,6 +450,8 @@ Uint8Array layout:
 </ul>
 
 </div>
+
+</main>
 
 <footer>
   <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>

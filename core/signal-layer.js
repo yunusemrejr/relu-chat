@@ -1,5 +1,5 @@
 import { BM25Scorer } from './bm25.js';
-import { cosine, tokens, compileAliasRegex, extractEntities, classifyIntent, rankEntries, rankTopK, DEFAULT_INTENTS } from './nlp.js';
+import { cosine, tokens, compileAliasRegex, extractEntities, classifyIntent, rankTopK, DEFAULT_INTENTS } from './nlp.js';
 import { extractPolicyFeatures } from '../policy/feature-extractor.js';
 import { softmax } from './math-utils.js';
 

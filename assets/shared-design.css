@@ -114,6 +114,26 @@ a:hover { color: var(--accent); }
   30% { opacity: 1; }
 }
 
+/* ----- SKIP LINK ----- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 200;
+  padding: var(--space-2) var(--space-4);
+  background: var(--accent);
+  color: #0d1117;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: var(--space-2);
+}
+
 /* ----- NAVIGATION ----- */
 .site-nav {
   position: sticky;
@@ -744,7 +764,7 @@ pre code {
   align-items: center;
   gap: var(--space-1);
   font-size: 0.75rem;
-  color: #8b95a3;
+  color: var(--text-secondary);
   font-weight: 500;
   background: var(--bg-elevated);
   padding: 2px var(--space-2) 2px 6px;

@@ -134,11 +134,6 @@ export function setCompositionSeed(seed) {
   }
 }
 
-export function seededPick(a) {
-  if (!Array.isArray(a) || a.length === 0) return '';
-  return a[Math.floor(_seededRng() * a.length)];
-}
-
 export function cosine(a, b) {
   if (!Array.isArray(a) || !Array.isArray(b)) return 0;
   if (a.length === 0 || b.length === 0) return 0;
@@ -398,20 +393,9 @@ export function extractEntities(query, KB) {
   return found;
 }
 
-export function rankEntries(qEmb, entryEmb) {
-  if (!Array.isArray(qEmb) || !Array.isArray(entryEmb) || entryEmb.length === 0) return [];
-  return entryEmb
-    .map((e, i) => {
-      if (!Array.isArray(e)) return { i, s: 0 };
-      return { i, s: cosine(qEmb, e) };
-    })
-    .sort((a, b) => b.s - a.s);
-}
-
 /**
  * Bounded top-K ranking using O(N·k) selection (no full sort).
- * Addresses "brute-force cosine over all KB" gap for future larger KBs.
- * Returns top k by cosine desc. For tiny current KBs (~50-100) cost is negligible.
+ * Returns top k by cosine desc.
  */
 export function rankTopK(qEmb, entryEmb, k = 8) {
   if (!Array.isArray(qEmb) || !Array.isArray(entryEmb) || entryEmb.length === 0) return [];
@@ -550,136 +534,6 @@ function truncateAtSentence(text, maxWords) {
     result = candidate;
   }
   return result || text.split(/\s+/).slice(0, maxWords).join(' ') + '...';
-}
-
-// ============================================================
-// compose() — legacy fallback (unchanged behavior when policy unavailable)
-// ============================================================
-export async function compose(query, qEmb, embedCached, entryEmb, intentEmb, lastTopic, KB, config, overrides) {
-  if (!Array.isArray(KB) || KB.length === 0) {
-    return {
-      text: "I don't have any knowledge loaded yet. Please try again later.",
-      meta: [{ text: 'empty-kb', type: 'warn' }]
-    };
-  }
-  const OPENERS = overrides?.openers || DEFAULT_OPENERS;
-  const CONNECTORS = overrides?.connectors || DEFAULT_CONNECTORS;
-  const CLOSERS = overrides?.closers || DEFAULT_CLOSERS;
-  const SEE_ALSO_PREFIXES = overrides?.seeAlsoPrefixes || DEFAULT_SEE_ALSO_PREFIXES;
-  const COMPARISON_OPENERS = overrides?.comparisonOpeners || DEFAULT_COMPARISON_OPENERS;
-  const TRANSITIONS = overrides?.transitions || DEFAULT_TRANSITIONS;
-  const INTENTS = overrides?.intents || DEFAULT_INTENTS;
-  const thresholdConfig = config?.THRESHOLDS || {};
-  const compositionConfig = config?.COMPOSITION || {};
-
-  const ranked = rankEntries(qEmb, entryEmb);
-  let entities = extractEntities(query, KB);
-  const { intent } = await classifyIntent(qEmb, intentEmb, INTENTS, thresholdConfig);
-
-  if (entities.length === 0 && lastTopic !== null && lastTopic >= 0 && ranked[0]?.s > 0.25) {
-    entities = [lastTopic];
-  }
-
-  if (intent === 'greeting' && entities.length === 0 && ranked[0]?.s < (thresholdConfig.GREETING_FALLBACK || 0.25)) {
-    return {
-      text: overrides?.greetingResponse || (pick(OPENERS) + "Hi! I'm an on-device assistant. All processing runs in your browser."),
-      meta: [{ text: 'intent: greeting', type: 'intent' }]
-    };
-  }
-
-  if (intent === 'help' && ranked[0]?.s < (thresholdConfig.GREETING_FALLBACK || 0.25)) {
-    return {
-      text: overrides?.helpResponse || "I can discuss topics entirely on your device. Try a question or choose a suggestion below.",
-      meta: [{ text: 'intent: help', type: 'intent' }]
-    };
-  }
-
-  if (ranked[0]?.s < (thresholdConfig.OFF_TOPIC || 0.15) && entities.length === 0) {
-    return {
-      text: overrides?.offTopicResponse || "That didn't map to anything I know well. Try asking about a topic I'm trained on.",
-      meta: [{ text: 'off-topic', type: 'warn' }]
-    };
-  }
-
-  let topEntries;
-  if (entities.length > 0) {
-    topEntries = [...entities];
-    for (const r of ranked.slice(0, 2)) if (!topEntries.includes(r.i) && r.s > (thresholdConfig.ENTITY_BOOST || 0.45)) topEntries.push(r.i);
-    topEntries = topEntries.slice(0, compositionConfig.MAX_ENTRIES || 3);
-  } else {
-    topEntries = [ranked[0].i];
-    if (ranked.length > 1 && ranked[1].s > (thresholdConfig.SECONDARY_ENTRY || 0.38)) topEntries.push(ranked[1].i);
-  }
-
-  const order = INTENTS[intent]?.order || ['def', 'int', 'ex'];
-
-  let parts = [];
-  if (intent === 'comparison' && topEntries.length >= 2) {
-    const eA = KB[topEntries[0]], eB = KB[topEntries[1]];
-    if (eA && eB && eA.name && eB.name) {
-      const openerKey = Math.random() < 0.33 ? 'similarity' : (Math.random() < 0.5 ? 'contrast' : 'both');
-      const openerText = (COMPARISON_OPENERS[openerKey] || '').replace(/\{A\}/g, eA.name).replace(/\{B\}/g, eB.name);
-      parts.push(openerText);
-    }
-  }
-
-  for (let ei = 0; ei < topEntries.length; ei++) {
-    const entry = KB[topEntries[ei]];
-    if (!entry || typeof entry !== 'object') {
-      console.warn(`[compose] KB entry at index ${topEntries[ei]} is invalid, skipping`);
-      continue;
-    }
-    const entryName = entry.name || 'topic';
-    const pieces = [];
-    const cats = (intent === 'comparison' && topEntries.length >= 2) ? order : (ei === 0 ? order : [order[0]]);
-    let prev = null;
-    for (let ci = 0; ci < cats.length; ci++) {
-      const cat = cats[ci];
-      const frag = await selectFragment(entry, cat, qEmb, embedCached, config);
-      if (!frag) continue;
-      let connector = "";
-      if (prev) {
-        const key = `${prev}_to_${cat}`;
-        const pool = CONNECTORS[key];
-        if (pool) connector = pick(pool);
-      } else if (intent === 'comparison' && topEntries.length >= 2 && ei === 0) {
-        connector = "";
-      } else if (ei === 0 && intent !== 'comparison') {
-        connector = Math.random() < 0.6 ? `**${entryName}** — ` : "";
-      } else {
-        connector = pick(TRANSITIONS).replace(/\\n/g, '\n') + `**${entryName}**: `;
-      }
-      pieces.push(connector + frag);
-      prev = cat;
-    }
-    if (pieces.length > 0) parts.push(pieces.join(' '));
-  }
-
-  let text = (intent !== 'comparison' || topEntries.length < 2 ? pick(OPENERS) : '') + (parts[0] || '');
-  for (let i = 1; i < parts.length; i++) text += parts[i];
-
-  const lastEntryIdx = topEntries[topEntries.length - 1];
-  const lastEntry = lastEntryIdx !== undefined ? KB[lastEntryIdx] : null;
-  if (lastEntry && lastEntry.related && Array.isArray(lastEntry.related) && lastEntry.related.length > 0) {
-    const relNames = lastEntry.related.slice(0, 3).map(rid => {
-      const found = Array.isArray(KB) ? KB.findIndex(e => e && e.id === rid) : -1;
-      return found >= 0 && KB[found] ? KB[found].name : rid;
-    }).filter(Boolean);
-    if (relNames.length > 0) {
-      text += '\n\n' + pick(SEE_ALSO_PREFIXES) + relNames.join(', ') + '.';
-    }
-  }
-  text += pick(CLOSERS);
-
-  const meta = [{ text: `intent: ${intent}`, type: 'intent' }];
-  for (const idx of topEntries) {
-    const entry = KB[idx];
-    meta.push({ text: entry && entry.name ? entry.name : `entry:${idx}`, type: '' });
-  }
-  meta.push({ text: `sim ${(ranked[0]?.s || 0).toFixed(2)}`, type: 'score' });
-  if (entities.length > 0) meta.push({ text: `${entities.length} entit${entities.length > 1 ? 'ies' : 'y'}`, type: 'score' });
-
-  return { text, meta };
 }
 
 // ============================================================
