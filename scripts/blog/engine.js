@@ -13,6 +13,9 @@ const BLOG_OUT = path.join(ROOT, 'blog');
 const SCHEMA_PATH = path.join(__dirname, 'schema.json');
 const SITE_URL = 'https://relu.chat';
 
+// Injected before </body> on every generated page (shared with hand-maintained pages).
+const GUMROAD_WIDGET = fs.readFileSync(path.join(__dirname, 'gumroad-widget.html'), 'utf8').trim();
+
 function loadSchema() {
   return JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
 }
@@ -387,6 +390,7 @@ footer a{color:var(--text-secondary);text-decoration:underline}
   <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
 </footer>
 
+${GUMROAD_WIDGET}
 </body>
 </html>`;
 }
@@ -687,6 +691,7 @@ footer a{color:var(--text-secondary);text-decoration:underline}
 })();
 </script>
 
+${GUMROAD_WIDGET}
 </body>
 </html>`;
 }
