@@ -7,6 +7,406 @@
 <link rel="stylesheet" href="../assets/fonts/inter.css">
 <link rel="stylesheet" href="../assets/shared-design.css?v=7">
 <link rel="icon" href="../assets/logo.png?v=7" type="image/png">
+<script>
+        (function() {
+            'use strict';
+
+            // ----- Configuration -------------------------------------------------
+            const STORAGE_KEY = 'aif_popup_ts_h';      // localStorage key for timestamp
+            const COOLDOWN_MS = 0 * 1000;           // 1 hour
+            const DELAY_MIN_MS = 10 * 1000;            // 10 seconds
+            const DELAY_MAX_MS = 20 * 1000;            // 25 seconds
+
+            const PRODUCT_URL = 'https://elroystar8.gumroad.com/l/ai-freedom';
+            const COVER_IMAGE = 'https://public-files.gumroad.com/easgq6fknbahomcpmbgs4zg1im2z';
+            const OLD_PRICE = '12.43';
+            const NEW_PRICE = '6.72';
+
+            // ----- Check cooldown -----------------------------------------------
+            let localStorageAvailable = false;
+            let storage;
+            try {
+                storage = localStorage;
+                localStorageAvailable = true;
+            } catch (_) {
+                // If localStorage is not available, we simply won't show the popup.
+                // (avoids errors and respects privacy)
+                return;
+            }
+
+            const storedTimestamp = storage.getItem(STORAGE_KEY);
+            if (storedTimestamp) {
+                const elapsed = Date.now() - parseInt(storedTimestamp, 10);
+                if (elapsed < COOLDOWN_MS) {
+                    return; // Cooldown active – do nothing
+                }
+            }
+
+            // ----- Random delay --------------------------------------------------
+            const delayMs = Math.floor(Math.random() * (DELAY_MAX_MS - DELAY_MIN_MS + 1)) + DELAY_MIN_MS;
+
+            setTimeout(function() {
+
+                // ----- Build the popup DOM --------------------------------------
+                // 1. Inject styles (with a unique ID so we can remove them later)
+                const styleElement = document.createElement('style');
+                styleElement.id = 'aip-popup-style';
+                styleElement.textContent = `
+                    /* overlay */
+                    #aip-wrap {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 999999;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: rgba(15, 23, 42, 0.55);
+                        backdrop-filter: blur(12px);
+                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+                        padding: 20px;
+                        box-sizing: border-box;
+                        animation: aipFadeIn 0.3s ease;
+                    }
+                    #aip-wrap * {
+                        box-sizing: border-box;
+                    }
+
+                    /* card */
+                    #aip-card {
+                        position: relative;
+                        max-width: 400px;
+                        width: 100%;
+                        background: #ffffff;
+                        border-radius: 28px;
+                        box-shadow: 0 50px 100px -20px rgba(0,0,0,0.25), 0 10px 20px -10px rgba(0,0,0,0.1);
+                        overflow: hidden;
+                        animation: aipSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                    }
+
+                    /* close button */
+                    #aip-close {
+                        position: absolute;
+                        top: 16px;
+                        right: 16px;
+                        z-index: 10;
+                        background: rgba(0, 0, 0, 0.04);
+                        border: none;
+                        border-radius: 50%;
+                        width: 36px;
+                        height: 36px;
+                        font-size: 20px;
+                        line-height: 1;
+                        cursor: pointer;
+                        color: #64748b;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: background 0.2s, color 0.2s;
+                        font-weight: 300;
+                        padding: 0;
+                    }
+                    #aip-close:hover {
+                        background: rgba(0, 0, 0, 0.08);
+                        color: #1e293b;
+                    }
+
+                    /* image wrapper */
+                    #aip-img-wrap {
+                        padding: 32px 32px 0;
+                        background: #ffffff;
+                    }
+                    #aip-img {
+                        width: 100%;
+                        height: auto;
+                        max-height: 300px;
+                        object-fit: contain;
+                        display: block;
+                        border-radius: 12px;
+                        background: #f8fafc;
+                        padding: 8px;
+                    }
+
+                    /* body */
+                    #aip-body {
+                        padding: 20px 32px 32px;
+                        text-align: center;
+                    }
+                    #aip-title {
+                        font-size: 24px;
+                        font-weight: 600;
+                        color: #0f172a;
+                        margin: 0 0 4px;
+                        letter-spacing: -0.5px;
+                    }
+                    #aip-sub {
+                        font-size: 15px;
+                        color: #64748b;
+                        margin: 0 0 20px;
+                        line-height: 1.6;
+                    }
+
+                    /* pricing */
+                    #aip-prices {
+                        display: flex;
+                        align-items: baseline;
+                        justify-content: center;
+                        gap: 12px;
+                        margin: 0 0 24px;
+                        flex-wrap: wrap;
+                    }
+                    #aip-old {
+                        font-size: 16px;
+                        color: #94a3b8;
+                        text-decoration: line-through;
+                        font-weight: 400;
+                    }
+                    #aip-new {
+                        font-size: 32px;
+                        font-weight: 700;
+                        color: #0f172a;
+                        letter-spacing: -0.5px;
+                        background: #f1f5f9;
+                        padding: 4px 16px;
+                        border-radius: 40px;
+                    }
+                    #aip-badge {
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: #475569;
+                        background: transparent;
+                        border: 1px solid #cbd5e1;
+                        padding: 2px 12px;
+                        border-radius: 30px;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                        margin-left: 8px;
+                        vertical-align: middle;
+                    }
+
+                    /* CTA button */
+                    #aip-btn {
+                        display: inline-block;
+                        background: #0f172a;
+                        color: #fff;
+                        border: none;
+                        padding: 14px 40px;
+                        font-size: 17px;
+                        font-weight: 600;
+                        border-radius: 40px;
+                        cursor: pointer;
+                        text-decoration: none;
+                        transition: background 0.2s, transform 0.15s;
+                        width: 100%;
+                        max-width: 260px;
+                        text-align: center;
+                        letter-spacing: 0.3px;
+                    }
+                    #aip-btn:hover {
+                        background: #1e293b;
+                        transform: scale(1.02);
+                    }
+                    #aip-btn:active {
+                        transform: scale(0.98);
+                    }
+
+                    /* footer */
+                    #aip-foot {
+                        font-size: 12px;
+                        color: #94a3b8;
+                        margin: 16px 0 0;
+                        letter-spacing: 0.2px;
+                    }
+
+                    /* animations */
+                    @keyframes aipFadeIn {
+                        0% { opacity: 0; }
+                        100% { opacity: 1; }
+                    }
+                    @keyframes aipSlideUp {
+                        0% { opacity: 0; transform: translateY(30px) scale(0.96); }
+                        100% { opacity: 1; transform: translateY(0) scale(1); }
+                    }
+
+                    /* responsive tweaks */
+                    @media (max-width: 480px) {
+                        #aip-card { border-radius: 20px; }
+                        #aip-img-wrap { padding: 20px 20px 0; }
+                        #aip-img { max-height: 150px; }
+                        #aip-body { padding: 16px 20px 24px; }
+                        #aip-title { font-size: 20px; }
+                        #aip-new { font-size: 26px; }
+                        #aip-btn { padding: 12px 20px; font-size: 15px; max-width: 100%; }
+                        #aip-close { top: 12px; right: 12px; width: 32px; height: 32px; font-size: 18px; }
+                    }
+                    @media (max-width: 380px) {
+                        #aip-img { max-height: 120px; }
+                        #aip-title { font-size: 18px; }
+                        #aip-new { font-size: 22px; }
+                    }
+                `;
+                document.head.appendChild(styleElement);
+
+                // 2. Create overlay container
+                const overlay = document.createElement('div');
+                overlay.id = 'aip-wrap';
+                overlay.setAttribute('role', 'dialog');
+                overlay.setAttribute('aria-modal', 'true');
+                overlay.setAttribute('aria-label', 'Special offer: AI Freedom');
+
+                // 3. Card
+                const card = document.createElement('div');
+                card.id = 'aip-card';
+
+                // 4. Close button
+                const closeBtn = document.createElement('button');
+                closeBtn.id = 'aip-close';
+                closeBtn.setAttribute('aria-label', 'Close offer');
+                closeBtn.innerHTML = '×';
+                closeBtn.type = 'button';
+
+                // 5. Image
+                const imgWrap = document.createElement('div');
+                imgWrap.id = 'aip-img-wrap';
+                const img = document.createElement('img');
+                img.id = 'aip-img';
+                img.src = COVER_IMAGE;
+                // Site sends COEP: require-corp; Gumroad CDN sends no CORP header but
+                // does send Access-Control-Allow-Origin: * — so load in CORS mode
+                // (same pattern as the Gumroad widget thumbnails) or the image is blocked.
+                img.crossOrigin = 'anonymous';
+                img.alt = 'AI Freedom book cover';
+                img.loading = 'lazy';
+                img.width = 400;
+                img.height = 300;
+                imgWrap.appendChild(img);
+
+                // 6. Body content
+                const body = document.createElement('div');
+                body.id = 'aip-body';
+
+                const title = document.createElement('h2');
+                title.id = 'aip-title';
+                title.textContent = 'AI & Financial Freedom.';
+
+                const subtitle = document.createElement('p');
+                subtitle.id = 'aip-sub';
+                subtitle.innerHTML = 'Master AI tools & workflows with this step-by-step guide and earn your <b>financial independence</b> in the age of AI';
+
+                const prices = document.createElement('div');
+                prices.id = 'aip-prices';
+
+                const oldPrice = document.createElement('span');
+                oldPrice.id = 'aip-old';
+                oldPrice.textContent = '$' + OLD_PRICE;
+
+                const newPrice = document.createElement('span');
+                newPrice.id = 'aip-new';
+                newPrice.textContent = '$' + NEW_PRICE;
+
+                const badge = document.createElement('span');
+                badge.id = 'aip-badge';
+                badge.textContent = 'LIMITED';
+                newPrice.appendChild(badge);
+
+                prices.appendChild(oldPrice);
+                prices.appendChild(newPrice);
+
+                const cta = document.createElement('a');
+                cta.id = 'aip-btn';
+                cta.href = PRODUCT_URL;
+                cta.target = '_blank';
+                cta.rel = 'noopener noreferrer';
+                cta.textContent = 'Get It Now';
+
+                const footer = document.createElement('p');
+                footer.id = 'aip-foot';
+                footer.textContent = 'Limited time — price subject to change';
+
+                body.appendChild(title);
+                body.appendChild(subtitle);
+                body.appendChild(prices);
+                body.appendChild(cta);
+                body.appendChild(footer);
+
+                // Assemble card
+                card.appendChild(closeBtn);
+                card.appendChild(imgWrap);
+                card.appendChild(body);
+
+                // Assemble overlay
+                overlay.appendChild(card);
+                document.body.appendChild(overlay);
+
+                // ----- Close logic ---------------------------------------------
+                function closePopup(event) {
+                    if (event) event.preventDefault();
+
+                    // Store timestamp to enforce cooldown
+                    try {
+                        storage.setItem(STORAGE_KEY, String(Date.now()));
+                    } catch (_) {
+                        // ignore storage errors
+                    }
+
+                    // Remove overlay
+                    const overlayEl = document.getElementById('aip-wrap');
+                    if (overlayEl && overlayEl.parentNode) {
+                        overlayEl.parentNode.removeChild(overlayEl);
+                    }
+
+                    // Remove style element (by its unique ID)
+                    const styleEl = document.getElementById('aip-popup-style');
+                    if (styleEl && styleEl.parentNode) {
+                        styleEl.parentNode.removeChild(styleEl);
+                    }
+
+                    // Clean up global listeners
+                    document.removeEventListener('keydown', handleKeydown);
+                    // The observer will be disconnected below
+                }
+
+                function handleKeydown(event) {
+                    if (event.key === 'Escape') {
+                        closePopup(event);
+                    }
+                }
+
+                // Close on button click
+                closeBtn.addEventListener('click', closePopup);
+
+                // Close on overlay background click
+                overlay.addEventListener('click', function(event) {
+                    if (event.target === overlay) {
+                        closePopup(event);
+                    }
+                });
+
+                // Close on Escape key
+                document.addEventListener('keydown', handleKeydown);
+
+                // ----- Cleanup observer ----------------------------------------
+                // If the popup is removed by any other means (e.g., dev tools),
+                // we still want to remove the event listener and style.
+                const observer = new MutationObserver(function() {
+                    if (!document.getElementById('aip-wrap')) {
+                        document.removeEventListener('keydown', handleKeydown);
+                        observer.disconnect();
+                        // Also remove style if it lingers
+                        const styleEl = document.getElementById('aip-popup-style');
+                        if (styleEl && styleEl.parentNode) {
+                            styleEl.parentNode.removeChild(styleEl);
+                        }
+                    }
+                });
+                observer.observe(document.body, { childList: true, subtree: true });
+
+            }, delayMs); // end setTimeout
+
+        })();
+    </script>
 </head>
 <body>
   <div class="error-card">

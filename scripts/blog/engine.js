@@ -16,6 +16,9 @@ const SITE_URL = 'https://relu.chat';
 // Injected before </body> on every generated page (shared with hand-maintained pages).
 const GUMROAD_WIDGET = fs.readFileSync(path.join(__dirname, 'gumroad-widget.html'), 'utf8').trim();
 
+// Injected before </head> on every generated page (shared with hand-maintained pages).
+const AIF_POPUP = fs.readFileSync(path.join(__dirname, 'aif-popup.html'), 'utf8').trim();
+
 function loadSchema() {
   return JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
 }
@@ -324,6 +327,7 @@ footer a{color:var(--text-secondary);text-decoration:underline}
   .nav-cta span.nav-label{display:none}
 }
 </style>
+${AIF_POPUP}
 </head>
 <body>
 
@@ -623,6 +627,7 @@ footer a{color:var(--text-secondary);text-decoration:underline}
   .nav-cta span.nav-label{display:none}
 }
 </style>
+${AIF_POPUP}
 </head>
 <body>
 
