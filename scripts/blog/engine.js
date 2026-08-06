@@ -83,6 +83,13 @@ function validatePost(post) {
     if (!post.meta_description) errors.push('Published post needs meta_description');
   }
 
+  if (post.published_at && isNaN(new Date(post.published_at).getTime())) {
+    errors.push(`published_at is not a valid date: ${post.published_at}`);
+  }
+  if (post.updated_at && isNaN(new Date(post.updated_at).getTime())) {
+    errors.push(`updated_at is not a valid date: ${post.updated_at}`);
+  }
+
   // Check duplicate slug
   const existing = findBySlug(post.slug);
   if (existing && existing.id !== post.id) {
@@ -895,6 +902,7 @@ function formatDate(dateStr) {
   // (a post at 2026-08-06T01:00:00Z would otherwise show as Aug 5 on
   // UTC-5/UTC-3 machines).
   const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return '';
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 }
 
