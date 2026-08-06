@@ -110,8 +110,11 @@
       ctx.fill();
     }
 
-    // slow signal pulses along random edges (inference metaphor)
+    // slow signal pulses along random edges (inference metaphor).
+    // Guard against an empty edge list (extreme hero aspect ratios) -
+    // modulo by 0 would make the pulse index NaN and crash the draw loop.
     var t = now / 1000;
+    if (!edges.length) return;
     for (var p = 0; p < 2; p++) {
       var ph = (t * 0.10 + p * 0.5) % 1;
       var eIdx = Math.floor((t * 0.7 + p * 17) % edges.length);
