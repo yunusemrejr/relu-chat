@@ -3,17 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Backpropagation Visualizer — ReLU.chat</title>
-<meta name="description" content="Interactive backpropagation calculator. Step through forward and backward passes of a neural network.">
+<title>K-Means Clustering Playground — ReLU.chat</title>
+<meta name="description" content="Interactive k-means clustering playground: add points, choose k, and step through assignment and centroid updates while watching SSE converge.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://relu.chat/tools/backpropagation/">
-<meta property="og:title" content="Backpropagation Visualizer — ReLU.chat">
-<meta property="og:description" content="Interactive backpropagation calculator. Step through forward and backward passes of a neural network.">
+<link rel="canonical" href="https://relu.chat/tools/k-means-clustering/">
+<meta property="og:title" content="K-Means Clustering Playground — ReLU.chat">
+<meta property="og:description" content="Interactive k-means clustering playground: add points, choose k, and step through assignment and centroid updates while watching SSE converge.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://relu.chat/tools/k-means-clustering/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png?v=7">
 <meta name="theme-color" content="#0d1117">
 <link rel="stylesheet" href="../../assets/fonts/sora.css">
 <link rel="stylesheet" href="../../assets/shared-design.css?v=11">
 <link rel="stylesheet" href="../../assets/css/tools.css">
 <link rel="icon" href="../../assets/logo.png?v=7" type="image/png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat/",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://relu.chat/tools/k-means-clustering/#app",
+      "name": "K-Means Clustering Playground",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "url": "https://relu.chat/tools/k-means-clustering/",
+      "description": "Interactive k-means clustering playground: add points, choose k, and step through assignment and centroid updates while watching SSE converge.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@id": "https://relu.chat/#website" }
+    }
+  ]
+}
+</script>
 <script>
         (function() {
             'use strict';
@@ -438,92 +467,62 @@
   <div class="nav-container">
     <a href="/" class="nav-logo">
       <img src="../../assets/logo.png?v=7" alt="ReLU.chat" width="24" height="24">
-      <span>Backpropagation Visualizer</span>
+      <span>K-Means Clustering Playground</span>
     </a>
     <a href="/tools/" class="btn btn-sm">All Tools</a>
   </div>
 </nav>
 
 <main id="main-content" class="tool-main">
+
   <div class="tool-header">
-    <h1>Backpropagation Visualizer</h1>
-    <p>Walk through forward and backward propagation in a 2→2→1 neural network. See exactly how gradients flow through each weight using the chain rule.</p>
+    <h1>K-Means Clustering Playground</h1>
+    <p>K-means groups unlabeled points into k clusters. Click on the canvas to add points, pick k, then watch the algorithm step by step: assign each point to the nearest centroid, move the centroids to the mean, repeat until nothing changes.</p>
   </div>
 
   <div class="tool-card">
     <div class="tool-card-header">
-      <span class="tool-card-title">Network</span>
-      <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
-        <button class="tool-btn primary" id="forward-btn" type="button">Forward Pass</button>
-        <button class="tool-btn" id="backward-btn" type="button" disabled>Backward Pass</button>
-        <button class="tool-btn" id="bp-reset-btn" type="button">Reset</button>
-      </div>
+      <span class="tool-card-title">Clustering Visualization</span>
+      <span class="tool-card-title" id="km-status">not started</span>
     </div>
-    <div class="canvas-wrap" id="bp-canvas-wrap">
-      <canvas id="bp-canvas" width="800" height="400"></canvas>
+    <div class="canvas-wrap" id="km-canvas-wrap">
+      <canvas id="km-canvas" width="800" height="500" role="img" aria-label="Scatter plot of points being clustered by k-means; points recolor as they are assigned to the nearest centroid"></canvas>
     </div>
-  </div>
-
-  <div class="controls" style="padding:0;flex-direction:row;flex-wrap:wrap;gap:var(--space-4);align-items:end">
-    <div class="control-group" style="min-width:100px;flex:1">
-      <span class="control-label">Input x₁</span>
-      <input type="range" id="bp-x1" min="-2" max="2" step="0.1" value="0.5">
-    </div>
-    <div class="control-group" style="min-width:100px;flex:1">
-      <span class="control-label">Input x₂</span>
-      <input type="range" id="bp-x2" min="-2" max="2" step="0.1" value="0.3">
-    </div>
-    <div class="control-group" style="min-width:100px;flex:1">
-      <span class="control-label">Target y</span>
-      <input type="range" id="bp-target" min="0" max="1" step="0.05" value="1">
-    </div>
+    <div class="legend" id="km-legend"></div>
   </div>
 
   <div class="tool-card">
     <div class="tool-card-header">
-      <span class="tool-card-title">Intermediate Values</span>
+      <span class="tool-card-title">Controls</span>
     </div>
     <div class="controls">
-      <div class="step-display" id="bp-steps">
-        <div class="step-line dim">Click "Forward Pass" to compute forward propagation.</div>
+      <div class="tool-btn-group">
+        <button class="tool-btn primary" id="km-run" type="button">Run to convergence</button>
+        <button class="tool-btn" id="km-step" type="button">Step</button>
+        <button class="tool-btn" id="km-reset" type="button">Reset centroids</button>
+        <button class="tool-btn" id="km-data" type="button">Generate data</button>
+        <button class="tool-btn" id="km-clear" type="button">Clear points</button>
       </div>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <div class="tool-card-header">
-      <span class="tool-card-title">Weight Gradients</span>
-    </div>
-    <div class="controls">
-      <div class="metrics" id="gradient-metrics">
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₁₁</div>
-          <div class="metric-value" id="grad-w11">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₁₂</div>
-          <div class="metric-value" id="grad-w12">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₂₁</div>
-          <div class="metric-value" id="grad-w21">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₂₂</div>
-          <div class="metric-value" id="grad-w22">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂wₕ₁</div>
-          <div class="metric-value" id="grad-wh1">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂wₕ₂</div>
-          <div class="metric-value" id="grad-wh2">—</div>
+      <div class="controls-grid">
+        <div class="control-group" style="min-width:140px">
+          <span class="control-label">Number of clusters k</span>
+          <select class="tool-select" id="km-k">
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
         </div>
       </div>
-
+      <div class="metrics" id="km-metrics" aria-live="polite">
+        <div class="metric"><div class="metric-label">Points</div><div class="metric-value" id="km-n">0</div></div>
+        <div class="metric"><div class="metric-label">SSE (inertia)</div><div class="metric-value" id="km-sse">—</div></div>
+        <div class="metric"><div class="metric-label">Iterations</div><div class="metric-value" id="km-iter">0</div></div>
+        <div class="metric"><div class="metric-label">Converged</div><div class="metric-value" id="km-conv">—</div></div>
+      </div>
       <div class="info-box">
-        <strong>Chain rule in action:</strong> Backpropagation computes gradients by applying the chain rule from the output backward. Each gradient tells us how much a small change in that weight would affect the loss. The network then updates weights in the direction that <em>reduces</em> the loss.
+        <strong>How it works:</strong> K-means minimizes the sum of squared distances (SSE) between each point and its cluster's centroid. Each <strong>Step</strong> does one full pass: assign every point to the nearest centroid, then move each centroid to the average of its points. When no point changes cluster, the algorithm has converged. K-means is fast but sensitive to the starting centroids — try <strong>Generate data</strong>, change k, and compare the SSE you end up with.
       </div>
     </div>
   </div>
@@ -531,10 +530,11 @@
   <div class="tool-card">
     <div class="controls">
       <div class="info-box">
-        <strong>What's happening here?</strong> Think of the network as a team of coworkers passing a message down a chain. <strong>Forward pass:</strong> the message starts at the inputs (x₁, x₂), each person multiplies it by their own importance factor (weight), adds their personal bias, and passes it to the next person. At the end, the output comes out — and we compare it to what we WANTED (the target). The difference is the <strong>loss</strong> (the mistake). <strong>Backward pass:</strong> now each person asks: "How much of this mistake was MY fault?" They figure it out by looking backward at who passed them the message and how much they amplified it. That's the <strong>chain rule</strong> — like figuring out who in the chain dropped the ball. The redder a connection, the more that weight contributed to the error. The greener it is, the more it helped. Click "Forward Pass" first to see the numbers flow, then "Backward Pass" to see who gets blamed.
+        <strong>What's happening here?</strong> Imagine sorting a pile of mixed coins by eye: you pick a few "reference" coins, put every coin next to the closest reference, then move each reference to the center of its pile, and repeat. That's k-means. The centroids (white cores with colored rings) are the references. Notice how clusters with different k produce very different groupings — the algorithm finds <em>a</em> grouping, not necessarily <em>the</em> grouping, and k is something you choose from domain knowledge.
       </div>
     </div>
   </div>
+
 </main>
 
 <script type="module" src="js/app.js"></script>

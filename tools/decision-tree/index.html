@@ -3,17 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Backpropagation Visualizer — ReLU.chat</title>
-<meta name="description" content="Interactive backpropagation calculator. Step through forward and backward passes of a neural network.">
+<title>Decision Tree Explorer — ReLU.chat</title>
+<meta name="description" content="Interactive decision tree visualizer: train a CART-style tree on two-class data, step through each axis-aligned split, and watch Gini impurity and accuracy change.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://relu.chat/tools/backpropagation/">
-<meta property="og:title" content="Backpropagation Visualizer — ReLU.chat">
-<meta property="og:description" content="Interactive backpropagation calculator. Step through forward and backward passes of a neural network.">
+<link rel="canonical" href="https://relu.chat/tools/decision-tree/">
+<meta property="og:title" content="Decision Tree Explorer — ReLU.chat">
+<meta property="og:description" content="Interactive decision tree visualizer: train a CART-style tree on two-class data, step through each axis-aligned split, and watch Gini impurity and accuracy change.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://relu.chat/tools/decision-tree/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png?v=7">
 <meta name="theme-color" content="#0d1117">
 <link rel="stylesheet" href="../../assets/fonts/sora.css">
 <link rel="stylesheet" href="../../assets/shared-design.css?v=11">
 <link rel="stylesheet" href="../../assets/css/tools.css">
 <link rel="icon" href="../../assets/logo.png?v=7" type="image/png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat/",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://relu.chat/tools/decision-tree/#app",
+      "name": "Decision Tree Explorer",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "url": "https://relu.chat/tools/decision-tree/",
+      "description": "Interactive decision tree visualizer: train a CART-style tree on two-class data, step through each axis-aligned split, and watch Gini impurity and accuracy change.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@id": "https://relu.chat/#website" }
+    }
+  ]
+}
+</script>
 <script>
         (function() {
             'use strict';
@@ -438,103 +467,84 @@
   <div class="nav-container">
     <a href="/" class="nav-logo">
       <img src="../../assets/logo.png?v=7" alt="ReLU.chat" width="24" height="24">
-      <span>Backpropagation Visualizer</span>
+      <span>Decision Tree Explorer</span>
     </a>
     <a href="/tools/" class="btn btn-sm">All Tools</a>
   </div>
 </nav>
 
 <main id="main-content" class="tool-main">
+
   <div class="tool-header">
-    <h1>Backpropagation Visualizer</h1>
-    <p>Walk through forward and backward propagation in a 2→2→1 neural network. See exactly how gradients flow through each weight using the chain rule.</p>
+    <h1>Decision Tree Explorer</h1>
+    <p>Decision trees classify data by asking a sequence of yes/no questions — "is x less than 4.2?" — splitting the plane into axis-aligned regions. Press <strong>Step</strong> to grow the tree one split at a time and watch accuracy improve.</p>
   </div>
 
   <div class="tool-card">
     <div class="tool-card-header">
-      <span class="tool-card-title">Network</span>
-      <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
-        <button class="tool-btn primary" id="forward-btn" type="button">Forward Pass</button>
-        <button class="tool-btn" id="backward-btn" type="button" disabled>Backward Pass</button>
-        <button class="tool-btn" id="bp-reset-btn" type="button">Reset</button>
-      </div>
+      <span class="tool-card-title">Tree Visualization</span>
+      <span class="tool-card-title" id="dt-status">untrained</span>
     </div>
-    <div class="canvas-wrap" id="bp-canvas-wrap">
-      <canvas id="bp-canvas" width="800" height="400"></canvas>
+    <div class="canvas-wrap" id="dt-canvas-wrap">
+      <canvas id="dt-canvas" width="800" height="500" role="img" aria-label="Scatter plot of two-class data being classified by a decision tree; regions show the tree's current prediction and rings mark misclassified points"></canvas>
     </div>
-  </div>
-
-  <div class="controls" style="padding:0;flex-direction:row;flex-wrap:wrap;gap:var(--space-4);align-items:end">
-    <div class="control-group" style="min-width:100px;flex:1">
-      <span class="control-label">Input x₁</span>
-      <input type="range" id="bp-x1" min="-2" max="2" step="0.1" value="0.5">
-    </div>
-    <div class="control-group" style="min-width:100px;flex:1">
-      <span class="control-label">Input x₂</span>
-      <input type="range" id="bp-x2" min="-2" max="2" step="0.1" value="0.3">
-    </div>
-    <div class="control-group" style="min-width:100px;flex:1">
-      <span class="control-label">Target y</span>
-      <input type="range" id="bp-target" min="0" max="1" step="0.05" value="1">
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#14b8a6"></span> Class A</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#fbbf24"></span> Class B</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:rgba(248,250,252,0.6)"></span> split boundary</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:transparent;border:1px dashed #f8fafc"></span> misclassified point</span>
     </div>
   </div>
 
   <div class="tool-card">
     <div class="tool-card-header">
-      <span class="tool-card-title">Intermediate Values</span>
+      <span class="tool-card-title">Controls</span>
     </div>
     <div class="controls">
-      <div class="step-display" id="bp-steps">
-        <div class="step-line dim">Click "Forward Pass" to compute forward propagation.</div>
+      <div class="tool-btn-group">
+        <button class="tool-btn primary" id="dt-train" type="button">Train full tree</button>
+        <button class="tool-btn" id="dt-step" type="button">Step (one split)</button>
+        <button class="tool-btn" id="dt-reset" type="button">Reset</button>
+        <button class="tool-btn" id="dt-data" type="button">New data</button>
       </div>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <div class="tool-card-header">
-      <span class="tool-card-title">Weight Gradients</span>
-    </div>
-    <div class="controls">
-      <div class="metrics" id="gradient-metrics">
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₁₁</div>
-          <div class="metric-value" id="grad-w11">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₁₂</div>
-          <div class="metric-value" id="grad-w12">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₂₁</div>
-          <div class="metric-value" id="grad-w21">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₂₂</div>
-          <div class="metric-value" id="grad-w22">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂wₕ₁</div>
-          <div class="metric-value" id="grad-wh1">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂wₕ₂</div>
-          <div class="metric-value" id="grad-wh2">—</div>
+      <div class="controls-grid">
+        <div class="control-group" style="min-width:140px">
+          <span class="control-label">Max depth</span>
+          <select class="tool-select" id="dt-depth">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
         </div>
       </div>
-
+      <div class="metrics" id="dt-metrics" aria-live="polite">
+        <div class="metric"><div class="metric-label">Splits shown</div><div class="metric-value" id="dt-splits">0</div></div>
+        <div class="metric"><div class="metric-label">Leaves</div><div class="metric-value" id="dt-leaves">—</div></div>
+        <div class="metric"><div class="metric-label">Tree depth</div><div class="metric-value" id="dt-depth-val">—</div></div>
+        <div class="metric"><div class="metric-label">Train accuracy</div><div class="metric-value accent" id="dt-acc">—</div></div>
+      </div>
       <div class="info-box">
-        <strong>Chain rule in action:</strong> Backpropagation computes gradients by applying the chain rule from the output backward. Each gradient tells us how much a small change in that weight would affect the loss. The network then updates weights in the direction that <em>reduces</em> the loss.
+        <strong>How it works:</strong> At each step the algorithm tries every possible vertical and horizontal split and keeps the one that best separates the classes, measured by <strong>Gini impurity</strong> — how mixed a region still is. It repeats inside each region until the depth limit, a pure region, or too few points. Deeper trees fit the training data better but can memorize noise (overfitting) — compare depth 3 vs depth 5 on the same data.
       </div>
     </div>
   </div>
 
   <div class="tool-card">
+    <div class="tool-card-header">
+      <span class="tool-card-title">Splits (in the order the tree adds them)</span>
+    </div>
     <div class="controls">
+      <div class="step-display" id="dt-splits-list" aria-live="polite">
+        <div class="split-list" id="dt-split-rows"></div>
+      </div>
       <div class="info-box">
-        <strong>What's happening here?</strong> Think of the network as a team of coworkers passing a message down a chain. <strong>Forward pass:</strong> the message starts at the inputs (x₁, x₂), each person multiplies it by their own importance factor (weight), adds their personal bias, and passes it to the next person. At the end, the output comes out — and we compare it to what we WANTED (the target). The difference is the <strong>loss</strong> (the mistake). <strong>Backward pass:</strong> now each person asks: "How much of this mistake was MY fault?" They figure it out by looking backward at who passed them the message and how much they amplified it. That's the <strong>chain rule</strong> — like figuring out who in the chain dropped the ball. The redder a connection, the more that weight contributed to the error. The greener it is, the more it helped. Click "Forward Pass" first to see the numbers flow, then "Backward Pass" to see who gets blamed.
+        <strong>What's happening here?</strong> A decision tree is like a game of twenty questions. Each split carves the plane along one axis — first the big separation, then finer ones inside each region. Points with a ring around them are misclassified by the current tree; watch them disappear as you add splits. This greedy "best split at each step" strategy is exactly what libraries like scikit-learn implement under the hood.
       </div>
     </div>
   </div>
+
 </main>
 
 <script type="module" src="js/app.js"></script>

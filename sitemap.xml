@@ -19,6 +19,48 @@
     
   </url>
   <url>
+    <loc>https://relu.chat/tools/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    
+  </url>
+  <url>
+    <loc>https://relu.chat/tools/neural-network/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    
+  </url>
+  <url>
+    <loc>https://relu.chat/tools/gradient-descent/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    
+  </url>
+  <url>
+    <loc>https://relu.chat/tools/backpropagation/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    
+  </url>
+  <url>
+    <loc>https://relu.chat/tools/activation-functions/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    
+  </url>
+  <url>
+    <loc>https://relu.chat/tools/k-means-clustering/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    
+  </url>
+  <url>
+    <loc>https://relu.chat/tools/decision-tree/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    
+  </url>
+  <url>
     <loc>https://relu.chat/blog/indexeddb-client-storage/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

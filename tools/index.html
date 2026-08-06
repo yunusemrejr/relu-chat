@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Interactive ML Tools — ReLU.chat</title>
-<meta name="description" content="Interactive AI/ML visualization tools: neural network explorer, gradient descent lab, backpropagation visualizer.">
+<meta name="description" content="Interactive AI/ML visualization tools: neural network explorer, gradient descent lab, backpropagation visualizer, activation functions, k-means clustering, and decision tree explorer.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://relu.chat/tools/">
 <meta property="og:title" content="Interactive ML Tools — ReLU.chat">
@@ -453,7 +453,7 @@
   </div>
 
   <div class="info-box" style="margin-bottom:0">
-    Think of machine learning like teaching a child to recognize cats. You show them pictures, they guess, you correct them, and they get better over time. These three tools show you exactly <strong>how</strong> that learning happens inside a computer — the math, the steps, and the feedback loop — all with sliders and buttons you can play with. No coding required.
+    Think of machine learning like teaching a child to recognize cats. You show them pictures, they guess, you correct them, and they get better over time. These six tools show you exactly <strong>how</strong> that learning happens inside a computer — the math, the steps, and the feedback loop — all with sliders and buttons you can play with. No coding required.
   </div>
 
   <div class="tools-grid">
@@ -493,6 +493,45 @@
         <span class="chip">Backpropagation</span>
         <span class="chip">Chain Rule</span>
         <span class="chip">Gradients</span>
+      </div>
+    </a>
+
+    <a href="activation-functions/" class="tool-listing">
+      <div class="tool-listing-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2.5-7 4 14 3-10 2 3h5.5"/></svg>
+      </div>
+      <h3>Activation Functions Explorer</h3>
+      <p>Plot ReLU, Leaky ReLU, Sigmoid, Tanh, GELU, SiLU, ELU and Softplus — with their derivatives — and see why the slope of an activation decides whether learning continues.</p>
+      <div class="tool-listing-tags">
+        <span class="chip">Activations</span>
+        <span class="chip">Derivatives</span>
+        <span class="chip">ReLU</span>
+      </div>
+    </a>
+
+    <a href="k-means-clustering/" class="tool-listing">
+      <div class="tool-listing-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.2"/><circle cx="17" cy="8" r="3.2"/><circle cx="12.5" cy="17" r="3.2"/><circle cx="12.5" cy="12.5" r="1.1"/></svg>
+      </div>
+      <h3>K-Means Clustering Playground</h3>
+      <p>Add points, choose k, and step through assignment and centroid updates. Watch the SSE (inertia) shrink as clusters converge — no labels required.</p>
+      <div class="tool-listing-tags">
+        <span class="chip">Clustering</span>
+        <span class="chip">Unsupervised</span>
+        <span class="chip">SSE</span>
+      </div>
+    </a>
+
+    <a href="decision-tree/" class="tool-listing">
+      <div class="tool-listing-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+      </div>
+      <h3>Decision Tree Explorer</h3>
+      <p>Grow a CART-style tree one split at a time on two-class data. See Gini impurity drop, misclassifications disappear, and overfitting appear at high depth.</p>
+      <div class="tool-listing-tags">
+        <span class="chip">Classification</span>
+        <span class="chip">Gini Impurity</span>
+        <span class="chip">Trees</span>
       </div>
     </a>
   </div>

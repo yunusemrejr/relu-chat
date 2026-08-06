@@ -12,7 +12,13 @@ ReLU.chat is an open-source platform for building and running interactive chatbo
 - [Game Theory Chat](https://relu.chat/chat/game-theory-chat/) — on-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma, 55+ topics, LaTeX math.
 - [Golden Age Inquiry](https://relu.chat/chat/golden-age-inquiry/) — on-device assistant for the scientific and philosophical discoveries of the Islamic Golden Age (8th-14th centuries).
 - [Data Science Chat](https://relu.chat/chat/data-science-chat/) — on-device assistant for data science and ML: pandas, NumPy, statistics, classification, clustering, evaluation.
-- [Interactive ML Tools](https://relu.chat/tools/) — neural network explorer, gradient descent lab, backpropagation visualizer, all in the browser.
+- [Interactive ML Tools](https://relu.chat/tools/) — six interactive visualizations:
+  - [Neural Network Explorer](https://relu.chat/tools/neural-network/) — 2-layer forward pass with adjustable weights and activations
+  - [Gradient Descent Lab](https://relu.chat/tools/gradient-descent/) — optimization steps on a loss surface
+  - [Backpropagation Visualizer](https://relu.chat/tools/backpropagation/) — step-by-step chain-rule gradients
+  - [Activation Functions Explorer](https://relu.chat/tools/activation-functions/) — ReLU, Leaky ReLU, Sigmoid, Tanh, GELU, SiLU, ELU, Softplus with derivatives
+  - [K-Means Clustering Playground](https://relu.chat/tools/k-means-clustering/) — interactive clustering with SSE convergence
+  - [Decision Tree Explorer](https://relu.chat/tools/decision-tree/) — step-by-step CART splits with Gini impurity
 
 ## How it works (full pipeline)
 

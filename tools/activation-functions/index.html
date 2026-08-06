@@ -3,17 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Backpropagation Visualizer — ReLU.chat</title>
-<meta name="description" content="Interactive backpropagation calculator. Step through forward and backward passes of a neural network.">
+<title>Activation Functions Explorer — ReLU.chat</title>
+<meta name="description" content="Interactive activation function visualizer: plot ReLU, Leaky ReLU, Sigmoid, Tanh, GELU, SiLU, ELU and Softplus with their derivatives.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://relu.chat/tools/backpropagation/">
-<meta property="og:title" content="Backpropagation Visualizer — ReLU.chat">
-<meta property="og:description" content="Interactive backpropagation calculator. Step through forward and backward passes of a neural network.">
+<link rel="canonical" href="https://relu.chat/tools/activation-functions/">
+<meta property="og:title" content="Activation Functions Explorer — ReLU.chat">
+<meta property="og:description" content="Interactive activation function visualizer: plot ReLU, Leaky ReLU, Sigmoid, Tanh, GELU, SiLU, ELU and Softplus with their derivatives.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://relu.chat/tools/activation-functions/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png?v=7">
 <meta name="theme-color" content="#0d1117">
 <link rel="stylesheet" href="../../assets/fonts/sora.css">
 <link rel="stylesheet" href="../../assets/shared-design.css?v=11">
 <link rel="stylesheet" href="../../assets/css/tools.css">
 <link rel="icon" href="../../assets/logo.png?v=7" type="image/png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat/",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://relu.chat/tools/activation-functions/#app",
+      "name": "Activation Functions Explorer",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "url": "https://relu.chat/tools/activation-functions/",
+      "description": "Interactive activation function visualizer: plot ReLU, Leaky ReLU, Sigmoid, Tanh, GELU, SiLU, ELU and Softplus with their derivatives.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@id": "https://relu.chat/#website" }
+    }
+  ]
+}
+</script>
 <script>
         (function() {
             'use strict';
@@ -438,92 +467,80 @@
   <div class="nav-container">
     <a href="/" class="nav-logo">
       <img src="../../assets/logo.png?v=7" alt="ReLU.chat" width="24" height="24">
-      <span>Backpropagation Visualizer</span>
+      <span>Activation Functions Explorer</span>
     </a>
     <a href="/tools/" class="btn btn-sm">All Tools</a>
   </div>
 </nav>
 
 <main id="main-content" class="tool-main">
+
   <div class="tool-header">
-    <h1>Backpropagation Visualizer</h1>
-    <p>Walk through forward and backward propagation in a 2→2→1 neural network. See exactly how gradients flow through each weight using the chain rule.</p>
+    <h1>Activation Functions Explorer</h1>
+    <p>Activation functions are the nonlinearity that lets neural networks learn anything beyond straight lines. Pick a function, move the input slider, and watch both the function and its derivative update live.</p>
   </div>
 
   <div class="tool-card">
     <div class="tool-card-header">
-      <span class="tool-card-title">Network</span>
-      <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
-        <button class="tool-btn primary" id="forward-btn" type="button">Forward Pass</button>
-        <button class="tool-btn" id="backward-btn" type="button" disabled>Backward Pass</button>
-        <button class="tool-btn" id="bp-reset-btn" type="button">Reset</button>
-      </div>
+      <span class="tool-card-title">Function Plot</span>
+      <span class="tool-card-title" id="fn-name">ReLU</span>
     </div>
-    <div class="canvas-wrap" id="bp-canvas-wrap">
-      <canvas id="bp-canvas" width="800" height="400"></canvas>
+    <div class="canvas-wrap" id="af-canvas-wrap">
+      <canvas id="af-canvas" width="800" height="420" role="img" aria-label="Plot of the selected activation function (teal) and its derivative (blue) over x from -6 to 6"></canvas>
     </div>
-  </div>
-
-  <div class="controls" style="padding:0;flex-direction:row;flex-wrap:wrap;gap:var(--space-4);align-items:end">
-    <div class="control-group" style="min-width:100px;flex:1">
-      <span class="control-label">Input x₁</span>
-      <input type="range" id="bp-x1" min="-2" max="2" step="0.1" value="0.5">
-    </div>
-    <div class="control-group" style="min-width:100px;flex:1">
-      <span class="control-label">Input x₂</span>
-      <input type="range" id="bp-x2" min="-2" max="2" step="0.1" value="0.3">
-    </div>
-    <div class="control-group" style="min-width:100px;flex:1">
-      <span class="control-label">Target y</span>
-      <input type="range" id="bp-target" min="0" max="1" step="0.05" value="1">
+    <div class="legend">
+      <span class="legend-item"><span class="legend-swatch" style="background:#14b8a6"></span> f(x) — function value</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#60a5fa"></span> f′(x) — derivative (slope)</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:rgba(248,250,252,0.7)"></span> tangent line at the selected x</span>
     </div>
   </div>
 
   <div class="tool-card">
     <div class="tool-card-header">
-      <span class="tool-card-title">Intermediate Values</span>
+      <span class="tool-card-title">Controls</span>
     </div>
     <div class="controls">
-      <div class="step-display" id="bp-steps">
-        <div class="step-line dim">Click "Forward Pass" to compute forward propagation.</div>
+      <div class="controls-grid">
+        <div class="control-group">
+          <span class="control-label">Function</span>
+          <select class="tool-select" id="fn-select">
+            <option value="relu">ReLU</option>
+            <option value="leaky">Leaky ReLU</option>
+            <option value="sigmoid">Sigmoid</option>
+            <option value="tanh">Tanh</option>
+            <option value="gelu">GELU</option>
+            <option value="silu">SiLU / Swish</option>
+            <option value="elu">ELU</option>
+            <option value="softplus">Softplus</option>
+          </select>
+        </div>
+        <div class="control-group" id="param-group">
+          <span class="control-label"><span id="param-label">α</span><span class="control-value" id="param-value">0.10</span></span>
+          <input type="range" id="param-slider" min="0.01" max="0.5" step="0.01" value="0.1">
+        </div>
+        <div class="control-group">
+          <span class="control-label"><span>Input x</span><span class="control-value" id="x-value">0.00</span></span>
+          <input type="range" id="input-x" min="-6" max="6" step="0.05" value="1">
+        </div>
       </div>
+      <div class="formula" id="formula-display" aria-live="polite">f(x) = max(0, x)</div>
+      <p class="control-hint" id="fn-hint">The derivative tells gradient descent which direction to nudge the weights. Where the slope is 0, learning stops.</p>
     </div>
   </div>
 
   <div class="tool-card">
     <div class="tool-card-header">
-      <span class="tool-card-title">Weight Gradients</span>
+      <span class="tool-card-title">Values at the selected input</span>
     </div>
     <div class="controls">
-      <div class="metrics" id="gradient-metrics">
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₁₁</div>
-          <div class="metric-value" id="grad-w11">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₁₂</div>
-          <div class="metric-value" id="grad-w12">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₂₁</div>
-          <div class="metric-value" id="grad-w21">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂w₂₂</div>
-          <div class="metric-value" id="grad-w22">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂wₕ₁</div>
-          <div class="metric-value" id="grad-wh1">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">∂L/∂wₕ₂</div>
-          <div class="metric-value" id="grad-wh2">—</div>
-        </div>
+      <div class="metrics" id="af-metrics" aria-live="polite">
+        <div class="metric"><div class="metric-label">f(x)</div><div class="metric-value accent" id="m-fx">—</div></div>
+        <div class="metric"><div class="metric-label">f′(x)</div><div class="metric-value" id="m-fpx">—</div></div>
+        <div class="metric"><div class="metric-label">Output range</div><div class="metric-value" id="m-range">—</div></div>
+        <div class="metric"><div class="metric-label">Monotonic</div><div class="metric-value" id="m-mono">—</div></div>
       </div>
-
       <div class="info-box">
-        <strong>Chain rule in action:</strong> Backpropagation computes gradients by applying the chain rule from the output backward. Each gradient tells us how much a small change in that weight would affect the loss. The network then updates weights in the direction that <em>reduces</em> the loss.
+        <strong>How it works:</strong> Each neuron computes <code>σ(W · x + b)</code> — a weighted sum passed through an activation function. ReLU (<strong>Re</strong>ctified <strong>L</strong>inear <strong>U</strong>nit) is the default in most modern networks: it keeps positive values and zeroes out negatives. The derivative is what backpropagation uses to decide how much each weight should change.
       </div>
     </div>
   </div>
@@ -531,10 +548,11 @@
   <div class="tool-card">
     <div class="controls">
       <div class="info-box">
-        <strong>What's happening here?</strong> Think of the network as a team of coworkers passing a message down a chain. <strong>Forward pass:</strong> the message starts at the inputs (x₁, x₂), each person multiplies it by their own importance factor (weight), adds their personal bias, and passes it to the next person. At the end, the output comes out — and we compare it to what we WANTED (the target). The difference is the <strong>loss</strong> (the mistake). <strong>Backward pass:</strong> now each person asks: "How much of this mistake was MY fault?" They figure it out by looking backward at who passed them the message and how much they amplified it. That's the <strong>chain rule</strong> — like figuring out who in the chain dropped the ball. The redder a connection, the more that weight contributed to the error. The greener it is, the more it helped. Click "Forward Pass" first to see the numbers flow, then "Backward Pass" to see who gets blamed.
+        <strong>What's happening here?</strong> Think of an activation function as a gatekeeper on a pipe. <strong>ReLU</strong> is a one-way gate: water (signal) flows freely forward but never backward. <strong>Sigmoid</strong> is a valve that smoothly squeezes everything into 0–1 — useful for probabilities, but its slope flattens at the extremes, so learning slows down there (the "vanishing gradient" problem). <strong>Tanh</strong> is the same shape centered on zero. <strong>GELU</strong> and <strong>SiLU</strong> are modern smooth gates that keep a little signal flowing even for negative inputs. Try sliding <em>x</em> across the plot and watch the blue derivative curve — where it is flat, gradient descent has nothing to push on.
       </div>
     </div>
   </div>
+
 </main>
 
 <script type="module" src="js/app.js"></script>
