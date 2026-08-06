@@ -1,0 +1,9 @@
+# Security contact for ReLU.chat
+# https://relu.chat/.well-known/security.txt
+
+Contact: https://github.com/yunusemrejr/relu-chat/issues
+Contact: https://yunusemrevurgun.com
+Expires: 2027-08-06T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://relu.chat/.well-known/security.txt
+Policy: This is a static open-source site (MIT). Report vulnerabilities privately via the GitHub repository issues page.

@@ -4,7 +4,7 @@
 
             // ----- Configuration -------------------------------------------------
             const STORAGE_KEY = 'aif_popup_ts_h';      // localStorage key for timestamp
-            const COOLDOWN_MS = 0 * 1000;           // 1 hour
+            const COOLDOWN_MS = 60 * 60 * 1000;         // 1 hour between shows (was 0 = every page load)
             const DELAY_MIN_MS = 10 * 1000;            // 10 seconds
             const DELAY_MAX_MS = 20 * 1000;            // 25 seconds
 
@@ -35,6 +35,11 @@
 
             // ----- Random delay --------------------------------------------------
             const delayMs = Math.floor(Math.random() * (DELAY_MAX_MS - DELAY_MIN_MS + 1)) + DELAY_MIN_MS;
+
+            // Respect prefers-reduced-motion: skip the interruptive modal entirely.
+            if (typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                return;
+            }
 
             setTimeout(function() {
 
@@ -237,6 +242,9 @@
                         #aip-title { font-size: 18px; }
                         #aip-new { font-size: 22px; }
                     }
+                    @media (prefers-reduced-motion: reduce) {
+                        #aip-wrap, #aip-card { animation: none !important; }
+                    }
                 `;
                 document.head.appendChild(styleElement);
 
@@ -331,8 +339,17 @@
                 overlay.appendChild(card);
                 document.body.appendChild(overlay);
 
+                // ----- Focus management ----------------------------------------
+                // Move focus into the dialog so keyboard users land inside it;
+                // restore focus to the previously focused element on close.
+                const lastFocused = document.activeElement;
+                try { closeBtn.focus({ preventScroll: true }); } catch (_) { closeBtn.focus(); }
+
                 // ----- Close logic ---------------------------------------------
                 function closePopup(event) {
+                    if (lastFocused && lastFocused.focus && lastFocused !== document.body) {
+                        try { lastFocused.focus({ preventScroll: true }); } catch (_) { lastFocused.focus(); }
+                    }
                     if (event) event.preventDefault();
 
                     // Store timestamp to enforce cooldown

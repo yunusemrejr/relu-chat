@@ -1,65 +1,100 @@
-# ReLU.chat — Full Documentation
+# ReLU.chat — Full Documentation for AI Agents
 
 > Free, browser-based, privacy-first open-source chatbots. No servers, no LLMs, no tracking.
+> Everything below is factual and verified against the repository at https://github.com/yunusemrejr/relu-chat (MIT license).
 
 ## What is ReLU.chat?
 
-ReLU.chat is an open-source platform for building and running interactive chatbots entirely in the browser. Unlike cloud-based AI services, ReLU.chat processes all natural language locally using quantized ONNX models, ensuring complete privacy and zero data transmission to external servers.
+ReLU.chat is an open-source platform for building and running interactive chatbots entirely in the browser. All natural language processing happens locally on the user's device using a quantized ONNX sentence-transformer model plus classical retrieval and a small reinforcement-learned policy network. Conversations never leave the browser: there are no servers, no API keys, no LLM calls, and no telemetry.
 
-## Technical Architecture
+## Try it (runs 100% client-side, no install)
 
-### Embedding Layer
-The system uses the all-MiniLM-L6-v2 sentence transformer model, quantized to ONNX format (~22MB). It converts user queries and knowledge-base entries into 384-dimensional dense vectors for semantic similarity computation.
+- [Game Theory Chat](https://relu.chat/chat/game-theory-chat/) — on-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma, 55+ topics, LaTeX math.
+- [Golden Age Inquiry](https://relu.chat/chat/golden-age-inquiry/) — on-device assistant for the scientific and philosophical discoveries of the Islamic Golden Age (8th-14th centuries).
+- [Data Science Chat](https://relu.chat/chat/data-science-chat/) — on-device assistant for data science and ML: pandas, NumPy, statistics, classification, clustering, evaluation.
+- [Interactive ML Tools](https://relu.chat/tools/) — neural network explorer, gradient descent lab, backpropagation visualizer, all in the browser.
 
-### Signal Layer
-A multi-signal retrieval system combines:
-- **BM25 sparse retrieval**: Term-frequency based matching against the knowledge base
-- **Dense cosine similarity**: Semantic matching via embedding vectors
-- **Entity extraction**: Named entity recognition and boosting
-- **Intent classification**: Temperature-calibrated intent scoring
-- **Follow-up detection**: Context-aware follow-up query handling
+## How it works (full pipeline)
 
-All signals are fused into a 25-feature decision packet.
+1. **Progressive loading** — a heuristic/BOW fallback answers the very first turns instantly while the ~22MB quantized MiniLM ONNX model and knowledge-base embeddings stream in the background (service worker pre-caches them). The full dense pipeline hot-swaps automatically when ready. Query embeddings are memoized and top-k ranking is bounded (no full sort).
+2. **Embedding** — queries and KB entries are embedded into 384-dimensional vectors by all-MiniLM-L6-v2 (quantized ONNX, running via ONNX Runtime/transformers.js).
+3. **Signal layer** — field-weighted BM25 sparse retrieval (k1=1.5, b=0.75; entry names repeated 3x, aliases 2x; bigram phrase matching), dense cosine similarity, fuzzy entity extraction (Levenshtein + word-overlap + notation patterns), and temperature-calibrated intent classification (19 prototypes per intent, 70/30 best-vs-average) are fused into a 25-feature decision packet. Explicit topic corrections ("I meant X") force the corrected topic to the top.
+4. **Policy network** — a ~13K-parameter MLP (25 inputs -> 128 -> 64 -> 6 action heads: mode, intent, topic count, fragment count, creativity, tone) trained with REINFORCE decides how to respond. Weights are auto-quantized to int8 at construction (~4x memory reduction). A 15-threshold heuristic fallback guarantees the system always works, even during cold start.
+5. **Composition** — responses are assembled from knowledge-base fragments (def/int/ex/form/app categories with truth/source confidence, difficulty, style, avoid-with constraints) using linguistic connectors, comparison openers, and session-aware diversity penalties.
+6. **Rendering** — KaTeX renders LaTeX math; progressive streaming rendering reveals responses in ~40-char chunks; session memory keeps up to 30 turns of context with importance-based eviction and an EMA summary vector (alpha=0.75).
 
-### Policy Network
-A multi-layer perceptron (MLP) with architecture 25→128→64→6 action heads, trained via reinforcement learning. The policy decides how to compose responses from fragment-based knowledge entries. Action heads control:
-- Fragment selection strategy
-- Response length and detail level
-- Connector and transition usage
-- Confidence scoring
-- Creative vs. factual balance
-- Follow-up prompt generation
+## Privacy guarantees
 
-### Fragment Composition
-Responses are composed from knowledge-base fragments connected by linguistic connectors. The system supports LaTeX rendering (via KaTeX), code blocks, and structured data presentation.
+- Zero data leaves the browser: no accounts, no cookies, no tracking, no server processing.
+- Offline capable after first load (PWA + service worker pre-caches model and policy weights).
+- Storage is client-side only (IndexedDB).
 
-### Heuristic Fallback
-When the MLP is unavailable (cold start, weight load failure), a parameterized heuristic system provides fallback behavior using 15 decision thresholds.
+## Performance characteristics
 
-## Key Features
-
-1. **Complete Privacy**: Zero data leaves the browser. No API calls, no telemetry, no tracking.
-2. **Offline Capable**: Works without internet after initial load (PWA with service worker).
-3. **Fast Response**: Sub-100ms inference using quantized ONNX models.
-4. **Interactive Visualizations**: Built-in tools for data science, game theory, and more.
-5. **Extensible Knowledge Base**: Add custom fragments to create domain-specific chatbots.
-6. **Reinforcement Learning**: Continuously improving response quality through RL training.
-
-## Source Code Structure
-
-- `core/` — NLP engine, chatbot engine, session memory, BM25 scorer, signal layer
-- `policy/` — Feature extractor, MLP inference, action schema, policy runtime
-- `chat/` — Individual chatbot implementations (data science, game theory, etc.)
-- `data/` — Knowledge base fragments, bot configurations, manifest
-- `dev/scripts/` — PyTorch training, weight export, prompt augmentation
-- `assets/` — Models, fonts, styles, shared design system
+- Sub-100ms inference on typical hardware with quantized ONNX models.
+- Service-worker pre-caching gives zero-wait chatbot startup on repeat visits.
+- All thresholds centralized in config; LRU caches, query memoization, and pre-built BM25 IDF keep retrieval fast.
 
 ## Blog
 
-Technical articles and updates are published at https://relu.chat/blog/
+38 technical articles at https://relu.chat/blog/ (RSS: https://relu.chat/blog/feed.xml):
 
-## Links
+- 2026-08-06 — [IndexedDB for On-Device AI: Storing Embeddings and Session State Locally](https://relu.chat/blog/indexeddb-client-storage/) — IndexedDB stores embeddings as raw binary and session state as structured records, giving browser-based AI a complete local persistence story that never leaves the device.
+- 2026-08-06 — [Model Size vs Quality: Why a Small Distilled Model Can Beat a Big One on Edge Devices](https://relu.chat/blog/model-size-vs-quality/) — Quality is task-relative. A small distilled model fine-tuned for a narrow task — quantized, cache-local, paired with strong retrieval — can beat a much larger general model on edge devices.
+- 2026-08-05 — [Privacy Checklist for Browser-Based AI: What Actually Leaves Your Device](https://relu.chat/blog/privacy-checklist-browser-ai/) — A six-step audit for browser-based AI: inventory first-load requests, watch live conversations, test offline, inspect storage, and read the source.
+- 2026-08-04 — [Named Entity Recognition Without an LLM: Regex, Fuzzy Matching, and Knowledge Bases](https://relu.chat/blog/named-entity-recognition-no-llm/) — For closed domains, NER does not need an LLM: exact alias regex, fuzzy matching with Levenshtein, notation patterns, and a knowledge base extract entities in milliseconds, on-device.
+- 2026-08-04 — [The Math of BM25: A Worked Example of Sparse Retrieval](https://relu.chat/blog/bm25-math-worked-example/) — A hand-computed BM25 ranking example showing smoothed IDF, term-frequency saturation, length normalization, and field weighting via term repetition.
+- 2026-08-04 — [WebAssembly and On-Device ML: Why WASM Makes Browser AI Fast](https://relu.chat/blog/webassembly-browser-ml/) — WebAssembly lets C and Rust numeric kernels run at near-native speed in the browser, and it is the substrate under on-device ML runtimes like ONNX Runtime and transformers.js.
+- 2026-08-03 — [Latency Budgets for Conversational UI: The 400ms Response Rule](https://relu.chat/blog/latency-budgets-conversational-ui/) — Users experience latency as time to first token, not time to completion. Budget 400 ms for that first token on your slowest device, and stream everything after it.
+- 2026-08-03 — [KaTeX vs MathJax: Rendering Math in the Browser](https://relu.chat/blog/katex-vs-mathjax-math-rendering/) — A practical comparison of KaTeX and MathJax for in-browser math rendering: speed, bundle size, TeX coverage, accessibility, and streaming output.
+- 2026-08-03 — [INT8 Quantization Explained: From FP32 to 8-Bit Without Losing Accuracy](https://relu.chat/blog/int8-quantization-explained/) — INT8 quantization maps a model's weights and activations onto 256 integer buckets, cutting memory 4x while usually keeping accuracy — the key to fitting models in a browser.
+- 2026-08-02 — [Cosine Similarity and Vector Search: The Math Behind Semantic Retrieval](https://relu.chat/blog/cosine-similarity-vector-search/) — Cosine similarity measures the angle between embeddings, and with normalized vectors it becomes a tight dot-product loop that powers semantic retrieval entirely in the browser.
+- 2026-08-02 — [Memory Management in Long Browser Chat Sessions: Avoiding Leaks](https://relu.chat/blog/memory-leaks-long-chat-sessions/) — How bounded turn buffers, importance-based eviction, response compression, and cache discipline keep long browser chat sessions from leaking memory.
+- 2026-08-02 — [Service Worker Caching Strategies for ML Assets](https://relu.chat/blog/service-worker-caching-strategies/) — Model weights are immutable and large, which makes them ideal cache-first assets. A practical guide to service worker strategies for ML: precache, versioning, and quota.
+- 2026-08-01 — [Intent Classification with Prototype Embeddings: Zero-Shot Style Without an LLM](https://relu.chat/blog/prototype-intent-classification/) — Prototype embeddings classify intent with cosine similarity against reference vectors — no LLM, no training data, and no server round-trip.
+- 2026-08-01 — [Subword Tokenization for On-Device NLP: How BPE Works](https://relu.chat/blog/tokenization-subword-bpe-on-device/) — Byte Pair Encoding builds a compact subword vocabulary by merging the most frequent character pairs, and it is why small on-device models can handle full natural language without giant embedding tables.
+- 2026-08-01 — [Web Workers: Keeping the UI Thread Responsive During Inference](https://relu.chat/blog/web-workers-ui-thread/) — Inference is compute, and compute does not belong on the UI thread. Here is how dedicated workers, transferable buffers, and worker pools keep a browser-based AI chatbot responsive.
+- 2026-06-30 — [Accessibility in AI Chatbots: WCAG Compliance for Conversational UI](https://relu.chat/blog/accessibility-ai-chatbots-wcag/) — How to make browser-based chatbots accessible: ARIA landmarks, keyboard navigation, reduced motion, and contrast compliance.
+- 2026-06-30 — [Progressive Loading: BOW to MLP to Transformer in 3 Stages](https://relu.chat/blog/progressive-loading-bow-mlp-transformer/) — The three-stage loading strategy that gives usable answers instantly while the 22MB transformer model streams in.
+- 2026-06-30 — [Dense-Sparse Ensemble Ranking: Combining BM25 and Embeddings](https://relu.chat/blog/dense-sparse-ensemble-ranking/) — How fusing dense cosine similarity with BM25 sparse scores at 70/30 weights produces better retrieval than either alone.
+- 2026-06-30 — [Topic Correction: When Users Say 'No, I Meant X'](https://relu.chat/blog/topic-correction-when-users-redirect/) — How explicit topic correction detection prevents chatbot topic drift when users redirect the conversation mid-turn.
+- 2026-06-30 — [Follow-Up Detection: 20 Patterns That Make Chatbots Conversational](https://relu.chat/blog/follow-up-detection-20-patterns/) — How regex pattern matching and heuristic detection handle 20+ follow-up types from 'how?' to 'tell me more' to emoji-only responses.
+- 2026-06-30 — [BM25 in the Browser: Field-Weighted Sparse Retrieval Without a Server](https://relu.chat/blog/bm25-browser-field-weighted-retrieval/) — Implementing field-weighted BM25 with bigram phrase matching entirely in JavaScript for real-time knowledge retrieval.
+- 2026-06-30 — [Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading](https://relu.chat/blog/service-worker-model-pre-caching/) — How service workers pre-cache the 22MB transformer model and policy weights for instant chatbot startup.
+- 2026-06-30 — [Session Memory Architecture: 30 Turns of Context Without a Server](https://relu.chat/blog/session-memory-architecture-30-turns/) — How importance-based eviction, response compression, and EMA summary vectors maintain long conversation context entirely in the browser.
+- 2026-06-30 — [Progressive Streaming Rendering: Making Chatbots Feel Native](https://relu.chat/blog/progressive-streaming-rendering-chatbots/) — How progressive response rendering with requestAnimationFrame creates a natural typing effect in browser chatbots.
+- 2026-06-30 — [Int8 Quantization in the Browser: How We Made MLP Inference 4x Faster](https://relu.chat/blog/int8-quantization-browser-mlp/) — How symmetric int8 quantization reduces memory and speeds up policy network inference in pure JavaScript.
+- 2026-06-10 — [ONNX Runtime Web and INT8 Quantization: How 90MB Models Become 22MB](https://relu.chat/blog/onnx-runtime-web-quantization/) — A practical look at how ONNX Runtime Web plus INT8 post-training quantization shrinks a 90MB sentence transformer to roughly 22MB, with only a small accuracy loss, and why that tradeoff is exactly right for in-browser NLP.
+- 2026-06-09 — [BM25 vs Dense Retrieval: Why We Use Both for Browser Chatbots](https://relu.chat/blog/bm25-vs-dense-retrieval/) — BM25 is fast and exact; dense embeddings are semantic and forgiving. For real user queries — many of them short, typo-prone, or relying on jargon — neither wins alone. Here is why hybrid retrieval is the right default.
+- 2026-06-08 — [Service Workers and PWA Caching for Offline AI Chatbots](https://relu.chat/blog/service-workers-offline-ai/) — A service worker can pre-cache the 22MB ONNX model, the embedding index, and the chatbot shell so the entire experience keeps working after the first load — even on a plane.
+- 2026-06-07 — [WebGPU and the Future of In-Browser AI Inference](https://relu.chat/blog/webgpu-future-browser-inference/) — WebGPU has shipped in stable Chrome, Edge, Firefox, and Safari. For in-browser ML, it is the unlock that makes 7B-parameter models possible without a server. Here is what it actually changes — and what it does not.
+- 2026-06-06 — [Knowledge Fragment Composition: Why We Ditched Generation for Retrieval](https://relu.chat/blog/knowledge-fragment-composition/) — Generation is flexible and dangerous; retrieval is rigid and safe. For domain-specific chatbots where accuracy matters more than creativity, retrieval + fragment composition wins. Here is the design and the tradeoffs.
+- 2026-06-05 — [Sentence Embeddings Explained: Why 384 Dimensions and What They Mean](https://relu.chat/blog/sentence-embeddings-384-dim-minilm/) — 384 is a specific number with a specific history. It is the output dimension of MiniLM-L6-v2, a distilled sentence transformer. Here is what those dimensions actually encode, why the number is what it is, and why it is the right size for browser NLP.
+- 2026-06-04 — [PPO and Reward Design: Training a Chatbot Policy Network That Actually Works](https://relu.chat/blog/ppo-reward-design-policy-network/) — The hardest part of training a chatbot policy network is not the algorithm — it is the reward function. A bad reward produces a model that optimizes for the wrong thing. Here is the function we use, what we tried that did not work, and what we learned about the dark art of reward shaping.
+- 2026-06-03 — [Heuristic Fallback for Cold Start: Graceful Degradation in Browser AI](https://relu.chat/blog/heuristic-fallback-cold-start/) — A 22MB model takes seconds to load, and users will not wait. A heuristic fallback gives a working chatbot on first paint and hot-swaps to the full transformer when the model finishes downloading. Here is how the pattern works and what it costs.
+- 2026-06-02 — [Linguistic Connectors: The Small Detail That Makes Retrieval Bots Sound Human](https://relu.chat/blog/linguistic-connectors-naturalness/) — A retrieval chatbot that just concatenates fragments sounds robotic. Connectors — small transitional phrases — turn a list of facts into a coherent response. Here is the small but important design decision that affects how a knowledge-grounded bot feels to talk to.
+- 2026-06-01 — [Sentence Embeddings vs Word Embeddings: Why We Embed Whole Questions](https://relu.chat/blog/sentence-vs-word-embeddings/) — Word embeddings (Word2Vec, GloVe) capture the meaning of individual words. Sentence transformers (MiniLM, SBERT) capture the meaning of a whole phrase. For Q&A retrieval, only the second is useful. Here is why averaging word vectors fails, and what sentence-level embeddings do differently.
+- 2026-05-25 — [Privacy-First AI: Why Browser-Based Machine Learning Matters](https://relu.chat/blog/privacy-first-ai-browsers/) — An argument for why browser-based machine learning is the future of privacy-first AI, and how ReLU.chat achieves zero data collection.
+- 2026-05-22 — [Training Chatbots with Reinforcement Learning: The ReLU.chat Approach](https://relu.chat/blog/reinforcement-learning-for-chatbots/) — An exploration of how reinforcement learning trains a lightweight MLP policy network to compose chatbot responses from knowledge fragments, without any LLM dependency.
+- 2026-05-20 — [How Browser-Based Chatbots Work: A Deep Dive into On-Device NLP](https://relu.chat/blog/how-browser-based-chatbots-work/) — A technical deep dive into how modern browser-based chatbots run full NLP pipelines client-side using quantized ONNX models, BM25 retrieval, and RL-trained policy networks.
 
-- Source: https://github.com/yunusemrejr/relu-chat
+## Books (by the same author, Gumroad)
+
+- [Fringe Learning: Resource-Efficient RL for Edge ML](https://elroystar8.gumroad.com/l/ecvuf) — practical reinforcement learning methods for resource-constrained edge machine learning.
+- [AI & Financial Freedom](https://elroystar8.gumroad.com/l/ai-freedom) — a step-by-step guide to mastering AI tools and workflows for financial independence in the age of AI.
+- More books: https://elroystar8.gumroad.com/
+
+## Source code
+
+- GitHub: https://github.com/yunusemrejr/relu-chat
 - License: MIT
-- How It Works: https://relu.chat/how-it-works.html
+- Author: Yunus Emre Vurgun (https://yunusemrevurgun.com)
+
+## Repository layout
+
+- core/ — NLP engine, chatbot engine, session memory, BM25 scorer, signal layer, UI
+- policy/ — feature extractor, MLP inference, action schema, policy runtime
+- chat/ — individual chatbots (game theory, golden age, data science)
+- data/ — knowledge-base fragments, bot configurations, manifest
+- assets/ — models, fonts, shared design system
+- dev/scripts/ — PyTorch training, weight export, prompt augmentation

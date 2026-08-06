@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: ReLU.chat Static Site
+  description: >-
+    ReLU.chat is a static, client-side site. This OpenAPI document declares the
+    public, crawlable endpoints an agent may fetch. There is no server API: all
+    product functionality runs in the visitor's browser.
+  version: 1.0.0
+servers:
+  - url: https://relu.chat
+paths:
+  /llms.txt:
+    get:
+      summary: AI-agent summary of the site
+      responses:
+        '200': { description: Text file }
+  /llms-full.txt:
+    get:
+      summary: Full documentation for AI agents
+      responses:
+        '200': { description: Text file }
+  /blog/feed.xml:
+    get:
+      summary: Blog RSS feed
+      responses:
+        '200': { description: RSS 2.0 XML }
+  /sitemap.xml:
+    get:
+      summary: XML sitemap
+      responses:
+        '200': { description: XML }

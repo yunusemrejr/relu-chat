@@ -28,8 +28,10 @@ RewriteRule ^(.*)$ https://relu.chat/$1 [L,R=301]
 # 4. Protect sensitive files and directories
 # ============================================================
 
-# Block access to .git, .env, .agent-logs, data directory
+# Allow IETF well-known URIs (security.txt, llms.txt), then block other dotfiles
 <IfModule mod_rewrite.c>
+    RewriteRule ^\.well-known/llms\.txt$ /llms.txt [L,R=301]
+    RewriteRule ^\.well-known/ - [L]
     RewriteRule ^\. - [F,L]
 </IfModule>
 

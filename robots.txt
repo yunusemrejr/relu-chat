@@ -8,25 +8,32 @@ Disallow: /policy/
 Disallow: /assets/models/
 Disallow: /_backups/
 
+# AI crawlers / assistants (content may be read and cited)
 User-agent: GPTBot
 Allow: /
-Allow: /blog/
-Allow: /how-it-works.html
-
+User-agent: ChatGPT-User
+Allow: /
 User-agent: ClaudeBot
 Allow: /
-Allow: /blog/
-Allow: /how-it-works.html
-
 User-agent: PerplexityBot
 Allow: /
-Allow: /blog/
-Allow: /how-it-works.html
-
-User-agent: Googlebot
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot
+Allow: /
+User-agent: cohere-ai
+Allow: /
+User-agent: ai2bot
+Allow: /
+User-agent: Meta-ExternalAgent
 Allow: /
 
+# General search engines
+User-agent: Googlebot
+Allow: /
 User-agent: Bingbot
+Allow: /
+User-agent: DuckDuckBot
 Allow: /
 
 Sitemap: https://relu.chat/sitemap.xml

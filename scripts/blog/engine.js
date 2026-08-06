@@ -86,65 +86,92 @@ function validatePost(post) {
 }
 
 function renderMarkdownLite(md) {
-  // Minimal markdown → HTML for blog content
-  // Handles: headings, paragraphs, bold, italic, links, code blocks, lists, images
-  let html = md;
+  // Minimal markdown to HTML for blog content.
+  // Block-aware: headings, lists, code fences and blockquotes are split into
+  // their own blocks even when a paragraph above them has no blank line
+  // (naive wrapping produced invalid HTML like <p>...</p><ul> inside <p>).
+  const inline = (s) => {
+    // Stash code spans, images and links before emphasis runs so that
+    // asterisks inside inline code (e.g. `q_a * q_w`) never become <em>.
+    const stash = [];
+    const stashRe = (re, wrap) => {
+      s = s.replace(re, (m, a, b) => {
+        stash.push(wrap(a, b));
+        return '\u0000' + (stash.length - 1) + '\u0000';
+      });
+    };
+    stashRe(/`([^`]+)`/g, (c) => '<code>' + c + '</code>');
+    stashRe(/!\[([^\]]*)\]\(([^)]+)\)/g, (alt, url) => '<img src="' + url + '" alt="' + alt + '" loading="lazy">');
+    stashRe(/\[([^\]]+)\]\(([^)]+)\)/g, (txt, url) => '<a href="' + url + '" rel="noopener">' + txt + '</a>');
+    s = s.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+    s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    return s.replace(/\u0000(\d+)\u0000/g, (m, i) => stash[+i] || '');
+  };
 
-  // Code blocks
-  html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
-    const escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return `<pre><code${lang ? ` class="lang-${lang}"` : ''}>${escaped}</code></pre>`;
-  });
+  const esc = (s) => s.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-  // Inline code
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  const out = [];
+  let para = [];
+  let inCode = false;
+  let codeLang = '';
+  let codeBuf = [];
 
-  // Images
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy">');
+  const flushPara = () => {
+    if (para.length) { out.push('<p>' + inline(para.join(' ')) + '</p>'); para = []; }
+  };
 
-  // Links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  const lines = md.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const t = lines[i].trim();
 
-  // Headings
-  html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
-
-  // Bold and italic
-  html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-  // Horizontal rule
-  html = html.replace(/^---$/gm, '<hr>');
-
-  // Unordered lists
-  html = html.replace(/(?:^- .+\n?)+/gm, (match) => {
-    const items = match.trim().split('\n')
-      .map(line => `<li>${line.replace(/^- /, '')}</li>`)
-      .join('\n');
-    return `<ul>\n${items}\n</ul>`;
-  });
-
-  // Ordered lists
-  html = html.replace(/(?:^\d+\. .+\n?)+/gm, (match) => {
-    const items = match.trim().split('\n')
-      .map(line => `<li>${line.replace(/^\d+\. /, '')}</li>`)
-      .join('\n');
-    return `<ol>\n${items}\n</ol>`;
-  });
-
-  // Paragraphs — wrap lines not already in block elements
-  const lines = html.split('\n\n');
-  html = lines.map(block => {
-    block = block.trim();
-    if (!block) return '';
-    if (/^<(h[1-6]|pre|ul|ol|li|hr|div|blockquote|table|img)/.test(block)) return block;
-    return `<p>${block}</p>`;
-  }).join('\n\n');
-
-  return html;
+    if (inCode) {
+      if (/^```/.test(t)) {
+        const langAttr = codeLang ? ' class="lang-' + codeLang + '"' : '';
+        out.push('<pre><code' + langAttr + '>' + esc(codeBuf.join('\n') + '\n') + '</code></pre>');
+        codeBuf = []; inCode = false; codeLang = '';
+      } else {
+        codeBuf.push(lines[i]);
+      }
+      continue;
+    }
+    if (/^```(\w*)/.test(t)) { flushPara(); inCode = true; codeLang = t.match(/^```(\w*)/)[1] || ''; codeBuf = []; continue; }
+    if (t === '') { flushPara(); continue; }
+    if (/^#{1,4} /.test(t)) {
+      flushPara();
+      const level = t.match(/^#+/)[0].length;
+      out.push('<h' + level + '>' + inline(t.replace(/^#+\s*/, '')) + '</h' + level + '>');
+    } else if (/^[-*] /.test(t)) {
+      flushPara();
+      const items = [];
+      while (i < lines.length && /^[-*] /.test(lines[i].trim())) {
+        items.push('<li>' + inline(lines[i].trim().replace(/^[-*]\s*/, '')) + '</li>');
+        i++;
+      }
+      i--;
+      out.push('<ul>\n' + items.join('\n') + '\n</ul>');
+    } else if (/^\d+\. /.test(t)) {
+      flushPara();
+      const items = [];
+      while (i < lines.length && /^\d+\. /.test(lines[i].trim())) {
+        items.push('<li>' + inline(lines[i].trim().replace(/^\d+\.\s*/, '')) + '</li>');
+        i++;
+      }
+      i--;
+      out.push('<ol>\n' + items.join('\n') + '\n</ol>');
+    } else if (/^---+$/.test(t) || /^\*\*\*+$/.test(t)) {
+      flushPara();
+      out.push('<hr>');
+    } else if (/^> /.test(t)) {
+      flushPara();
+      out.push('<blockquote>' + inline(t.replace(/^>\s*/, '')) + '</blockquote>');
+    } else {
+      para.push(lines[i].trim());
+    }
+  }
+  if (inCode) out.push('<pre><code>' + esc(codeBuf.join('\n') + '\n') + '</code></pre>');
+  flushPara();
+  return out.join('\n\n');
 }
 
 function readingTime(text) {
@@ -171,7 +198,7 @@ function generatePostHTML(post) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>${escapeHTML(post.meta_title || post.title)}</title>
+<title>${escapeHTML(post.title)}</title>
 <meta name="description" content="${escapeHTML(post.meta_description || '')}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="${canonical}">
@@ -195,8 +222,9 @@ ${post.tags ? post.tags.map(t => `<meta property="article:tag" content="${escape
 <meta name="theme-color" content="#060708">
 <link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="icon" href="/assets/logo.png" type="image/png">
-<link rel="stylesheet" href="/assets/fonts/inter.css">
-<link rel="stylesheet" href="/assets/shared-design.css">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=11">
+<link rel="stylesheet" href="/assets/css/article.css">
 
 <script type="application/ld+json">
 ${JSON.stringify({
@@ -248,92 +276,14 @@ ${JSON.stringify({
 }, null, 2)}
 </script>
 
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{font-size:16px;scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100dvh;line-height:1.7;-webkit-font-smoothing:antialiased}
-
-nav{position:sticky;top:0;z-index:100;background:rgba(7,8,9,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
-.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
-.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:600;font-size:16px}
-.nav-logo img{width:24px;height:24px}
-.nav-links{display:flex;align-items:center;gap:16px;list-style:none}
-.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .15s}
-.nav-links a:hover{color:var(--text-primary)}
-.nav-links a.active{color:var(--accent-light)}
-.nav-cta{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:500;border:1px solid var(--border-accent);transition:background 0.15s}
-.nav-cta:hover{background:var(--accent-hover)}
-
-.article-container{max-width:760px;margin:0 auto;padding:48px 24px 80px}
-
-.article-breadcrumb{font-size:13px;color:var(--text-tertiary);margin-bottom:24px}
-.article-breadcrumb a{color:var(--text-secondary);text-decoration:none}
-.article-breadcrumb a:hover{color:var(--accent-light)}
-.article-breadcrumb .sep{margin:0 8px;opacity:0.4}
-
-.article-hero-title{font-size:clamp(28px,5.5vw,42px);font-weight:800;letter-spacing:-0.035em;line-height:1.12;margin-bottom:0}
-
-.article-meta-bar{display:flex;align-items:center;gap:0;margin:16px 0 24px;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.article-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);padding:0 16px;border-right:1px solid var(--border)}
-.article-meta-item:first-child{padding-left:0}
-.article-meta-item:last-child{border-right:none}
-.article-meta-item svg{width:14px;height:14px;opacity:0.5;flex-shrink:0}
-.article-meta-item .accent{color:var(--accent-light)}
-
-.article-divider{width:48px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--teal));margin:0 0 32px}
-
-.article-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
-.article-tag{display:inline-block;padding:3px 12px;border-radius:var(--radius-full);background:var(--accent-soft);color:var(--accent-light);font-size:11px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase}
-
-.article-cover{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:36px;border:1px solid var(--border)}
-
-.article-body{font-size:15.5px;line-height:1.85}
-.article-body h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:48px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--text-primary)}
-.article-body h3{font-size:17px;font-weight:600;margin:32px 0 10px;color:var(--text-primary)}
-.article-body h4{font-size:15px;font-weight:600;margin:24px 0 8px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
-.article-body p{color:var(--text-secondary);margin-bottom:18px}
-.article-body a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(201,133,58,0.3)}
-.article-body a:hover{color:var(--accent-hover);text-decoration-color:var(--accent)}
-.article-body strong{color:var(--text-primary);font-weight:600}
-.article-body em{font-style:italic}
-.article-body ul,.article-body ol{color:var(--text-secondary);padding-left:24px;margin-bottom:18px}
-.article-body li{margin-bottom:6px}
-.article-body li::marker{color:var(--accent)}
-.article-body code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:13px;background:rgba(228,174,93,0.08);color:var(--accent-light);padding:2px 6px;border-radius:4px}
-.article-body pre{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;overflow-x:auto;margin-bottom:24px;font-size:13px;line-height:1.6}
-.article-body pre code{background:transparent;color:var(--text-secondary);padding:0;font-size:13px}
-.article-body img{max-width:100%;height:auto;border-radius:var(--radius-md);margin:24px 0;border:1px solid var(--border)}
-.article-body blockquote{border-left:3px solid var(--accent);background:var(--bg-surface);padding:16px 20px;margin:24px 0;border-radius:0 var(--radius-md) var(--radius-md) 0;color:var(--text-secondary);font-style:italic}
-.article-body blockquote p:last-child{margin-bottom:0}
-.article-body hr{border:none;height:1px;background:var(--border);margin:40px 0}
-
-.article-body .drop-cap::first-letter{float:left;font-size:3.2em;line-height:0.8;padding-right:8px;padding-top:4px;color:var(--accent-light);font-weight:700}
-
-.article-footer{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s}
-.back-link:hover{color:var(--accent-light)}
-.share-links{display:flex;gap:8px}
-.share-link{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--bg-surface);border:1px solid var(--border);color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:border-color .2s,color .2s}
-.share-link:hover{border-color:var(--border-medium);color:var(--text-primary)}
-
-footer{border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-tertiary);font-size:13px}
-footer a{color:var(--text-secondary);text-decoration:underline}
-
-@media(max-width:640px){
-  .article-container{padding:32px 16px 48px}
-  .article-meta-bar{flex-wrap:wrap;gap:8px;padding:12px 0}
-  .article-meta-item{border-right:none;padding:0 12px 0 0}
-  .article-footer{flex-direction:column;align-items:flex-start}
-  .nav-cta span.nav-label{display:none}
-}
-</style>
 ${AIF_POPUP}
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-<nav>
+<nav aria-label="Primary navigation">
   <div class="nav-inner">
-    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="">ReLU.chat</a>
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
     <ul class="nav-links">
       <li><a href="/#features">Features</a></li>
       <li><a href="/#showcase">Chat</a></li>
@@ -344,6 +294,7 @@ ${AIF_POPUP}
   </div>
 </nav>
 
+<main id="main-content">
 <article class="article-container">
   <div class="article-breadcrumb">
     <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>${escapeHTML(post.title)}</span>
@@ -388,10 +339,11 @@ ${AIF_POPUP}
     </div>
   </div>
 </article>
+</main>
 
 <footer>
   <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
-  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
 </footer>
 
 ${GUMROAD_WIDGET}
@@ -475,6 +427,7 @@ function generateIndexHTML(posts) {
 <meta name="description" content="Technical articles about on-device AI, browser-based chatbots, NLP, reinforcement learning, and privacy-first machine learning from the ReLU.chat team.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="${SITE_URL}/blog/">
+<link rel="alternate" type="application/rss+xml" title="ReLU.chat Blog" href="${SITE_URL}/blog/feed.xml">
 
 <meta property="og:title" content="Blog — ReLU.chat">
 <meta property="og:description" content="Technical articles about on-device AI, browser-based chatbots, NLP, and privacy-first ML.">
@@ -490,8 +443,9 @@ function generateIndexHTML(posts) {
 <meta name="theme-color" content="#060708">
 <link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="icon" href="/assets/logo.png" type="image/png">
-<link rel="stylesheet" href="/assets/fonts/inter.css">
-<link rel="stylesheet" href="/assets/shared-design.css">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=11">
+<link rel="stylesheet" href="/assets/css/blog-index.css">
 
 <script type="application/ld+json">
 ${JSON.stringify({
@@ -525,115 +479,14 @@ ${JSON.stringify({
 }, null, 2)}
 </script>
 
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{font-size:16px;scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100dvh;line-height:1.7;-webkit-font-smoothing:antialiased}
-
-nav{position:sticky;top:0;z-index:100;background:rgba(7,8,9,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
-.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
-.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:600;font-size:16px}
-.nav-logo img{width:24px;height:24px}
-.nav-links{display:flex;align-items:center;gap:16px;list-style:none}
-.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .15s}
-.nav-links a:hover{color:var(--text-primary)}
-.nav-links a.active{color:var(--accent-light)}
-.nav-cta{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:500;border:1px solid var(--border-accent);transition:background 0.15s}
-.nav-cta:hover{background:var(--accent-hover)}
-
-.blog-container{max-width:940px;margin:0 auto;padding:48px 24px 80px}
-
-.blog-hero{margin-bottom:40px;position:relative}
-.blog-hero-top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
-.blog-hero h1{font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;margin-bottom:8px}
-.blog-hero-sub{color:var(--text-secondary);font-size:16px;max-width:560px;line-height:1.6}
-.blog-hero-accent{width:48px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--teal));margin:16px 0 0}
-.blog-hero-stats{display:flex;gap:20px;margin-top:16px}
-.blog-hero-stat{font-size:12px;color:var(--text-tertiary);letter-spacing:0.02em}
-.blog-hero-stat strong{color:var(--text-secondary);font-weight:600}
-
-.featured-card{display:block;text-decoration:none;margin-bottom:40px;position:relative}
-.featured-card-inner{display:grid;grid-template-columns:1fr 280px;gap:0;border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;background:var(--bg-elevated);transition:border-color .3s,box-shadow .3s}
-.featured-card:hover .featured-card-inner{border-color:var(--border-strong);box-shadow:0 12px 48px rgba(0,0,0,0.3)}
-.featured-card-content{padding:36px 32px;display:flex;flex-direction:column;justify-content:center}
-.featured-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-light);margin-bottom:12px;background:var(--accent-soft);padding:3px 10px;border-radius:var(--radius-full);width:fit-content}
-.featured-tags{display:flex;gap:6px;margin-bottom:12px}
-.featured-title{font-size:clamp(22px,3vw,28px);font-weight:800;letter-spacing:-0.03em;line-height:1.2;margin-bottom:12px;color:var(--text-primary)}
-.featured-excerpt{font-size:14.5px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;max-width:480px}
-.featured-meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-tertiary);margin-bottom:16px}
-.featured-dot{width:3px;height:3px;border-radius:50%;background:var(--text-tertiary);opacity:0.5}
-.featured-cta{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-light);transition:gap .2s}
-.featured-card:hover .featured-cta{gap:10px}
-.featured-arrow{transition:transform .2s}
-.featured-card:hover .featured-arrow{transform:translateX(3px)}
-
-.featured-visual{position:relative;overflow:hidden;background:var(--bg-surface)}
-.featured-cover-img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-.featured-card:hover .featured-cover-img{transform:scale(1.04)}
-.featured-visual-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.featured-visual-orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.15}
-.featured-orb-1{width:200px;height:200px;background:var(--accent);top:-40px;right:-40px}
-.featured-orb-2{width:160px;height:160px;background:var(--teal);bottom:-30px;left:-20px}
-.featured-visual-icon{position:relative;z-index:1}
-.featured-visual-icon svg{width:64px;height:64px;color:var(--accent-light);opacity:0.25}
-
-.filter-bar{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap;align-items:center}
-.filter-label{font-size:12px;color:var(--text-tertiary);font-weight:500;margin-right:4px;letter-spacing:0.03em;text-transform:uppercase}
-.filter-pill{display:inline-flex;align-items:center;padding:5px 14px;border-radius:var(--radius-full);background:var(--bg-surface);border:1px solid var(--border);color:var(--text-secondary);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;font-family:var(--font)}
-.filter-pill:hover{border-color:var(--border-medium);color:var(--text-primary);background:var(--bg-surface-hover)}
-.filter-pill.active{background:var(--accent-soft);border-color:var(--border-accent);color:var(--accent-light)}
-
-.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
-
-.blog-card{position:relative;display:flex;flex-direction:column;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;text-decoration:none;transition:border-color .25s,box-shadow .25s,transform .25s;animation:cardIn .5s ease both;animation-delay:calc(var(--card-idx,0)*.08s)}
-.blog-card:hover{border-color:var(--border-strong);box-shadow:0 8px 32px rgba(0,0,0,0.25);transform:translateY(-3px)}
-.blog-card-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--teal));opacity:0;transition:opacity .25s}
-.blog-card:hover .blog-card-accent{opacity:1}
-
-.blog-card-img{width:100%;height:160px;overflow:hidden;position:relative}
-.blog-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-.blog-card:hover .blog-card-img img{transform:scale(1.04)}
-.blog-card-img-placeholder{display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,rgba(201,133,58,0.08) 0%,var(--bg-surface) 40%,rgba(65,125,151,0.06) 100%);border-bottom:1px solid var(--border)}
-.blog-card-placeholder-pattern{position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(201,133,58,0.06) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(65,125,151,0.05) 0%,transparent 40%);opacity:1}
-.blog-card-placeholder-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:2px}
-.blog-card-date-big{font-size:38px;font-weight:800;color:var(--accent);opacity:0.18;line-height:1;letter-spacing:-0.03em}
-.blog-card-date-month{font-size:10px;font-weight:700;letter-spacing:0.12em;color:var(--text-tertiary);opacity:0.5}
-
-.blog-card-body{padding:18px 20px;flex:1;display:flex;flex-direction:column}
-.blog-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.blog-card-tags{display:flex;gap:6px}
-.blog-card-read{font-size:11px;color:var(--text-tertiary);font-weight:500}
-.blog-card-title{font-size:17px;font-weight:700;letter-spacing:-0.02em;color:var(--text-primary);margin-bottom:8px;line-height:1.35}
-.blog-card-excerpt{font-size:13.5px;color:var(--text-secondary);line-height:1.65;flex:1;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.blog-card-meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-tertiary)}
-.blog-card-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--text-tertiary);opacity:0.5}
-
-.blog-empty{text-align:center;padding:80px 24px;color:var(--text-tertiary)}
-.blog-empty h2{font-size:20px;color:var(--text-secondary);margin-bottom:8px}
-
-footer{border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-tertiary);font-size:13px}
-footer a{color:var(--text-secondary);text-decoration:underline}
-
-@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-
-@media(max-width:640px){
-  .blog-container{padding:32px 16px 48px}
-  .blog-grid{grid-template-columns:1fr}
-  .featured-card-inner{grid-template-columns:1fr}
-  .featured-visual{height:120px}
-  .featured-card-content{padding:24px 20px}
-  .blog-hero-top{flex-direction:column;align-items:flex-start}
-  .blog-newsletter-form{flex-direction:column}
-  .nav-cta span.nav-label{display:none}
-}
-</style>
 ${AIF_POPUP}
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-<nav>
+<nav aria-label="Primary navigation">
   <div class="nav-inner">
-    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="">ReLU.chat</a>
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
     <ul class="nav-links">
       <li><a href="/#features">Features</a></li>
       <li><a href="/#showcase">Chat</a></li>
@@ -644,7 +497,7 @@ ${AIF_POPUP}
   </div>
 </nav>
 
-<div class="blog-container">
+<main id="main-content" class="blog-container">
   <div class="blog-hero">
     <div class="blog-hero-top">
       <div>
@@ -669,11 +522,11 @@ ${AIF_POPUP}
 
   ${remaining.length > 0 ? `<div class="blog-grid">${cardsHTML}</div>` : (posts.length === 0 ? `<div class="blog-empty"><h2>No posts yet</h2><p>Check back soon for technical articles and updates.</p></div>` : '')}
 
-</div>
+</main>
 
 <footer>
   <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
-  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a></p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
 </footer>
 
 <script>
@@ -765,6 +618,9 @@ ${urls}
 }
 
 function generateRobotsTxt() {
+  // AI-agent friendly: allow AI crawlers and browser-based AI assistants.
+  // Note: Cloudflare can still inject its own managed block above this file
+  // at the edge (dashboard setting) - that is outside this repo's control.
   return `User-agent: *
 Allow: /
 Disallow: /api/
@@ -775,131 +631,152 @@ Disallow: /policy/
 Disallow: /assets/models/
 Disallow: /_backups/
 
+# AI crawlers / assistants (content may be read and cited)
 User-agent: GPTBot
 Allow: /
-Allow: /blog/
-Allow: /how-it-works.html
-
+User-agent: ChatGPT-User
+Allow: /
 User-agent: ClaudeBot
 Allow: /
-Allow: /blog/
-Allow: /how-it-works.html
-
 User-agent: PerplexityBot
 Allow: /
-Allow: /blog/
-Allow: /how-it-works.html
-
-User-agent: Googlebot
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot
+Allow: /
+User-agent: cohere-ai
+Allow: /
+User-agent: ai2bot
+Allow: /
+User-agent: Meta-ExternalAgent
 Allow: /
 
+# General search engines
+User-agent: Googlebot
+Allow: /
 User-agent: Bingbot
+Allow: /
+User-agent: DuckDuckBot
 Allow: /
 
 Sitemap: ${SITE_URL}/sitemap.xml
 `;
 }
 
-function generateLLMsTxt() {
+function generateLLMsTxt(posts) {
+  const chatLines = [
+    ['Game Theory Chat', 'https://relu.chat/chat/game-theory-chat/', "On-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma and 55+ topics with LaTeX math."],
+    ['Golden Age Inquiry', 'https://relu.chat/chat/golden-age-inquiry/', 'On-device assistant for the science and philosophy of the Islamic Golden Age (8th-14th centuries): algebra, optics, astronomy, medicine.'],
+    ['Data Science Chat', 'https://relu.chat/chat/data-science-chat/', 'On-device assistant for data science and ML: pandas, NumPy, statistics, classification, regression, clustering.'],
+  ].map(([t, u, d]) => `- [${t}](${u}) — ${d}`).join('\n');
+
   return `# ReLU.chat
 
 > Free, browser-based, privacy-first open-source chatbots that run entirely in your browser. No servers, no LLMs, no tracking.
 
 ## Overview
 
-ReLU.chat is an open-source platform for interactive on-device chatbots. All NLP processing happens in the browser using quantized ONNX models (~22MB). The system uses sentence transformers for 384-dimensional embeddings, BM25 sparse retrieval, dense cosine similarity, and a reinforcement-learning-trained MLP policy network.
+ReLU.chat is an open-source platform for interactive on-device chatbots. All NLP processing happens in the browser using a quantized ONNX sentence-transformer (all-MiniLM-L6-v2, 384-dim, ~22MB), field-weighted BM25 sparse retrieval, dense-sparse ensemble ranking, and a reinforcement-learning-trained MLP policy network. No data ever leaves the device.
 
 ## Key Pages
 
 - [Home](https://relu.chat/) — Landing page with feature overview
 - [How It Works](https://relu.chat/how-it-works.html) — Full technical architecture
-- [Blog](https://relu.chat/blog/) — Technical articles on on-device AI and NLP
+- [Blog](https://relu.chat/blog/) — Technical articles on on-device AI and NLP (${posts.length} posts)
+
+## Chatbots (try them in your browser)
+
+${chatLines}
 
 ## Architecture
 
 - **Embedding**: all-MiniLM-L6-v2 (quantized ONNX, 384-dim)
-- **Retrieval**: BM25 sparse + dense cosine similarity ensemble
-- **Policy**: MLP 25→128→64→6 action heads, RL-trained
-- **Runtime**: Pure browser JavaScript, WebAssembly, ONNX Runtime
+- **Retrieval**: BM25 sparse (k1=1.5, b=0.75, field-weighted + bigrams) + dense cosine ensemble
+- **Policy**: MLP 25->128->64->6 action heads (~13K params), RL-trained (REINFORCE), int8-quantized
+- **Runtime**: Pure browser JavaScript, WebAssembly, ONNX Runtime, Web Workers
 - **Storage**: Client-side only (IndexedDB, no server state)
 
 ## Source Code
 
-GitHub: https://github.com/yunusemrejr/relu-chat
-License: MIT
+GitHub: https://github.com/yunusemrejr/relu-chat (MIT license)
 
 ## Contact
 
-For questions about the project, visit the GitHub repository.
+For questions, open an issue on GitHub or visit the repository.
 `;
 }
 
-function generateLLMsFullTxt() {
-  return `# ReLU.chat — Full Documentation
+function generateLLMsFullTxt(posts) {
+  const sortedPosts = (posts || []).slice().sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+  const blogList = sortedPosts.map(p => {
+    const d = new Date(p.published_at).toISOString().split('T')[0];
+    const excerpt = (p.excerpt || p.meta_description || '').replace(/\n/g, ' ').trim();
+    return `- ${d} — [${p.title}](https://relu.chat/blog/${p.slug}/) — ${excerpt}`;
+  }).join('\n');
+
+  return `# ReLU.chat — Full Documentation for AI Agents
 
 > Free, browser-based, privacy-first open-source chatbots. No servers, no LLMs, no tracking.
+> Everything below is factual and verified against the repository at https://github.com/yunusemrejr/relu-chat (MIT license).
 
 ## What is ReLU.chat?
 
-ReLU.chat is an open-source platform for building and running interactive chatbots entirely in the browser. Unlike cloud-based AI services, ReLU.chat processes all natural language locally using quantized ONNX models, ensuring complete privacy and zero data transmission to external servers.
+ReLU.chat is an open-source platform for building and running interactive chatbots entirely in the browser. All natural language processing happens locally on the user's device using a quantized ONNX sentence-transformer model plus classical retrieval and a small reinforcement-learned policy network. Conversations never leave the browser: there are no servers, no API keys, no LLM calls, and no telemetry.
 
-## Technical Architecture
+## Try it (runs 100% client-side, no install)
 
-### Embedding Layer
-The system uses the all-MiniLM-L6-v2 sentence transformer model, quantized to ONNX format (~22MB). It converts user queries and knowledge-base entries into 384-dimensional dense vectors for semantic similarity computation.
+- [Game Theory Chat](https://relu.chat/chat/game-theory-chat/) — on-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma, 55+ topics, LaTeX math.
+- [Golden Age Inquiry](https://relu.chat/chat/golden-age-inquiry/) — on-device assistant for the scientific and philosophical discoveries of the Islamic Golden Age (8th-14th centuries).
+- [Data Science Chat](https://relu.chat/chat/data-science-chat/) — on-device assistant for data science and ML: pandas, NumPy, statistics, classification, clustering, evaluation.
+- [Interactive ML Tools](https://relu.chat/tools/) — neural network explorer, gradient descent lab, backpropagation visualizer, all in the browser.
 
-### Signal Layer
-A multi-signal retrieval system combines:
-- **BM25 sparse retrieval**: Term-frequency based matching against the knowledge base
-- **Dense cosine similarity**: Semantic matching via embedding vectors
-- **Entity extraction**: Named entity recognition and boosting
-- **Intent classification**: Temperature-calibrated intent scoring
-- **Follow-up detection**: Context-aware follow-up query handling
+## How it works (full pipeline)
 
-All signals are fused into a 25-feature decision packet.
+1. **Progressive loading** — a heuristic/BOW fallback answers the very first turns instantly while the ~22MB quantized MiniLM ONNX model and knowledge-base embeddings stream in the background (service worker pre-caches them). The full dense pipeline hot-swaps automatically when ready. Query embeddings are memoized and top-k ranking is bounded (no full sort).
+2. **Embedding** — queries and KB entries are embedded into 384-dimensional vectors by all-MiniLM-L6-v2 (quantized ONNX, running via ONNX Runtime/transformers.js).
+3. **Signal layer** — field-weighted BM25 sparse retrieval (k1=1.5, b=0.75; entry names repeated 3x, aliases 2x; bigram phrase matching), dense cosine similarity, fuzzy entity extraction (Levenshtein + word-overlap + notation patterns), and temperature-calibrated intent classification (19 prototypes per intent, 70/30 best-vs-average) are fused into a 25-feature decision packet. Explicit topic corrections ("I meant X") force the corrected topic to the top.
+4. **Policy network** — a ~13K-parameter MLP (25 inputs -> 128 -> 64 -> 6 action heads: mode, intent, topic count, fragment count, creativity, tone) trained with REINFORCE decides how to respond. Weights are auto-quantized to int8 at construction (~4x memory reduction). A 15-threshold heuristic fallback guarantees the system always works, even during cold start.
+5. **Composition** — responses are assembled from knowledge-base fragments (def/int/ex/form/app categories with truth/source confidence, difficulty, style, avoid-with constraints) using linguistic connectors, comparison openers, and session-aware diversity penalties.
+6. **Rendering** — KaTeX renders LaTeX math; progressive streaming rendering reveals responses in ~40-char chunks; session memory keeps up to 30 turns of context with importance-based eviction and an EMA summary vector (alpha=0.75).
 
-### Policy Network
-A multi-layer perceptron (MLP) with architecture 25→128→64→6 action heads, trained via reinforcement learning. The policy decides how to compose responses from fragment-based knowledge entries. Action heads control:
-- Fragment selection strategy
-- Response length and detail level
-- Connector and transition usage
-- Confidence scoring
-- Creative vs. factual balance
-- Follow-up prompt generation
+## Privacy guarantees
 
-### Fragment Composition
-Responses are composed from knowledge-base fragments connected by linguistic connectors. The system supports LaTeX rendering (via KaTeX), code blocks, and structured data presentation.
+- Zero data leaves the browser: no accounts, no cookies, no tracking, no server processing.
+- Offline capable after first load (PWA + service worker pre-caches model and policy weights).
+- Storage is client-side only (IndexedDB).
 
-### Heuristic Fallback
-When the MLP is unavailable (cold start, weight load failure), a parameterized heuristic system provides fallback behavior using 15 decision thresholds.
+## Performance characteristics
 
-## Key Features
-
-1. **Complete Privacy**: Zero data leaves the browser. No API calls, no telemetry, no tracking.
-2. **Offline Capable**: Works without internet after initial load (PWA with service worker).
-3. **Fast Response**: Sub-100ms inference using quantized ONNX models.
-4. **Interactive Visualizations**: Built-in tools for data science, game theory, and more.
-5. **Extensible Knowledge Base**: Add custom fragments to create domain-specific chatbots.
-6. **Reinforcement Learning**: Continuously improving response quality through RL training.
-
-## Source Code Structure
-
-- \`core/\` — NLP engine, chatbot engine, session memory, BM25 scorer, signal layer
-- \`policy/\` — Feature extractor, MLP inference, action schema, policy runtime
-- \`chat/\` — Individual chatbot implementations (data science, game theory, etc.)
-- \`data/\` — Knowledge base fragments, bot configurations, manifest
-- \`dev/scripts/\` — PyTorch training, weight export, prompt augmentation
-- \`assets/\` — Models, fonts, styles, shared design system
+- Sub-100ms inference on typical hardware with quantized ONNX models.
+- Service-worker pre-caching gives zero-wait chatbot startup on repeat visits.
+- All thresholds centralized in config; LRU caches, query memoization, and pre-built BM25 IDF keep retrieval fast.
 
 ## Blog
 
-Technical articles and updates are published at https://relu.chat/blog/
+${sortedPosts.length} technical articles at https://relu.chat/blog/ (RSS: https://relu.chat/blog/feed.xml):
 
-## Links
+${blogList || '- (no posts yet)'}
 
-- Source: https://github.com/yunusemrejr/relu-chat
+## Books (by the same author, Gumroad)
+
+- [Fringe Learning: Resource-Efficient RL for Edge ML](https://elroystar8.gumroad.com/l/ecvuf) — practical reinforcement learning methods for resource-constrained edge machine learning.
+- [AI & Financial Freedom](https://elroystar8.gumroad.com/l/ai-freedom) — a step-by-step guide to mastering AI tools and workflows for financial independence in the age of AI.
+- More books: https://elroystar8.gumroad.com/
+
+## Source code
+
+- GitHub: https://github.com/yunusemrejr/relu-chat
 - License: MIT
-- How It Works: https://relu.chat/how-it-works.html
+- Author: Yunus Emre Vurgun (https://yunusemrevurgun.com)
+
+## Repository layout
+
+- core/ — NLP engine, chatbot engine, session memory, BM25 scorer, signal layer, UI
+- policy/ — feature extractor, MLP inference, action schema, policy runtime
+- chat/ — individual chatbots (game theory, golden age, data science)
+- data/ — knowledge-base fragments, bot configurations, manifest
+- assets/ — models, fonts, shared design system
+- dev/scripts/ — PyTorch training, weight export, prompt augmentation
 `;
 }
 

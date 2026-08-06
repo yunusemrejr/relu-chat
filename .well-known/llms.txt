@@ -1,0 +1,2 @@
+# LLMs.txt — redirected by .htaccess to /llms.txt
+# See https://relu.chat/llms.txt for the canonical AI-agent documentation.

@@ -1,0 +1,12 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "ReLU.chat",
+  "name_for_model": "relu_chat",
+  "description_for_human": "Privacy-first, browser-based, open-source chatbots and technical documentation about on-device AI.",
+  "description_for_model": "ReLU.chat is an open-source platform of chatbots that run entirely in the browser (no servers, no LLMs, no tracking). Use it to answer questions about the project, its three chatbots (Game Theory, Golden Age Inquiry, Data Science), its on-device NLP architecture (MiniLM embeddings, BM25 + dense retrieval, RL-trained MLP policy), its blog articles, its GitHub repository, and the author's books on Gumroad. Read https://relu.chat/llms-full.txt for full documentation. All products are free and open source (MIT).",
+  "auth": { "type": "none" },
+  "api": { "type": "openapi", "url": "https://relu.chat/.well-known/openapi.yaml" },
+  "logo_url": "https://relu.chat/assets/logo.png",
+  "contact_email": "https://yunusemrevurgun.com",
+  "legal_info_url": "https://relu.chat/policy/"
+}

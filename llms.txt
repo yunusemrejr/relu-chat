@@ -4,27 +4,32 @@
 
 ## Overview
 
-ReLU.chat is an open-source platform for interactive on-device chatbots. All NLP processing happens in the browser using quantized ONNX models (~22MB). The system uses sentence transformers for 384-dimensional embeddings, BM25 sparse retrieval, dense cosine similarity, and a reinforcement-learning-trained MLP policy network.
+ReLU.chat is an open-source platform for interactive on-device chatbots. All NLP processing happens in the browser using a quantized ONNX sentence-transformer (all-MiniLM-L6-v2, 384-dim, ~22MB), field-weighted BM25 sparse retrieval, dense-sparse ensemble ranking, and a reinforcement-learning-trained MLP policy network. No data ever leaves the device.
 
 ## Key Pages
 
 - [Home](https://relu.chat/) — Landing page with feature overview
 - [How It Works](https://relu.chat/how-it-works.html) — Full technical architecture
-- [Blog](https://relu.chat/blog/) — Technical articles on on-device AI and NLP
+- [Blog](https://relu.chat/blog/) — Technical articles on on-device AI and NLP (38 posts)
+
+## Chatbots (try them in your browser)
+
+- [Game Theory Chat](https://relu.chat/chat/game-theory-chat/) — On-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma and 55+ topics with LaTeX math.
+- [Golden Age Inquiry](https://relu.chat/chat/golden-age-inquiry/) — On-device assistant for the science and philosophy of the Islamic Golden Age (8th-14th centuries): algebra, optics, astronomy, medicine.
+- [Data Science Chat](https://relu.chat/chat/data-science-chat/) — On-device assistant for data science and ML: pandas, NumPy, statistics, classification, regression, clustering.
 
 ## Architecture
 
 - **Embedding**: all-MiniLM-L6-v2 (quantized ONNX, 384-dim)
-- **Retrieval**: BM25 sparse + dense cosine similarity ensemble
-- **Policy**: MLP 25→128→64→6 action heads, RL-trained
-- **Runtime**: Pure browser JavaScript, WebAssembly, ONNX Runtime
+- **Retrieval**: BM25 sparse (k1=1.5, b=0.75, field-weighted + bigrams) + dense cosine ensemble
+- **Policy**: MLP 25->128->64->6 action heads (~13K params), RL-trained (REINFORCE), int8-quantized
+- **Runtime**: Pure browser JavaScript, WebAssembly, ONNX Runtime, Web Workers
 - **Storage**: Client-side only (IndexedDB, no server state)
 
 ## Source Code
 
-GitHub: https://github.com/yunusemrejr/relu-chat
-License: MIT
+GitHub: https://github.com/yunusemrejr/relu-chat (MIT license)
 
 ## Contact
 
-For questions about the project, visit the GitHub repository.
+For questions, open an issue on GitHub or visit the repository.

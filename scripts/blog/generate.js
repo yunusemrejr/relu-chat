@@ -66,12 +66,12 @@ function generate() {
   console.log('Generated: blog/robots.txt');
 
   // Generate llms.txt
-  const llmsTxt = engine.generateLLMsTxt();
+  const llmsTxt = engine.generateLLMsTxt(posts);
   fs.writeFileSync(path.join(BLOG_OUT, 'llms.txt'), llmsTxt);
   console.log('Generated: blog/llms.txt');
 
   // Generate llms-full.txt
-  const llmsFullTxt = engine.generateLLMsFullTxt();
+  const llmsFullTxt = engine.generateLLMsFullTxt(posts);
   fs.writeFileSync(path.join(BLOG_OUT, 'llms-full.txt'), llmsFullTxt);
   console.log('Generated: blog/llms-full.txt');
 
