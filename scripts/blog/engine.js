@@ -10,6 +10,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '../..');
 const POSTS_DIR = path.join(ROOT, 'content/blog/posts');
 const BLOG_OUT = path.join(ROOT, 'blog');
+const BLOG_ASSETS_DIR = path.join(ROOT, 'assets/blog');
 const SCHEMA_PATH = path.join(__dirname, 'schema.json');
 const SITE_URL = 'https://relu.chat';
 
@@ -41,7 +42,13 @@ function loadAllPosts() {
 function getPublishedPosts() {
   return loadAllPosts()
     .filter(p => p.status === 'published')
-    .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+    .sort((a, b) => {
+      const d = new Date(b.published_at) - new Date(a.published_at);
+      if (d !== 0) return d;
+      const u = new Date(b.updated_at || b.published_at) - new Date(a.updated_at || a.published_at);
+      if (u !== 0) return u;
+      return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+    });
 }
 
 function findBySlug(slug) {
@@ -190,7 +197,7 @@ function generatePostHTML(post) {
   const updatedDate = post.updated_at ? new Date(post.updated_at).toISOString() : publishedDate;
   const ogImage = post.cover_image
     ? (post.cover_image.startsWith('http') ? post.cover_image : `${SITE_URL}/${post.cover_image.replace(/^\//, '')}`)
-    : `${SITE_URL}/assets/logo.png`;
+    : `${SITE_URL}/assets/blog/${post.slug}.svg`;  // generated default thumbnail
   const publishedYear = new Date(post.published_at).getFullYear();
 
   return `<!DOCTYPE html>
@@ -351,6 +358,86 @@ ${GUMROAD_WIDGET}
 </html>`;
 }
 
+function coverSrc(post) {
+  if (post.cover_image) {
+    return post.cover_image.startsWith('http') ? post.cover_image : '/' + post.cover_image.replace(/^\//, '');
+  }
+  // No cover in the post data: fall back to the generated default thumbnail.
+  return `/assets/blog/${post.slug}.svg`;
+}
+
+function hashStr(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function mulberry32(seed) {
+  return function () {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function defaultCoverSvg(post) {
+  // Deterministic, on-brand thumbnail (dark, teal accent) derived from the
+  // slug. Used for every post without a cover_image so cards never show a
+  // bare placeholder. Decorative: alt text is empty in the card markup.
+  const rand = mulberry32(hashStr(post.slug));
+  const tag = (post.tags && post.tags[0] ? post.tags[0] : 'ml').toUpperCase();
+  const W = 1200, H = 630;
+  let shapes = '';
+  const nodes = [];
+  const N = 11;
+  for (let i = 0; i < N; i++) {
+    nodes.push({ x: 60 + rand() * (W - 120), y: 70 + rand() * (H - 170) });
+  }
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < 170 * 170) {
+        const alpha = (0.10 + rand() * 0.14).toFixed(2);
+        shapes += `<line x1="${nodes[i].x.toFixed(0)}" y1="${nodes[i].y.toFixed(0)}" x2="${nodes[j].x.toFixed(0)}" y2="${nodes[j].y.toFixed(0)}" stroke="rgba(20,184,166,${alpha})" stroke-width="1.5"/>`;
+      }
+    }
+  }
+  for (const n of nodes) {
+    shapes += `<circle cx="${n.x.toFixed(0)}" cy="${n.y.toFixed(0)}" r="${(1.5 + rand() * 2.2).toFixed(1)}" fill="rgba(20,184,166,${(0.22 + rand() * 0.25).toFixed(2)})"/>`;
+  }
+  const labelX = Math.round(60 + rand() * 40);
+  const labelY = H - 78;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+  <rect width="${W}" height="${H}" fill="#0d1117"/>
+  <rect x="0" y="0" width="${W}" height="${H}" fill="#151b23" opacity="0.55"/>
+  <g>${shapes}</g>
+  <line x1="${labelX}" y1="${labelY}" x2="${labelX + 96}" y2="${labelY}" stroke="#14b8a6" stroke-width="3"/>
+  <text x="${labelX + 112}" y="${labelY + 10}" font-family="Sora, system-ui, sans-serif" font-size="30" font-weight="600" letter-spacing="7" fill="#f9fafb">${tag}</text>
+  <circle cx="${W - 76}" cy="76" r="5" fill="#14b8a6"/>
+</svg>
+`;
+}
+
+function generateDefaultCovers(posts) {
+  if (!fs.existsSync(BLOG_ASSETS_DIR)) fs.mkdirSync(BLOG_ASSETS_DIR, { recursive: true });
+  let count = 0;
+  for (const post of posts) {
+    if (post.cover_image) continue;
+    const file = path.join(BLOG_ASSETS_DIR, post.slug + '.svg');
+    const svg = defaultCoverSvg(post);
+    if (!fs.existsSync(file) || fs.readFileSync(file, 'utf8') !== svg) {
+      fs.writeFileSync(file, svg);
+      count++;
+    }
+  }
+  return count;
+}
+
 function generateIndexHTML(posts) {
   const totalReadMin = posts.reduce((sum, p) => sum + readingTime(p.content), 0);
   const allTags = [...new Set(posts.flatMap(p => p.tags || []))];
@@ -381,7 +468,7 @@ function generateIndexHTML(posts) {
           <span class="featured-cta">Read article <span class="featured-arrow">&rarr;</span></span>
         </div>
         <div class="featured-visual">
-          ${featured.cover_image ? `<img class="featured-cover-img" src="/${featured.cover_image.replace(/^\//, '')}" alt="${escapeHTML(featured.cover_image_alt || featured.title)}" loading="lazy">` : `<div class="featured-visual-inner"><div class="featured-visual-orb featured-orb-1"></div><div class="featured-visual-orb featured-orb-2"></div><div class="featured-visual-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div></div>`}
+          <img class="featured-cover-img${featured.cover_image ? '' : ' default-thumb'}" src="${coverSrc(featured)}" alt="${escapeHTML(featured.cover_image_alt || featured.title)}" loading="lazy">
         </div>
       </div>
     </a>`;
@@ -391,13 +478,11 @@ function generateIndexHTML(posts) {
     const date = formatDate(post.published_at);
     const excerpt = post.excerpt || (post.meta_description || '').substring(0, 160);
     const readMin = readingTime(post.content);
-    const dateShort = new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const monthNum = String(new Date(post.published_at).getMonth() + 1).padStart(2, '0');
-    const dayNum = String(new Date(post.published_at).getDate()).padStart(2, '0');
+    const isDefaultCover = !post.cover_image;
     return `
     <a href="${href}" class="blog-card" style="--card-idx:${idx}" data-tags="${(post.tags||[]).join(',')}">
       <div class="blog-card-accent"></div>
-      ${post.cover_image ? `<div class="blog-card-img"><img src="/${post.cover_image.replace(/^\//, '')}" alt="${escapeHTML(post.cover_image_alt || post.title)}" loading="lazy"></div>` : `<div class="blog-card-img blog-card-img-placeholder"><div class="blog-card-placeholder-pattern"></div><div class="blog-card-placeholder-inner"><span class="blog-card-date-big">${dayNum}</span><span class="blog-card-date-month">${new Date(post.published_at).toLocaleDateString('en-US', { month: 'short' }).toUpperCase()}</span></div></div>`}
+      <div class="blog-card-img"><img class="${isDefaultCover ? 'default-thumb' : ''}" src="${coverSrc(post)}" alt="" loading="lazy"></div>
       <div class="blog-card-body">
         <div class="blog-card-top">
           ${post.tags && post.tags.length ? `<div class="blog-card-tags">${post.tags.slice(0, 2).map(t => `<span class="article-tag">${escapeHTML(t)}</span>`).join('')}</div>` : ''}
@@ -805,8 +890,12 @@ function escapeHTML(str) {
 }
 
 function formatDate(dateStr) {
+  // Always render in UTC: published_at is an absolute instant, so the
+  // displayed day must not depend on the generator machine's timezone
+  // (a post at 2026-08-06T01:00:00Z would otherwise show as Aug 5 on
+  // UTC-5/UTC-3 machines).
   const d = new Date(dateStr);
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 }
 
 module.exports = {
@@ -815,5 +904,6 @@ module.exports = {
   renderMarkdownLite, generatePostHTML, generateIndexHTML,
   generateRSSFeed, generateSitemap, generateRobotsTxt,
   generateLLMsTxt, generateLLMsFullTxt,
+  generateDefaultCovers, defaultCoverSvg, coverSrc,
   escapeHTML, formatDate, POSTS_DIR, BLOG_OUT, SITE_URL
 };

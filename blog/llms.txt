@@ -10,7 +10,7 @@ ReLU.chat is an open-source platform for interactive on-device chatbots. All NLP
 
 - [Home](https://relu.chat/) — Landing page with feature overview
 - [How It Works](https://relu.chat/how-it-works.html) — Full technical architecture
-- [Blog](https://relu.chat/blog/) — Technical articles on on-device AI and NLP (38 posts)
+- [Blog](https://relu.chat/blog/) — Technical articles on on-device AI and NLP (48 posts)
 
 ## Chatbots (try them in your browser)
 

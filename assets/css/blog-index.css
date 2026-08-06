@@ -327,6 +327,16 @@ nav {
 }
 .blog-card:hover .blog-card-img img { filter: grayscale(100%) contrast(1) brightness(1); }
 
+/* Generated default thumbnails are already dark + teal: don't desaturate them. */
+.blog-card-img img.default-thumb,
+.featured-cover-img.default-thumb {
+  filter: none;
+}
+.blog-card:hover .blog-card-img img.default-thumb,
+.featured-card:hover .featured-cover-img.default-thumb {
+  filter: none;
+}
+
 .blog-card-body {
   padding: var(--space-5);
   flex: 1;

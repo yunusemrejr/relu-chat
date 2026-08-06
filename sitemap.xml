@@ -61,13 +61,73 @@
     
   </url>
   <url>
+    <loc>https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/chunking-strategies-knowledge-base/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/query-expansion-without-llm/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/knowledge-base-fragments-fields-metadata/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
     <loc>https://relu.chat/blog/indexeddb-client-storage/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <lastmod>2026-08-06</lastmod>
   </url>
   <url>
+    <loc>https://relu.chat/blog/float32-vs-float64-precision/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/browser-vector-math-optimization/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/offline-first-chat-architecture/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
     <loc>https://relu.chat/blog/model-size-vs-quality/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/conversation-state-machines/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/debugging-browser-ml/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-08-06</lastmod>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/bias-in-retrieval-chatbots/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <lastmod>2026-08-06</lastmod>

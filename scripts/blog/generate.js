@@ -29,6 +29,10 @@ function generate() {
   const posts = engine.getPublishedPosts();
   console.log(`Found ${posts.length} published posts`);
 
+  // Generate default SVG thumbnails for posts without cover_image
+  const covers = engine.generateDefaultCovers(posts);
+  if (covers > 0) console.log(`Generated ${covers} default cover SVGs`);
+
   if (posts.length === 0) {
     console.log('No published posts. Generating empty blog.');
   }

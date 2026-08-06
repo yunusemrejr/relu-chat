@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0d1117"/>
+  <rect x="0" y="0" width="1200" height="630" fill="#151b23" opacity="0.55"/>
+  <g><line x1="501" y1="256" x2="587" y2="309" stroke="rgba(20,184,166,0.21)" stroke-width="1.5"/><line x1="562" y1="419" x2="587" y2="309" stroke="rgba(20,184,166,0.19)" stroke-width="1.5"/><line x1="562" y1="419" x2="437" y2="491" stroke="rgba(20,184,166,0.19)" stroke-width="1.5"/><line x1="745" y1="255" x2="587" y2="309" stroke="rgba(20,184,166,0.22)" stroke-width="1.5"/><circle cx="501" cy="256" r="3.2" fill="rgba(20,184,166,0.35)"/><circle cx="562" cy="419" r="2.7" fill="rgba(20,184,166,0.31)"/><circle cx="578" cy="95" r="2.8" fill="rgba(20,184,166,0.35)"/><circle cx="261" cy="103" r="1.7" fill="rgba(20,184,166,0.23)"/><circle cx="203" cy="453" r="3.5" fill="rgba(20,184,166,0.44)"/><circle cx="745" cy="255" r="3.3" fill="rgba(20,184,166,0.25)"/><circle cx="301" cy="302" r="1.7" fill="rgba(20,184,166,0.36)"/><circle cx="587" cy="309" r="3.2" fill="rgba(20,184,166,0.36)"/><circle cx="437" cy="491" r="2.7" fill="rgba(20,184,166,0.36)"/><circle cx="1104" cy="158" r="2.0" fill="rgba(20,184,166,0.32)"/><circle cx="1125" cy="329" r="2.9" fill="rgba(20,184,166,0.40)"/></g>
+  <line x1="75" y1="552" x2="171" y2="552" stroke="#14b8a6" stroke-width="3"/>
+  <text x="187" y="562" font-family="Sora, system-ui, sans-serif" font-size="30" font-weight="600" letter-spacing="7" fill="#f9fafb">MEMORY</text>
+  <circle cx="1124" cy="76" r="5" fill="#14b8a6"/>
+</svg>

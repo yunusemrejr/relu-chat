@@ -5,13 +5,63 @@
   <link>https://relu.chat/blog/</link>
   <description>Technical articles about on-device AI, browser-based chatbots, NLP, and privacy-first machine learning.</description>
   <language>en</language>
-  <lastBuildDate>Thu, 06 Aug 2026 12:35:19 GMT</lastBuildDate>
+  <lastBuildDate>Thu, 06 Aug 2026 13:16:22 GMT</lastBuildDate>
   <atom:link href="https://relu.chat/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <image>
     <url>https://relu.chat/assets/logo.png</url>
     <title>ReLU.chat</title>
     <link>https://relu.chat</link>
   </image>
+  <item>
+    <title>Measuring Retrieval Quality: Precision, Recall, MRR and NDCG</title>
+    <link>https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/</guid>
+    <pubDate>Thu, 06 Aug 2026 17:30:00 GMT</pubDate>
+    <description>How to evaluate a knowledge-base retriever with precision, recall, MRR, and NDCG: definitions, worked examples, and a tuning loop for dense/sparse ensembles.</description>
+    <author>ReLU.chat</author>
+    <category>retrieval</category>
+    <category>ndcg</category>
+    <category>mrr</category>
+    <category>evaluation</category>
+  </item>
+  <item>
+    <title>Chunking Strategies for Knowledge Bases: Splitting Text for Retrieval</title>
+    <link>https://relu.chat/blog/chunking-strategies-knowledge-base/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/chunking-strategies-knowledge-base/</guid>
+    <pubDate>Thu, 06 Aug 2026 16:45:00 GMT</pubDate>
+    <description>How chunk size, boundaries, and overlap decide what a knowledge base retriever can find — fixed, overlapping, and structure-aware chunking compared.</description>
+    <author>ReLU.chat</author>
+    <category>chunking</category>
+    <category>retrieval</category>
+    <category>knowledge-base</category>
+    <category>embeddings</category>
+    <category>bm25</category>
+  </item>
+  <item>
+    <title>Query Expansion Without an LLM: Synonyms, Spelling and Boosting</title>
+    <link>https://relu.chat/blog/query-expansion-without-llm/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/query-expansion-without-llm/</guid>
+    <pubDate>Thu, 06 Aug 2026 15:30:00 GMT</pubDate>
+    <description>Improve retrieval without an LLM: index-time alias weighting, query-side synonym expansion, edit-distance spelling correction, and boosting before re-ranking.</description>
+    <author>ReLU.chat</author>
+    <category>query-expansion</category>
+    <category>bm25</category>
+    <category>spelling-correction</category>
+    <category>retrieval</category>
+  </item>
+  <item>
+    <title>How Knowledge Bases Are Structured: Fragments, Fields and Metadata</title>
+    <link>https://relu.chat/blog/knowledge-base-fragments-fields-metadata/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/knowledge-base-fragments-fields-metadata/</guid>
+    <pubDate>Thu, 06 Aug 2026 14:00:00 GMT</pubDate>
+    <description>Knowledge base entries built from categorized fragments, weighted fields, and confidence metadata — and why structure decides retrieval quality.</description>
+    <author>ReLU.chat</author>
+    <category>knowledge-base</category>
+    <category>retrieval</category>
+    <category>metadata</category>
+    <category>bm25</category>
+    <category>rag</category>
+  </item>
   <item>
     <title>IndexedDB for On-Device AI: Storing Embeddings and Session State Locally</title>
     <link>https://relu.chat/blog/indexeddb-client-storage/</link>
@@ -26,6 +76,43 @@
     <category>privacy</category>
   </item>
   <item>
+    <title>Float32 vs Float64: Precision Trade-Offs for In-Browser ML</title>
+    <link>https://relu.chat/blog/float32-vs-float64-precision/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/float32-vs-float64-precision/</guid>
+    <pubDate>Thu, 06 Aug 2026 12:30:00 GMT</pubDate>
+    <description>When to use float32 versus float64 in browser ML: tensors stay float32, accumulators like EMA summaries deserve float64, and int8 quantization shrinks weights.</description>
+    <author>ReLU.chat</author>
+    <category>float32</category>
+    <category>float64</category>
+    <category>precision</category>
+    <category>quantization</category>
+  </item>
+  <item>
+    <title>The Real Cost of Cosine Similarity: Optimizing Vector Math in JavaScript</title>
+    <link>https://relu.chat/blog/browser-vector-math-optimization/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/browser-vector-math-optimization/</guid>
+    <pubDate>Thu, 06 Aug 2026 11:15:00 GMT</pubDate>
+    <description>What cosine similarity actually costs in the browser, and how precomputed norms, typed arrays, bounded top-k, and memoization cut that cost.</description>
+    <author>ReLU.chat</author>
+    <category>performance</category>
+    <category>javascript</category>
+    <category>vectors</category>
+    <category>embeddings</category>
+    <category>retrieval</category>
+  </item>
+  <item>
+    <title>Offline-First Chat Architecture: Queues, Retries and Sync-Free Design</title>
+    <link>https://relu.chat/blog/offline-first-chat-architecture/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/offline-first-chat-architecture/</guid>
+    <pubDate>Thu, 06 Aug 2026 10:00:00 GMT</pubDate>
+    <description>Designing browser chat that works offline: persisted work queues, retries with backoff and idempotency, and sync-free design with one local copy of state.</description>
+    <author>ReLU.chat</author>
+    <category>offline-first</category>
+    <category>service-worker</category>
+    <category>indexeddb</category>
+    <category>chat-architecture</category>
+  </item>
+  <item>
     <title>Model Size vs Quality: Why a Small Distilled Model Can Beat a Big One on Edge Devices</title>
     <link>https://relu.chat/blog/model-size-vs-quality/</link>
     <guid isPermaLink="true">https://relu.chat/blog/model-size-vs-quality/</guid>
@@ -37,6 +124,44 @@
     <category>quantization</category>
     <category>edge-ai</category>
     <category>on-device</category>
+  </item>
+  <item>
+    <title>Conversation State Machines: Modes, Intents and Follow-Up Routing</title>
+    <link>https://relu.chat/blog/conversation-state-machines/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/conversation-state-machines/</guid>
+    <pubDate>Thu, 06 Aug 2026 08:45:00 GMT</pubDate>
+    <description>How modes, intents, and follow-up routing fit together in a conversation state machine, with JavaScript examples and a look at ReLU.chat&#39;s policy.</description>
+    <author>ReLU.chat</author>
+    <category>conversation</category>
+    <category>state-machine</category>
+    <category>intents</category>
+    <category>routing</category>
+    <category>chatbots</category>
+  </item>
+  <item>
+    <title>Debugging In-Browser ML: Profiling, Logging and Graceful Fallbacks</title>
+    <link>https://relu.chat/blog/debugging-browser-ml/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/debugging-browser-ml/</guid>
+    <pubDate>Thu, 06 Aug 2026 07:30:00 GMT</pubDate>
+    <description>Practical techniques for debugging browser-based ML: profiling inference stages, structured on-device logging, and graceful fallback paths.</description>
+    <author>ReLU.chat</author>
+    <category>debugging</category>
+    <category>browser-ml</category>
+    <category>profiling</category>
+    <category>fallbacks</category>
+  </item>
+  <item>
+    <title>Bias in Retrieval Chatbots: Where It Comes From and How to Audit It</title>
+    <link>https://relu.chat/blog/bias-in-retrieval-chatbots/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/bias-in-retrieval-chatbots/</guid>
+    <pubDate>Thu, 06 Aug 2026 06:15:00 GMT</pubDate>
+    <description>Where bias enters retrieval chatbots — corpus, embeddings, term weighting, ranking — and a practical audit procedure for each stage.</description>
+    <author>ReLU.chat</author>
+    <category>bias</category>
+    <category>retrieval</category>
+    <category>evaluation</category>
+    <category>nlp</category>
+    <category>chatbots</category>
   </item>
   <item>
     <title>Privacy Checklist for Browser-Based AI: What Actually Leaves Your Device</title>
@@ -141,136 +266,6 @@
     <category>embeddings</category>
     <category>retrieval</category>
     <category>browser</category>
-  </item>
-  <item>
-    <title>Memory Management in Long Browser Chat Sessions: Avoiding Leaks</title>
-    <link>https://relu.chat/blog/memory-leaks-long-chat-sessions/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/memory-leaks-long-chat-sessions/</guid>
-    <pubDate>Sun, 02 Aug 2026 10:00:00 GMT</pubDate>
-    <description>Keep long browser chat sessions leak-free: bounded buffers, importance-based eviction, compression, and cache discipline.</description>
-    <author>ReLU.chat</author>
-    <category>memory</category>
-    <category>performance</category>
-    <category>chat-sessions</category>
-    <category>eviction</category>
-    <category>browser</category>
-  </item>
-  <item>
-    <title>Service Worker Caching Strategies for ML Assets</title>
-    <link>https://relu.chat/blog/service-worker-caching-strategies/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/service-worker-caching-strategies/</guid>
-    <pubDate>Sun, 02 Aug 2026 10:00:00 GMT</pubDate>
-    <description>Cache-first for immutable model weights, stale-while-revalidate for indexes, versioned caches: a practical guide for browser ML assets.</description>
-    <author>ReLU.chat</author>
-    <category>service-worker</category>
-    <category>caching</category>
-    <category>performance</category>
-    <category>offline</category>
-    <category>on-device</category>
-  </item>
-  <item>
-    <title>Intent Classification with Prototype Embeddings: Zero-Shot Style Without an LLM</title>
-    <link>https://relu.chat/blog/prototype-intent-classification/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/prototype-intent-classification/</guid>
-    <pubDate>Sat, 01 Aug 2026 09:00:00 GMT</pubDate>
-    <description>Classify intents with prototype embeddings and cosine similarity — no LLM, no training data, fully in-browser.</description>
-    <author>ReLU.chat</author>
-    <category>intent-classification</category>
-    <category>embeddings</category>
-    <category>cosine-similarity</category>
-    <category>prototypes</category>
-    <category>zero-shot</category>
-  </item>
-  <item>
-    <title>Subword Tokenization for On-Device NLP: How BPE Works</title>
-    <link>https://relu.chat/blog/tokenization-subword-bpe-on-device/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/tokenization-subword-bpe-on-device/</guid>
-    <pubDate>Sat, 01 Aug 2026 09:00:00 GMT</pubDate>
-    <description>How byte pair encoding (BPE) builds compact subword vocabularies, why it beats word- and character-level tokenizers, and what it means for on-device NLP.</description>
-    <author>ReLU.chat</author>
-    <category>tokenization</category>
-    <category>bpe</category>
-    <category>nlp</category>
-    <category>on-device</category>
-    <category>browser</category>
-  </item>
-  <item>
-    <title>Web Workers: Keeping the UI Thread Responsive During Inference</title>
-    <link>https://relu.chat/blog/web-workers-ui-thread/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/web-workers-ui-thread/</guid>
-    <pubDate>Sat, 01 Aug 2026 09:00:00 GMT</pubDate>
-    <description>Why inference must run off the main thread: transferable buffers, worker pools, and keeping requestAnimationFrame smooth in on-device AI.</description>
-    <author>ReLU.chat</author>
-    <category>web-workers</category>
-    <category>performance</category>
-    <category>browser</category>
-    <category>inference</category>
-    <category>on-device</category>
-  </item>
-  <item>
-    <title>Accessibility in AI Chatbots: WCAG Compliance for Conversational UI</title>
-    <link>https://relu.chat/blog/accessibility-ai-chatbots-wcag/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/accessibility-ai-chatbots-wcag/</guid>
-    <pubDate>Tue, 30 Jun 2026 20:56:02 GMT</pubDate>
-    <description>How to make browser-based chatbots accessible: ARIA landmarks, keyboard navigation, reduced motion, and contrast compliance.</description>
-    <author>ReLU.chat</author>
-    <category>accessibility</category>
-    <category>wcag</category>
-    <category>chat</category>
-    <category>aria</category>
-    <category>inclusive-design</category>
-  </item>
-  <item>
-    <title>Progressive Loading: BOW to MLP to Transformer in 3 Stages</title>
-    <link>https://relu.chat/blog/progressive-loading-bow-mlp-transformer/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/progressive-loading-bow-mlp-transformer/</guid>
-    <pubDate>Tue, 30 Jun 2026 20:56:01 GMT</pubDate>
-    <description>The three-stage loading strategy that gives usable answers instantly while the 22MB transformer model streams in.</description>
-    <author>ReLU.chat</author>
-    <category>loading</category>
-    <category>progressive</category>
-    <category>architecture</category>
-    <category>performance</category>
-    <category>boot</category>
-  </item>
-  <item>
-    <title>Dense-Sparse Ensemble Ranking: Combining BM25 and Embeddings</title>
-    <link>https://relu.chat/blog/dense-sparse-ensemble-ranking/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/dense-sparse-ensemble-ranking/</guid>
-    <pubDate>Tue, 30 Jun 2026 20:55:59 GMT</pubDate>
-    <description>How fusing dense cosine similarity with BM25 sparse scores at 70/30 weights produces better retrieval than either alone.</description>
-    <author>ReLU.chat</author>
-    <category>retrieval</category>
-    <category>ensemble</category>
-    <category>ranking</category>
-    <category>bm25</category>
-    <category>embeddings</category>
-  </item>
-  <item>
-    <title>Topic Correction: When Users Say &#39;No, I Meant X&#39;</title>
-    <link>https://relu.chat/blog/topic-correction-when-users-redirect/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/topic-correction-when-users-redirect/</guid>
-    <pubDate>Tue, 30 Jun 2026 20:55:53 GMT</pubDate>
-    <description>How explicit topic correction detection prevents chatbot topic drift when users redirect the conversation mid-turn.</description>
-    <author>ReLU.chat</author>
-    <category>nlp</category>
-    <category>correction</category>
-    <category>conversation</category>
-    <category>topic</category>
-    <category>chat</category>
-  </item>
-  <item>
-    <title>Follow-Up Detection: 20 Patterns That Make Chatbots Conversational</title>
-    <link>https://relu.chat/blog/follow-up-detection-20-patterns/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/follow-up-detection-20-patterns/</guid>
-    <pubDate>Tue, 30 Jun 2026 20:55:52 GMT</pubDate>
-    <description>How regex pattern matching and heuristic detection handle 20+ follow-up types from &#39;how?&#39; to &#39;tell me more&#39; to emoji-only responses.</description>
-    <author>ReLU.chat</author>
-    <category>nlp</category>
-    <category>follow-up</category>
-    <category>conversation</category>
-    <category>chat</category>
-    <category>patterns</category>
   </item>
 </channel>
 </rss>
