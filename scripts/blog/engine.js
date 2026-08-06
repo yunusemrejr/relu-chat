@@ -204,7 +204,7 @@ function generatePostHTML(post) {
   const updatedDate = post.updated_at ? new Date(post.updated_at).toISOString() : publishedDate;
   const ogImage = post.cover_image
     ? (post.cover_image.startsWith('http') ? post.cover_image : `${SITE_URL}/${post.cover_image.replace(/^\//, '')}`)
-    : `${SITE_URL}/assets/blog/${post.slug}.svg`;  // generated default thumbnail
+    : `${SITE_URL}/assets/blog/${post.slug}.png`;  // generated default thumbnail
   const publishedYear = new Date(post.published_at).getFullYear();
 
   return `<!DOCTYPE html>
@@ -237,7 +237,7 @@ ${post.tags ? post.tags.map(t => `<meta property="article:tag" content="${escape
 <link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 <link rel="stylesheet" href="/assets/fonts/sora.css">
-<link rel="stylesheet" href="/assets/shared-design.css?v=11">
+<link rel="stylesheet" href="/assets/shared-design.css?v=12">
 <link rel="stylesheet" href="/assets/css/article.css">
 
 <script type="application/ld+json">
@@ -536,7 +536,7 @@ function generateIndexHTML(posts) {
 <link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 <link rel="stylesheet" href="/assets/fonts/sora.css">
-<link rel="stylesheet" href="/assets/shared-design.css?v=11">
+<link rel="stylesheet" href="/assets/shared-design.css?v=12">
 <link rel="stylesheet" href="/assets/css/blog-index.css">
 
 <script type="application/ld+json">

@@ -9,6 +9,9 @@ Disallow: /assets/models/
 Disallow: /_backups/
 
 # AI crawlers / assistants (content may be read and cited)
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: GPTBot
 Allow: /
 User-agent: ChatGPT-User

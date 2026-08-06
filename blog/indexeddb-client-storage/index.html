@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>IndexedDB for On-Device AI: Storing Embeddings and Session State Locally</title>
+<title>IndexedDB for On-Device AI: Embeddings and Session Storage</title>
 <meta name="description" content="Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://relu.chat/blog/indexeddb-client-storage/">
@@ -12,7 +12,7 @@
 <meta property="og:description" content="Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://relu.chat/blog/indexeddb-client-storage/">
-<meta property="og:image" content="https://relu.chat/assets/blog/indexeddb-client-storage.svg">
+<meta property="og:image" content="https://relu.chat/assets/blog/indexeddb-client-storage.png">
 <meta property="og:site_name" content="ReLU.chat">
 <meta property="article:published_time" content="2026-08-06T13:00:00.000Z">
 <meta property="article:modified_time" content="2026-08-06T13:00:00.000Z">
@@ -26,13 +26,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="IndexedDB for On-Device AI: Embeddings and Session State">
 <meta name="twitter:description" content="Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.">
-<meta name="twitter:image" content="https://relu.chat/assets/blog/indexeddb-client-storage.svg">
+<meta name="twitter:image" content="https://relu.chat/assets/blog/indexeddb-client-storage.png">
 
 <meta name="theme-color" content="#060708">
 <link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 <link rel="stylesheet" href="/assets/fonts/sora.css">
-<link rel="stylesheet" href="/assets/shared-design.css?v=11">
+<link rel="stylesheet" href="/assets/shared-design.css?v=12">
 <link rel="stylesheet" href="/assets/css/article.css">
 
 <script type="application/ld+json">

@@ -27,7 +27,7 @@
 <link rel="icon" href="assets/logo.png?v=7" type="image/png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="assets/fonts/sora.css">
-<link rel="stylesheet" href="assets/shared-design.css?v=11">
+<link rel="stylesheet" href="assets/shared-design.css?v=12">
 <link rel="stylesheet" href="assets/katex/katex.min.css">
 
 <style>
@@ -503,6 +503,11 @@
   overflow: hidden;
 }
 
+/* Desktop: no toggle exists, keep the checkbox out of the tab order */
+@media (min-width: 769px) {
+  .nav-toggle-input { display: none; }
+}
+
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -679,6 +684,7 @@
   .nav-links,
   .nav-cta.desktop-only { display: none; }
   .nav-toggle { display: flex; }
+  .nav-toggle-input { display: block; }
 
   .ebook-banner-card {
     align-items: stretch;
@@ -1183,7 +1189,7 @@
 <input type="checkbox" id="nav-toggle-input" class="nav-toggle-input" aria-hidden="true">
 
 <!-- ==================== NAVIGATION ==================== -->
-<nav class="site-nav" id="navbar">
+<nav class="site-nav" id="navbar" aria-label="Primary navigation">
   <div class="nav-container">
     <a href="/" class="nav-logo">
       <img src="assets/logo.png?v=7" alt="ReLU.chat" width="24" height="24">
@@ -1206,7 +1212,7 @@
 </nav>
 
 <!-- Mobile overlay nav -->
-<div class="mobile-nav" aria-hidden="true">
+<div class="mobile-nav" id="mobile-nav" aria-hidden="true">
   <a href="#features" onclick="document.getElementById('nav-toggle-input').checked=false">Features</a>
   <a href="#showcase" onclick="document.getElementById('nav-toggle-input').checked=false">Chatbots</a>
   <a href="/tools/" onclick="document.getElementById('nav-toggle-input').checked=false">ML Tools</a>
@@ -1613,10 +1619,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var navToggleInput = document.getElementById('nav-toggle-input');
   var navToggleLabel = navToggleInput ? document.querySelector('label[for="nav-toggle-input"]') : null;
+  var mobileNav = document.getElementById('mobile-nav');
   if (navToggleInput && navToggleLabel) {
-    navToggleInput.addEventListener('change', function() {
-      navToggleLabel.setAttribute('aria-expanded', String(navToggleInput.checked));
+    function syncNav() {
+      var open = navToggleInput.checked;
+      navToggleLabel.setAttribute('aria-expanded', String(open));
+      // Keep the overlay in sync for assistive tech: hidden when closed,
+      // announced when open (the static aria-hidden in markup is the default).
+      if (mobileNav) {
+        mobileNav.setAttribute('aria-hidden', open ? 'false' : 'true');
+        if ('inert' in mobileNav) mobileNav.inert = !open;
+      }
+    }
+    navToggleInput.addEventListener('change', syncNav);
+    // Menu links close the overlay via inline onclicks; keep AT state in sync.
+    document.addEventListener('click', function(e) {
+      if (mobileNav && mobileNav.contains(e.target)) syncNav();
     });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && navToggleInput.checked) {
+        navToggleInput.checked = false;
+        syncNav();
+      }
+    });
+    syncNav();
   }
 });
 </script>
