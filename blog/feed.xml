@@ -5,7 +5,7 @@
   <link>https://relu.chat/blog/</link>
   <description>Technical articles about on-device AI, browser-based chatbots, NLP, and privacy-first machine learning.</description>
   <language>en</language>
-  <lastBuildDate>Thu, 06 Aug 2026 13:16:22 GMT</lastBuildDate>
+  <lastBuildDate>Sun, 09 Aug 2026 20:20:00 GMT</lastBuildDate>
   <atom:link href="https://relu.chat/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <image>
     <url>https://relu.chat/assets/logo.png</url>
@@ -18,7 +18,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/</guid>
     <pubDate>Thu, 06 Aug 2026 17:30:00 GMT</pubDate>
     <description>How to evaluate a knowledge-base retriever with precision, recall, MRR, and NDCG: definitions, worked examples, and a tuning loop for dense/sparse ensembles.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>retrieval</category>
     <category>ndcg</category>
     <category>mrr</category>
@@ -30,7 +30,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/chunking-strategies-knowledge-base/</guid>
     <pubDate>Thu, 06 Aug 2026 16:45:00 GMT</pubDate>
     <description>How chunk size, boundaries, and overlap decide what a knowledge base retriever can find — fixed, overlapping, and structure-aware chunking compared.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>chunking</category>
     <category>retrieval</category>
     <category>knowledge-base</category>
@@ -43,7 +43,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/query-expansion-without-llm/</guid>
     <pubDate>Thu, 06 Aug 2026 15:30:00 GMT</pubDate>
     <description>Improve retrieval without an LLM: index-time alias weighting, query-side synonym expansion, edit-distance spelling correction, and boosting before re-ranking.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>query-expansion</category>
     <category>bm25</category>
     <category>spelling-correction</category>
@@ -55,7 +55,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/knowledge-base-fragments-fields-metadata/</guid>
     <pubDate>Thu, 06 Aug 2026 14:00:00 GMT</pubDate>
     <description>Knowledge base entries built from categorized fragments, weighted fields, and confidence metadata — and why structure decides retrieval quality.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>knowledge-base</category>
     <category>retrieval</category>
     <category>metadata</category>
@@ -68,7 +68,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/indexeddb-client-storage/</guid>
     <pubDate>Thu, 06 Aug 2026 13:00:00 GMT</pubDate>
     <description>Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>indexeddb</category>
     <category>storage</category>
     <category>embeddings</category>
@@ -81,7 +81,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/float32-vs-float64-precision/</guid>
     <pubDate>Thu, 06 Aug 2026 12:30:00 GMT</pubDate>
     <description>When to use float32 versus float64 in browser ML: tensors stay float32, accumulators like EMA summaries deserve float64, and int8 quantization shrinks weights.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>float32</category>
     <category>float64</category>
     <category>precision</category>
@@ -93,7 +93,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/browser-vector-math-optimization/</guid>
     <pubDate>Thu, 06 Aug 2026 11:15:00 GMT</pubDate>
     <description>What cosine similarity actually costs in the browser, and how precomputed norms, typed arrays, bounded top-k, and memoization cut that cost.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>performance</category>
     <category>javascript</category>
     <category>vectors</category>
@@ -106,7 +106,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/offline-first-chat-architecture/</guid>
     <pubDate>Thu, 06 Aug 2026 10:00:00 GMT</pubDate>
     <description>Designing browser chat that works offline: persisted work queues, retries with backoff and idempotency, and sync-free design with one local copy of state.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>offline-first</category>
     <category>service-worker</category>
     <category>indexeddb</category>
@@ -118,7 +118,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/model-size-vs-quality/</guid>
     <pubDate>Thu, 06 Aug 2026 09:30:00 GMT</pubDate>
     <description>Smaller can be better: distillation, quantization, and domain fit explain when a 22 MB model beats a much larger one on edge devices.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>model-size</category>
     <category>distillation</category>
     <category>quantization</category>
@@ -131,7 +131,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/conversation-state-machines/</guid>
     <pubDate>Thu, 06 Aug 2026 08:45:00 GMT</pubDate>
     <description>How modes, intents, and follow-up routing fit together in a conversation state machine, with JavaScript examples and a look at ReLU.chat&#39;s policy.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>conversation</category>
     <category>state-machine</category>
     <category>intents</category>
@@ -144,7 +144,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/debugging-browser-ml/</guid>
     <pubDate>Thu, 06 Aug 2026 07:30:00 GMT</pubDate>
     <description>Practical techniques for debugging browser-based ML: profiling inference stages, structured on-device logging, and graceful fallback paths.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>debugging</category>
     <category>browser-ml</category>
     <category>profiling</category>
@@ -156,7 +156,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/bias-in-retrieval-chatbots/</guid>
     <pubDate>Thu, 06 Aug 2026 06:15:00 GMT</pubDate>
     <description>Where bias enters retrieval chatbots — corpus, embeddings, term weighting, ranking — and a practical audit procedure for each stage.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>bias</category>
     <category>retrieval</category>
     <category>evaluation</category>
@@ -169,7 +169,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/privacy-checklist-browser-ai/</guid>
     <pubDate>Wed, 05 Aug 2026 11:30:00 GMT</pubDate>
     <description>What actually leaves your device when AI runs in the browser? A six-step audit: network, offline test, storage, and source.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>privacy</category>
     <category>security</category>
     <category>checklist</category>
@@ -182,7 +182,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/named-entity-recognition-no-llm/</guid>
     <pubDate>Tue, 04 Aug 2026 12:00:00 GMT</pubDate>
     <description>Gazetteers, regex, Levenshtein fuzzy matching, and knowledge bases deliver solid entity extraction in the browser — no LLM required.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>ner</category>
     <category>nlp</category>
     <category>regex</category>
@@ -195,7 +195,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/bm25-math-worked-example/</guid>
     <pubDate>Tue, 04 Aug 2026 11:00:00 GMT</pubDate>
     <description>Step-by-step BM25 ranking: smoothed IDF, term-frequency saturation (k1), length normalization (b), and field weighting.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>bm25</category>
     <category>retrieval</category>
     <category>search</category>
@@ -208,7 +208,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/webassembly-browser-ml/</guid>
     <pubDate>Tue, 04 Aug 2026 11:00:00 GMT</pubDate>
     <description>What WebAssembly is, why compiled numeric kernels beat JavaScript for ML, and how runtimes like ONNX Runtime run models entirely in the browser.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>webassembly</category>
     <category>wasm</category>
     <category>onnx-runtime</category>
@@ -221,7 +221,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/latency-budgets-conversational-ui/</guid>
     <pubDate>Mon, 03 Aug 2026 11:00:00 GMT</pubDate>
     <description>First-token latency under 400 ms keeps a conversation feeling instant. Budgets, streaming, and progressive loading for conversational UI.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>latency</category>
     <category>performance</category>
     <category>conversational-ui</category>
@@ -234,7 +234,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/katex-vs-mathjax-math-rendering/</guid>
     <pubDate>Mon, 03 Aug 2026 10:30:00 GMT</pubDate>
     <description>KaTeX vs MathJax for in-browser math: speed, bundle size, TeX coverage, accessibility, and streaming chat output.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>katex</category>
     <category>mathjax</category>
     <category>math</category>
@@ -247,7 +247,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/int8-quantization-explained/</guid>
     <pubDate>Mon, 03 Aug 2026 09:30:00 GMT</pubDate>
     <description>How INT8 quantization maps FP32 weights and activations to 256 buckets, why accuracy usually survives, and how calibration keeps it that way.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>quantization</category>
     <category>int8</category>
     <category>onnx</category>
@@ -260,7 +260,7 @@
     <guid isPermaLink="true">https://relu.chat/blog/cosine-similarity-vector-search/</guid>
     <pubDate>Sun, 02 Aug 2026 10:00:00 GMT</pubDate>
     <description>The math of cosine similarity and vector search: dot products, normalization, brute-force top-k in the browser, and hybrid dense-sparse ranking.</description>
-    <author>ReLU.chat</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>vector-search</category>
     <category>cosine-similarity</category>
     <category>embeddings</category>

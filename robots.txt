@@ -8,35 +8,53 @@ Disallow: /policy/
 Disallow: /assets/models/
 Disallow: /_backups/
 
-# AI crawlers / assistants (content may be read and cited)
-User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: GPTBot
-Allow: /
-User-agent: ChatGPT-User
-Allow: /
-User-agent: ClaudeBot
-Allow: /
-User-agent: PerplexityBot
-Allow: /
-User-agent: Google-Extended
-Allow: /
-User-agent: Applebot
-Allow: /
-User-agent: cohere-ai
-Allow: /
-User-agent: ai2bot
-Allow: /
-User-agent: Meta-ExternalAgent
-Allow: /
-
-# General search engines
+# --- Real-time search & AI discovery: full access ---
 User-agent: Googlebot
 Allow: /
 User-agent: Bingbot
 Allow: /
 User-agent: DuckDuckBot
 Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: Applebot
+Allow: /
+
+# --- AI training crawlers: HTML text stays readable and citable, but heavy
+#     media (images, video, model/WASM binaries) and PDFs are excluded to
+#     protect crawl budget (2026 policy; Cloudflare edge adds ai-train=no
+#     and blanket blocks for some of these agents - this file never overrides
+#     those edge blocks for media paths). ---
+User-agent: GPTBot
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: Google-Extended
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: ClaudeBot
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: PerplexityBot
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: cohere-ai
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: ai2bot
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+
+# Note: GPTBot, ClaudeBot, Google-Extended, meta-externalagent, CCBot,
+# Bytespider, Amazonbot and Applebot-Extended are additionally blocked at the
+# edge by the Cloudflare managed robots.txt (ai-train=no). The origin rules
+# above keep article HTML citable by AI assistants while protecting media.
 
 Sitemap: https://relu.chat/sitemap.xml

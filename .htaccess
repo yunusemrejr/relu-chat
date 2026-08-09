@@ -24,6 +24,9 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteCond %{HTTP_HOST} ^www\.relu\.chat$ [NC]
 RewriteRule ^(.*)$ https://relu.chat/$1 [L,R=301]
 
+# Canonical: /index.html -> / (single canonical form for the homepage)
+RewriteRule ^index\.html$ / [L,R=301]
+
 # ============================================================
 # 4. Protect sensitive files and directories
 # ============================================================

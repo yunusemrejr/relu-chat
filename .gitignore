@@ -28,3 +28,6 @@ vendor/
 output/playwright/
 
 .agent_memory/
+
+# Runtime state written by api/ping.php (IndexNow smart-ping marker)
+data/indexnow-marker.json

@@ -656,7 +656,7 @@ function generateRSSFeed(posts) {
     <guid isPermaLink="true">${url}</guid>
     <pubDate>${pubDate}</pubDate>
     <description>${escapeHTML(post.meta_description || post.excerpt || '')}</description>
-    <author>${escapeHTML(post.author || 'relu@relu.chat')}</author>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     ${post.tags ? post.tags.map(t => `<category>${escapeHTML(t)}</category>`).join('\n    ') : ''}
   </item>`;
   }).join('\n');
@@ -685,6 +685,9 @@ function generateSitemap(posts) {
     { url: SITE_URL + '/', changefreq: 'weekly', priority: '1.0' },
     { url: SITE_URL + '/how-it-works.html', changefreq: 'monthly', priority: '0.8' },
     { url: SITE_URL + '/blog/', changefreq: 'weekly', priority: '0.9' },
+    { url: SITE_URL + '/chat/data-science-chat/', changefreq: 'monthly', priority: '0.8' },
+    { url: SITE_URL + '/chat/game-theory-chat/', changefreq: 'monthly', priority: '0.8' },
+    { url: SITE_URL + '/chat/golden-age-inquiry/', changefreq: 'monthly', priority: '0.8' },
     { url: SITE_URL + '/tools/', changefreq: 'monthly', priority: '0.7' },
     { url: SITE_URL + '/tools/neural-network/', changefreq: 'monthly', priority: '0.6' },
     { url: SITE_URL + '/tools/gradient-descent/', changefreq: 'monthly', priority: '0.6' },
@@ -698,28 +701,42 @@ function generateSitemap(posts) {
     url: `${SITE_URL}/blog/${p.slug}/`,
     changefreq: 'monthly',
     priority: '0.7',
-    lastmod: new Date(p.updated_at || p.published_at).toISOString().split('T')[0]
+    lastmod: new Date(p.updated_at || p.published_at).toISOString().split('T')[0],
+    title: p.title,
+    image: p.og_image || `${SITE_URL}/assets/blog/${p.slug}.png`
   }));
 
   const allPages = [...staticPages, ...blogPages];
 
-  const urls = allPages.map(p => `  <url>
+  const urls = allPages.map(p => {
+    let b = `  <url>
     <loc>${p.url}</loc>
     <changefreq>${p.changefreq}</changefreq>
-    <priority>${p.priority}</priority>
-    ${p.lastmod ? `<lastmod>${p.lastmod}</lastmod>` : ''}
-  </url>`).join('\n');
+    <priority>${p.priority}</priority>`;
+    if (p.lastmod) b += `
+    <lastmod>${p.lastmod}</lastmod>`;
+    if (p.image) b += `
+    <image:image>
+      <image:loc>${p.image}</image:loc>
+      <image:caption>${escapeHTML(p.title || '')}</image:caption>
+      <image:license>https://opensource.org/licenses/MIT</image:license>
+    </image:image>`;
+    b += `
+  </url>`;
+    return b;
+  }).join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls}
 </urlset>`;
 }
-
 function generateRobotsTxt() {
-  // AI-agent friendly: allow AI crawlers and browser-based AI assistants.
-  // Note: Cloudflare can still inject its own managed block above this file
-  // at the edge (dashboard setting) - that is outside this repo's control.
+  // 2026 policy: real-time search & AI discovery get full access; AI training
+  // crawlers may read/cite HTML but are excluded from heavy media (/assets/)
+  // and PDFs (crawl-budget protection). Cloudflare's edge managed robots.txt
+  // (ai-train=no) additionally blocks some agents; origin rules never override
+  // those edge blocks for media paths.
   return `User-agent: *
 Allow: /
 Disallow: /api/
@@ -730,38 +747,49 @@ Disallow: /policy/
 Disallow: /assets/models/
 Disallow: /_backups/
 
-# AI crawlers / assistants (content may be read and cited)
-User-agent: GPTBot
-Allow: /
-User-agent: ChatGPT-User
-Allow: /
-User-agent: ClaudeBot
-Allow: /
-User-agent: PerplexityBot
-Allow: /
-User-agent: Google-Extended
-Allow: /
-User-agent: Applebot
-Allow: /
-User-agent: cohere-ai
-Allow: /
-User-agent: ai2bot
-Allow: /
-User-agent: Meta-ExternalAgent
-Allow: /
-
-# General search engines
+# --- Real-time search & AI discovery: full access ---
 User-agent: Googlebot
 Allow: /
 User-agent: Bingbot
 Allow: /
 User-agent: DuckDuckBot
 Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: Applebot
+Allow: /
+
+# --- AI training crawlers: HTML citable, media/PDFs excluded ---
+User-agent: GPTBot
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: Google-Extended
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: ClaudeBot
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: PerplexityBot
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: cohere-ai
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
+User-agent: ai2bot
+Allow: /
+Disallow: /assets/
+Disallow: /*.pdf$
 
 Sitemap: ${SITE_URL}/sitemap.xml
 `;
 }
-
 function generateLLMsTxt(posts) {
   const chatLines = [
     ['Game Theory Chat', 'https://relu.chat/chat/game-theory-chat/', "On-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma and 55+ topics with LaTeX math."],
