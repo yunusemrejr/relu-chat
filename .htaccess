@@ -144,6 +144,9 @@ AddDefaultCharset UTF-8
     <FilesMatch "\.(html)$">
         Header set Cache-Control "no-cache, no-store, must-revalidate"
     </FilesMatch>
+    <FilesMatch "^(robots\.txt|sitemap\.xml|feed\.xml)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+    </FilesMatch>
 </IfModule>
 
 # ============================================================
