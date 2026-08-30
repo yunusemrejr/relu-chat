@@ -96,6 +96,15 @@
   justify-content: center;
 }
 
+/* Featured hero CTA: same outline + accent, one step stronger than siblings */
+.btn-featured {
+  background: rgba(20, 184, 166, 0.12);
+}
+
+.btn-featured:hover {
+  background: rgba(20, 184, 166, 0.18);
+}
+
 /* Ebook promo */
 .ebook-banner {
   padding: 0 var(--space-6) var(--space-12);
@@ -1232,7 +1241,9 @@
       <h1>Intelligence that stays <span class="accent-word">on-device</span></h1>
       <p class="hero-subhead">Open-source chatbots that run entirely in your browser. Transformer embeddings, BM25 retrieval, dense-sparse ensemble ranking, and a 25-feature MLP policy network — zero servers, zero LLMs, zero telemetry.</p>
       <div class="hero-ctas">
-        <a href="chat/game-theory-chat/" class="btn btn-primary">Game Theory Chat</a>
+        <!-- WHY btn-featured: five equal-weight CTAs read as no hierarchy; the persistent tint (the
+             existing hover treatment) makes exactly one dominant action without breaking the outline system -->
+        <a href="chat/game-theory-chat/" class="btn btn-primary btn-featured">Game Theory Chat</a>
         <a href="chat/golden-age-inquiry/" class="btn btn-primary">Golden Age Inquiry</a>
         <a href="chat/data-science-chat/" class="btn btn-primary">Data Science Chat</a>
         <a href="/tools/" class="btn btn-secondary">ML Tools</a>
@@ -1609,13 +1620,16 @@
 <script src="assets/katex/auto-render.min.js" data-cfasync="false"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var latexEl = document.querySelector('.chat-bubble.latex');
-  if (latexEl && window.renderMathInElement) {
-    renderMathInElement(latexEl, {
-      delimiters: [{ left: '$', right: '$', display: false }],
-      throwOnError: false
-    });
-  }
+  // WHY all mockup bodies, not just .chat-bubble.latex: inline math in regular bubbles
+  // (e.g. the logistic-regression formula in the Data Science mockup) used to stay raw $...$
+  document.querySelectorAll('.chat-mockup-body').forEach(function(latexEl) {
+    if (window.renderMathInElement) {
+      renderMathInElement(latexEl, {
+        delimiters: [{ left: '$', right: '$', display: false }],
+        throwOnError: false
+      });
+    }
+  });
 
   var navToggleInput = document.getElementById('nav-toggle-input');
   var navToggleLabel = navToggleInput ? document.querySelector('label[for="nav-toggle-input"]') : null;

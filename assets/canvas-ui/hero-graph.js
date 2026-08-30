@@ -50,7 +50,9 @@
   }
 
   function buildGraph(d) {
-    var count = d.w < 640 ? 24 : 40;
+    // WHY bumped from 24/40: render inspection showed the graph nearly invisible on --bg;
+    // denser nodes + higher alphas keep the "quiet neural backdrop" intent readable.
+    var count = d.w < 640 ? 28 : 48;
     nodes = [];
     for (var i = 0; i < count; i++) {
       nodes.push({
@@ -93,7 +95,7 @@
       var na = nodes[e.a], nb = nodes[e.b];
       var dx = na.x - nb.x, dy = na.y - nb.y;
       var dist = Math.sqrt(dx * dx + dy * dy);
-      var alpha = 0.16 * Math.max(0, 1 - dist / 170);
+      var alpha = 0.24 * Math.max(0, 1 - dist / 170);
       ctx.strokeStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',' + alpha.toFixed(3) + ')';
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -104,7 +106,7 @@
 
     for (k = 0; k < nodes.length; k++) {
       var nn = nodes[k];
-      ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',0.30)';
+      ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',0.45)';
       ctx.beginPath();
       ctx.arc(nn.x, nn.y, nn.r, 0, Math.PI * 2);
       ctx.fill();
@@ -123,13 +125,13 @@
       var px = s.x + (tg.x - s.x) * ph;
       var py = s.y + (tg.y - s.y) * ph;
       var trail = 0.16;
-      ctx.strokeStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',0.30)';
+      ctx.strokeStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',0.50)';
       ctx.lineWidth = 1.2;
       ctx.beginPath();
       ctx.moveTo(s.x + (tg.x - s.x) * Math.max(0, ph - trail), s.y + (tg.y - s.y) * Math.max(0, ph - trail));
       ctx.lineTo(px, py);
       ctx.stroke();
-      ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',0.5)';
+      ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',0.7)';
       ctx.beginPath();
       ctx.arc(px, py, 1.4, 0, Math.PI * 2);
       ctx.fill();

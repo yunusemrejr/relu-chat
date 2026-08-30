@@ -1,4 +1,4 @@
-const CACHE_VERSION = 11;
+const CACHE_VERSION = 12;
 const CACHE_PREFIX = 'relu-chat';
 const APP_CACHE = `${CACHE_PREFIX}-v${CACHE_VERSION}`;
 const MODEL_CACHE = `${CACHE_PREFIX}-models-v${CACHE_VERSION}`;

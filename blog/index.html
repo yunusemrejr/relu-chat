@@ -1647,6 +1647,28 @@
       });
     });
   });
+
+  // WHY collapse: 114 tag pills rendered as a ~10-row wall of noise above the grid.
+  // Show the first 18; the rest sit behind one toggle. Stateless by design.
+  var SHOW_FIRST=18, bar=document.querySelector('.filter-bar');
+  var tagPills=Array.prototype.slice.call(pills).filter(function(p){return p.getAttribute('data-tag')!=='all'});
+  if(bar&&tagPills.length>SHOW_FIRST){
+    tagPills.forEach(function(p,i){ if(i>=SHOW_FIRST) p.classList.add('filter-extra'); });
+    var more=document.createElement('button');
+    more.type='button';
+    more.className='filter-pill filter-more';
+    more.setAttribute('aria-expanded','false');
+    more.textContent='Show all topics (+'+(tagPills.length-SHOW_FIRST)+')';
+    more.addEventListener('click',function(){
+      var collapsed=bar.classList.toggle('tags-collapsed');
+      more.setAttribute('aria-expanded',String(!collapsed));
+      more.textContent=collapsed
+        ?'Show all topics (+'+(tagPills.length-SHOW_FIRST)+')'
+        :'Fewer topics';
+    });
+    bar.classList.add('tags-collapsed');
+    bar.appendChild(more);
+  }
 })();
 </script>
 
