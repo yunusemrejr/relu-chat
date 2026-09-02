@@ -892,9 +892,9 @@ ${blogList || '- (no posts yet)'}
 
 ## Books (by the same author, Gumroad)
 
-- [Fringe Learning: Resource-Efficient RL for Edge ML](https://elroystar8.gumroad.com/l/ecvuf) — practical reinforcement learning methods for resource-constrained edge machine learning.
-- [AI & Financial Freedom](https://elroystar8.gumroad.com/l/ai-freedom) — a step-by-step guide to mastering AI tools and workflows for financial independence in the age of AI.
-- More books: https://elroystar8.gumroad.com/
+- [Fringe Learning: Resource-Efficient RL for Edge ML](https://theknowledgeproject.gumroad.com/l/ecvuf) — practical reinforcement learning methods for resource-constrained edge machine learning.
+- [AI & Financial Freedom](https://theknowledgeproject.gumroad.com/l/ai-freedom) — a step-by-step guide to mastering AI tools and workflows for financial independence in the age of AI.
+- More books: https://theknowledgeproject.gumroad.com/
 
 ## Source code
 
