@@ -13,18 +13,18 @@
    this file when a trial token is available for this domain; until
    then this 2D canvas keeps the same visual intent everywhere.
    ============================================================ */
-(function () {
-  'use strict';
-
-  var canvas = document.getElementById('hero-graph');
+(() => {
+  var canvas = document.getElementById("hero-graph");
   if (!canvas) return;
-  var ctx = canvas.getContext && canvas.getContext('2d');
+  var ctx = canvas.getContext && canvas.getContext("2d");
   if (!ctx) return;
 
-  var hero = document.getElementById('hero');
+  var hero = document.getElementById("hero");
   if (!hero) return;
 
-  var REDUCE = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var REDUCE =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var ACCENT = [20, 184, 166]; // var(--accent)
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var nodes = [];
@@ -36,15 +36,18 @@
 
   function dims() {
     var r = hero.getBoundingClientRect();
-    return { w: Math.max(320, Math.round(r.width)), h: Math.max(240, Math.round(r.height)) };
+    return {
+      w: Math.max(320, Math.round(r.width)),
+      h: Math.max(240, Math.round(r.height)),
+    };
   }
 
   function resize() {
     var d = dims();
     canvas.width = Math.round(d.w * dpr);
     canvas.height = Math.round(d.h * dpr);
-    canvas.style.width = d.w + 'px';
-    canvas.style.height = d.h + 'px';
+    canvas.style.width = d.w + "px";
+    canvas.style.height = d.h + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     buildGraph(d);
   }
@@ -60,7 +63,7 @@
         y: Math.random() * d.h,
         vx: (Math.random() - 0.5) * 0.14,
         vy: (Math.random() - 0.5) * 0.14,
-        r: 1 + Math.random() * 1.5
+        r: 1 + Math.random() * 1.5,
       });
     }
     edges = [];
@@ -83,20 +86,44 @@
     var i, k;
     for (i = 0; i < nodes.length; i++) {
       var n = nodes[i];
-      n.x += n.vx; n.y += n.vy;
-      if (n.x < 0) { n.x = 0; n.vx *= -1; }
-      if (n.x > d.w) { n.x = d.w; n.vx *= -1; }
-      if (n.y < 0) { n.y = 0; n.vy *= -1; }
-      if (n.y > d.h) { n.y = d.h; n.vy *= -1; }
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 0) {
+        n.x = 0;
+        n.vx *= -1;
+      }
+      if (n.x > d.w) {
+        n.x = d.w;
+        n.vx *= -1;
+      }
+      if (n.y < 0) {
+        n.y = 0;
+        n.vy *= -1;
+      }
+      if (n.y > d.h) {
+        n.y = d.h;
+        n.vy *= -1;
+      }
     }
 
     for (i = 0; i < edges.length; i++) {
       var e = edges[i];
-      var na = nodes[e.a], nb = nodes[e.b];
-      var dx = na.x - nb.x, dy = na.y - nb.y;
+      var na = nodes[e.a],
+        nb = nodes[e.b];
+      var dx = na.x - nb.x,
+        dy = na.y - nb.y;
       var dist = Math.sqrt(dx * dx + dy * dy);
       var alpha = 0.24 * Math.max(0, 1 - dist / 170);
-      ctx.strokeStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',' + alpha.toFixed(3) + ')';
+      ctx.strokeStyle =
+        "rgba(" +
+        ACCENT[0] +
+        "," +
+        ACCENT[1] +
+        "," +
+        ACCENT[2] +
+        "," +
+        alpha.toFixed(3) +
+        ")";
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(na.x, na.y);
@@ -106,7 +133,8 @@
 
     for (k = 0; k < nodes.length; k++) {
       var nn = nodes[k];
-      ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',0.45)';
+      ctx.fillStyle =
+        "rgba(" + ACCENT[0] + "," + ACCENT[1] + "," + ACCENT[2] + ",0.45)";
       ctx.beginPath();
       ctx.arc(nn.x, nn.y, nn.r, 0, Math.PI * 2);
       ctx.fill();
@@ -118,20 +146,26 @@
     var t = now / 1000;
     if (!edges.length) return;
     for (var p = 0; p < 2; p++) {
-      var ph = (t * 0.10 + p * 0.5) % 1;
+      var ph = (t * 0.1 + p * 0.5) % 1;
       var eIdx = Math.floor((t * 0.7 + p * 17) % edges.length);
       var ed = edges[eIdx];
-      var s = nodes[ed.a], tg = nodes[ed.b];
+      var s = nodes[ed.a],
+        tg = nodes[ed.b];
       var px = s.x + (tg.x - s.x) * ph;
       var py = s.y + (tg.y - s.y) * ph;
       var trail = 0.16;
-      ctx.strokeStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',0.50)';
+      ctx.strokeStyle =
+        "rgba(" + ACCENT[0] + "," + ACCENT[1] + "," + ACCENT[2] + ",0.50)";
       ctx.lineWidth = 1.2;
       ctx.beginPath();
-      ctx.moveTo(s.x + (tg.x - s.x) * Math.max(0, ph - trail), s.y + (tg.y - s.y) * Math.max(0, ph - trail));
+      ctx.moveTo(
+        s.x + (tg.x - s.x) * Math.max(0, ph - trail),
+        s.y + (tg.y - s.y) * Math.max(0, ph - trail),
+      );
       ctx.lineTo(px, py);
       ctx.stroke();
-      ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',0.7)';
+      ctx.fillStyle =
+        "rgba(" + ACCENT[0] + "," + ACCENT[1] + "," + ACCENT[2] + ",0.7)";
       ctx.beginPath();
       ctx.arc(px, py, 1.4, 0, Math.PI * 2);
       ctx.fill();
@@ -144,7 +178,10 @@
   }
 
   function stop() {
-    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    if (raf) {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    }
   }
 
   function onVisibility() {
@@ -162,19 +199,25 @@
     return;
   }
 
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      visible = entries[0].isIntersecting;
-      if (visible && tabActive) start(); else stop();
-    }, { rootMargin: '200px' });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(
+      (entries) => {
+        visible = entries[0].isIntersecting;
+        if (visible && tabActive) start();
+        else stop();
+      },
+      { rootMargin: "200px" },
+    );
     io.observe(hero);
   } else {
     visible = true;
     start();
   }
-  document.addEventListener('visibilitychange', onVisibility);
-  if ('ResizeObserver' in window) {
-    new ResizeObserver(function () { resize(); }).observe(hero);
+  document.addEventListener("visibilitychange", onVisibility);
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(() => {
+      resize();
+    }).observe(hero);
   }
-  window.addEventListener('resize', resize);
+  window.addEventListener("resize", resize);
 })();
