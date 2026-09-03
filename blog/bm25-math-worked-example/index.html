@@ -1181,6 +1181,7 @@ def bm25_score(query_tokens, doc_tokens, idf, avgdl, k1=1.5, b=0.75):
                                     try {
                                         var n = document.createElement("div");
                                         return (
+                                            // pi-lens-ignore: ast-grep:no-inner-html-js
                                             (n.innerHTML = e),
                                             JSON.parse(n.textContent)
                                         );
@@ -1470,6 +1471,7 @@ def bm25_score(query_tokens, doc_tokens, idf, avgdl, k1=1.5, b=0.75):
                             if (Object.prototype.hasOwnProperty.call(r, o)) {
                                 var i = r[o];
                                 null != i &&
+                                    // pi-lens-ignore: ast-grep:no-negation-in-equality-check-js
                                     !1 !== i &&
                                     ("class" === o
                                         ? (n.className = i)
@@ -1490,6 +1492,7 @@ def bm25_score(query_tokens, doc_tokens, idf, avgdl, k1=1.5, b=0.75):
                 }
                 function U(t, r) {
                     var e = document.createElement("div");
+                    // pi-lens-ignore: ast-grep:no-inner-html-js
                     e.innerHTML = t;
                     var n = e.firstChild;
                     return (

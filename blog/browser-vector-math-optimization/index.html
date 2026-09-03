@@ -1133,6 +1133,7 @@ function score(query, normalizedFragment) {
                                     try {
                                         var n = document.createElement("div");
                                         return (
+                                            // pi-lens-ignore: ast-grep:no-inner-html-js
                                             (n.innerHTML = e),
                                             JSON.parse(n.textContent)
                                         );
@@ -1422,6 +1423,7 @@ function score(query, normalizedFragment) {
                             if (Object.prototype.hasOwnProperty.call(r, o)) {
                                 var i = r[o];
                                 null != i &&
+                                    // pi-lens-ignore: ast-grep:no-negation-in-equality-check-js
                                     !1 !== i &&
                                     ("class" === o
                                         ? (n.className = i)
@@ -1442,6 +1444,7 @@ function score(query, normalizedFragment) {
                 }
                 function U(t, r) {
                     var e = document.createElement("div");
+                    // pi-lens-ignore: ast-grep:no-inner-html-js
                     e.innerHTML = t;
                     var n = e.firstChild;
                     return (

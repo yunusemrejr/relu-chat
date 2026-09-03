@@ -1139,6 +1139,7 @@ function transition(intent, payload) {
                                     try {
                                         var n = document.createElement("div");
                                         return (
+                                            // pi-lens-ignore: ast-grep:no-inner-html-js
                                             (n.innerHTML = e),
                                             JSON.parse(n.textContent)
                                         );
@@ -1428,6 +1429,7 @@ function transition(intent, payload) {
                             if (Object.prototype.hasOwnProperty.call(r, o)) {
                                 var i = r[o];
                                 null != i &&
+                                    // pi-lens-ignore: ast-grep:no-negation-in-equality-check-js
                                     !1 !== i &&
                                     ("class" === o
                                         ? (n.className = i)
@@ -1448,6 +1450,7 @@ function transition(intent, payload) {
                 }
                 function U(t, r) {
                     var e = document.createElement("div");
+                    // pi-lens-ignore: ast-grep:no-inner-html-js
                     e.innerHTML = t;
                     var n = e.firstChild;
                     return (

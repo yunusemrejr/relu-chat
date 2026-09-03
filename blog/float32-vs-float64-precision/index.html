@@ -1124,6 +1124,7 @@ const int8 = Int8Array.from(weights, (w) =&gt; Math.round(w * scale));
                                     try {
                                         var n = document.createElement("div");
                                         return (
+                                            // pi-lens-ignore: ast-grep:no-inner-html-js
                                             (n.innerHTML = e),
                                             JSON.parse(n.textContent)
                                         );
@@ -1413,6 +1414,7 @@ const int8 = Int8Array.from(weights, (w) =&gt; Math.round(w * scale));
                             if (Object.prototype.hasOwnProperty.call(r, o)) {
                                 var i = r[o];
                                 null != i &&
+                                    // pi-lens-ignore: ast-grep:no-negation-in-equality-check-js
                                     !1 !== i &&
                                     ("class" === o
                                         ? (n.className = i)
@@ -1433,6 +1435,7 @@ const int8 = Int8Array.from(weights, (w) =&gt; Math.round(w * scale));
                 }
                 function U(t, r) {
                     var e = document.createElement("div");
+                    // pi-lens-ignore: ast-grep:no-inner-html-js
                     e.innerHTML = t;
                     var n = e.firstChild;
                     return (

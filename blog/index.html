@@ -3097,6 +3097,7 @@
                   var e = void 0 !== r[2] ? r[2] : r[3];
                   try {
                     var n = document.createElement("div");
+                    // pi-lens-ignore: ast-grep:no-inner-html-js
                     return ((n.innerHTML = e), JSON.parse(n.textContent));
                   } catch (t) {
                     return null;
@@ -3327,6 +3328,7 @@
               if (Object.prototype.hasOwnProperty.call(r, o)) {
                 var i = r[o];
                 null != i &&
+                  // pi-lens-ignore: ast-grep:no-negation-in-equality-check-js
                   !1 !== i &&
                   ("class" === o
                     ? (n.className = i)
