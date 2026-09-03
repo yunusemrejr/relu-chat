@@ -29,7 +29,7 @@ const IMMUTABLE_REGEX =
   /\/assets\/transformers\/.*\.wasm$|\/assets\/models\/.*\.(onnx|json)$/;
 
 // Static assets that benefit from stale-while-revalidate: serve cached, update in background
-const STATIC_REGEX = /\.(css|js|woff2?|ttf|otf|eot|png|svg|webmanifest)$/;
+const STATIC_REGEX = /\.(css|js|woff2?|ttf|otf|eot|png|svg|jpg|jpeg|webp|webmanifest)$/;
 
 // Model assets to background-preload after activation (best-effort, don't block)
 const MODEL_PRELOAD_ASSETS = [
@@ -185,6 +185,7 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
+  // pi-lens-ignore: unchecked-throwing-call-js
   const url = new URL(e.request.url);
 
   // Only handle same-origin requests

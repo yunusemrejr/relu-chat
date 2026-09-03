@@ -19,7 +19,7 @@
 <meta name="twitter:description" content="On-device NLU assistant for data science concepts.">
 
 <link rel="stylesheet" href="../../assets/fonts/sora.css">
-<link rel="stylesheet" href="../../assets/shared-design.css?v=12">
+<link rel="stylesheet" href="../../assets/shared-design.css?v=13">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="/assets/css/diagrams.css?v=7">
@@ -490,6 +490,20 @@
   }
 ]
 </script>
+<style>
+/* Toolkit strip */
+.kit-strip {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4) var(--space-10);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+.kit-strip a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.kit-strip a:hover { text-decoration: underline; }
+</style>
 </head>
 <body>
 
@@ -538,6 +552,10 @@
     </div>
   </form>
 </main>
+
+<section class="kit-strip" aria-label="On-Device Chatbot Builder Toolkit">
+  Built with the ReLU.chat architecture. Want to build your own? The <a href="https://theknowledgeproject.gumroad.com/l/ekuidr" target="_blank" rel="noopener noreferrer">On-Device Chatbot Builder Toolkit</a> gives you the frameworks, templates, and evaluation guides — $29, runs entirely on-device.
+</section>
 
 <script src="../../assets/katex/katex.min.js" data-cfasync="false"></script>
 <script src="../../assets/katex/auto-render.min.js" data-cfasync="false"></script>

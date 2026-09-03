@@ -41,7 +41,7 @@
     <link rel="apple-touch-icon" href="/assets/logo.png" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="stylesheet" href="/assets/fonts/sora.css" />
-    <link rel="stylesheet" href="/assets/shared-design.css?v=12" />
+    <link rel="stylesheet" href="/assets/shared-design.css?v=13" />
     <link rel="stylesheet" href="/assets/css/blog-index.css" />
 
     <script type="application/ld+json">
@@ -981,6 +981,24 @@
         ><button class="filter-pill" data-tag="word2vec">word2vec</button
         ><button class="filter-pill" data-tag="open-source">open-source</button>
       </div>
+
+      <section class="kit-hub-banner" aria-label="On-Device Chatbot Builder Toolkit">
+        <img
+          class="kit-hub-img"
+          src="/assets/toolkit-cover.jpg"
+          alt="ReLU.chat On-Device Chatbot Builder Toolkit"
+          width="1005"
+          height="675"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="kit-hub-copy">
+          <span class="kit-hub-label">Premium · From the makers of ReLU.chat</span>
+          <span class="kit-hub-title">Stop reading about it. Start building it.</span>
+          <span class="kit-hub-text">Every technique in this blog, distilled into the On-Device Chatbot Builder Toolkit: frameworks, templates, and evaluation guides for shipping your own privacy-first chatbot — no servers, data never leaves the device.</span>
+          <a class="kit-hub-cta" href="https://theknowledgeproject.gumroad.com/l/ekuidr" target="_blank" rel="noopener noreferrer">Get the Toolkit · $29 <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
 
       <div class="blog-grid">
         <a
@@ -3323,6 +3341,7 @@
         }
         function U(t, r) {
           var e = document.createElement("div");
+          // pi-lens-ignore: ast-grep:no-inner-html-js
           e.innerHTML = t;
           var n = e.firstChild;
           return (n.setAttribute("width", r), n.setAttribute("height", r), n);

@@ -51,7 +51,7 @@
         <link rel="icon" href="assets/logo.png?v=7" type="image/png" />
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="stylesheet" href="assets/fonts/sora.css" />
-        <link rel="stylesheet" href="assets/shared-design.css?v=12" />
+        <link rel="stylesheet" href="assets/shared-design.css?v=13" />
         <link rel="stylesheet" href="assets/katex/katex.min.css" />
 
         <style>
@@ -179,6 +179,93 @@
             }
 
             .ebook-banner .btn {
+                flex-shrink: 0;
+                white-space: nowrap;
+            }
+
+            /* Toolkit banner */
+            .kit-banner {
+                padding: 0 var(--space-6) var(--space-12);
+                background: var(--bg);
+            }
+
+            .kit-banner-card {
+                max-width: 1000px;
+                margin: 0 auto;
+                display: flex;
+                align-items: center;
+                gap: var(--space-6);
+                padding: var(--space-5) var(--space-6);
+                background: var(--bg-elevated);
+                border: 1px solid var(--border);
+                border-left: 3px solid var(--accent);
+                border-radius: var(--radius);
+            }
+
+            .kit-banner-img {
+                width: 300px;
+                aspect-ratio: 3/2;
+                object-fit: cover;
+                border-radius: var(--radius);
+                border: 1px solid var(--border);
+                flex-shrink: 0;
+            }
+
+            .kit-banner-copy {
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-1);
+                min-width: 0;
+                flex: 1;
+            }
+
+            .kit-banner-label {
+                color: var(--accent);
+                font-size: 0.6875rem;
+                font-weight: 600;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+
+            .kit-banner-title {
+                color: var(--text-primary);
+                font-size: clamp(1.125rem, 1.8vw, 1.375rem);
+                font-weight: 700;
+                line-height: 1.25;
+            }
+
+            .kit-banner-text {
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+                line-height: 1.6;
+                max-width: 60ch;
+            }
+
+            .kit-banner-meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--space-2);
+                margin-top: var(--space-2);
+            }
+
+            .kit-banner-chip {
+                font-size: 0.6875rem;
+                font-weight: 500;
+                color: var(--text-secondary);
+                padding: 0.2rem 0.7rem;
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid var(--border);
+                border-radius: 999px;
+                white-space: nowrap;
+            }
+
+            .kit-banner-price {
+                margin-top: var(--space-2);
+                font-size: 0.75rem;
+                color: var(--text-muted);
+            }
+
+            .kit-banner .btn {
                 flex-shrink: 0;
                 white-space: nowrap;
             }
@@ -822,6 +909,20 @@
                     width: 100%;
                 }
 
+                .kit-banner-card {
+                    align-items: stretch;
+                    flex-direction: column;
+                }
+
+                .kit-banner-img {
+                    width: 100%;
+                    aspect-ratio: 16/7;
+                }
+
+                .kit-banner .btn {
+                    width: 100%;
+                }
+
                 .showcase-card {
                     grid-template-columns: 1fr;
                     gap: var(--space-6);
@@ -858,6 +959,15 @@
                 }
                 .ebook-banner-card {
                     padding: var(--space-4);
+                }
+                .kit-banner {
+                    padding: 0 var(--space-4) var(--space-10);
+                }
+                .kit-banner-card {
+                    padding: var(--space-4);
+                }
+                .kit-banner-meta {
+                    display: none;
                 }
                 #how-it-works,
                 #features,
@@ -2280,6 +2390,57 @@
                 </div>
             </section>
 
+            <!-- ==================== TOOLKIT BANNER ==================== -->
+            <section class="kit-banner" aria-label="On-Device Chatbot Builder Toolkit">
+                <div class="kit-banner-card">
+                    <img
+                        class="kit-banner-img"
+                        src="assets/toolkit-cover.jpg"
+                        alt="ReLU.chat On-Device Chatbot Builder Toolkit — local intelligence, privacy by design"
+                        width="1005"
+                        height="675"
+                        loading="lazy"
+                        decoding="async"
+                    />
+                    <div class="kit-banner-copy">
+                        <span class="kit-banner-label"
+                            >Premium · From the makers of ReLU.chat</span
+                        >
+                        <div class="kit-banner-title">
+                            Build your own on-device chatbot
+                        </div>
+                        <p class="kit-banner-text">
+                            You've seen what local, privacy-first AI can do on
+                            this site. The On-Device Chatbot Builder Toolkit
+                            hands you the architecture behind it — frameworks,
+                            templates, and evaluation guides covering the full
+                            pipeline, from raw input to validated response.
+                        </p>
+                        <div class="kit-banner-meta">
+                            <span class="kit-banner-chip"
+                                >Full pipeline: Input → Response</span
+                            >
+                            <span class="kit-banner-chip"
+                                >Frameworks &amp; templates</span
+                            >
+                            <span class="kit-banner-chip"
+                                >Retrieval + policy + privacy</span
+                            >
+                        </div>
+                        <span class="kit-banner-price"
+                            >One-time purchase · $29</span
+                        >
+                    </div>
+                    <a
+                        href="https://theknowledgeproject.gumroad.com/l/ekuidr"
+                        class="btn btn-primary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Get the Toolkit</a
+                    >
+                </div>
+            </section>
+
             <!-- ==================== ABOUT ==================== -->
             <section id="about">
                 <div class="section-wrap">
@@ -2387,6 +2548,13 @@
                 </a>
                 <a href="/llms.txt" class="footer-link" rel="noopener"
                     >llms.txt</a
+                >
+                <a
+                    href="https://theknowledgeproject.gumroad.com/l/ekuidr"
+                    class="footer-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Toolkit <span aria-hidden="true">↗</span></a
                 >
                 <a href="#" class="footer-link" id="back-to-top">
                     <svg
@@ -2761,6 +2929,7 @@
                                     try {
                                         var n = document.createElement("div");
                                         return (
+                                            // pi-lens-ignore: ast-grep:no-inner-html-js
                                             (n.innerHTML = e),
                                             JSON.parse(n.textContent)
                                         );

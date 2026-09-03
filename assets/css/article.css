@@ -344,6 +344,74 @@ footer p { margin-bottom: var(--space-1); font-size: 0.8125rem; }
 footer a { color: var(--text-secondary); text-decoration: underline; }
 footer a:hover { color: var(--accent); }
 
+/* ── Toolkit promo card (in-article, after article body) ── */
+.kit-promo {
+  margin: var(--space-8) 0 var(--space-6);
+}
+.kit-promo-link {
+  display: flex;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, var(--radius));
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+.kit-promo-link:hover { border-color: var(--accent); }
+.kit-promo-img {
+  width: 200px;
+  height: 134px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+.kit-promo-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.kit-promo-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.kit-promo-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.kit-promo-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.kit-promo-cta {
+  margin-top: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.kit-promo-arrow { transition: transform 0.15s ease; }
+.kit-promo-link:hover .kit-promo-arrow { transform: translateX(3px); }
+
+@media (max-width: 640px) {
+  .kit-promo-link { flex-direction: row; gap: var(--space-3); padding: var(--space-4); }
+  .kit-promo-img { width: 88px; height: 88px; }
+  .kit-promo-title { font-size: 0.9375rem; }
+  .kit-promo-desc { display: none; }
+  .kit-promo-cta { margin-top: 0; }
+}
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
   .article-container { padding: var(--space-6) var(--space-4) var(--space-12); }

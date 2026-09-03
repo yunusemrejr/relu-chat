@@ -94,8 +94,9 @@ ReLU.chat is an open-source platform for building and running interactive chatbo
 - 2026-05-22 — [Training Chatbots with Reinforcement Learning: The ReLU.chat Approach](https://relu.chat/blog/reinforcement-learning-for-chatbots/) — An exploration of how reinforcement learning trains a lightweight MLP policy network to compose chatbot responses from knowledge fragments, without any LLM dependency.
 - 2026-05-20 — [How Browser-Based Chatbots Work: A Deep Dive into On-Device NLP](https://relu.chat/blog/how-browser-based-chatbots-work/) — A technical deep dive into how modern browser-based chatbots run full NLP pipelines client-side using quantized ONNX models, BM25 retrieval, and RL-trained policy networks.
 
-## Books (by the same author, Gumroad)
+## Books & toolkits (by the same author, Gumroad)
 
+- [On-Device Chatbot Builder Toolkit](https://theknowledgeproject.gumroad.com/l/ekuidr) — an engineering field kit for building your own bounded, inspectable, privacy-first conversational system: domain definition, knowledge-base architecture, entity and alias systems, intent design, sparse + semantic retrieval, retrieval evaluation, confidence, conversation state, decision policies, controlled response composition, local deployment, privacy, testing, and failure containment. Core pipeline: Input → Signals → Retrieval → Evidence → Decision → Composition → Validation → Response. $29, one-time.
 - [Fringe Learning: Resource-Efficient RL for Edge ML](https://theknowledgeproject.gumroad.com/l/ecvuf) — practical reinforcement learning methods for resource-constrained edge machine learning.
 - [AI & Financial Freedom](https://theknowledgeproject.gumroad.com/l/ai-freedom) — a step-by-step guide to mastering AI tools and workflows for financial independence in the age of AI.
 - More books: https://theknowledgeproject.gumroad.com/

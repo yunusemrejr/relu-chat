@@ -535,3 +535,87 @@ footer a:hover {
   animation: none;
  }
 }
+
+/* ── Toolkit banner (hub) ── */
+.kit-hub-banner {
+  max-width: 1080px;
+  margin: 0 auto var(--space-10);
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+.kit-hub-img {
+  width: 240px;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.kit-hub-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.kit-hub-label {
+  color: var(--accent);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.kit-hub-title {
+  color: var(--text-primary);
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.kit-hub-text {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 70ch;
+}
+.kit-hub-cta {
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 var(--space-5);
+  background: var(--accent);
+  color: #0d1117;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius);
+  white-space: nowrap;
+  transition: filter 0.15s ease;
+}
+.kit-hub-cta:hover { filter: brightness(1.1); }
+@media (max-width: 768px) {
+  .kit-hub-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+    padding: var(--space-4);
+  }
+  .kit-hub-img {
+    width: 100%;
+    aspect-ratio: 16/6;
+  }
+  .kit-hub-cta {
+    justify-content: center;
+    align-self: stretch;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kit-hub-cta { transition: none; }
+}
