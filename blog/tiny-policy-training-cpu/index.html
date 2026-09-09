@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Training a Chatbot Policy on a Laptop — ReLU.chat</title>
+<meta name="description" content="A reproducible CPU training recipe, a real three-second run, and the limits of routing metrics on a small contextual-bandit policy.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/tiny-policy-training-cpu/">
+
+<meta property="og:title" content="Training a Chatbot Policy on a Laptop">
+<meta property="og:description" content="A reproducible CPU training recipe, a real three-second run, and the limits of routing metrics on a small contextual-bandit policy.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/tiny-policy-training-cpu/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="reinforcement-learning">
+<meta property="article:tag" content="engineering">
+<meta property="article:tag" content="evaluation">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Training a Chatbot Policy on a Laptop">
+<meta name="twitter:description" content="A reproducible CPU training recipe, a real three-second run, and the limits of routing metrics on a small contextual-bandit policy.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/tiny-policy-training-cpu/#webpage",
+      "url": "https://relu.chat/blog/tiny-policy-training-cpu/",
+      "name": "Training a Chatbot Policy on a Laptop",
+      "description": "A reproducible CPU training recipe, a real three-second run, and the limits of routing metrics on a small contextual-bandit policy.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/tiny-policy-training-cpu/#article",
+      "headline": "Training a Chatbot Policy on a Laptop",
+      "description": "A reproducible CPU training recipe, a real three-second run, and the limits of routing metrics on a small contextual-bandit policy.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/tiny-policy-training-cpu/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "reinforcement-learning, engineering, evaluation"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Training a Chatbot Policy on a Laptop</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">reinforcement-learning</span><span class="article-tag">engineering</span><span class="article-tag">evaluation</span></div>
+
+  <h1 class="article-hero-title">Training a Chatbot Policy on a Laptop</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-define-the-experiment-before-training">Define the experiment before training</a></li><li><a href="#section-keep-the-exported-computation-identical">Keep the exported computation identical</a></li><li><a href="#section-the-september-2026-run">The September 2026 run</a></li><li><a href="#section-reproduce-and-inspect">Reproduce and inspect</a></li></ol></nav><div class="article-body">
+    <p>A useful chatbot policy does not need to generate language. It can make a much smaller decision: should this question receive a definition, an example, a comparison, or an explanation that the topic is outside the knowledge base?</p>
+
+<p>ReLU.chat uses a 25-input network with two ReLU hidden layers, 128 and 64 units wide. Its 13,079 parameters choose response behavior. The sentence-embedding model is separate and stays frozen. That distinction makes CPU training practical.</p>
+
+<h2 id="section-define-the-experiment-before-training">Define the experiment before training</h2>
+
+<p>One question is one episode. The state contains retrieval scores, intent signals, entity matches, and conversation features. Actions choose mode, intent, topic count, fragment count, and tone. The reward measures agreement with authored routing labels.</p>
+
+<p>This is a contextual bandit. It does not optimize a long conversation trajectory. Calling it conversational intelligence would overstate what the experiment measures. The appropriate comparisons are the previous policy, a supervised-only checkpoint, and the reward-trained candidate.</p>
+
+<h2 id="section-keep-the-exported-computation-identical">Keep the exported computation identical</h2>
+
+<p>An earlier training path inserted LayerNorm between linear layers, while browser inference omitted it. Learned weights alone cannot reproduce that missing operation. The replacement trainer uses exactly the browser’s linear–ReLU–linear–ReLU computation.</p>
+
+<p>Feature scaling happens during training. Before export, each first-layer weight column is divided by its feature scale. The deployed network therefore consumes the same raw features as the JavaScript extractor. Numerical fixtures compare exported Python predictions with JavaScript and WASM outputs.</p>
+
+<h2 id="section-the-september-2026-run">The September 2026 run</h2>
+
+<p>The dataset contains 2,688 authored cases: 1,830 training, 420 validation, and 438 test cases. Topics are separated across all three splits. Training question templates differ from the templates used for validation and testing. Follow-up cases are tied to their topic split. No user conversations are included.</p>
+
+<p>Supervised warm-start training is followed by fresh, on-policy REINFORCE samples. An action-independent expected-reward baseline reduces variance. The run completed training, evaluation, and export in 3.10 seconds on the development laptop. This is one local measurement, not a timing guarantee for every device.</p>
+
+<p>Joint mode-and-intent accuracy on the held-out cases was 93.6% for the old policy, 98.6% for supervised training, and 98.6% after REINFORCE. The supervised and RL checkpoints tied on this test metric; the RL stage did not add a measured test-accuracy gain. The distinction matters when deciding whether extra training complexity earns its keep.</p>
+
+<h2 id="section-reproduce-and-inspect">Reproduce and inspect</h2>
+
+<p>The repository includes build-policy-dataset.mjs, train-policy-fast.py, and verify-fast-policy.mjs under dev/scripts. The fast trainer needs NumPy, limits numerical-library threads, and enforces a wall-clock deadline. The release also has an external process timeout.</p>
+
+<p>Keep the best checkpoint according to validation, then run the untouched test split once for acceptance. Separately check real answers, unsupported questions, follow-ups, and model-loading failures. Routing accuracy cannot establish factual correctness, useful prose, or user satisfaction.</p>
+
+<p><a href="/data/policy-evaluation.json" rel="noopener">Inspect the published evaluation summary</a>, then <a href="/chat/reinforcement-learning-chat/" rel="noopener">explore reinforcement learning</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/reinforcement-learning-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/reward-design-small-chatbot/">Reward Design for a Small Learning Chatbot</a></li><li><a href="/blog/grouped-validation-leakage/">Data Leakage: Split by Entity Before You Train</a></li><li><a href="/blog/q-learning-sarsa-worked-example/">Q-learning vs SARSA: One Update, Worked Through</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Training%20a%20Chatbot%20Policy%20on%20a%20Laptop&url=https%3A%2F%2Frelu.chat%2Fblog%2Ftiny-policy-training-cpu%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Ftiny-policy-training-cpu%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>

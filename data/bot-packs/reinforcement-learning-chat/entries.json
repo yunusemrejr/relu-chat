@@ -1,0 +1,356 @@
+[
+  {
+    "id": "reinforcement-learning",
+    "idx": 0,
+    "name": "Reinforcement learning",
+    "aliases": [
+      "reinforcement learning",
+      "rl",
+      "agent",
+      "environment"
+    ],
+    "summary": "Reinforcement learning studies agents that improve decisions through interaction and reward. The objective is expected return over time, not simply predicting a labeled answer.",
+    "related": [
+      "markov-decision-process"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "markov-decision-process",
+    "idx": 1,
+    "name": "Markov decision process",
+    "aliases": [
+      "markov decision process",
+      "mdp",
+      "markov property",
+      "state"
+    ],
+    "summary": "An MDP describes states, actions, transition probabilities, rewards, and a discount factor. A state is Markov when it contains the information needed to predict the next transition given the action.",
+    "related": [
+      "reward-return"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "reward-return",
+    "idx": 2,
+    "name": "Reward and return",
+    "aliases": [
+      "reward and return",
+      "return",
+      "discount factor",
+      "gamma",
+      "cumulative reward"
+    ],
+    "summary": "Reward is feedback for one transition; return aggregates rewards across future steps. They are different learning targets.",
+    "related": [
+      "exploration-exploitation"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "exploration-exploitation",
+    "idx": 3,
+    "name": "Exploration and exploitation",
+    "aliases": [
+      "exploration and exploitation",
+      "exploration",
+      "exploitation",
+      "epsilon greedy"
+    ],
+    "summary": "Exploration tries actions to learn about their outcomes; exploitation chooses actions that currently appear best.",
+    "related": [
+      "contextual-bandit"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "contextual-bandit",
+    "idx": 4,
+    "name": "Contextual bandit",
+    "aliases": [
+      "contextual bandit",
+      "bandit",
+      "multi armed bandit",
+      "one step rl"
+    ],
+    "summary": "A contextual bandit chooses an action using the current context and receives one-step reward. It does not model how the action changes future states.",
+    "related": [
+      "value-function"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "value-function",
+    "idx": 5,
+    "name": "Value function",
+    "aliases": [
+      "value function",
+      "state value",
+      "v function",
+      "value estimate"
+    ],
+    "summary": "A state-value function estimates expected return from a state when following a particular policy. It depends on both the environment and the policy.",
+    "related": [
+      "bellman-equation"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "bellman-equation",
+    "idx": 6,
+    "name": "Bellman equation",
+    "aliases": [
+      "bellman equation",
+      "bellman expectation",
+      "bellman optimality"
+    ],
+    "summary": "A Bellman equation relates value now to expected immediate reward plus discounted value after the next transition.",
+    "related": [
+      "q-learning"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "q-learning",
+    "idx": 7,
+    "name": "Q-learning",
+    "aliases": [
+      "q-learning",
+      "q learning",
+      "q value",
+      "temporal difference"
+    ],
+    "summary": "Q-learning is an off-policy temporal-difference method that updates an action-value estimate toward a reward plus the best estimated next-state value.",
+    "related": [
+      "sarsa"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "sarsa",
+    "idx": 8,
+    "name": "SARSA",
+    "aliases": [
+      "sarsa",
+      "on policy td",
+      "state action reward state action"
+    ],
+    "summary": "SARSA updates an action-value estimate using the next action actually chosen by the behavior policy. It is an on-policy TD control method.",
+    "related": [
+      "policy-gradient"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "policy-gradient",
+    "idx": 9,
+    "name": "Policy gradient",
+    "aliases": [
+      "policy gradient",
+      "reinforce",
+      "score function",
+      "policy gradients"
+    ],
+    "summary": "Policy-gradient methods adjust a parameterized action distribution to increase expected return. REINFORCE uses sampled returns to weight log-probability gradients.",
+    "related": [
+      "actor-critic"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "actor-critic",
+    "idx": 10,
+    "name": "Actor-critic",
+    "aliases": [
+      "actor-critic",
+      "actor critic",
+      "advantage",
+      "baseline"
+    ],
+    "summary": "Actor-critic methods combine a policy, the actor, with a learned value estimator, the critic. The critic supplies a lower-variance learning signal.",
+    "related": [
+      "experience-replay"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "experience-replay",
+    "idx": 11,
+    "name": "Experience replay",
+    "aliases": [
+      "experience replay",
+      "replay buffer",
+      "off policy",
+      "replay"
+    ],
+    "summary": "Experience replay stores transitions and samples them later for learning. It can reduce sample correlation and reuse expensive experience.",
+    "related": [
+      "reward-shaping"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "reward-shaping",
+    "idx": 12,
+    "name": "Reward shaping",
+    "aliases": [
+      "reward shaping",
+      "potential shaping",
+      "reward hacking",
+      "reward design"
+    ],
+    "summary": "Reward shaping adds learning guidance. Poorly designed rewards can teach an agent to optimize a proxy while failing the intended task.",
+    "related": [
+      "rl-evaluation"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "rl-evaluation",
+    "idx": 13,
+    "name": "RL evaluation",
+    "aliases": [
+      "rl evaluation",
+      "evaluation",
+      "held out",
+      "random seed",
+      "test set"
+    ],
+    "summary": "RL evaluation measures a fixed policy on tasks, seeds, or environments that were not used to choose its parameters. Training reward alone is insufficient.",
+    "related": [
+      "efficient-rl-on-a-laptop"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "efficient-rl-on-a-laptop",
+    "idx": 14,
+    "name": "Efficient RL on a laptop",
+    "aliases": [
+      "efficient rl on a laptop",
+      "cpu training",
+      "fast training",
+      "ten minute",
+      "small policy"
+    ],
+    "summary": "Efficient laptop training starts with a small decision problem, compact features, vectorized batches, and a fixed wall-clock budget.",
+    "related": [
+      "termination-truncation"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "termination-truncation",
+    "idx": 15,
+    "name": "Termination and truncation",
+    "aliases": [
+      "termination and truncation",
+      "terminal",
+      "truncated",
+      "time limit",
+      "episode"
+    ],
+    "summary": "Termination means the task reached an end state. Truncation means an external limit stopped observation, even if the underlying task could continue.",
+    "related": [
+      "reinforcement-learning"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  }
+]

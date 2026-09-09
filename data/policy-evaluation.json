@@ -1,0 +1,84 @@
+{
+  "method": "supervised warm start + on-policy contextual-bandit REINFORCE",
+  "task": "One-step routing reward from authored labels; not end-to-end factuality or real-user feedback.",
+  "seed": 20260909,
+  "dataset_sha256": "965244ecb66e21f43b52a66ac0b5d47781c158a49c3ac86c825b050d374ada10",
+  "training_seconds": 3.101,
+  "max_training_seconds": 120,
+  "rl_updates": 1620,
+  "parameters": 13079,
+  "split_counts": {
+    "train": 1830,
+    "validation": 420,
+    "test": 438
+  },
+  "split_protocol": "Topics are disjoint across all three splits. Training question templates differ from validation/test templates. Authored cases; no user conversations.",
+  "old_policy_test": {
+    "mode": 0.9429223744292238,
+    "intent": 0.9928571428571429,
+    "topic_count": 0.1761904761904762,
+    "frag_count": 0,
+    "tone": 0.5095238095238095,
+    "joint_mode_intent": 0.9360730593607306,
+    "score": 0.7919308545335944
+  },
+  "supervised_test": {
+    "mode": 0.9885844748858448,
+    "intent": 0.9976190476190476,
+    "topic_count": 1,
+    "frag_count": 1,
+    "tone": 1,
+    "joint_mode_intent": 0.9863013698630136,
+    "score": 0.9944814090019569
+  },
+  "reinforce_test": {
+    "mode": 0.9885844748858448,
+    "intent": 0.9976190476190476,
+    "topic_count": 1,
+    "frag_count": 1,
+    "tone": 1,
+    "joint_mode_intent": 0.9863013698630136,
+    "score": 0.9944814090019569
+  },
+  "validation": {
+    "mode": 1,
+    "intent": 0.9926470588235294,
+    "topic_count": 1,
+    "frag_count": 0.9926470588235294,
+    "tone": 0.9926470588235294,
+    "joint_mode_intent": 0.9928571428571429,
+    "score": 0.9963235294117647
+  },
+  "release_gate_passed": true,
+  "retrieval_benchmark": {
+    "runtime": "v22.22.3",
+    "corpus_entries": 80,
+    "queries": 30,
+    "samples": 150,
+    "old": {
+      "median_ms": 16.666615000000093,
+      "p95_ms": 17.66905799999995
+    },
+    "current": {
+      "median_ms": 0.07340399999975489,
+      "p95_ms": 0.1297669999999016
+    },
+    "median_speedup": 227.05322598299475,
+    "ranking_parity": true
+  },
+  "numerical_verification": {
+    "fixtures": 40,
+    "maxExportError": 1.7881393432617188e-7,
+    "maxWasmError": 0,
+    "js": {
+      "median_us": 13.968000000005532,
+      "p95_us": 18.507999999997082
+    },
+    "wasm": {
+      "median_us": 14.24799999998072,
+      "p95_us": 21.721000000013646
+    },
+    "wasmBytes": 3685,
+    "node": "v22.22.3"
+  }
+}

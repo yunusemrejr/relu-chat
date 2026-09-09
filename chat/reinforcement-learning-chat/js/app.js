@@ -1,0 +1,2 @@
+import { bootChat } from '/core/chat-page.js';
+bootChat({"id": "reinforcement-learning-chat", "name": "Reinforcement Learning Chat", "url": "/chat/reinforcement-learning-chat/", "description": "Learn how agents choose actions: rewards, value functions, bandits, Q-learning, and policy gradients.", "tags": ["Reinforcement learning", "education", "on-device"], "kb_version": "2.0.0", "kb_updated": "2026-09-09", "topic_count": 16, "engine": "shared", "suggestions": ["What is Q-learning?", "Compare Q-learning and SARSA", "Example of reward shaping", "Explain contextual bandit"]});

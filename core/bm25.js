@@ -30,9 +30,11 @@ export class BM25Scorer {
   }
 
   fit(documents) {
+    this._index = null;
     this._docCount = documents.length;
     this._docTokens = documents.map(doc => tokens(doc));
     this._docLens = this._docTokens.map(t => t.length);
+    this._termFrequencies = this._docTokens.map(words => { const tf = new Map(); for (const word of words) tf.set(word, (tf.get(word) || 0) + 1); return tf; });
     this._avgDocLen = this._docLens.reduce((a, b) => a + b, 0) / Math.max(this._docCount, 1);
 
     // Build document frequency map (unigrams + bigrams)
@@ -63,6 +65,7 @@ export class BM25Scorer {
 
     // Pre-compute bigrams for each document
     this._docBigrams = this._docTokens.map(tkns => bigrams(tkns));
+    this._bigramSets = this._docBigrams.map(words => new Set(words));
 
     this._ready = true;
     return this;
@@ -153,10 +156,7 @@ export class BM25Scorer {
     if (!docTokens || docLen === 0) return 0;
 
     // Build term frequency map
-    const tf = new Map();
-    for (const t of docTokens) {
-      tf.set(t, (tf.get(t) || 0) + 1);
-    }
+    const tf = this._termFrequencies[docIdx];
 
     let score = 0;
 
@@ -171,7 +171,7 @@ export class BM25Scorer {
 
     // Bigram scoring (bonus for adjacent word matches)
     const qBigrams = bigrams(qTokens);
-    const docBigramSet = new Set(this._docBigrams[docIdx] || []);
+    const docBigramSet = this._bigramSets[docIdx];
     if (qBigrams.length > 0 && docBigramSet.size > 0) {
       for (const qbg of qBigrams) {
         if (docBigramSet.has(qbg)) {
@@ -203,26 +203,16 @@ export class BM25Scorer {
    */
   scoreTopK(query, k = 20) {
     if (!this._ready) return [];
-    const n = this._docCount;
-    const kk = Math.max(1, Math.min(k | 0, n));
+    const kk = Math.max(1, Math.min(k | 0, this._docCount));
     const res = [];
-    const used = new Set();
-    let maxS = 0;
-    for (let r = 0; r < kk; r++) {
-      let best = -1, bs = -Infinity;
-      for (let j = 0; j < n; j++) {
-        if (used.has(j)) continue;
-        const s = this.score(query, j);
-        if (s > bs) { bs = s; best = j; }
-      }
-      if (best < 0) break;
-      used.add(best);
-      if (bs > maxS) maxS = bs;
-      res.push({ i: best, s: bs });
+    for (let i = 0; i < this._docCount; i++) {
+      const item = { i, s: this.score(query, i) };
+      let at = res.findIndex(other => item.s > other.s);
+      if (at < 0) at = res.length;
+      if (at < kk) { res.splice(at, 0, item); if (res.length > kk) res.pop(); }
     }
-    if (maxS > 0) {
-      for (const r of res) r.s /= maxS;
-    }
+    const maxS = res[0]?.s || 0;
+    if (maxS > 0) for (const result of res) result.s /= maxS;
     return res;
   }
 

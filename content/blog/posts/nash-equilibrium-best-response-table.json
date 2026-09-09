@@ -1,0 +1,18 @@
+{
+  "id": "nash-equilibrium-best-response-table",
+  "slug": "nash-equilibrium-best-response-table",
+  "title": "Find a Nash Equilibrium with Best Responses",
+  "meta_title": "Find a Nash Equilibrium with Best Responses",
+  "meta_description": "Check a complete 2×2 game, identify two pure equilibria, and distinguish unilateral stability from efficiency.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "game-theory",
+    "worked-example"
+  ],
+  "excerpt": "Check a complete 2×2 game, identify two pure equilibria, and distinguish unilateral stability from efficiency.",
+  "related_bot": "game-theory-chat",
+  "content": "# Find a Nash Equilibrium with Best Responses\n\nA pure Nash equilibrium is an action pair in which neither player can improve their payoff by changing only their own action. The simplest way to check a small game is to mark best responses one player at a time.\n\nDo not start by looking for the largest sum of payoffs. Equilibrium concerns unilateral incentives, while efficiency compares outcomes differently.\n\n## Specify the payoff table\n\nPlayer 1 chooses Top or Bottom. Player 2 chooses Left or Right. Each payoff pair lists player 1 first and player 2 second.\n\nTop–Left gives (3, 3). Top–Right gives (0, 2). Bottom–Left gives (2, 0). Bottom–Right gives (1, 1).\n\nWrite down the ordering of the payoff pair before calculating. Reversing the players’ payoffs is a common source of errors.\n\n## Mark player 1’s best responses\n\nIf player 2 chooses Left, player 1 compares 3 from Top with 2 from Bottom. Top is the best response.\n\nIf player 2 chooses Right, player 1 compares 0 from Top with 1 from Bottom. Bottom is the best response. These comparisons stay within a column because player 2’s action is held fixed.\n\n## Mark player 2’s best responses\n\nIf player 1 chooses Top, player 2 compares 3 from Left with 2 from Right. Left is the best response.\n\nIf player 1 chooses Bottom, player 2 compares 0 from Left with 1 from Right. Right is the best response. These comparisons stay within a row because player 1’s action is held fixed.\n\n## Find the intersections\n\nTop–Left and Bottom–Right are both mutual best responses. At either outcome, a unilateral deviation reduces the deviator’s payoff. There are therefore two pure Nash equilibria.\n\nThe two off-diagonal outcomes fail the test. At Top–Right, either player can improve by switching. The same is true at Bottom–Left.\n\n## Separate stability from welfare\n\nTop–Left gives both players 3, whereas Bottom–Right gives both 1. The latter is Pareto dominated by the former, yet it remains a Nash equilibrium because one player cannot move both players together.\n\nMultiple equilibria also leave a coordination question unresolved. Finding equilibrium action pairs does not explain which one real players will choose or how they will learn it.\n\nThis game also has an interior mixed equilibrium: each player assigns probability one-half to their first action. That follows from making the other player indifferent. Pure and mixed calculations answer related but separate parts of the game.\n\nSee [Stanford’s game theory reference](https://plato.stanford.edu/entries/game-theory/) and [ask Game Theory Chat about best-response tables](/chat/game-theory-chat/?q=Explain%20best-response%20table)."
+}

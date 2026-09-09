@@ -39,7 +39,7 @@
       "alkhwarizmi",
       "khwarizmi"
     ],
-    "summary": "Persian mathematician, astronomer, and geographer whose works founded algebra and introduced algorithms.",
+    "summary": "Persian mathematician, astronomer, and geographer whose influential works systematized algebra and described arithmetic methods.",
     "related": [
       "house_of_wisdom",
       "algebra",
@@ -1180,6 +1180,66 @@
       "philosophy_golden_age",
       "al_ghazali"
     ],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "historical_sources",
+    "idx": 47,
+    "name": "Reading historical sources",
+    "aliases": [
+      "reading historical sources",
+      "source criticism",
+      "historical evidence",
+      "manuscript evidence"
+    ],
+    "summary": "Historical claims should distinguish surviving primary texts, later copies, translations, and modern interpretation. An attribution can be plausible without being certain.",
+    "related": [],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "knowledge_networks",
+    "idx": 48,
+    "name": "Networks of knowledge transmission",
+    "aliases": [
+      "networks of knowledge transmission",
+      "knowledge transmission",
+      "translation networks",
+      "scientific exchange"
+    ],
+    "summary": "Scholarship across medieval Islamic societies developed through networks of translation, teaching, travel, correspondence, and manuscript copying.",
+    "related": [],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "periodization",
+    "idx": 49,
+    "name": "Periodization of the Islamic Golden Age",
+    "aliases": [
+      "periodization of the islamic golden age",
+      "golden age dates",
+      "end of golden age",
+      "periodization"
+    ],
+    "summary": "The Islamic Golden Age is a broad modern label for periods of intellectual activity across diverse societies. Exact starting and ending dates depend on the field and region.",
+    "related": [],
     "fragmentKeys": [
       "def",
       "int",

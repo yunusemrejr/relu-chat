@@ -1,10 +1,11 @@
 {
   "botId": "golden-age-inquiry",
-  "kbVersion": "1.0.0",
+  "kbVersion": "2.0.0",
   "model": {
     "embedding": "all-MiniLM-L6-v2",
     "dim": 384,
-    "vectorDtype": "float16"
+    "vectorDtype": "float32",
+    "vectors": "browser-generated-content-hash-cache"
   },
   "config": {
     "thresholds": {
@@ -17,13 +18,13 @@
   "fragments": "fragments.json",
   "aliasIndex": "aliases.json",
   "bm25Index": "bm25.json",
-  "entryVectors": "entry-vectors.f16.json",
-  "fragmentVectors": "fragment-vectors.f16.json",
+  "entryVectors": null,
+  "fragmentVectors": null,
   "diagrams": "diagrams.json",
   "overrides": "overrides.json",
   "intents": "intents.json",
   "policy": {
     "weights": "policy.weights.json",
-    "manifest": null
+    "manifest": "policy.manifest.json"
   }
 }

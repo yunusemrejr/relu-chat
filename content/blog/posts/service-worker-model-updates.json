@@ -1,0 +1,19 @@
+{
+  "id": "service-worker-model-updates",
+  "slug": "service-worker-model-updates",
+  "title": "Service Worker Updates Without Stale Model Weights",
+  "meta_title": "Service Worker Updates Without Stale Model Weights",
+  "meta_description": "Separate stable embedding assets from mutable policies, avoid eager runtime downloads, and test update and offline failure paths.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "web-platform",
+    "performance",
+    "offline"
+  ],
+  "excerpt": "Separate stable embedding assets from mutable policies, avoid eager runtime downloads, and test update and offline failure paths.",
+  "related_bot": "web-platform-chat",
+  "content": "# Service Worker Updates Without Stale Model Weights\n\nA service worker can make a chatbot load quickly on repeat visits. It can also keep an old model alive long after a new release if caching rules treat mutable files as immutable.\n\nThe safe design starts with asset identity. Ask which URLs represent fixed content and which URLs are reused whenever a file changes.\n\n## Separate model bytes from policy revisions\n\nAn embedding model that does not change between releases can live in a persistent model cache. If its content changes, give the resource a new versioned identity. Otherwise a cache-first strategy has no reason to request the new bytes.\n\nPolicy manifests and weights are different when deployment reuses their URLs. They need revalidation or network-first fetching, plus a consistency check. A new manifest paired with old weights should trigger a recoverable fallback rather than unchecked inference.\n\n## Remember the HTTP cache\n\nService-worker Cache Storage and the browser HTTP cache are separate layers. Missing a response in Cache Storage does not necessarily force a transfer from the origin.\n\nFor mutable release assets, use request and response cache rules that permit fresh validation. For versioned, stable model resources, long reuse can be appropriate. Do not apply one lifetime to every JSON file merely because the extension matches.\n\n## Download only what is needed\n\nPreloading every WASM runtime variant during service-worker activation can spend bandwidth before a visitor opens a chatbot. It may also fetch alternatives the browser will never select.\n\nA lightweight page shell can install without downloading the embedding model. Load enhanced matching when the person chooses it, and let the runtime request the compatible binary. Basic keyword retrieval can remain available while the optional enhancement prepares.\n\n## Keep writes and partial responses out\n\nAn API POST must not enter a public asset cache. Likewise, a 206 Partial Content response is not a complete model file. Caching it under the full resource key can break later requests in confusing ways.\n\nHandle or bypass range requests deliberately. Cache successful complete GET responses only, and leave unrelated origins and sensitive endpoints outside the service worker’s asset path.\n\n## Test a real update sequence\n\nVisit with release A, then deploy release B and reload. Check both first and subsequent navigations. Next disconnect the network and revisit a cached page. Finally open an uncached route offline: it should explain that the page is unavailable, not masquerade as the home page.\n\nKeep cache cleanup scoped to the application’s own prefix. A website can host other tools whose caches must survive your activation event.\n\nSee [MDN’s service-worker guide](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers) and [ask Web Platform Chat about cache strategies](/chat/web-platform-chat/?q=Explain%20cache%20strategies)."
+}

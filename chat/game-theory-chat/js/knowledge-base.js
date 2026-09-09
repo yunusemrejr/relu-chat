@@ -1,5 +1,5 @@
-export const KB_VERSION = '1.2.0';
-export const KB_UPDATED = '2026-05-16';
+export const KB_VERSION = '2.0.0';
+export const KB_UPDATED = '2026-09-09';
 
 export function kb(id, name, aliases, summary, f, related=[]) {
   return { id, name, aliases: [name.toLowerCase(), ...aliases.map(a => a.toLowerCase())], summary, f, related };
@@ -1011,4 +1011,111 @@ export const KB = [
    ['coalition','core','mech_design','fair_division'])
 ];
 
+
+// September 2026: worked examples and evaluation literacy.
+KB.push(...[
+  {
+    "id": "best_response_worked",
+    "name": "Best-response table",
+    "aliases": [
+      "best-response table",
+      "best response",
+      "find nash equilibrium",
+      "2x2 equilibrium"
+    ],
+    "summary": "A best-response table marks the actions that maximize each player’s payoff against each fixed action of the opponent. Mutual best responses are pure Nash equilibria.",
+    "f": {
+      "def": [
+        "A best-response table marks the actions that maximize each player’s payoff against each fixed action of the opponent. Mutual best responses are pure Nash equilibria."
+      ],
+      "int": [
+        "Check one player at a time while holding the other action fixed. Ties mean there may be several best responses."
+      ],
+      "ex": [
+        "For payoffs (3,3), (0,2) in the top row and (2,0), (1,1) in the bottom row, both (top,left) and (bottom,right) are mutual best responses."
+      ],
+      "form": [
+        "A profile is Nash when no unilateral deviation strictly improves the deviator’s payoff. This test does not compare total welfare."
+      ],
+      "app": [
+        "Use this method to check a two-player payoff table by hand. The bot explains the method; it does not parse arbitrary uploaded payoff matrices."
+      ]
+    },
+    "related": [],
+    "sources": [
+      {
+        "title": "Stanford Encyclopedia: Game Theory",
+        "url": "https://plato.stanford.edu/entries/game-theory/"
+      }
+    ]
+  },
+  {
+    "id": "mixed_equilibrium_worked",
+    "name": "Mixed-equilibrium calculation",
+    "aliases": [
+      "mixed-equilibrium calculation",
+      "calculate mixed equilibrium",
+      "indifference method"
+    ],
+    "summary": "To find an interior mixed equilibrium, choose each player’s mixing probability to make the other player indifferent between actions in their support.",
+    "f": {
+      "def": [
+        "To find an interior mixed equilibrium, choose each player’s mixing probability to make the other player indifferent between actions in their support."
+      ],
+      "int": [
+        "Your opponent’s mix determines your indifference, and your mix determines theirs. Reversing this is a common calculation error."
+      ],
+      "ex": [
+        "In matching pennies with payoffs +1 for a match and −1 otherwise to player 1, if player 2 chooses heads with probability q, the two expected payoffs are 2q−1 and 1−2q. Equality gives q=1/2."
+      ],
+      "form": [
+        "Solve the indifference equations, check all probabilities lie in [0,1], and verify excluded actions do not offer a profitable deviation."
+      ],
+      "app": [
+        "Use support enumeration when there are more than two actions. Not every equilibrium uses every available action."
+      ]
+    },
+    "related": [],
+    "sources": [
+      {
+        "title": "Stanford Encyclopedia: Game Theory",
+        "url": "https://plato.stanford.edu/entries/game-theory/"
+      }
+    ]
+  },
+  {
+    "id": "equilibrium_limits",
+    "name": "Limits of equilibrium predictions",
+    "aliases": [
+      "limits of equilibrium predictions",
+      "equilibrium prediction",
+      "rationality assumptions"
+    ],
+    "summary": "An equilibrium is a consistency condition on strategies and beliefs under a specified model. It does not guarantee that people will discover or play it.",
+    "f": {
+      "def": [
+        "An equilibrium is a consistency condition on strategies and beliefs under a specified model. It does not guarantee that people will discover or play it."
+      ],
+      "int": [
+        "Preferences, information, timing, and feasible actions must be modeled before an equilibrium prediction has meaning."
+      ],
+      "ex": [
+        "Two coordination equilibria can both be stable against unilateral deviation, while the model alone does not select which one players reach."
+      ],
+      "form": [
+        "Existence, uniqueness, efficiency, and convergence are separate properties. Proving one does not establish the others."
+      ],
+      "app": [
+        "Compare predicted behavior with evidence, and state assumptions when applying a classroom game to real institutions."
+      ]
+    },
+    "related": [],
+    "sources": [
+      {
+        "title": "Stanford Encyclopedia: Game Theory",
+        "url": "https://plato.stanford.edu/entries/game-theory/"
+      }
+    ]
+  }
+]);
 export const KB_ID_TO_INDEX = new Map(KB.map((e, i) => [e.id, i]));

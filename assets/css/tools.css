@@ -177,7 +177,10 @@
   border: 1px solid var(--border);
   background: var(--bg-surface);
   color: var(--text-secondary);
-  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background 0.15s ease;
   user-select: none;
   white-space: nowrap;
 }
@@ -233,7 +236,9 @@
   font-family: var(--font-mono);
 }
 
-.metric-value.accent { color: var(--accent); }
+.metric-value.accent {
+  color: var(--accent);
+}
 
 /* Info box */
 .info-box {
@@ -349,9 +354,16 @@
   color: var(--text-secondary);
 }
 
-.step-display .step-line .hl { color: var(--accent); font-weight: 600; }
-.step-display .step-line .dim { color: var(--text-muted); }
-.step-display .step-line .error { color: var(--error); }
+.step-display .step-line .hl {
+  color: var(--accent);
+  font-weight: 600;
+}
+.step-display .step-line .dim {
+  color: var(--text-muted);
+}
+.step-display .step-line .error {
+  color: var(--error);
+}
 
 /* Node value indicators */
 .node-value {
@@ -508,10 +520,12 @@
   white-space: nowrap;
   transition: filter 0.15s ease;
 }
-.kit-tool-cta:hover { filter: brightness(1.1); }
+.kit-tool-cta:hover {
+  filter: brightness(1.1);
+}
 .kit-tool-img {
   width: 240px;
-  aspect-ratio: 3/2;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -526,7 +540,7 @@
   }
   .kit-tool-img {
     width: 100%;
-    aspect-ratio: 16/6;
+    aspect-ratio: 16 / 6;
   }
   .kit-tool-cta {
     justify-content: center;
@@ -534,5 +548,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .kit-tool-cta { transition: none; }
+  .kit-tool-cta {
+    transition: none;
+  }
 }

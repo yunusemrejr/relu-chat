@@ -47,7 +47,7 @@ import { cosine, tokens } from '../core/nlp.js';
 // ---------------------------------------------------------------------------
 
 const COMPARISON_CUES = /\b(vs|versus|compare|comparison|difference|differ|distinguish|between)\b/i;
-const FORMAL_CUES     = /\b(prove|proof|theorem|formal|math|mathematical|rigorous|derive|defini)\w*\b/i;
+const FORMAL_CUES     = /\b(prove|proof|theorem|formal|math|mathematical|rigorous|derive)\w*\b/i;
 const EXAMPLE_CUES    = /\b(example|illustrate|illustration|case|concrete|instance|show me)\b/i;
 
 // ---------------------------------------------------------------------------

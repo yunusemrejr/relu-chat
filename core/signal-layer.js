@@ -1,3 +1,4 @@
+import { detectIntentCue } from './intent-cues.js';
 import { BM25Scorer } from './bm25.js';
 import { cosine, tokens, compileAliasRegex, extractEntities, classifyIntent, rankTopK, DEFAULT_INTENTS } from './nlp.js';
 import { extractPolicyFeatures } from '../policy/feature-extractor.js';
@@ -26,6 +27,7 @@ export class SignalLayer {
       // Boost name and aliases by repeating, summary doubled
       return `${name} ${name} ${name} ${aliases} ${aliases} ${summary} ${summary} ${def} ${int} ${ex} ${form} ${app}`;
     });
+    this._vocabulary = new Set(texts.flatMap(tokens));
     this._bm25Scorer = new BM25Scorer(1.5, 0.75).fit(texts);
     this._bm25Ready = this._bm25Scorer.getReady();
     return this;
@@ -60,9 +62,10 @@ export class SignalLayer {
     compileAliasRegex(KB);
 
     let entities = extractEntities(query, KB);
+    const explicitEntities = [...entities];
 
     const recentEntities = session?.getRecentEntities?.();
-    if (recentEntities && recentEntities.length > 0) {
+    if (entities.length === 0 && session?.getFollowUpContext?.(query)?.isFollowUp && recentEntities?.length > 0) {
       const entitySet = new Set(entities);
       for (const re of recentEntities) {
         if (!entitySet.has(re)) {
@@ -82,6 +85,9 @@ export class SignalLayer {
       entropy: calibration.entropy,
     };
 
+    const cue = detectIntentCue(query);
+    if (cue) { intent.name = cue; intent.rawScores = { ...intent.rawScores, [cue]: 0.95 }; }
+
     const denseRanked = rankTopK(qEmb, entryEmb, 20);
 
     let sparseRanked = [];
@@ -95,6 +101,23 @@ export class SignalLayer {
     const reranked = neuralRerank(query, qEmb, topK, entryEmb, 0.15);
 
     const followUp = session?.getFollowUpContext?.(query) || null;
+    // Exact entity names outrank incidental corpus overlap; longest match first.
+    for (let position = 0; position < explicitEntities.length; position++) {
+      const i = explicitEntities[position];
+      const exact = KB[i]?.aliasRegex?.some(regex => regex.test(query));
+      if (!exact) continue;
+      const existing = reranked.find(item => item.i === i);
+      const score = .96 - Math.min(position, 5) * .03;
+      if (existing) existing.s = Math.max(existing.s, score);
+      else reranked.push({ i, s: score, dense: 0, sparse: 0, rerankBonus: 0 });
+    }
+    const contentTokens = tokens(query);
+    const knownFraction = this._vocabulary && contentTokens.length
+      ? contentTokens.filter(word => this._vocabulary.has(word)).length / contentTokens.length : 1;
+    const unsupported = explicitEntities.length === 0 && !followUp?.isFollowUp && knownFraction < .4 && contentTokens.length >= 2;
+    if (unsupported) for (const item of reranked) item.s = 0;
+    reranked.sort((a, b) => b.s - a.s || a.i - b.i);
+
     const wasAmbiguous = session?.wasPreviousQueryAmbiguous?.() || false;
 
     const queryTokens = tokens(query);
@@ -305,6 +328,12 @@ export class SignalLayer {
           followUpSignals.boostDelta = correctionBoost;
         }
       }
+    }
+
+    if (followUp?.isFollowUp && explicitEntities.length === 0 && session?.lastTopic != null) {
+      const last = reranked.find(item => item.i === session.lastTopic);
+      if (last) last.s = Math.max(1, ...reranked.map(item => item.s + .01));
+      reranked.sort((a, b) => b.s - a.s || a.i - b.i);
     }
 
     const features = extractPolicyFeatures(

@@ -1,0 +1,19 @@
+{
+  "id": "reward-design-small-chatbot",
+  "slug": "reward-design-small-chatbot",
+  "title": "Reward Design for a Small Learning Chatbot",
+  "meta_title": "Reward Design for a Small Learning Chatbot",
+  "meta_description": "Design routing rewards without confusing longer answers, topic overlap, or training scores with useful explanations.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "reinforcement-learning",
+    "evaluation",
+    "chatbots"
+  ],
+  "excerpt": "Design routing rewards without confusing longer answers, topic overlap, or training scores with useful explanations.",
+  "related_bot": "reinforcement-learning-chat",
+  "content": "# Reward Design for a Small Learning Chatbot\n\nA reward tells a learning system what to optimize. If the reward is only a convenient proxy, an improved score may mean the proxy became easier to satisfy rather than the product became better.\n\nFor a small retrieval chatbot, separate three questions: did it find the relevant topic, did it choose the requested kind of answer, and is the resulting explanation correct and useful? One number rarely tells you all three.\n\n## Start with observable decisions\n\nAn authored routing dataset can label a question as requesting a definition, example, formal treatment, application, or comparison. A reward for matching that intent has a clear meaning. It is still narrower than a reward for teaching well.\n\nFor example, “give a worked example of projection” should select an example fragment. Correctly selecting that fragment does not prove that the numerical example is correct. The knowledge content needs a separate check.\n\n## Three tempting shortcuts\n\nRewarding answer length can produce unnecessary paragraphs. Rewarding keyword overlap can favor a fragment that repeats the question without answering it. Rewarding any on-topic response can punish a justified clarification when a question is ambiguous.\n\nA useful failure set includes a short answer that is sufficient, a long answer that is irrelevant, an unsupported question with familiar keywords, and a comparison whose two topics must remain distinct.\n\n## Keep the RL assumptions visible\n\nIn a contextual-bandit setup, sample an action from the current policy and evaluate its one-step reward. An action-independent baseline can reduce gradient variance without changing the expected policy gradient.\n\nDo not store an old log probability and later treat it as if it came from the current policy. Reusing experience requires assumptions and, where appropriate, off-policy correction. A replay buffer is not automatically valid for every policy-gradient algorithm.\n\n## Use multiple acceptance checks\n\nSelect checkpoints using validation cases. Reserve new topics or templates for a final test, and report the denominator behind every accuracy. Compare the RL candidate with a supervised-only model: if supervision already solves the task, the remaining RL gain may be small.\n\nThen inspect rendered answers. Check topic switches, examples after a definition, requests for another example, unsupported subjects, and behavior when optional assets fail to load. These tests catch failures that label agreement cannot express.\n\n## What ReLU.chat measures\n\nOur small policy experiment reports routing-label accuracy on authored cases. It does not claim to measure user satisfaction or learning outcomes. That boundary makes the result more useful: it tells us which decision improved and which questions still require evidence.\n\nRead the [CPU training experiment](/blog/tiny-policy-training-cpu/), inspect the [evaluation summary](/data/policy-evaluation.json), or [explore reward shaping](/chat/reinforcement-learning-chat/?q=Explain%20reward%20shaping)."
+}

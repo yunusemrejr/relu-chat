@@ -1,14 +1,11 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /data/
 Disallow: /dev/
-Disallow: /core/
-Disallow: /policy/
 Disallow: /assets/models/
 Disallow: /_backups/
 
-# --- Real-time search & AI discovery: full access ---
+# Search crawlers may load page rendering resources. Server rules protect private files.
 User-agent: Googlebot
 Allow: /
 User-agent: Bingbot
@@ -22,11 +19,7 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
-# --- AI training crawlers: HTML text stays readable and citable, but heavy
-#     media (images, video, model/WASM binaries) and PDFs are excluded to
-#     protect crawl budget (2026 policy; Cloudflare edge adds ai-train=no
-#     and blanket blocks for some of these agents - this file never overrides
-#     those edge blocks for media paths). ---
+# Preserve the existing training-crawler preference: readable HTML, no asset/PDF crawling.
 User-agent: GPTBot
 Allow: /
 Disallow: /assets/
@@ -51,10 +44,5 @@ User-agent: ai2bot
 Allow: /
 Disallow: /assets/
 Disallow: /*.pdf$
-
-# Note: GPTBot, ClaudeBot, Google-Extended, meta-externalagent, CCBot,
-# Bytespider, Amazonbot and Applebot-Extended are additionally blocked at the
-# edge by the Cloudflare managed robots.txt (ai-train=no). The origin rules
-# above keep article HTML citable by AI assistants while protecting media.
 
 Sitemap: https://relu.chat/sitemap.xml

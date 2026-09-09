@@ -19,7 +19,7 @@ const { buildBM25Index, buildAliasIndex } = require('./build-bm25-index.js');
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const DATA_DIR = path.join(PROJECT_ROOT, 'data', 'bots');
 const POLICY_DIR = path.join(PROJECT_ROOT, 'assets', 'models', 'policy');
-const OUTPUT_DIR = path.join(PROJECT_ROOT, 'dev', 'exports', 'bot-packs');
+const OUTPUT_DIR = path.join(PROJECT_ROOT, 'data', 'bot-packs');
 
 // ── Bot ID → policy folder mapping ────────────────────────────────────────
 function policyFolderForBotId(botId) {
@@ -77,7 +77,7 @@ async function loadBotData(botId) {
   const kbMod = await importModule(kbPath);
   const KB = kbMod.KB || [];
   const entryText = kbMod.entryText || ((e) => `${e.name} ${e.aliases?.join(' ') || ''} ${e.summary}`);
-  const KB_VERSION = kbMod.KB_VERSION || '1.0.0';
+  const KB_VERSION = kbMod.KB_VERSION || '2.0.0';
 
   // Fragment metadata
   const fragmentMetaPath = path.join(botDir, 'fragment-meta.json');
@@ -106,8 +106,8 @@ async function loadBotData(botId) {
 
   // Policy weights
   const policyFolder = policyFolderForBotId(botId);
-  const policyWeightsPath = path.join(POLICY_DIR, policyFolder, 'policy.weights.json');
-  const policyManifestPath = path.join(POLICY_DIR, policyFolder, 'policy.manifest.json');
+  const policyWeightsPath = path.join(POLICY_DIR, 'policy.weights.json');
+  const policyManifestPath = path.join(POLICY_DIR, 'policy.manifest.json');
   const hasPolicyWeights = fs.existsSync(policyWeightsPath);
   const hasPolicyManifest = fs.existsSync(policyManifestPath);
 
@@ -140,21 +140,12 @@ function buildEntries(KB) {
 }
 
 // ── Build fragments.json ──────────────────────────────────────────────────
-function buildFragments(fragmentMeta) {
-  // Return a compact version of fragment metadata keyed by entry_id
-  const result = {};
-  for (const [key, meta] of Object.entries(fragmentMeta)) {
-    result[key] = {
-      entry_id: meta.entry_id,
-      name: meta.name,
-      summary: meta.summary,
-      related: meta.related || [],
-      fragmentCount: meta.fragments
-        ? Object.values(meta.fragments).reduce((sum, arr) => sum + (Array.isArray(arr) ? arr.length : 0), 0)
-        : 0
-    };
-  }
-  return result;
+function buildFragments(KB) {
+  return Object.fromEntries(KB.map(entry => [entry.id, {
+    entry_id: entry.id, name: entry.name, summary: entry.summary,
+    related: entry.related || [], sources: entry.sources || [],
+    fragments: entry.f, fragmentCount: Object.values(entry.f).reduce((n, values) => n + values.length, 0)
+  }]));
 }
 
 // ── Build diagrams.json (related-entry graph) ─────────────────────────────
@@ -229,7 +220,7 @@ async function exportBot(botId) {
   console.log(`  ✓ entries.json (${entries.length} entries)`);
 
   // 2. fragments.json
-  const fragments = buildFragments(data.fragmentMeta);
+  const fragments = buildFragments(data.KB);
   writeJSON(outDir, 'fragments.json', fragments);
   console.log(`  ✓ fragments.json (${Object.keys(fragments).length} fragment groups)`);
 
@@ -258,11 +249,8 @@ async function exportBot(botId) {
   writeJSON(outDir, 'intents.json', intents);
   console.log(`  ✓ intents.json (${Object.keys(intents.INTENTS).length} intents)`);
 
-  // 8. Vector placeholders
-  writeVectorPlaceholder(outDir, 'entry-vectors.f16.json', data.KB.length, 384);
-  writeVectorPlaceholder(outDir, 'fragment-vectors.f16.json', Object.keys(data.fragmentMeta).length, 384);
-  console.log(`  ✓ entry-vectors.f16.json (placeholder)`);
-  console.log(`  ✓ fragment-vectors.f16.json (placeholder)`);
+  // Vectors are computed and content-hash cached by the browser when requested.
+  // No placeholder vector files are advertised as real data.
 
   // 9. Policy weights
   let policyManifest = null;
@@ -283,7 +271,8 @@ async function exportBot(botId) {
     model: {
       embedding: 'all-MiniLM-L6-v2',
       dim: 384,
-      vectorDtype: 'float16'
+      vectorDtype: 'float32',
+      vectors: 'browser-generated-content-hash-cache'
     },
     config: {
       thresholds: {
@@ -296,8 +285,8 @@ async function exportBot(botId) {
     fragments: 'fragments.json',
     aliasIndex: 'aliases.json',
     bm25Index: 'bm25.json',
-    entryVectors: 'entry-vectors.f16.json',
-    fragmentVectors: 'fragment-vectors.f16.json',
+    entryVectors: null,
+    fragmentVectors: null,
     diagrams: 'diagrams.json',
     overrides: 'overrides.json',
     intents: 'intents.json',

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Reward Design for a Small Learning Chatbot — ReLU.chat</title>
+<meta name="description" content="Design routing rewards without confusing longer answers, topic overlap, or training scores with useful explanations.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/reward-design-small-chatbot/">
+
+<meta property="og:title" content="Reward Design for a Small Learning Chatbot">
+<meta property="og:description" content="Design routing rewards without confusing longer answers, topic overlap, or training scores with useful explanations.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/reward-design-small-chatbot/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="reinforcement-learning">
+<meta property="article:tag" content="evaluation">
+<meta property="article:tag" content="chatbots">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reward Design for a Small Learning Chatbot">
+<meta name="twitter:description" content="Design routing rewards without confusing longer answers, topic overlap, or training scores with useful explanations.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/reward-design-small-chatbot/#webpage",
+      "url": "https://relu.chat/blog/reward-design-small-chatbot/",
+      "name": "Reward Design for a Small Learning Chatbot",
+      "description": "Design routing rewards without confusing longer answers, topic overlap, or training scores with useful explanations.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/reward-design-small-chatbot/#article",
+      "headline": "Reward Design for a Small Learning Chatbot",
+      "description": "Design routing rewards without confusing longer answers, topic overlap, or training scores with useful explanations.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/reward-design-small-chatbot/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "reinforcement-learning, evaluation, chatbots"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Reward Design for a Small Learning Chatbot</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">reinforcement-learning</span><span class="article-tag">evaluation</span><span class="article-tag">chatbots</span></div>
+
+  <h1 class="article-hero-title">Reward Design for a Small Learning Chatbot</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-start-with-observable-decisions">Start with observable decisions</a></li><li><a href="#section-three-tempting-shortcuts">Three tempting shortcuts</a></li><li><a href="#section-keep-the-rl-assumptions-visible">Keep the RL assumptions visible</a></li><li><a href="#section-use-multiple-acceptance-checks">Use multiple acceptance checks</a></li><li><a href="#section-what-relu-chat-measures">What ReLU.chat measures</a></li></ol></nav><div class="article-body">
+    <p>A reward tells a learning system what to optimize. If the reward is only a convenient proxy, an improved score may mean the proxy became easier to satisfy rather than the product became better.</p>
+
+<p>For a small retrieval chatbot, separate three questions: did it find the relevant topic, did it choose the requested kind of answer, and is the resulting explanation correct and useful? One number rarely tells you all three.</p>
+
+<h2 id="section-start-with-observable-decisions">Start with observable decisions</h2>
+
+<p>An authored routing dataset can label a question as requesting a definition, example, formal treatment, application, or comparison. A reward for matching that intent has a clear meaning. It is still narrower than a reward for teaching well.</p>
+
+<p>For example, “give a worked example of projection” should select an example fragment. Correctly selecting that fragment does not prove that the numerical example is correct. The knowledge content needs a separate check.</p>
+
+<h2 id="section-three-tempting-shortcuts">Three tempting shortcuts</h2>
+
+<p>Rewarding answer length can produce unnecessary paragraphs. Rewarding keyword overlap can favor a fragment that repeats the question without answering it. Rewarding any on-topic response can punish a justified clarification when a question is ambiguous.</p>
+
+<p>A useful failure set includes a short answer that is sufficient, a long answer that is irrelevant, an unsupported question with familiar keywords, and a comparison whose two topics must remain distinct.</p>
+
+<h2 id="section-keep-the-rl-assumptions-visible">Keep the RL assumptions visible</h2>
+
+<p>In a contextual-bandit setup, sample an action from the current policy and evaluate its one-step reward. An action-independent baseline can reduce gradient variance without changing the expected policy gradient.</p>
+
+<p>Do not store an old log probability and later treat it as if it came from the current policy. Reusing experience requires assumptions and, where appropriate, off-policy correction. A replay buffer is not automatically valid for every policy-gradient algorithm.</p>
+
+<h2 id="section-use-multiple-acceptance-checks">Use multiple acceptance checks</h2>
+
+<p>Select checkpoints using validation cases. Reserve new topics or templates for a final test, and report the denominator behind every accuracy. Compare the RL candidate with a supervised-only model: if supervision already solves the task, the remaining RL gain may be small.</p>
+
+<p>Then inspect rendered answers. Check topic switches, examples after a definition, requests for another example, unsupported subjects, and behavior when optional assets fail to load. These tests catch failures that label agreement cannot express.</p>
+
+<h2 id="section-what-relu-chat-measures">What ReLU.chat measures</h2>
+
+<p>Our small policy experiment reports routing-label accuracy on authored cases. It does not claim to measure user satisfaction or learning outcomes. That boundary makes the result more useful: it tells us which decision improved and which questions still require evidence.</p>
+
+<p>Read the <a href="/blog/tiny-policy-training-cpu/" rel="noopener">CPU training experiment</a>, inspect the <a href="/data/policy-evaluation.json" rel="noopener">evaluation summary</a>, or <a href="/chat/reinforcement-learning-chat/?q=Explain%20reward%20shaping" rel="noopener">explore reward shaping</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/reinforcement-learning-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/tiny-policy-training-cpu/">Training a Chatbot Policy on a Laptop</a></li><li><a href="/blog/bias-in-retrieval-chatbots/">Bias in Retrieval Chatbots: Where It Comes From and How to Audit It</a></li><li><a href="/blog/grouped-validation-leakage/">Data Leakage: Split by Entity Before You Train</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Reward%20Design%20for%20a%20Small%20Learning%20Chatbot&url=https%3A%2F%2Frelu.chat%2Fblog%2Freward-design-small-chatbot%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Freward-design-small-chatbot%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>

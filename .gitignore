@@ -31,3 +31,13 @@ output/playwright/
 
 # Runtime state written by api/ping.php (IndexNow smart-ping marker)
 data/indexnow-marker.json
+
+# Machine-local bytecode, databases, and release artifacts
+__pycache__/
+*.py[cod]
+*.db
+*.sqlite
+*.sqlite3
+dev/exports/*
+!dev/exports/.gitkeep
+.venv/

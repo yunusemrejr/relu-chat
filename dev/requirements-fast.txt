@@ -1,0 +1,2 @@
+# CPU training only; no GPU or PyTorch packages.
+numpy==2.3.5

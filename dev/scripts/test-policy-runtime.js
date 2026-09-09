@@ -132,6 +132,7 @@ function runValidationTests() {
   // 1.2 Valid plan → passes
   {
     const validPlan = {
+      ...DEFAULT_PLAN,
       mode: 'normal',
       topics: [0, 1],
       intent: 'definition',

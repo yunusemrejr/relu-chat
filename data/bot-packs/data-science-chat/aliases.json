@@ -888,5 +888,77 @@
       37,
       0.9
     ]
+  ],
+  "grouped cross validation": [
+    [
+      38,
+      1
+    ]
+  ],
+  "group leakage": [
+    [
+      38,
+      0.9
+    ]
+  ],
+  "groupkfold": [
+    [
+      38,
+      0.9
+    ]
+  ],
+  "patient split": [
+    [
+      38,
+      0.9
+    ]
+  ],
+  "probability calibration": [
+    [
+      39,
+      1
+    ]
+  ],
+  "calibrated probabilities": [
+    [
+      39,
+      0.9
+    ]
+  ],
+  "reliability diagram": [
+    [
+      39,
+      0.9
+    ]
+  ],
+  "brier score": [
+    [
+      39,
+      0.9
+    ]
+  ],
+  "dataset shift": [
+    [
+      40,
+      1
+    ]
+  ],
+  "data drift": [
+    [
+      40,
+      0.9
+    ]
+  ],
+  "distribution shift": [
+    [
+      40,
+      0.9
+    ]
+  ],
+  "concept drift": [
+    [
+      40,
+      0.9
+    ]
   ]
 }

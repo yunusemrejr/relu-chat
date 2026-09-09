@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Install as the bare repository's hooks/post-receive. Configuration stays on host:
+# git config relu.webRoot /absolute/web/root
+# git config relu.backupRoot /absolute/private/backups
+set -euo pipefail
+repo=$(git rev-parse --absolute-git-dir)
+web_root=$(git config --get relu.webRoot)
+backup_root=$(git config --get relu.backupRoot)
+mkdir -p "$backup_root"
+exec 9>"$repo/relu-deploy.lock"
+flock 9
+while read -r oldrev newrev ref; do
+  if [[ "$ref" != refs/heads/main ]]; then
+    echo "No deployment for $ref"
+    continue
+  fi
+  if [[ "$newrev" =~ ^0+$ ]]; then
+    echo "Ref deletion does not delete production files"
+    continue
+  fi
+  staging=$(mktemp -d "$backup_root/staging-XXXXXXXX")
+  for script in release_files.py package-release.py deploy-reviewed-release.py; do
+    git show "$newrev:dev/scripts/$script" > "$staging/$script"
+  done
+  python3 "$staging/package-release.py" --repository "$repo" --commit "$newrev" --output "$staging/artifact"
+  python3 "$staging/deploy-reviewed-release.py" deploy "$staging/artifact/release.tar.gz" --web-root "$web_root" --backup-root "$backup_root"
+  echo "Verified production against commit $newrev"
+done

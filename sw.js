@@ -1,250 +1,63 @@
-const CACHE_VERSION = 13;
-const CACHE_PREFIX = "relu-chat";
+const CACHE_VERSION = 14;
+const CACHE_PREFIX = 'relu-chat';
 const APP_CACHE = `${CACHE_PREFIX}-v${CACHE_VERSION}`;
-const MODEL_CACHE = `${CACHE_PREFIX}-models-v${CACHE_VERSION}`;
-
-const APP_ASSETS = [
-  "/",
-  "/assets/logo.png?v=7",
-  "/assets/fonts/sora.css",
-  "/assets/shared-design.css?v=12",
-  "/assets/canvas-ui/hero-graph.js",
-  "/assets/katex/katex.min.css",
-  "/assets/katex/katex.min.js",
-  "/assets/katex/auto-render.min.js",
-  "/core/ui.js",
-  "/core/cache.js",
-  "/core/nlp.js",
-  "/core/bm25.js",
-  "/core/signal-layer.js",
-  "/core/chatbot-engine.js",
-  "/core/bot-pack-loader.js",
-  "/core/math-utils.js",
-  "/assets/transformers/transformers.js",
-  "/manifest.webmanifest",
-];
-
-// Immutable assets: versioned URLs that never change (cache-first, no network needed)
-const IMMUTABLE_REGEX =
-  /\/assets\/transformers\/.*\.wasm$|\/assets\/models\/.*\.(onnx|json)$/;
-
-// Static assets that benefit from stale-while-revalidate: serve cached, update in background
-const STATIC_REGEX = /\.(css|js|woff2?|ttf|otf|eot|png|svg|jpg|jpeg|webp|webmanifest)$/;
-
-// Model assets to background-preload after activation (best-effort, don't block)
-const MODEL_PRELOAD_ASSETS = [
-  "/assets/transformers/ort-wasm-simd-threaded.wasm",
-  "/assets/transformers/ort-wasm-simd.wasm",
-  "/assets/transformers/ort-wasm-threaded.wasm",
-  "/assets/transformers/ort-wasm.wasm",
-  "/assets/models/all-MiniLM-L6-v2/onnx/model_quantized.onnx",
-  "/assets/models/policy/policy.manifest.json",
-  "/assets/models/policy/policy.weights.json",
-];
-
-function isModelRequest(url) {
-  return (
-    url.pathname.startsWith("/assets/models/") ||
-    url.pathname.startsWith("/assets/transformers/")
-  );
+// Keep downloaded embedding/runtime bytes across UI releases. Version the URL
+// when changing these model files; mutable policy artifacts use APP_CACHE.
+const MODEL_CACHE = `${CACHE_PREFIX}-models-v13`;
+const APP_ASSETS = ['/', '/chat/', '/errors/offline.html', '/assets/fonts/sora.css', '/assets/shared-design.css?v=14', '/manifest.webmanifest'];
+const isModel = url => url.pathname.startsWith('/assets/models/all-MiniLM-L6-v2/') || url.pathname.startsWith('/assets/transformers/');
+const openCache = name => caches.open(name).catch(() => null);
+const readCache = (cache, request) => cache ? cache.match(request).catch(() => undefined) : Promise.resolve(undefined);
+// Storage quotas or private browsing must not discard a valid network response.
+const saveCache = (cache, request, response) => cache ? cache.put(request, response).catch(() => {}) : Promise.resolve();
+async function cacheFirst(request) {
+  const cache = await openCache(MODEL_CACHE);
+  const response = await readCache(cache, request);
+  if (response) return response;
+  const fresh = await fetch(request);
+  if (fresh.ok && fresh.status !== 206) await saveCache(cache, request, fresh.clone());
+  return fresh;
 }
-
-function isImmutable(url) {
-  return IMMUTABLE_REGEX.test(url.pathname);
+async function networkFirst(request, navigation = false) {
+  const cache = await openCache(APP_CACHE);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 4500);
+  try {
+    const response = await fetch(request, { signal: controller.signal, cache: 'no-cache' });
+    if (response.ok && response.status !== 206) await saveCache(cache, request, response.clone());
+    return response;
+  } catch {
+    const cached = await readCache(cache, request);
+    if (cached) return cached;
+    if (navigation) return (await readCache(cache, '/errors/offline.html')) || new Response('This page is not available offline. Reconnect and try again.', {status:503,headers:{'Content-Type':'text/plain'}});
+    return new Response('Offline asset unavailable', { status: 503 });
+  } finally { clearTimeout(timeout); }
 }
-
-function isStaticAsset(url) {
-  return STATIC_REGEX.test(url.pathname);
-}
-
-// ---- Caching strategies ----
-
-/** Cache-first: return cached response or fetch+store. */
-async function cacheFirst(request, cacheName) {
-  const cache = await caches.open(cacheName);
-  const cached = await cache.match(request);
-  if (cached) return cached;
-  const response = await fetch(request);
-  if (response.ok && response.status !== 206) {
-    cache.put(request, response.clone());
-  }
-  return response;
-}
-
-/** Stale-while-revalidate: serve cached immediately, update in background. */
-async function staleWhileRevalidate(request, cacheName) {
-  const cache = await caches.open(cacheName);
-  const cached = await cache.match(request);
-  const fetchPromise = fetch(request)
-    .then((response) => {
-      if (response.ok && response.status !== 206) {
-        cache.put(request, response.clone());
-      }
-      return response;
-    })
-    .catch(() => cached);
-  return cached || fetchPromise;
-}
-
-/** Handle model file requests with Range request support. */
-async function handleModelRequest(request) {
-  const cache = await caches.open(MODEL_CACHE);
-
-  // Range request: serve partial content from cached full response
-  if (request.headers.has("range")) {
-    return handleRangeRequest(request, cache);
-  }
-
-  // Normal request: cache-first
-  const cached = await cache.match(request);
-  if (cached) return cached;
-
-  const response = await fetch(request);
-  if (response.ok && response.status !== 206) {
-    cache.put(request, response.clone());
-  }
-  return response;
-}
-
-/** Serve partial content from a cached full response. */
-async function handleRangeRequest(request, cache) {
-  // Match on URL alone (strip Range header from cache key)
-  const cacheKey = new Request(request.url, { method: "GET" });
-  const cached = await cache.match(cacheKey);
-
-  if (cached) {
-    const blob = await cached.blob();
-    const match = request.headers.get("range").match(/bytes=(\d+)-(\d*)/);
-    if (match) {
-      const start = parseInt(match[1], 10);
-      const end = match[2] ? parseInt(match[2], 10) + 1 : blob.size;
-      if (start < blob.size && end <= blob.size && start < end) {
-        const sliced = blob.slice(start, end);
-        return new Response(sliced, {
-          status: 206,
-          statusText: "Partial Content",
-          headers: {
-            "Content-Range": `bytes ${start}-${start + sliced.size - 1}/${blob.size}`,
-            "Content-Type":
-              cached.headers.get("Content-Type") || "application/octet-stream",
-            "Content-Length": String(sliced.size),
-          },
-        });
-      }
-    }
-    // Range not satisfiable or malformed range — serve full response
-    return cached;
-  }
-
-  // Not cached: pass Range request through to network
-  const response = await fetch(request);
-  if (response.ok && response.status !== 206) {
-    cache.put(new Request(request.url, { method: "GET" }), response.clone());
-  }
-  return response;
-}
-
-// ---- Event handlers ----
-
-self.addEventListener("install", (e) => {
-  e.waitUntil(
-    caches
-      .open(APP_CACHE)
-      .then((c) => c.addAll(APP_ASSETS))
-      .then(() => self.skipWaiting()),
-  );
+self.addEventListener('install', event => {
+  event.waitUntil((async () => {
+    const cache = await openCache(APP_CACHE);
+    await Promise.all(APP_ASSETS.map(async url => {
+      const response = await fetch(url, {cache:'reload'});
+      if (!response.ok) throw new Error(`Precache failed: ${url}`);
+      await saveCache(cache,url,response);
+    }));
+    await self.skipWaiting();
+  })());
 });
-
-self.addEventListener("activate", (e) => {
-  const activeCaches = [APP_CACHE, MODEL_CACHE];
-
-  // Phase 1: clean up old caches — fast, blocks activate
-  const cleanup = caches
-    .keys()
-    .then((keys) =>
-      Promise.all(
-        keys
-          .filter((k) => !activeCaches.includes(k))
-          .map((k) => caches.delete(k)),
-      ),
-    );
-
-  e.waitUntil(cleanup.then(() => self.clients.claim()));
-
-  // Phase 2: pre-cache critical model files in background (best-effort)
-  e.waitUntil(
-    caches
-      .open(MODEL_CACHE)
-      .then((c) =>
-        Promise.allSettled(MODEL_PRELOAD_ASSETS.map((asset) => c.add(asset))),
-      )
-      .then(() => {
-        console.log("[sw] Model preloading complete");
-      }),
-  );
-});
-
-self.addEventListener("fetch", (e) => {
-  // pi-lens-ignore: unchecked-throwing-call-js
-  const url = new URL(e.request.url);
-
-  // Only handle same-origin requests
-  if (url.origin !== self.location.origin) return;
-
-  // ---- Model files: /assets/models/ and /assets/transformers/ ----
-  if (isModelRequest(url)) {
-    if (isImmutable(url)) {
-      // Immutable WASM files: cache-first (no network after first fetch)
-      e.respondWith(cacheFirst(e.request, MODEL_CACHE));
-    } else {
-      // Model files with range request support
-      e.respondWith(handleModelRequest(e.request));
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    for (const key of await caches.keys()) {
+      if (key.startsWith(CACHE_PREFIX + '-') && key !== APP_CACHE && key !== MODEL_CACHE) await caches.delete(key);
     }
-    return;
-  }
-
-  // ---- Static assets (CSS, JS, fonts, images): stale-while-revalidate ----
-  if (isStaticAsset(url)) {
-    e.respondWith(staleWhileRevalidate(e.request, APP_CACHE));
-    return;
-  }
-
-  // ---- Navigation requests (HTML pages): stale-while-revalidate ----
-  // Serves cached HTML immediately for fast load + offline, then updates cache
-  // in the background so changes propagate without manual refresh.
-  if (e.request.mode === "navigate") {
-    e.respondWith(staleWhileRevalidate(e.request, APP_CACHE));
-    return;
-  }
-
-  // ---- Default: cache-first with network fallback (preserves existing behavior) ----
-  e.respondWith(
-    caches.match(e.request).then(
-      (r) =>
-        r ||
-        fetch(e.request)
-          .then((res) => {
-            if (
-              res.ok &&
-              res.status !== 206 &&
-              (url.pathname.startsWith("/core/") ||
-                url.pathname.startsWith("/data/") ||
-                url.pathname.startsWith("/assets/") ||
-                url.pathname.startsWith("/chat/"))
-            ) {
-              const cloned = res.clone();
-              caches.open(APP_CACHE).then((c) => {
-                c.put(e.request, cloned);
-              });
-            }
-            return res;
-          })
-          .catch(() => {
-            if (e.request.mode === "navigate") {
-              return caches.match("/");
-            }
-            return new Response("", { status: 503 });
-          }),
-    ),
-  );
+    await self.clients.claim();
+  })());
+});
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
+  // API writes and partial responses must never enter a public asset cache.
+  if (request.method !== 'GET' || url.origin !== self.location.origin || url.pathname.startsWith('/api/') || request.headers.has('range')) return;
+  if (isModel(url)) { event.respondWith(cacheFirst(request)); return; }
+  if (request.mode === 'navigate') { event.respondWith(networkFirst(request, true)); return; }
+  if (/\.(?:js|css|json|wasm|bin|woff2?|png|svg|webp|jpg|webmanifest)$/.test(url.pathname)) event.respondWith(networkFirst(request));
 });

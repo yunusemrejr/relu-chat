@@ -1,0 +1,18 @@
+{
+  "id": "rl-termination-truncation",
+  "slug": "rl-termination-truncation",
+  "title": "Termination vs Truncation in RL Targets",
+  "meta_title": "Termination vs Truncation in RL Targets",
+  "meta_description": "A small numerical example shows why environment termination and time-limit truncation should not share one done flag.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "reinforcement-learning",
+    "debugging"
+  ],
+  "excerpt": "A small numerical example shows why environment termination and time-limit truncation should not share one done flag.",
+  "related_bot": "reinforcement-learning-chat",
+  "content": "# Termination vs Truncation in RL Targets\n\nAn episode can stop because the task ended or because an external limit interrupted it. Those events look similar in a training loop but can require different value targets.\n\nTermination means the modeled process reached an end state. Truncation means observation stopped for a reason outside that process, such as a simulator’s maximum step count. The correct interpretation comes from the environment definition, not the name of the variable in your code.\n\n## The numerical consequence\n\nSuppose a transition gives reward 1, the discount factor is 0.9, and the estimated value of the next observation is 5. For a continuing transition, the one-step target is 1 + 0.9 × 5 = 5.5.\n\nFor a genuinely terminal transition, the target is just 1. Future return after termination is zero by the task definition. Using 5.5 would invent future opportunities that do not exist.\n\nFor an external time-limit truncation of a continuing task, retaining the bootstrap estimate can be appropriate. Treating it as terminal gives target 1 and can systematically undervalue states near the arbitrary cutoff.\n\n## A finite horizon is different\n\nSometimes the horizon is part of the actual task. A game may end after ten moves, or a controller may have a fixed number of actions to reach a target. Remaining time then belongs in the state if it affects optimal decisions.\n\nA genuine end at the task horizon can be termination. An external training limit imposed on an otherwise continuing task is truncation. Do not decide solely by checking whether a timer was involved.\n\n## Store enough information\n\nA replay record should preserve reward, the next observation, and separate terminated and truncated flags. If an environment automatically resets, ensure that the next observation in the record is the final observation of the transition, not the first observation of the next episode.\n\nThe update also needs a policy for bootstrapping each boundary type. Write down that policy next to the environment definition so future refactors do not silently change the learning objective.\n\n## A compact test\n\nConstruct one continuing transition, one terminal transition, and one externally truncated transition with the same reward and next-state estimate. Verify the expected targets explicitly. Then test the auto-reset path, where a final observation can be easy to lose.\n\nThis check is cheap and often more informative than another long training run. A model cannot reliably compensate for a target that erases the wrong future rewards.\n\nSee [Gymnasium’s time-limit explanation](https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/) for the API distinction, or [ask about termination and truncation](/chat/reinforcement-learning-chat/?q=Explain%20termination%20and%20truncation)."
+}

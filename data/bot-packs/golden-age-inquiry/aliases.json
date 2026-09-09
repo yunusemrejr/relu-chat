@@ -1178,5 +1178,77 @@
       46,
       0.9
     ]
+  ],
+  "reading historical sources": [
+    [
+      47,
+      1
+    ]
+  ],
+  "source criticism": [
+    [
+      47,
+      0.9
+    ]
+  ],
+  "historical evidence": [
+    [
+      47,
+      0.9
+    ]
+  ],
+  "manuscript evidence": [
+    [
+      47,
+      0.9
+    ]
+  ],
+  "networks of knowledge transmission": [
+    [
+      48,
+      1
+    ]
+  ],
+  "knowledge transmission": [
+    [
+      48,
+      0.9
+    ]
+  ],
+  "translation networks": [
+    [
+      48,
+      0.9
+    ]
+  ],
+  "scientific exchange": [
+    [
+      48,
+      0.9
+    ]
+  ],
+  "periodization of the islamic golden age": [
+    [
+      49,
+      1
+    ]
+  ],
+  "golden age dates": [
+    [
+      49,
+      0.9
+    ]
+  ],
+  "end of golden age": [
+    [
+      49,
+      0.9
+    ]
+  ],
+  "periodization": [
+    [
+      49,
+      0.9
+    ]
   ]
 }

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0d1117"/>
+  <rect x="0" y="0" width="1200" height="630" fill="#151b23" opacity="0.55"/>
+  <g><line x1="430" y1="280" x2="486" y2="371" stroke="rgba(20,184,166,0.21)" stroke-width="1.5"/><line x1="81" y1="420" x2="191" y2="506" stroke="rgba(20,184,166,0.19)" stroke-width="1.5"/><line x1="605" y1="176" x2="694" y2="194" stroke="rgba(20,184,166,0.16)" stroke-width="1.5"/><line x1="445" y1="108" x2="352" y2="70" stroke="rgba(20,184,166,0.19)" stroke-width="1.5"/><line x1="191" y1="506" x2="334" y2="513" stroke="rgba(20,184,166,0.20)" stroke-width="1.5"/><circle cx="430" cy="280" r="3.7" fill="rgba(20,184,166,0.41)"/><circle cx="1064" cy="366" r="3.7" fill="rgba(20,184,166,0.35)"/><circle cx="840" cy="435" r="2.4" fill="rgba(20,184,166,0.27)"/><circle cx="81" cy="420" r="2.1" fill="rgba(20,184,166,0.45)"/><circle cx="605" cy="176" r="3.2" fill="rgba(20,184,166,0.45)"/><circle cx="445" cy="108" r="2.3" fill="rgba(20,184,166,0.46)"/><circle cx="191" cy="506" r="3.2" fill="rgba(20,184,166,0.44)"/><circle cx="352" cy="70" r="2.0" fill="rgba(20,184,166,0.38)"/><circle cx="486" cy="371" r="2.3" fill="rgba(20,184,166,0.44)"/><circle cx="334" cy="513" r="1.6" fill="rgba(20,184,166,0.35)"/><circle cx="694" cy="194" r="1.9" fill="rgba(20,184,166,0.31)"/></g>
+  <line x1="84" y1="552" x2="180" y2="552" stroke="#14b8a6" stroke-width="3"/>
+  <text x="196" y="562" font-family="Sora, system-ui, sans-serif" font-size="30" font-weight="600" letter-spacing="7" fill="#f9fafb">HISTORY-OF-SCIENCE</text>
+  <circle cx="1124" cy="76" r="5" fill="#14b8a6"/>
+</svg>

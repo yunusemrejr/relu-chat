@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>WASM vs JavaScript: Verify the Same Model First — ReLU.chat</title>
+<meta name="description" content="A small MLP shows why export parity, fixed memory, startup costs, and end-to-end latency matter more than assuming WASM is faster.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/wasm-javascript-policy-parity/">
+
+<meta property="og:title" content="WASM vs JavaScript: Verify the Same Model First">
+<meta property="og:description" content="A small MLP shows why export parity, fixed memory, startup costs, and end-to-end latency matter more than assuming WASM is faster.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/wasm-javascript-policy-parity/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="webassembly">
+<meta property="article:tag" content="performance">
+<meta property="article:tag" content="engineering">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WASM vs JavaScript: Verify the Same Model First">
+<meta name="twitter:description" content="A small MLP shows why export parity, fixed memory, startup costs, and end-to-end latency matter more than assuming WASM is faster.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/wasm-javascript-policy-parity/#webpage",
+      "url": "https://relu.chat/blog/wasm-javascript-policy-parity/",
+      "name": "WASM vs JavaScript: Verify the Same Model First",
+      "description": "A small MLP shows why export parity, fixed memory, startup costs, and end-to-end latency matter more than assuming WASM is faster.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/wasm-javascript-policy-parity/#article",
+      "headline": "WASM vs JavaScript: Verify the Same Model First",
+      "description": "A small MLP shows why export parity, fixed memory, startup costs, and end-to-end latency matter more than assuming WASM is faster.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/wasm-javascript-policy-parity/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "webassembly, performance, engineering"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>WASM vs JavaScript: Verify the Same Model First</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">webassembly</span><span class="article-tag">performance</span><span class="article-tag">engineering</span></div>
+
+  <h1 class="article-hero-title">WASM vs JavaScript: Verify the Same Model First</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-establish-the-numerical-contract">Establish the numerical contract</a></li><li><a href="#section-compare-outputs-before-labels">Compare outputs before labels</a></li><li><a href="#section-measure-the-small-result-honestly">Measure the small result honestly</a></li><li><a href="#section-include-first-load-work">Include first-load work</a></li></ol></nav><div class="article-body">
+    <p>Moving an inference kernel into WebAssembly is not automatically an optimization. The first question is whether both implementations compute the same model. The second is whether the complete user interaction becomes faster.</p>
+
+<p>ReLU.chat’s policy is deliberately small: 25 inputs, two hidden layers, and 13,079 parameters. At that size, both JavaScript and WASM can finish quickly. Integration mistakes can matter more than arithmetic throughput.</p>
+
+<h2 id="section-establish-the-numerical-contract">Establish the numerical contract</h2>
+
+<p>The kernel reads raw feature values, applies a linear layer and ReLU twice, and produces logits for action heads. Softmax and final answer-plan construction remain in JavaScript.</p>
+
+<p>Weight order, bias placement, floating-point rounding, feature scaling, and head order all need to match. A shape check alone cannot detect a transposed matrix whose dimensions happen to be square.</p>
+
+<p>The September implementation uses fixed buffers, no imports, and a fixed 128 KiB linear memory. Its compiled module is 3,685 bytes. JavaScript copies weights once, then writes a 25-element input vector and reads the output logits.</p>
+
+<h2 id="section-compare-outputs-before-labels">Compare outputs before labels</h2>
+
+<p>Two implementations can choose the same top action while producing substantially different probabilities. That difference may become visible on an ambiguous question or after retraining.</p>
+
+<p>Our fixture check compared 40 exported Python examples against JavaScript. The maximum probability difference was below 0.000001. JavaScript and WASM outputs were identical on those fixtures. This is evidence for those cases, not a proof covering every floating-point input.</p>
+
+<h2 id="section-measure-the-small-result-honestly">Measure the small result honestly</h2>
+
+<p>On the development laptop with Node.js 22, a 3,000-call warm benchmark measured median times around 14 microseconds for both implementations. The difference was small. These numbers exclude browser model downloads and do not establish a universal WASM speedup.</p>
+
+<p>The practical improvement was replacing a placeholder module with verified computation and a dependable JavaScript fallback. A tiny policy did not need a large runtime download or dynamic allocation to accomplish that.</p>
+
+<h2 id="section-include-first-load-work">Include first-load work</h2>
+
+<p>For a browser experience, measure transfer, decoding, compilation, model initialization, query processing, and rendering. Test an empty cache separately from a warm one. A fast kernel can coexist with a slow first visit if the page downloads several unused runtime variants.</p>
+
+<p>Keep mutable manifests and weights fresh. Verify hashes before attaching a new kernel. If an optional asset fails, retain a usable basic path rather than making the entire chat unavailable.</p>
+
+<p>Read <a href="https://developer.mozilla.org/en-US/docs/WebAssembly" rel="noopener">MDN’s WebAssembly overview</a>, inspect <a href="/data/policy-evaluation.json" rel="noopener">the evaluation summary</a>, or <a href="/chat/web-platform-chat/?q=Explain%20WebAssembly" rel="noopener">explore WASM in the web-platform chatbot</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/web-platform-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/service-worker-model-updates/">Service Worker Updates Without Stale Model Weights</a></li><li><a href="/blog/tiny-policy-training-cpu/">Training a Chatbot Policy on a Laptop</a></li><li><a href="/blog/browser-vector-math-optimization/">The Real Cost of Cosine Similarity: Optimizing Vector Math in JavaScript</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=WASM%20vs%20JavaScript%3A%20Verify%20the%20Same%20Model%20First&url=https%3A%2F%2Frelu.chat%2Fblog%2Fwasm-javascript-policy-parity%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fwasm-javascript-policy-parity%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Find a Nash Equilibrium with Best Responses — ReLU.chat</title>
+<meta name="description" content="Check a complete 2×2 game, identify two pure equilibria, and distinguish unilateral stability from efficiency.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/nash-equilibrium-best-response-table/">
+
+<meta property="og:title" content="Find a Nash Equilibrium with Best Responses">
+<meta property="og:description" content="Check a complete 2×2 game, identify two pure equilibria, and distinguish unilateral stability from efficiency.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/nash-equilibrium-best-response-table/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="game-theory">
+<meta property="article:tag" content="worked-example">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Find a Nash Equilibrium with Best Responses">
+<meta name="twitter:description" content="Check a complete 2×2 game, identify two pure equilibria, and distinguish unilateral stability from efficiency.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/nash-equilibrium-best-response-table/#webpage",
+      "url": "https://relu.chat/blog/nash-equilibrium-best-response-table/",
+      "name": "Find a Nash Equilibrium with Best Responses",
+      "description": "Check a complete 2×2 game, identify two pure equilibria, and distinguish unilateral stability from efficiency.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/nash-equilibrium-best-response-table/#article",
+      "headline": "Find a Nash Equilibrium with Best Responses",
+      "description": "Check a complete 2×2 game, identify two pure equilibria, and distinguish unilateral stability from efficiency.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/nash-equilibrium-best-response-table/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "game-theory, worked-example"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Find a Nash Equilibrium with Best Responses</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">game-theory</span><span class="article-tag">worked-example</span></div>
+
+  <h1 class="article-hero-title">Find a Nash Equilibrium with Best Responses</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-specify-the-payoff-table">Specify the payoff table</a></li><li><a href="#section-mark-player-1-s-best-responses">Mark player 1’s best responses</a></li><li><a href="#section-mark-player-2-s-best-responses">Mark player 2’s best responses</a></li><li><a href="#section-find-the-intersections">Find the intersections</a></li><li><a href="#section-separate-stability-from-welfare">Separate stability from welfare</a></li></ol></nav><div class="article-body">
+    <p>A pure Nash equilibrium is an action pair in which neither player can improve their payoff by changing only their own action. The simplest way to check a small game is to mark best responses one player at a time.</p>
+
+<p>Do not start by looking for the largest sum of payoffs. Equilibrium concerns unilateral incentives, while efficiency compares outcomes differently.</p>
+
+<h2 id="section-specify-the-payoff-table">Specify the payoff table</h2>
+
+<p>Player 1 chooses Top or Bottom. Player 2 chooses Left or Right. Each payoff pair lists player 1 first and player 2 second.</p>
+
+<p>Top–Left gives (3, 3). Top–Right gives (0, 2). Bottom–Left gives (2, 0). Bottom–Right gives (1, 1).</p>
+
+<p>Write down the ordering of the payoff pair before calculating. Reversing the players’ payoffs is a common source of errors.</p>
+
+<h2 id="section-mark-player-1-s-best-responses">Mark player 1’s best responses</h2>
+
+<p>If player 2 chooses Left, player 1 compares 3 from Top with 2 from Bottom. Top is the best response.</p>
+
+<p>If player 2 chooses Right, player 1 compares 0 from Top with 1 from Bottom. Bottom is the best response. These comparisons stay within a column because player 2’s action is held fixed.</p>
+
+<h2 id="section-mark-player-2-s-best-responses">Mark player 2’s best responses</h2>
+
+<p>If player 1 chooses Top, player 2 compares 3 from Left with 2 from Right. Left is the best response.</p>
+
+<p>If player 1 chooses Bottom, player 2 compares 0 from Left with 1 from Right. Right is the best response. These comparisons stay within a row because player 1’s action is held fixed.</p>
+
+<h2 id="section-find-the-intersections">Find the intersections</h2>
+
+<p>Top–Left and Bottom–Right are both mutual best responses. At either outcome, a unilateral deviation reduces the deviator’s payoff. There are therefore two pure Nash equilibria.</p>
+
+<p>The two off-diagonal outcomes fail the test. At Top–Right, either player can improve by switching. The same is true at Bottom–Left.</p>
+
+<h2 id="section-separate-stability-from-welfare">Separate stability from welfare</h2>
+
+<p>Top–Left gives both players 3, whereas Bottom–Right gives both 1. The latter is Pareto dominated by the former, yet it remains a Nash equilibrium because one player cannot move both players together.</p>
+
+<p>Multiple equilibria also leave a coordination question unresolved. Finding equilibrium action pairs does not explain which one real players will choose or how they will learn it.</p>
+
+<p>This game also has an interior mixed equilibrium: each player assigns probability one-half to their first action. That follows from making the other player indifferent. Pure and mixed calculations answer related but separate parts of the game.</p>
+
+<p>See <a href="https://plato.stanford.edu/entries/game-theory/" rel="noopener">Stanford’s game theory reference</a> and <a href="/chat/game-theory-chat/?q=Explain%20best-response%20table" rel="noopener">ask Game Theory Chat about best-response tables</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/game-theory-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/dot-product-cosine-worked-example/">Dot Product and Cosine Similarity, Step by Step</a></li><li><a href="/blog/least-squares-without-inverse/">Least Squares Without Computing an Inverse</a></li><li><a href="/blog/precision-recall-small-example/">Precision and Recall: A 100-Case Example</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Find%20a%20Nash%20Equilibrium%20with%20Best%20Responses&url=https%3A%2F%2Frelu.chat%2Fblog%2Fnash-equilibrium-best-response-table%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fnash-equilibrium-best-response-table%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>

@@ -15,10 +15,10 @@ const SCHEMA_PATH = path.join(__dirname, 'schema.json');
 const SITE_URL = 'https://relu.chat';
 
 // Injected before </body> on every generated page (shared with hand-maintained pages).
-const GUMROAD_WIDGET = fs.readFileSync(path.join(__dirname, 'gumroad-widget.html'), 'utf8').trim();
+const GUMROAD_WIDGET = ''; // Contextual product links remain; no interruptive catalogue widget.
 
 // Injected before </head> on every generated page (shared with hand-maintained pages).
-const AIF_POPUP = fs.readFileSync(path.join(__dirname, 'aif-popup.html'), 'utf8').trim();
+const AIF_POPUP = ''; // Reading is never interrupted by timed promotion modals.
 
 function loadSchema() {
   return JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
@@ -204,7 +204,7 @@ function generatePostHTML(post) {
   const updatedDate = post.updated_at ? new Date(post.updated_at).toISOString() : publishedDate;
   const ogImage = post.cover_image
     ? (post.cover_image.startsWith('http') ? post.cover_image : `${SITE_URL}/${post.cover_image.replace(/^\//, '')}`)
-    : `${SITE_URL}/assets/blog/${post.slug}.png`;  // generated default thumbnail
+    : (fs.existsSync(path.join(BLOG_ASSETS_DIR, post.slug + '.png')) ? `${SITE_URL}/assets/blog/${post.slug}.png` : `${SITE_URL}/assets/logo.png`);
   const publishedYear = new Date(post.published_at).getFullYear();
 
   return `<!DOCTYPE html>
@@ -212,7 +212,7 @@ function generatePostHTML(post) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>${escapeHTML(post.title)}</title>
+<title>${escapeHTML(post.meta_title || post.title)} — ReLU.chat</title>
 <meta name="description" content="${escapeHTML(post.meta_description || '')}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="${canonical}">
@@ -237,7 +237,7 @@ ${post.tags ? post.tags.map(t => `<meta property="article:tag" content="${escape
 <link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 <link rel="stylesheet" href="/assets/fonts/sora.css">
-<link rel="stylesheet" href="/assets/shared-design.css?v=12">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
 <link rel="stylesheet" href="/assets/css/article.css">
 
 <script type="application/ld+json">
@@ -536,7 +536,7 @@ function generateIndexHTML(posts) {
 <link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 <link rel="stylesheet" href="/assets/fonts/sora.css">
-<link rel="stylesheet" href="/assets/shared-design.css?v=12">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
 <link rel="stylesheet" href="/assets/css/blog-index.css">
 
 <script type="application/ld+json">
@@ -651,7 +651,7 @@ function generateRSSFeed(posts) {
     const url = `${SITE_URL}/blog/${post.slug}/`;
     const pubDate = new Date(post.published_at).toUTCString();
     return `  <item>
-    <title>${escapeHTML(post.title)}</title>
+    <title>${escapeHTML(post.meta_title || post.title)} — ReLU.chat</title>
     <link>${url}</link>
     <guid isPermaLink="true">${url}</guid>
     <pubDate>${pubDate}</pubDate>
@@ -697,13 +697,21 @@ function generateSitemap(posts) {
     { url: SITE_URL + '/tools/decision-tree/', changefreq: 'monthly', priority: '0.6' },
   ];
 
+  const bots = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/manifest.json'), 'utf8')).bots;
+  staticPages.push({url:SITE_URL+'/chat/',changefreq:'monthly',priority:'0.9',lastmod:'2026-09-09'});
+  for (const bot of bots) {
+    const existing = staticPages.find(p => p.url === SITE_URL + bot.url);
+    if (existing) existing.lastmod = bot.kb_updated;
+    else staticPages.push({url:SITE_URL+bot.url,changefreq:'monthly',priority:'0.8',lastmod:bot.kb_updated});
+  }
+
   const blogPages = posts.map(p => ({
     url: `${SITE_URL}/blog/${p.slug}/`,
     changefreq: 'monthly',
     priority: '0.7',
     lastmod: new Date(p.updated_at || p.published_at).toISOString().split('T')[0],
     title: p.title,
-    image: p.og_image || `${SITE_URL}/assets/blog/${p.slug}.png`
+    image: p.og_image || SITE_URL + coverSrc(p)
   }));
 
   const allPages = [...staticPages, ...blogPages];
@@ -719,7 +727,7 @@ function generateSitemap(posts) {
     <image:image>
       <image:loc>${p.image}</image:loc>
       <image:caption>${escapeHTML(p.title || '')}</image:caption>
-      <image:license>https://opensource.org/licenses/MIT</image:license>
+
     </image:image>`;
     b += `
   </url>`;
@@ -841,75 +849,48 @@ function generateLLMsFullTxt(posts) {
     return `- ${d} — [${p.title}](https://relu.chat/blog/${p.slug}/) — ${excerpt}`;
   }).join('\n');
 
-  return `# ReLU.chat — Full Documentation for AI Agents
+  const bots = JSON.parse(fs.readFileSync(path.join(__dirname, '../../data/manifest.json'), 'utf8')).bots;
+  return `# ReLU.chat — Architecture and Learning Resources
 
-> Free, browser-based, privacy-first open-source chatbots. No servers, no LLMs, no tracking.
-> Everything below is factual and verified against the repository at https://github.com/yunusemrejr/relu-chat (MIT license).
+> Six free, open-source learning assistants. Questions are processed locally; page and optional model downloads use the network.
 
-## What is ReLU.chat?
+## Chatbots
 
-ReLU.chat is an open-source platform for building and running interactive chatbots entirely in the browser. All natural language processing happens locally on the user's device using a quantized ONNX sentence-transformer model plus classical retrieval and a small reinforcement-learned policy network. Conversations never leave the browser: there are no servers, no API keys, no LLM calls, and no telemetry.
+${bots.map(b => `- [${b.name}](https://relu.chat${b.url}) — ${b.description} ${b.topic_count} topics.`).join('\n')}
 
-## Try it (runs 100% client-side, no install)
+## How the current release works
 
-- [Game Theory Chat](https://relu.chat/chat/game-theory-chat/) — on-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma, 55+ topics, LaTeX math.
-- [Golden Age Inquiry](https://relu.chat/chat/golden-age-inquiry/) — on-device assistant for the scientific and philosophical discoveries of the Islamic Golden Age (8th-14th centuries).
-- [Data Science Chat](https://relu.chat/chat/data-science-chat/) — on-device assistant for data science and ML: pandas, NumPy, statistics, classification, clustering, evaluation.
-- [Interactive ML Tools](https://relu.chat/tools/) — six interactive visualizations:
-  - [Neural Network Explorer](https://relu.chat/tools/neural-network/) — 2-layer forward pass with adjustable weights and activations
-  - [Gradient Descent Lab](https://relu.chat/tools/gradient-descent/) — optimization steps on a loss surface
-  - [Backpropagation Visualizer](https://relu.chat/tools/backpropagation/) — step-by-step chain-rule gradients
-  - [Activation Functions Explorer](https://relu.chat/tools/activation-functions/) — ReLU, Leaky ReLU, Sigmoid, Tanh, GELU, SiLU, ELU, Softplus with derivatives
-  - [K-Means Clustering Playground](https://relu.chat/tools/k-means-clustering/) — interactive clustering with SSE convergence
-  - [Decision Tree Explorer](https://relu.chat/tools/decision-tree/) — step-by-step CART splits with Gini impurity
+1. The selected knowledge base starts with keyword vectors and field-weighted BM25. No large model download is required to ask a question.
+2. Explicit entity and intent cues guide retrieval. Follow-ups retain the last topic, while a newly named topic takes precedence.
+3. A 13,079-parameter policy has 25 inputs, 128 and 64 ReLU hidden units, and six action heads. It runs in verified WebAssembly or JavaScript, with a heuristic fallback. Float32 weights are used by default; int8 is optional.
+4. Complete answers are assembled from curated fragments and rendered with math and available source links. These assistants do not generate arbitrary text, execute code, or solve arbitrary exercises.
+5. Enhanced matching is optional: a button downloads the approximately 22 MB quantized MiniLM model plus runtime assets. The browser prepares the complete embedding set before switching, clears incompatible query vectors, and can cache public knowledge vectors in IndexedDB.
+6. Conversations stay in memory unless the user saves a text file. Cached pages and assets support offline reuse; an unvisited page needs a connection. The service worker does not prefetch the large model.
 
-## How it works (full pipeline)
+## Evaluation and limits
 
-1. **Progressive loading** — a heuristic/BOW fallback answers the very first turns instantly while the ~22MB quantized MiniLM ONNX model and knowledge-base embeddings stream in the background (service worker pre-caches them). The full dense pipeline hot-swaps automatically when ready. Query embeddings are memoized and top-k ranking is bounded (no full sort).
-2. **Embedding** — queries and KB entries are embedded into 384-dimensional vectors by all-MiniLM-L6-v2 (quantized ONNX, running via ONNX Runtime/transformers.js).
-3. **Signal layer** — field-weighted BM25 sparse retrieval (k1=1.5, b=0.75; entry names repeated 3x, aliases 2x; bigram phrase matching), dense cosine similarity, fuzzy entity extraction (Levenshtein + word-overlap + notation patterns), and temperature-calibrated intent classification (19 prototypes per intent, 70/30 best-vs-average) are fused into a 25-feature decision packet. Explicit topic corrections ("I meant X") force the corrected topic to the top.
-4. **Policy network** — a ~13K-parameter MLP (25 inputs -> 128 -> 64 -> 6 action heads: mode, intent, topic count, fragment count, creativity, tone) trained with REINFORCE decides how to respond. Weights are auto-quantized to int8 at construction (~4x memory reduction). A 15-threshold heuristic fallback guarantees the system always works, even during cold start.
-5. **Composition** — responses are assembled from knowledge-base fragments (def/int/ex/form/app categories with truth/source confidence, difficulty, style, avoid-with constraints) using linguistic connectors, comparison openers, and session-aware diversity penalties.
-6. **Rendering** — KaTeX renders LaTeX math; progressive streaming rendering reveals responses in ~40-char chunks; session memory keeps up to 30 turns of context with importance-based eviction and an EMA summary vector (alpha=0.75).
+The September 9, 2026 CPU training run took 3.10 seconds. On 438 authored held-out routing cases, joint mode/intent accuracy rose from 93.6% for the previous policy to 98.6% for the new policy. The RL stage matched supervised training on this test. These are routing measurements, not factual-answer accuracy or real-user satisfaction. Topics are disjoint across training, validation, and test splits; training templates differ from validation/test templates.
 
-## Privacy guarantees
+The fixed-memory WASM module uses 128 KiB and matches JavaScript outputs on 40 exported fixtures. Both paths took around 14 microseconds in the recorded policy microbenchmark; no WASM speed advantage is claimed. Optimized BM25 preserved original scores and rankings on 30 benchmark queries, with median scoring time falling from 16.67 ms to 0.073 ms on the measured laptop. End-to-end browser latency varies.
 
-- Zero data leaves the browser: no accounts, no cookies, no tracking, no server processing.
-- Offline capable after first load (PWA + service worker pre-caches model and policy weights).
-- Storage is client-side only (IndexedDB).
+- [Architecture and limits](https://relu.chat/how-it-works.html)
+- [Reproducible evaluation results](https://relu.chat/data/policy-evaluation.json)
+- [Six interactive ML tools](https://relu.chat/tools/)
+- [Source repository](https://github.com/yunusemrejr/relu-chat)
 
-## Performance characteristics
+## Privacy and network use
 
-- Sub-100ms inference on typical hardware with quantized ONNX models.
-- Service-worker pre-caching gives zero-wait chatbot startup on repeat visits.
-- All thresholds centralized in config; LRU caches, query memoization, and pre-built BM25 IDF keep retrieval fast.
+Chat questions are not sent to a language-generation API. The host receives normal page and asset requests. Optional model downloads use the site origin. Following external links, purchasing an ebook, or submitting a separate signup form involves the respective service. Browser storage contains public assets and knowledge embeddings, not saved chat transcripts.
 
-## Blog
+## Learning guides
 
-${sortedPosts.length} technical articles at https://relu.chat/blog/ (RSS: https://relu.chat/blog/feed.xml):
+${sortedPosts.length} original technical articles at https://relu.chat/blog/ (RSS: https://relu.chat/blog/feed.xml):
 
 ${blogList || '- (no posts yet)'}
 
-## Books (by the same author, Gumroad)
+## Development
 
-- [Fringe Learning: Resource-Efficient RL for Edge ML](https://theknowledgeproject.gumroad.com/l/ecvuf) — practical reinforcement learning methods for resource-constrained edge machine learning.
-- [AI & Financial Freedom](https://theknowledgeproject.gumroad.com/l/ai-freedom) — a step-by-step guide to mastering AI tools and workflows for financial independence in the age of AI.
-- More books: https://theknowledgeproject.gumroad.com/
-
-## Source code
-
-- GitHub: https://github.com/yunusemrejr/relu-chat
-- License: MIT
-- Author: Yunus Emre Vurgun (https://yunusemrevurgun.com)
-
-## Repository layout
-
-- core/ — NLP engine, chatbot engine, session memory, BM25 scorer, signal layer, UI
-- policy/ — feature extractor, MLP inference, action schema, policy runtime
-- chat/ — individual chatbots (game theory, golden age, data science)
-- data/ — knowledge-base fragments, bot configurations, manifest
-- assets/ — models, fonts, shared design system
-- dev/scripts/ — PyTorch training, weight export, prompt augmentation
+The repository contains the shared runtime in core/, policy inference in policy/, six chatbot pages in chat/, and authored knowledge in data/bots/. The bounded CPU trainer is dev/scripts/train-policy-fast.py; its maximum allowed training budget is 540 seconds. See README.md for dataset, training, parity, and regression commands. Source code is MIT licensed.
 `;
 }
 
@@ -941,5 +922,5 @@ module.exports = {
   generateRSSFeed, generateSitemap, generateRobotsTxt,
   generateLLMsTxt, generateLLMsFullTxt,
   generateDefaultCovers, defaultCoverSvg, coverSrc,
-  escapeHTML, formatDate, POSTS_DIR, BLOG_OUT, SITE_URL
+  escapeHTML, formatDate, readingTime, POSTS_DIR, BLOG_OUT, SITE_URL
 };

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Service Worker Updates Without Stale Model Weights — ReLU.chat</title>
+<meta name="description" content="Separate stable embedding assets from mutable policies, avoid eager runtime downloads, and test update and offline failure paths.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/service-worker-model-updates/">
+
+<meta property="og:title" content="Service Worker Updates Without Stale Model Weights">
+<meta property="og:description" content="Separate stable embedding assets from mutable policies, avoid eager runtime downloads, and test update and offline failure paths.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/service-worker-model-updates/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="web-platform">
+<meta property="article:tag" content="performance">
+<meta property="article:tag" content="offline">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Service Worker Updates Without Stale Model Weights">
+<meta name="twitter:description" content="Separate stable embedding assets from mutable policies, avoid eager runtime downloads, and test update and offline failure paths.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/service-worker-model-updates/#webpage",
+      "url": "https://relu.chat/blog/service-worker-model-updates/",
+      "name": "Service Worker Updates Without Stale Model Weights",
+      "description": "Separate stable embedding assets from mutable policies, avoid eager runtime downloads, and test update and offline failure paths.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/service-worker-model-updates/#article",
+      "headline": "Service Worker Updates Without Stale Model Weights",
+      "description": "Separate stable embedding assets from mutable policies, avoid eager runtime downloads, and test update and offline failure paths.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/service-worker-model-updates/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "web-platform, performance, offline"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Service Worker Updates Without Stale Model Weights</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">web-platform</span><span class="article-tag">performance</span><span class="article-tag">offline</span></div>
+
+  <h1 class="article-hero-title">Service Worker Updates Without Stale Model Weights</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-separate-model-bytes-from-policy-revisions">Separate model bytes from policy revisions</a></li><li><a href="#section-remember-the-http-cache">Remember the HTTP cache</a></li><li><a href="#section-download-only-what-is-needed">Download only what is needed</a></li><li><a href="#section-keep-writes-and-partial-responses-out">Keep writes and partial responses out</a></li><li><a href="#section-test-a-real-update-sequence">Test a real update sequence</a></li></ol></nav><div class="article-body">
+    <p>A service worker can make a chatbot load quickly on repeat visits. It can also keep an old model alive long after a new release if caching rules treat mutable files as immutable.</p>
+
+<p>The safe design starts with asset identity. Ask which URLs represent fixed content and which URLs are reused whenever a file changes.</p>
+
+<h2 id="section-separate-model-bytes-from-policy-revisions">Separate model bytes from policy revisions</h2>
+
+<p>An embedding model that does not change between releases can live in a persistent model cache. If its content changes, give the resource a new versioned identity. Otherwise a cache-first strategy has no reason to request the new bytes.</p>
+
+<p>Policy manifests and weights are different when deployment reuses their URLs. They need revalidation or network-first fetching, plus a consistency check. A new manifest paired with old weights should trigger a recoverable fallback rather than unchecked inference.</p>
+
+<h2 id="section-remember-the-http-cache">Remember the HTTP cache</h2>
+
+<p>Service-worker Cache Storage and the browser HTTP cache are separate layers. Missing a response in Cache Storage does not necessarily force a transfer from the origin.</p>
+
+<p>For mutable release assets, use request and response cache rules that permit fresh validation. For versioned, stable model resources, long reuse can be appropriate. Do not apply one lifetime to every JSON file merely because the extension matches.</p>
+
+<h2 id="section-download-only-what-is-needed">Download only what is needed</h2>
+
+<p>Preloading every WASM runtime variant during service-worker activation can spend bandwidth before a visitor opens a chatbot. It may also fetch alternatives the browser will never select.</p>
+
+<p>A lightweight page shell can install without downloading the embedding model. Load enhanced matching when the person chooses it, and let the runtime request the compatible binary. Basic keyword retrieval can remain available while the optional enhancement prepares.</p>
+
+<h2 id="section-keep-writes-and-partial-responses-out">Keep writes and partial responses out</h2>
+
+<p>An API POST must not enter a public asset cache. Likewise, a 206 Partial Content response is not a complete model file. Caching it under the full resource key can break later requests in confusing ways.</p>
+
+<p>Handle or bypass range requests deliberately. Cache successful complete GET responses only, and leave unrelated origins and sensitive endpoints outside the service worker’s asset path.</p>
+
+<h2 id="section-test-a-real-update-sequence">Test a real update sequence</h2>
+
+<p>Visit with release A, then deploy release B and reload. Check both first and subsequent navigations. Next disconnect the network and revisit a cached page. Finally open an uncached route offline: it should explain that the page is unavailable, not masquerade as the home page.</p>
+
+<p>Keep cache cleanup scoped to the application’s own prefix. A website can host other tools whose caches must survive your activation event.</p>
+
+<p>See <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" rel="noopener">MDN’s service-worker guide</a> and <a href="/chat/web-platform-chat/?q=Explain%20cache%20strategies" rel="noopener">ask Web Platform Chat about cache strategies</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/web-platform-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/service-worker-caching-strategies/">Service Worker Caching Strategies for ML Assets</a></li><li><a href="/blog/local-chat-privacy-network/">Local Chat Privacy: What Still Uses the Network?</a></li><li><a href="/blog/wasm-javascript-policy-parity/">WASM vs JavaScript: Verify the Same Model First</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Service%20Worker%20Updates%20Without%20Stale%20Model%20Weights&url=https%3A%2F%2Frelu.chat%2Fblog%2Fservice-worker-model-updates%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fservice-worker-model-updates%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>

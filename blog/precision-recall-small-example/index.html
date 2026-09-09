@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Precision and Recall: A 100-Case Example — ReLU.chat</title>
+<meta name="description" content="Compute precision, recall, accuracy, and F1 from the same small confusion matrix, then connect thresholds to the errors you care about.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/precision-recall-small-example/">
+
+<meta property="og:title" content="Precision and Recall: A 100-Case Example">
+<meta property="og:description" content="Compute precision, recall, accuracy, and F1 from the same small confusion matrix, then connect thresholds to the errors you care about.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/precision-recall-small-example/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="data-science">
+<meta property="article:tag" content="worked-example">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Precision and Recall: A 100-Case Example">
+<meta name="twitter:description" content="Compute precision, recall, accuracy, and F1 from the same small confusion matrix, then connect thresholds to the errors you care about.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/precision-recall-small-example/#webpage",
+      "url": "https://relu.chat/blog/precision-recall-small-example/",
+      "name": "Precision and Recall: A 100-Case Example",
+      "description": "Compute precision, recall, accuracy, and F1 from the same small confusion matrix, then connect thresholds to the errors you care about.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/precision-recall-small-example/#article",
+      "headline": "Precision and Recall: A 100-Case Example",
+      "description": "Compute precision, recall, accuracy, and F1 from the same small confusion matrix, then connect thresholds to the errors you care about.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/precision-recall-small-example/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "data-science, worked-example"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Precision and Recall: A 100-Case Example</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">data-science</span><span class="article-tag">worked-example</span></div>
+
+  <h1 class="article-hero-title">Precision and Recall: A 100-Case Example</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-write-the-four-counts">Write the four counts</a></li><li><a href="#section-calculate-precision">Calculate precision</a></li><li><a href="#section-calculate-recall">Calculate recall</a></li><li><a href="#section-accuracy-and-f1">Accuracy and F1</a></li><li><a href="#section-choose-a-threshold-on-validation-data">Choose a threshold on validation data</a></li></ol></nav><div class="article-body">
+    <p>Precision and recall describe different mistakes. You can calculate both from the same four counts, but choosing between them requires understanding what a positive prediction means in the task.</p>
+
+<p>Imagine an inspection system evaluating 100 manufactured parts. Ten parts are defective. The model flags eight parts: six are defective and two are fine. It misses four defective parts.</p>
+
+<h2 id="section-write-the-four-counts">Write the four counts</h2>
+
+<p>True positives are the six defective parts correctly flagged. False positives are the two good parts flagged unnecessarily. False negatives are the four defects missed. True negatives are the remaining 88 good parts correctly left unflagged.</p>
+
+<p>The counts should sum to 100. The actual-positive count is 6 + 4 = 10, and the predicted-positive count is 6 + 2 = 8. These checks catch many confusion-matrix mistakes.</p>
+
+<h2 id="section-calculate-precision">Calculate precision</h2>
+
+<p>Precision asks: among flagged parts, how many were actually defective? The calculation is 6 / (6 + 2) = 0.75, or 75%.</p>
+
+<p>This describes the reliability of an alert. It does not tell you how many defects went undetected. A system that flags only one obvious defect could have perfect precision and still miss nearly everything else.</p>
+
+<h2 id="section-calculate-recall">Calculate recall</h2>
+
+<p>Recall asks: among all defective parts, how many were flagged? The calculation is 6 / (6 + 4) = 0.60, or 60%.</p>
+
+<p>This describes coverage of actual positives. A system that flags every part has perfect recall, but its precision here would be only 10%.</p>
+
+<h2 id="section-accuracy-and-f1">Accuracy and F1</h2>
+
+<p>Accuracy is (6 + 88) / 100 = 94%. Yet predicting every part as good would already achieve 90%, because defects are uncommon. Accuracy alone hides much of the failure pattern.</p>
+
+<p>F1 is the harmonic mean of precision and recall. Using counts, it is 2TP / (2TP + FP + FN) = 12 / 18, approximately 0.667. It balances the two ratios, but does not encode every operational cost or use true negatives directly.</p>
+
+<h2 id="section-choose-a-threshold-on-validation-data">Choose a threshold on validation data</h2>
+
+<p>Lowering the threshold usually flags more parts, trading fewer misses for more false alarms. The preferred tradeoff depends on inspection capacity and the consequences of each error. Do not repeatedly tune the threshold on the final test set.</p>
+
+<p>If there are no predicted positives, precision has a zero denominator. A reporting tool needs an explicit convention. For multiclass tasks, also specify macro, micro, or weighted averaging; they answer different questions.</p>
+
+<p>See <a href="https://scikit-learn.org/stable/modules/model_evaluation.html" rel="noopener">scikit-learn model evaluation</a> and <a href="/chat/data-science-chat/?q=Difference%20between%20precision%20and%20recall" rel="noopener">ask the data science bot to compare precision and recall</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/data-science-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/least-squares-without-inverse/">Least Squares Without Computing an Inverse</a></li><li><a href="/blog/dot-product-cosine-worked-example/">Dot Product and Cosine Similarity, Step by Step</a></li><li><a href="/blog/grouped-validation-leakage/">Data Leakage: Split by Entity Before You Train</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Precision%20and%20Recall%3A%20A%20100-Case%20Example&url=https%3A%2F%2Frelu.chat%2Fblog%2Fprecision-recall-small-example%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fprecision-recall-small-example%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>

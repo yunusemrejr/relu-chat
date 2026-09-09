@@ -1,0 +1,18 @@
+{
+  "id": "precision-recall-small-example",
+  "slug": "precision-recall-small-example",
+  "title": "Precision and Recall: A 100-Case Example",
+  "meta_title": "Precision and Recall: A 100-Case Example",
+  "meta_description": "Compute precision, recall, accuracy, and F1 from the same small confusion matrix, then connect thresholds to the errors you care about.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "data-science",
+    "worked-example"
+  ],
+  "excerpt": "Compute precision, recall, accuracy, and F1 from the same small confusion matrix, then connect thresholds to the errors you care about.",
+  "related_bot": "data-science-chat",
+  "content": "# Precision and Recall: A 100-Case Example\n\nPrecision and recall describe different mistakes. You can calculate both from the same four counts, but choosing between them requires understanding what a positive prediction means in the task.\n\nImagine an inspection system evaluating 100 manufactured parts. Ten parts are defective. The model flags eight parts: six are defective and two are fine. It misses four defective parts.\n\n## Write the four counts\n\nTrue positives are the six defective parts correctly flagged. False positives are the two good parts flagged unnecessarily. False negatives are the four defects missed. True negatives are the remaining 88 good parts correctly left unflagged.\n\nThe counts should sum to 100. The actual-positive count is 6 + 4 = 10, and the predicted-positive count is 6 + 2 = 8. These checks catch many confusion-matrix mistakes.\n\n## Calculate precision\n\nPrecision asks: among flagged parts, how many were actually defective? The calculation is 6 / (6 + 2) = 0.75, or 75%.\n\nThis describes the reliability of an alert. It does not tell you how many defects went undetected. A system that flags only one obvious defect could have perfect precision and still miss nearly everything else.\n\n## Calculate recall\n\nRecall asks: among all defective parts, how many were flagged? The calculation is 6 / (6 + 4) = 0.60, or 60%.\n\nThis describes coverage of actual positives. A system that flags every part has perfect recall, but its precision here would be only 10%.\n\n## Accuracy and F1\n\nAccuracy is (6 + 88) / 100 = 94%. Yet predicting every part as good would already achieve 90%, because defects are uncommon. Accuracy alone hides much of the failure pattern.\n\nF1 is the harmonic mean of precision and recall. Using counts, it is 2TP / (2TP + FP + FN) = 12 / 18, approximately 0.667. It balances the two ratios, but does not encode every operational cost or use true negatives directly.\n\n## Choose a threshold on validation data\n\nLowering the threshold usually flags more parts, trading fewer misses for more false alarms. The preferred tradeoff depends on inspection capacity and the consequences of each error. Do not repeatedly tune the threshold on the final test set.\n\nIf there are no predicted positives, precision has a zero denominator. A reporting tool needs an explicit convention. For multiclass tasks, also specify macro, micro, or weighted averaging; they answer different questions.\n\nSee [scikit-learn model evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) and [ask the data science bot to compare precision and recall](/chat/data-science-chat/?q=Difference%20between%20precision%20and%20recall)."
+}

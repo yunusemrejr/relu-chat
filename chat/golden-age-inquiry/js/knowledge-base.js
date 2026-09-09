@@ -1,5 +1,5 @@
-export const KB_VERSION = '1.1.0';
-export const KB_UPDATED = '2026-05-16';
+export const KB_VERSION = '2.0.0';
+export const KB_UPDATED = '2026-09-09';
 
 export function kb(id, name, aliases, summary, f, related=[]) {
   return { id, name, aliases: [name.toLowerCase(), ...aliases.map(a => a.toLowerCase())], summary, f, related };
@@ -25,7 +25,7 @@ export const KB = [
    ['al_khwarizmi','al_kindi','translation_movement','mamun']),
 
   kb('al_khwarizmi','Al-Khwarizmi',['al-khwarizmi','algoritmi','muhammad ibn musa','al khwarizmi','alkhwarizmi','khwarizmi'],
-    'Persian mathematician, astronomer, and geographer whose works founded algebra and introduced algorithms.',{
+    'Persian mathematician, astronomer, and geographer whose influential works systematized algebra and described arithmetic methods.',{
     def:['Muhammad ibn Musa al-Khwarizmi (c. 780\u2013850) was a scholar at the House of Wisdom in Baghdad.',
          'His name gave rise to the word "algorithm" and his book "Al-Kitab al-Mukhtasar fi Hisab al-Jabr wa\'l-Muqabala" gave us "algebra."'],
     int:['He synthesized Greek geometry with Indian numerals and Persian mathematics to create entirely new fields.',
@@ -72,7 +72,7 @@ export const KB = [
          'He wrote 450 works across philosophy, medicine, astronomy, logic, and psychology; about 240 survive.'],
     int:['Ibn Sina systematized all of Greek medical knowledge and added his own clinical observations into a single coherent framework.',
          'His "Floating Man" thought experiment anticipated Descartes\' "Cogito" by six centuries.'],
-    ex:['The Canon of Medicine described contagious diseases, quarantine, clinical trials, and the effects of diet and environment on health.',
+    ex:['The Canon of Medicine discussed health, disease, medicines, and regimen, including the role of diet and exercise.',
          'His "Book of Healing" was a philosophical and scientific encyclopedia covering logic, physics, mathematics, and metaphysics.'],
     form:['The Canon organized medicine into: general principles, simple drugs (materia medica), diseases by body part, systemic conditions, and compound remedies.',
           'He distinguished mediastinitis from pleurisy and described over 700 drugs with their properties and dosages.'],
@@ -85,7 +85,7 @@ export const KB = [
     def:['Written by Ibn Sina (Avicenna) around 1025 CE, the Canon (Al-Qanun fi al-Tibb) spans five books and over a million words.',
          'It synthesized Greek (Hippocrates, Galen), Persian, Indian, and Arabic medical knowledge into a unified system.'],
     int:['The Canon treated medicine as a rational science based on observation and logic, not superstition.',
-         'It introduced concepts like clinical trials, quarantine, and evidence-based practice centuries before they appeared in Europe.'],
+         'It organized medical knowledge and observations in a medieval framework; its methods should not be equated with modern randomized clinical trials.'],
     ex:['Book I covers general principles: anatomy, physiology, pathology, diagnosis, and treatment.',
          'Book II describes 760 simple drugs; Book III covers diseases by organ; Book IV covers systemic diseases; Book V covers compound remedies.'],
     form:['The humoral theory organized health as balance of four humors (blood, phlegm, yellow bile, black bile) corresponding to four qualities (hot, cold, wet, dry).',
@@ -478,8 +478,8 @@ export const KB = [
          'Their "Book of Ingenious Devices" (Kitab al-Hiyal) described 100 mechanical devices including trick vessels, fountains, and automata.'],
     int:['The Banu Musa were among the first to apply Greek theoretical mechanics to practical engineering problems.',
          'Their automatic fountain with intermittent flow used a siphonic principle that was a precursor to modern feedback control.'],
-    ex:['They designed the first conical valve (the "banu musa valve"), a self-regulating mechanism that controlled fluid flow.',
-         'Their "gas mask" device was a mechanical apparatus that supplied fresh air to workers in contaminated environments.'],
+    ex:['Their descriptions of valves and trick vessels illustrate how fluid flow can be controlled mechanically.',
+         'Their fountain designs used water flow and air pressure to produce changing effects.'],
     form:['Their work included sophisticated float-valve control systems, differential pressure sensors, and self-trimming lamps.',
           'The Book of Ingenious Devices is distinct from al-Jazari\'s later work in its focus on Greek-inspired theoretical mechanics over practical craft.'],
     app:['Their self-regulating mechanisms and feedback controls anticipated modern automation and control theory.',
@@ -669,4 +669,113 @@ export const KB = [
    ['ibn_bajjah','ibn_rushd','philosophy_golden_age','al_ghazali'])
 ];
 
+
+// September 2026: worked examples and evaluation literacy.
+KB.push(...[
+  {
+    "id": "historical_sources",
+    "name": "Reading historical sources",
+    "aliases": [
+      "reading historical sources",
+      "source criticism",
+      "historical evidence",
+      "manuscript evidence"
+    ],
+    "summary": "Historical claims should distinguish surviving primary texts, later copies, translations, and modern interpretation. An attribution can be plausible without being certain.",
+    "f": {
+      "def": [
+        "Historical claims should distinguish surviving primary texts, later copies, translations, and modern interpretation. An attribution can be plausible without being certain."
+      ],
+      "int": [
+        "A manuscript’s copying date is not automatically the date its underlying work was composed."
+      ],
+      "ex": [
+        "When evaluating an invention claim, ask whether the evidence is a surviving instrument, a technical description, or a much later biographical anecdote."
+      ],
+      "form": [
+        "Compare provenance, language, dating, independent witnesses, and the gap between the event and the surviving account."
+      ],
+      "app": [
+        "Use this approach to examine claims about scientific priority and avoid presenting contested biographies as settled fact."
+      ]
+    },
+    "related": [],
+    "sources": [
+      {
+        "title": "Stanford Encyclopedia: Arabic and Islamic Natural Science",
+        "url": "https://plato.stanford.edu/entries/arabic-islamic-natural/"
+      }
+    ]
+  },
+  {
+    "id": "knowledge_networks",
+    "name": "Networks of knowledge transmission",
+    "aliases": [
+      "networks of knowledge transmission",
+      "knowledge transmission",
+      "translation networks",
+      "scientific exchange"
+    ],
+    "summary": "Scholarship across medieval Islamic societies developed through networks of translation, teaching, travel, correspondence, and manuscript copying.",
+    "f": {
+      "def": [
+        "Scholarship across medieval Islamic societies developed through networks of translation, teaching, travel, correspondence, and manuscript copying."
+      ],
+      "int": [
+        "Knowledge moved through many cities and languages; it cannot be reduced to a single building or one uninterrupted institution."
+      ],
+      "ex": [
+        "A work might be studied in Arabic, commented on in another region, and later translated into Latin for a new scholarly audience."
+      ],
+      "form": [
+        "Distinguish transmission of a text from independent discovery and from later adaptation of its methods."
+      ],
+      "app": [
+        "This framework helps connect Greek, Syriac, Persian, Indian, Arabic, and Latin traditions without erasing their differences."
+      ]
+    },
+    "related": [],
+    "sources": [
+      {
+        "title": "Stanford Encyclopedia: Arabic and Islamic Natural Science",
+        "url": "https://plato.stanford.edu/entries/arabic-islamic-natural/"
+      }
+    ]
+  },
+  {
+    "id": "periodization",
+    "name": "Periodization of the Islamic Golden Age",
+    "aliases": [
+      "periodization of the islamic golden age",
+      "golden age dates",
+      "end of golden age",
+      "periodization"
+    ],
+    "summary": "The Islamic Golden Age is a broad modern label for periods of intellectual activity across diverse societies. Exact starting and ending dates depend on the field and region.",
+    "f": {
+      "def": [
+        "The Islamic Golden Age is a broad modern label for periods of intellectual activity across diverse societies. Exact starting and ending dates depend on the field and region."
+      ],
+      "int": [
+        "A convenient label can hide continuity, local differences, and important work outside its usual date range."
+      ],
+      "ex": [
+        "The 1258 sack of Baghdad was a major event, but scholarship continued in other centers; it is not a universal endpoint for scientific activity."
+      ],
+      "form": [
+        "Use dates tied to a particular scholar, text, instrument, or institution instead of assuming a single timeline explains every discipline."
+      ],
+      "app": [
+        "When comparing achievements, place them in their local political, linguistic, and intellectual settings."
+      ]
+    },
+    "related": [],
+    "sources": [
+      {
+        "title": "Stanford Encyclopedia: Arabic and Islamic Natural Science",
+        "url": "https://plato.stanford.edu/entries/arabic-islamic-natural/"
+      }
+    ]
+  }
+]);
 export const KB_ID_TO_INDEX = new Map(KB.map((e, i) => [e.id, i]));

@@ -957,5 +957,65 @@
       "form",
       "app"
     ]
+  },
+  {
+    "id": "grouped_validation",
+    "idx": 38,
+    "name": "Grouped cross-validation",
+    "aliases": [
+      "grouped cross-validation",
+      "group leakage",
+      "groupkfold",
+      "patient split"
+    ],
+    "summary": "Grouped cross-validation keeps observations from the same entity together in one fold. It tests transfer to unseen entities rather than recognition of familiar ones.",
+    "related": [],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "calibration",
+    "idx": 39,
+    "name": "Probability calibration",
+    "aliases": [
+      "probability calibration",
+      "calibrated probabilities",
+      "reliability diagram",
+      "brier score"
+    ],
+    "summary": "Calibration asks whether predicted probabilities agree with observed frequencies. A model can rank cases well while assigning misleading probability values.",
+    "related": [],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "dataset_shift",
+    "idx": 40,
+    "name": "Dataset shift",
+    "aliases": [
+      "dataset shift",
+      "data drift",
+      "distribution shift",
+      "concept drift"
+    ],
+    "summary": "Dataset shift occurs when the distribution encountered during use differs from the training distribution. It can affect inputs, labels, or their relationship.",
+    "related": [],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
   }
 ]

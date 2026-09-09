@@ -1,0 +1,13 @@
+{
+  "name": "relu-chat",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Six browser-based learning assistants with local retrieval and a small policy network",
+  "engines": { "node": ">=22.13.0" },
+  "scripts": {
+    "dev": "python3 -m http.server 8017 --bind 127.0.0.1",
+    "test": "node dev/scripts/check-release.mjs",
+    "check:content": "node scripts/blog/validate.js && python3 dev/scripts/check-site.py",
+    "train:policy": "timeout 580s bash -e -c 'node dev/scripts/build-policy-dataset.mjs; python3 dev/scripts/train-policy-fast.py --max-seconds 120; bash dev/scripts/build-policy-wasm.sh; node dev/scripts/verify-fast-policy.mjs'"
+  }
+}

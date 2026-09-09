@@ -1,0 +1,19 @@
+{
+  "id": "dot-product-cosine-worked-example",
+  "slug": "dot-product-cosine-worked-example",
+  "title": "Dot Product and Cosine Similarity, Step by Step",
+  "meta_title": "Dot Product and Cosine Similarity, Step by Step",
+  "meta_description": "Work through a dot product, vector norms, and cosine similarity, including the zero-vector case that retrieval code must handle.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "linear-algebra",
+    "worked-example",
+    "retrieval"
+  ],
+  "excerpt": "Work through a dot product, vector norms, and cosine similarity, including the zero-vector case that retrieval code must handle.",
+  "related_bot": "linear-algebra-chat",
+  "content": "# Dot Product and Cosine Similarity, Step by Step\n\nThe dot product and cosine similarity are closely related, but they answer different questions. A dot product includes vector magnitude. Cosine similarity divides out the magnitudes to compare direction.\n\nThat distinction matters in retrieval. If one embedding has twice the norm of another, its dot product can be larger even when its direction is no better aligned with the query.\n\n## Multiply and add\n\nTake x = (1, 2) and y = (3, 4). Multiply matching coordinates and sum: x · y = 1 × 3 + 2 × 4 = 11. The result is a scalar, not a vector.\n\nThe coordinates must describe the same space. A 384-dimensional sentence vector and an unrelated 384-dimensional feature vector are not comparable merely because their lengths match.\n\n## Compute the lengths\n\nThe Euclidean norm of x is the square root of 1² + 2², which is the square root of 5. The norm of y is the square root of 3² + 4², which is 5.\n\nCosine similarity is therefore 11 divided by 5 times the square root of 5, approximately 0.98387. The vectors point in very similar directions, though their lengths differ.\n\n## Scale one vector\n\nDouble y to obtain (6, 8). The dot product doubles to 22, and y’s norm doubles to 10. Cosine similarity remains 22 divided by 10 times the square root of 5, again approximately 0.98387.\n\nPositive rescaling changes magnitude while preserving direction. Multiplying by a negative scalar reverses direction, so the sign of cosine similarity changes.\n\n## Handle a zero vector deliberately\n\nA zero vector has no direction, so its cosine similarity is undefined mathematically. Retrieval code needs an explicit convention. Returning zero is a common engineering choice meaning no useful directional signal, but it should not be confused with a mathematical angle of ninety degrees.\n\nAlso check finite values and matching dimensions. Silently comparing only a prefix can produce a believable score from incompatible embeddings. A safe failure is preferable to a false match.\n\n## Apply it to chatbot loading\n\nA bag-of-words vector and a transformer embedding use different coordinates. During progressive loading, update query encoding and all stored knowledge vectors together. Clearing memoized query vectors is essential when switching spaces.\n\nEven normalized vectors do not make every similarity threshold universal. Different models and corpora produce different score distributions. Evaluate ranking quality on representative questions rather than transferring a threshold blindly.\n\nContinue with [MIT’s linear algebra course](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/) or [ask the linear algebra bot about dot products](/chat/linear-algebra-chat/?q=Explain%20dot%20product)."
+}

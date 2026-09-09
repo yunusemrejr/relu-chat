@@ -1,0 +1,19 @@
+{
+  "id": "local-chat-privacy-network",
+  "slug": "local-chat-privacy-network",
+  "title": "Local Chat Privacy: What Still Uses the Network?",
+  "meta_title": "Local Chat Privacy: What Still Uses the Network?",
+  "meta_description": "Distinguish local question processing from page downloads, browser storage, external links, and offline availability.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "privacy",
+    "browser-ai",
+    "web-platform"
+  ],
+  "excerpt": "Distinguish local question processing from page downloads, browser storage, external links, and offline availability.",
+  "related_bot": "web-platform-chat",
+  "content": "# Local Chat Privacy: What Still Uses the Network?\n\n“Runs locally” describes where computation happens. It does not mean a website never contacts a server. A useful privacy explanation separates the conversation path from loading the website and opening external resources.\n\nIn ReLU.chat, question processing and answer assembly happen in the browser. The website still needs to deliver HTML, JavaScript, styles, knowledge content, and optional model files.\n\n## Follow one question\n\nThe browser tokenizes or embeds the question, ranks local knowledge entries, chooses an answer plan, and renders stored fragments. This path does not require sending the text to a chatbot API.\n\nThe distinction is testable: inspect requests while submitting a distinctive test question. Compare request bodies, query strings, and WebSocket activity with the text you entered. Also inspect scripts that can initiate their own network activity.\n\nA page’s privacy statement should describe its actual behavior. “No conversation is sent to a chat service” is a more specific claim than “no data ever leaves your device.”\n\n## Loading is still communication\n\nA page request exposes ordinary connection information to the hosting infrastructure. Downloading a model reveals a request for that model resource. External links connect to their destinations when followed, and remotely embedded resources can contact another host as soon as they load.\n\nReLU.chat’s current chat interface uses local assets and explicit source and product links. Optional enhanced matching downloads about 22 MB and caches it. A visitor can use basic keyword matching without choosing that enhancement.\n\n## Storage is a separate question\n\nLocal storage can persist even when nothing is uploaded. The chat session is kept in memory; exporting a conversation creates a text file on the user’s device. Public knowledge embeddings may be cached in IndexedDB, while asset responses may be cached by the service worker and browser.\n\nA browser profile shared with someone else has a different privacy boundary from a personal profile. Clearing site data or using a fresh profile changes available caches, and private browsing can restrict storage behavior.\n\n## Offline is conditional\n\nA previously loaded page can work offline only if its required assets are available. An uncached chatbot or an optional model that was never downloaded cannot be reconstructed from an offline badge.\n\nTest by loading a chatbot, disconnecting, reloading it, and submitting a question. Then try a route never visited before. Those are different cases and should have different explanations when assets are missing.\n\n## Prefer a clear boundary\n\nLocal processing reduces the need to transmit conversation text. It does not automatically settle hosting logs, external destinations, browser extensions, shared devices, or every storage question. Describe each boundary accurately and make optional downloads visible.\n\nSee [how ReLU.chat works](/how-it-works.html), [the web-platform chatbot](/chat/web-platform-chat/), and [MDN’s service-worker documentation](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers)."
+}

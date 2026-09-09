@@ -1,10 +1,11 @@
+import { interpretMessage, conversationalReply } from './conversation.js';
 import { LRUCache } from './cache.js';
 import { SessionMemory } from './session.js';
 import { composeV2, setCompositionSeed, tokens, bowVec, compileAliasRegex } from './nlp.js';
 import { pushMessage, pushMessageStream, setStatus, escapeHTML, md, renderDiagramElement } from './ui.js';
 import { loadPolicyRuntime, planAnswer, isPolicyLoaded } from '../policy/policy-runtime.js';
 import { SignalLayer } from './signal-layer.js';
-import { BotPackLoader } from './bot-pack-loader.js';
+import { readEmbeddings, writeEmbeddings, embeddingKey, validEmbeddings } from './embedding-store.js';
 
 // ---------------------------------------------------------------------------
 // Loading state machine
@@ -75,7 +76,7 @@ export async function createChatbot(config) {
   const sendBtn = document.getElementById('send');
   const form = document.getElementById('form');
   let extractor = null, entryEmb = [], intentEmb = {}, domainPrototypeEmbs = [];
-  let ready = false, busy = false;
+  let ready = false, busy = false, upgradePromise = null, pendingUpgrade = null;
   // Session memory: replaces single `lastTopic` with full turn-based tracking
   const session = new SessionMemory(CONFIG?.SESSION?.maxHistory || 30);
   const fragEmbCache = new LRUCache(CONFIG?.CACHE?.MAX_SIZE || 500);
@@ -86,7 +87,7 @@ export async function createChatbot(config) {
   const queryEmbCache = new LRUCache(CONFIG?.CACHE?.QUERY_EMB_MAX || 64);
 
   async function embed(text) {
-    const key = (text || '').trim().toLowerCase().slice(0, 240);
+    const key = (text || '').trim().toLowerCase();
     if (key && queryEmbCache.has(key)) return queryEmbCache.get(key);
     let v;
     if (extractor) {
@@ -106,203 +107,128 @@ export async function createChatbot(config) {
     return v;
   }
 
-  async function init() {
-    _setLoadState('loading_transformer');
+  function commitUpgrade(next) {
+    if (busy) { pendingUpgrade = next; return; }
+    extractor = next.extractor;
+    entryEmb = next.entries;
+    intentEmb = next.intents;
+    domainPrototypeEmbs = next.domain;
+    queryEmbCache.clear();
+    fragEmbCache.clear();
+    pendingUpgrade = null;
+    bar.style.width = '100%';
+    setStatus('Ready · enhanced matching', true);
+    _setLoadState('ready');
+    const enhance = document.getElementById('enhance');
+    if (enhance) { enhance.textContent = 'Enhanced matching on'; enhance.disabled = true; }
+  }
 
-    // ── Attempt bot-pack fast-path (Track B P1) ───────────────────────────
-    let botPack = null;
-    let botPackLoader = null;
-    try {
-      const botId = botProfile?.id || 'default';
-      botPackLoader = new BotPackLoader(botId, '/data/bot-packs/');
-      const available = await botPackLoader.probe();
-      if (available) {
-        console.log('[chatbot-engine] Bot-pack found, using fast-path loading');
-        await botPackLoader.stage1_basic();
-        await botPackLoader.stage2_sparse();
-        botPack = botPackLoader.getData();
-      }
-    } catch (packErr) {
-      console.warn('[chatbot-engine] Bot-pack probe failed, falling back:', packErr.message);
-    }
-
-    // ── Fast bootstrap: BOW + heuristic so first turns are usable immediately ──
-    // Addresses "No lazy/progressive model loading — MiniLM blocks first interaction".
-    // Heuristic + BOW (already built) handle queries while full transformer streams in
-    // (aided by SW model pre-cache). Hot-swap to dense vectors when ready.
-    const voc = new Set();
-    for (const e of KB) for (const t of tokens(entryText(e))) voc.add(t);
-    for (const k of Object.keys(INTENTS)) for (const p of INTENTS[k].prototypes) for (const t of tokens(p)) voc.add(t);
-    bowVocab = new Map();
-    [...voc].forEach((w, i) => bowVocab.set(w, i));
-    entryEmb = KB.map(e => bowVec(entryText(e), bowVocab));
-    for (const k of Object.keys(INTENTS)) intentEmb[k] = INTENTS[k].prototypes.map(p => bowVec(p, bowVocab));
-
-    // Use precomputed BM25 from bot-pack if available, else build client-side
-    if (botPack?.bm25) {
+  async function enhanceMatching() {
+    if (upgradePromise) return upgradePromise;
+    const button = document.getElementById('enhance');
+    if (button) { button.disabled = true; button.textContent = 'Preparing enhanced matching…'; }
+    upgradePromise = (async () => {
       try {
-        signalLayer.initBM25FromIndex(botPack.bm25);
-        console.log('[chatbot-engine] Using precomputed BM25 index from bot-pack');
-      } catch (e) { console.warn('BM25 init (bot-pack) failed:', e); }
-    } else {
-      try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init (bootstrap) failed:', e); }
-    }
-
-    // Partial ready: enable UI + heuristic path right away (first turns use fast BOW+policy heuristic)
-    _setLoadState('partially_ready');
-    setStatus('basic (enhancing…)', true);
-    sendBtn.disabled = false;
-    ready = true; // allow handle(); embed() will use bow until extractor present
-    if (onReady) onReady();
-
-    // ---- Parallel initialization: start policy loading while transformer loads ----
-    const policyPromise = (async () => {
-      try {
-        const policyBotProfile = botProfile || {
-          id: 'default',
-          allowedIntents: Object.keys(INTENTS),
-          tone: 'neutral',
-          maxTopics: 3,
-          creativityCeiling: 0.35
-        };
-        const policyResult = await loadPolicyRuntime({
-          wasmPath: '/assets/models/policy/policy.wasm',
-          weightsPath: '/assets/models/policy/policy.weights.bin',
-          manifestPath: '/assets/models/policy/policy.manifest.json',
-          botProfile: policyBotProfile
+        _setLoadState('loading_transformer');
+        setStatus('Ready · enhancing matching', true);
+        const { pipeline, env } = await import('/assets/transformers/transformers.js');
+        env.allowLocalModels = true;
+        env.allowRemoteModels = false;
+        env.localModelPath = '/assets/models/';
+        env.backends.onnx.wasm.wasmPaths = '/assets/transformers/';
+        // A single WASM thread avoids blob worker imports blocked by the site's
+        // CSP, keeps memory bounded, and leaves CPU capacity for the page.
+        env.backends.onnx.wasm.numThreads = 1;
+        env.useBrowserCache = true;
+        const nextExtractor = await pipeline('feature-extraction', CONFIG.EMBEDDING.model, {
+          quantized: CONFIG.EMBEDDING.quantized,
+          progress_callback: p => { if (p.status === 'progress' && p.total) bar.style.width = `${p.loaded / p.total * 100}%`; }
         });
-        // W8: Surface schema-mismatch to UI
-        if (policyResult && policyResult.schemaMismatch) {
-          console.warn('[chatbot-engine] Schema mismatch detected:', policyResult.schemaMismatchMessage);
-          setStatus('schema mismatch — using heuristic', false);
+        const encode = async text => Array.from((await nextExtractor(text, { pooling: 'mean', normalize: true })).data);
+        const key = await embeddingKey(KB, entryText, INTENTS, CONFIG.EMBEDDING.model);
+        let vectors = await readEmbeddings(key);
+        if (!validEmbeddings(vectors, KB.length, INTENTS)) {
+          _setLoadState('loading_embeddings');
+          const entries = [];
+          for (const e of KB) entries.push(await encode(entryText(e)));
+          const intents = {};
+          for (const [name, intent] of Object.entries(INTENTS)) {
+            intents[name] = [];
+            for (const text of intent.prototypes) intents[name].push(await encode(text));
+          }
+          vectors = { entries, intents };
+          await writeEmbeddings(key, vectors);
         }
-      } catch (policyErr) {
-        console.error('[chatbot-engine] Policy load failed:', policyErr.message);
+        const domain = [];
+        for (const text of botProfile?.domainPrototypes || []) domain.push(await encode(text));
+        commitUpgrade({ extractor: nextExtractor, ...vectors, domain });
+      } catch (error) {
+        console.warn('[chat] Enhanced matching unavailable:', error.message);
+        setStatus('Ready · keyword matching', true);
+        _setLoadState('partially_ready');
+        upgradePromise = null;
+        if (button) { button.disabled = false; button.textContent = 'Retry enhanced matching'; }
       }
     })();
+    return upgradePromise;
+  }
 
-    // ---- Deferred import: transformers.js only loaded when init() runs ----
-    const { pipeline, env } = await import('/assets/transformers/transformers.js');
-    env.allowLocalModels = true;
-    env.allowRemoteModels = false;
-    env.localModelPath = '/assets/models';
-    env.backends.onnx.wasm.wasmPaths = '/assets/transformers/';
-    env.useBrowserCache = true;
-
-    // ---- Load transformer model while policy loads in background ----
-    let usedFallback = false;
-    try {
-      setStatus('loading transformer…');
-      extractor = await pipeline('feature-extraction', CONFIG.EMBEDDING.model, {
-        quantized: CONFIG.EMBEDDING.quantized,
-        progress_callback: (p) => {
-          if (p.status === 'progress' && p.total) {
-            const pct = (p.loaded / p.total) * 100;
-            bar.style.width = pct + '%';
-            setStatus(`loading ${p.file || 'model'} ${pct.toFixed(0)}%`);
-          }
-        }
-      });
-
-      // ---- Hot-swap: re-encode KB with real dense embeddings (progressive upgrade) ----
-      // Previous BOW entryEmb/intentEmb allow instant first turns; now replace in place.
-      _setLoadState('loading_embeddings');
-      setStatus('encoding knowledge base…');
-      bar.style.width = '0%';
-      compileAliasRegex(KB);
-
-      // ── Bot-pack vector fast-path: use precomputed vectors if available ──
-      let usedBotPackVectors = false;
-      if (botPackLoader) {
-        try {
-          const vecData = await botPackLoader.stage3_vectors();
-          const ev = vecData.entryVectors;
-          const fv = vecData.fragmentVectors;
-          // Check if vectors are real (not placeholder)
-          if (ev && !ev._note && Array.isArray(ev.data || ev)) {
-            entryEmb = ev.data || ev;
-            usedBotPackVectors = true;
-            console.log('[chatbot-engine] Using precomputed entry vectors from bot-pack');
-          }
-          if (fv && !fv._note) {
-            // Fragment vectors loaded; store for potential use in signal layer
-            botPackLoader._fragmentVectors = fv.data || fv;
-          }
-        } catch (vecErr) {
-          console.warn('[chatbot-engine] Bot-pack vectors failed, encoding at runtime:', vecErr.message);
-        }
-      }
-
-      if (!usedBotPackVectors) {
-        const BATCH = 8;
-        const newEntryEmb = [];
-        for (let i = 0; i < KB.length; i += BATCH) {
-          const batch = KB.slice(i, i + BATCH).map(e => embed(entryText(e)));
-          newEntryEmb.push(...await Promise.all(batch));
-          bar.style.width = (Math.min(i + BATCH, KB.length) / KB.length * 100) + '%';
-        }
-        entryEmb = newEntryEmb; // hot-swap
-      } else {
-        bar.style.width = '100%';
-      }
-
-      // Initialize (or re-init) BM25 sparse retrieval via SignalLayer (now with better text)
-      if (!botPack?.bm25) {
-        try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed:', e); }
-      }
-
-      for (const k of Object.keys(INTENTS)) {
-        intentEmb[k] = [];
-        for (const p of INTENTS[k].prototypes) intentEmb[k].push(await embed(p));
-      }
-
-      // Pre-embed domain prototypes for domainMatch feature
-      if (botProfile?.domainPrototypes && botProfile.domainPrototypes.length > 0) {
-        for (const dp of botProfile.domainPrototypes) {
-          domainPrototypeEmbs.push(await embed(dp));
-        }
-      }
-    } catch (err) {
-      console.error('Model load failed, using BOW fallback:', err);
-      usedFallback = true;
-      // BOW already bootstrapped above; ensure signal
-      if (!botPack?.bm25) {
-        try { signalLayer.initBM25(KB); } catch (e) { console.warn('BM25 init failed in fallback:', e); }
-      }
-      setStatus('offline mode', true);
-    }
-
-    // ---- Wait for policy to finish ----
-    if (!isPolicyLoaded()) {
-      _setLoadState('loading_policy');
-    }
-    await policyPromise;
-
-    // ---- Check readiness ----
-    if (!isPolicyLoaded()) {
-      _setLoadState('error');
-      setStatus('policy error — please reload and clear browser cache', false);
-      return; // block further — policy is mandatory
-    }
-
-    bar.style.width = '100%';
-    setTimeout(() => bar.style.width = '0%', 500);
-    if (!usedFallback) setStatus('ready', true);
+  function init() {
+    const vocabulary = new Set();
+    for (const entry of KB) for (const token of tokens(entryText(entry))) vocabulary.add(token);
+    for (const intent of Object.values(INTENTS)) for (const text of intent.prototypes) for (const token of tokens(text)) vocabulary.add(token);
+    bowVocab = new Map([...vocabulary].map((word, index) => [word, index]));
+    entryEmb = KB.map(entry => bowVec(entryText(entry), bowVocab));
+    for (const [name, intent] of Object.entries(INTENTS)) intentEmb[name] = intent.prototypes.map(text => bowVec(text, bowVocab));
+    compileAliasRegex(KB);
+    signalLayer.initBM25(KB);
     ready = true;
-    _setLoadState('ready');
-    // sendBtn already enabled from partial bootstrap
+    sendBtn.disabled = false;
+    _setLoadState('partially_ready');
+    setStatus('Ready · keyword matching', true);
+    document.getElementById('enhance')?.addEventListener('click', enhanceMatching);
+    loadPolicyRuntime({ botProfile }).catch(error => console.warn('[chat] Using built-in policy:', error.message));
     if (onReady) onReady();
   }
 
+  function addSources(answerElement, topics) {
+    const sources = [...new Map((topics || []).flatMap(i => KB[i]?.sources || []).map(source => [source.url, source])).values()];
+    if (sources.length) {
+      const references = document.createElement('div');
+      references.className = 'answer-sources';
+      references.append('Read more: ');
+      for (const source of sources.slice(0, 3)) {
+        if (!/^https:\/\//.test(source.url)) continue;
+        const link = document.createElement('a');
+        link.href = source.url; link.textContent = source.title; link.target = '_blank'; link.rel = 'noopener noreferrer';
+        references.append(link, ' ');
+      }
+      answerElement.querySelector('.msg-body').append(references);
+    }
+  }
+
   async function handle(query) {
-    if (!query.trim()) return;
+    query = query.trim().slice(0, 2000);
+    if (!query) return;
     pushMessage('user', md(escapeHTML(query)));
     busy = true;
     sendBtn.disabled = true;
 
     const typingEl = pushMessage('bot', '<div class="typing"><span></span><span></span><span></span></div>');
     let text, meta;
+    const originalQuery = query;
     try {
+      const message = interpretMessage(query);
+      const conversational = conversationalReply(message, session, KB, botProfile);
+      if (conversational) {
+        typingEl.remove();
+        const answerElement = pushMessage('bot', md(conversational.text));
+        addSources(answerElement, conversational.topics);
+        session.addTurn(originalQuery, conversational.text, [], conversational.topics, []);
+        suggestionsEl?.classList.toggle('has-conversation', !conversational.showSuggestions);
+        return;
+      }
+      query = message.query;
       const qEmb = await embed(query);
 
       // ---- Lightweight frontend ML signal layer — bundles BM25, entity extraction,
@@ -351,37 +277,15 @@ export async function createChatbot(config) {
       const result = await composeV2(query, qEmb, embedCached, entryEmb, intentEmb, session.lastTopic, KB, CONFIG, overrides, plan);
 
       text = result.text;
-      meta = result.meta;
+      meta = result.meta?.filter(item => !item.type);
 
       typingEl.remove();
 
-      // Stream-render: reveal response in progressive chunks for native chat feel
-      // Respect prefers-reduced-motion: show full response instantly when set
-      const stream = pushMessageStream('bot', meta);
-      const rendered = md(text);
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReduced) {
-        stream.update(rendered);
-        stream.done();
-      } else {
-        const CHUNK = 40;
-        let pos = 0;
-        const reveal = () => {
-          if (pos < rendered.length) {
-            pos = Math.min(pos + CHUNK, rendered.length);
-            stream.update(rendered.slice(0, pos));
-            if (pos < rendered.length) {
-              requestAnimationFrame(reveal);
-            } else {
-              stream.done();
-            }
-          } else {
-            stream.done();
-          }
-        };
-        requestAnimationFrame(reveal);
-      }
-
+      // The answer is already complete locally. Render once: no artificial delay,
+      // incomplete HTML, repeated layout, or repeated live-region announcements.
+      const answerElement = pushMessage('bot', md(text), meta);
+      addSources(answerElement, result.topics || plan.topics || []);
+      suggestionsEl?.classList.add('has-conversation');
       // W1: Render diagram if available
       if (result.diagramAst) {
         await renderDiagramElement(result.diagramAst, { theme: 'dark' });
@@ -405,7 +309,7 @@ export async function createChatbot(config) {
         }
       }
 
-      session.addTurn(query, text, dp.entities, presentedTopics, fragmentsUsed, qEmb);
+      session.addTurn(originalQuery, text, dp.entities, presentedTopics, fragmentsUsed, qEmb);
     } catch (err) {
       console.error(err);
       typingEl.remove();
@@ -413,6 +317,7 @@ export async function createChatbot(config) {
     } finally {
       busy = false;
       sendBtn.disabled = false;
+      if (pendingUpgrade) commitUpgrade(pendingUpgrade);
     }
   }
 
@@ -423,15 +328,17 @@ export async function createChatbot(config) {
     input.value = '';
     input.style.height = 'auto';
     handle(q);
+
   });
 
   input.addEventListener('input', () => {
     input.style.height = 'auto';
     input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+    input.style.overflowY = input.scrollHeight > 120 ? 'auto' : 'hidden';
   });
 
   input.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
       e.preventDefault();
       form.requestSubmit();
     }
@@ -453,6 +360,23 @@ export async function createChatbot(config) {
     pushMessage('bot', welcomeMessage);
   }
 
+  document.getElementById('clear-chat')?.addEventListener('click', () => {
+    if (busy) return;
+    session.reset();
+    document.getElementById('messages').replaceChildren();
+    suggestionsEl?.classList.remove('has-conversation');
+    if (welcomeMessage) pushMessage('bot', welcomeMessage);
+    input.focus();
+  });
+  document.getElementById('export-chat')?.addEventListener('click', () => {
+    const messages = [...document.querySelectorAll('#messages .msg')].map(el => el.innerText).join('\n\n');
+    const url = URL.createObjectURL(new Blob([messages], { type: 'text/plain;charset=utf-8' }));
+    const link = document.createElement('a'); link.href = url; link.download = `${botProfile.id}-conversation.txt`; link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
   sendBtn.disabled = true;
   init();
+  const initialQuestion = new URLSearchParams(location.search).get('q');
+  if (initialQuestion) { input.value = initialQuestion.slice(0, 2000); input.focus(); }
+
 }

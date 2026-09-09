@@ -538,84 +538,97 @@ footer a:hover {
 
 /* ── Toolkit banner (hub) ── */
 .kit-hub-banner {
-  max-width: 1080px;
-  margin: 0 auto var(--space-10);
-  display: flex;
-  align-items: center;
-  gap: var(--space-5);
-  padding: var(--space-5);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius);
+ max-width: 1080px;
+ margin: 0 auto var(--space-10);
+ display: flex;
+ align-items: center;
+ gap: var(--space-5);
+ padding: var(--space-5);
+ background: var(--bg-elevated);
+ border: 1px solid var(--border);
+ border-left: 3px solid var(--accent);
+ border-radius: var(--radius);
 }
 .kit-hub-img {
-  width: 240px;
-  aspect-ratio: 3/2;
-  object-fit: cover;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  flex-shrink: 0;
+ width: 240px;
+ aspect-ratio: 3 / 2;
+ object-fit: cover;
+ border-radius: var(--radius);
+ border: 1px solid var(--border);
+ flex-shrink: 0;
 }
 .kit-hub-copy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  min-width: 0;
+ display: flex;
+ flex-direction: column;
+ gap: var(--space-2);
+ min-width: 0;
 }
 .kit-hub-label {
-  color: var(--accent);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+ color: var(--accent);
+ font-size: 0.6875rem;
+ font-weight: 600;
+ letter-spacing: 0.08em;
+ text-transform: uppercase;
 }
 .kit-hub-title {
-  color: var(--text-primary);
-  font-size: 1.125rem;
-  font-weight: 700;
-  line-height: 1.25;
+ color: var(--text-primary);
+ font-size: 1.125rem;
+ font-weight: 700;
+ line-height: 1.25;
 }
 .kit-hub-text {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  line-height: 1.6;
-  max-width: 70ch;
+ color: var(--text-secondary);
+ font-size: 0.875rem;
+ line-height: 1.6;
+ max-width: 70ch;
 }
 .kit-hub-cta {
-  margin-top: var(--space-2);
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 44px;
-  padding: 0 var(--space-5);
-  background: var(--accent);
-  color: #0d1117;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: var(--radius);
-  white-space: nowrap;
-  transition: filter 0.15s ease;
+ margin-top: var(--space-2);
+ align-self: flex-start;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ height: 44px;
+ padding: 0 var(--space-5);
+ background: var(--accent);
+ color: #0d1117;
+ font-size: 0.875rem;
+ font-weight: 600;
+ text-decoration: none;
+ border-radius: var(--radius);
+ white-space: nowrap;
+ transition: filter 0.15s ease;
 }
-.kit-hub-cta:hover { filter: brightness(1.1); }
+.kit-hub-cta:hover {
+ filter: brightness(1.1);
+}
 @media (max-width: 768px) {
-  .kit-hub-banner {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-4);
-    padding: var(--space-4);
-  }
-  .kit-hub-img {
-    width: 100%;
-    aspect-ratio: 16/6;
-  }
-  .kit-hub-cta {
-    justify-content: center;
-    align-self: stretch;
-  }
+ .kit-hub-banner {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-4);
+  padding: var(--space-4);
+ }
+ .kit-hub-img {
+  width: 100%;
+  aspect-ratio: 16 / 6;
+ }
+ .kit-hub-cta {
+  justify-content: center;
+  align-self: stretch;
+ }
 }
 @media (prefers-reduced-motion: reduce) {
-  .kit-hub-cta { transition: none; }
+ .kit-hub-cta {
+  transition: none;
+ }
 }
+
+.blog-search { margin:28px 0 18px; }
+.blog-search label { display:block; font-size:.8rem; margin-bottom:9px; color:var(--text-secondary,#abb3bd); }
+#blog-search { width:100%; min-height:48px; padding:12px 16px; border:1px solid var(--border,#30363d); border-radius:6px; background:var(--bg-secondary,#1b2026); color:var(--text-primary,#f1f5f9); font:inherit; font-size:16px; }
+#blog-search:focus-visible { outline:2px solid var(--accent,#14b8a6); outline-offset:2px; }
+#search-count { min-height:1.5em; font-size:.75rem; color:var(--text-secondary,#abb3bd); margin-top:8px; }
+/* Honor image proportions even when HTML supplies intrinsic dimensions. */
+.kit-hub-img { width:160px; height:auto; max-height:160px; object-fit:contain; }
+@media(max-width:768px){.kit-hub-img{width:120px;height:auto;aspect-ratio:auto;align-self:flex-start}.kit-hub-title{font-size:1rem}}

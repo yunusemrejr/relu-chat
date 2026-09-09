@@ -1,0 +1,18 @@
+{
+  "id": "rank-svd-conditioning",
+  "slug": "rank-svd-conditioning",
+  "title": "Rank, SVD, and Conditioning: Three Different Questions",
+  "meta_title": "Rank, SVD, and Conditioning: Three Different Questions",
+  "meta_description": "Use a diagonal matrix to distinguish exact rank, low-rank approximation, and sensitivity to numerical perturbations.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "linear-algebra",
+    "numerical-computing"
+  ],
+  "excerpt": "Use a diagonal matrix to distinguish exact rank, low-rank approximation, and sensitivity to numerical perturbations.",
+  "related_bot": "linear-algebra-chat",
+  "content": "# Rank, SVD, and Conditioning: Three Different Questions\n\nRank, singular values, and condition numbers often appear together. They are related, but they describe different aspects of a matrix. Confusing them makes numerical debugging harder.\n\nRank asks how many independent directions a map produces. Singular values describe the amount of stretching along special input directions. A condition number describes sensitivity of a problem to changes in its input.\n\n## Start with a diagonal matrix\n\nLet A be diag(1, 0.001). It maps (x, y) to (x, 0.001y). Both diagonal entries are nonzero, so the matrix has exact rank 2 and is invertible.\n\nIts singular values are 1 and 0.001. Its condition number in the Euclidean norm is their ratio, 1000. Full rank therefore does not imply that solving with A is insensitive to noise.\n\n## Watch a perturbation grow\n\nSolving Ax = b gives x = (b₁, 1000b₂). An absolute perturbation of 0.0001 in the second component of b changes the second component of x by 0.1.\n\nThe condition number describes a worst-case relative sensitivity, so it should not be interpreted as a promise that every error will grow by exactly 1000. The direction of the perturbation and the specific right-hand side matter.\n\n## Choose a numerical rank\n\nIn exact arithmetic, rank is unambiguous. In floating-point work, deciding which singular values are effectively zero requires a tolerance. That tolerance depends on scale, dimensions, numerical precision, and the noise in the data.\n\nIf measurements are noisy at a scale much larger than 0.001, the second direction may contain little reliable information. Treating A as approximately rank 1 can be a modeling decision, not proof that its exact rank is 1.\n\n## Understand truncation\n\nKeeping only the largest singular value produces diag(1, 0). The approximation drops the second direction completely. Its largest error magnitude, in spectral norm, is 0.001.\n\nThis is useful for compression when small directions are expendable. It is dangerous if the discarded direction represents a rare but important signal. Small numerical energy and low practical importance are not the same thing.\n\n## Diagnose before changing precision\n\nFirst verify units and feature scales. Then inspect the singular spectrum and the residual of the computed solution. Consider regularization or a reformulated problem when noise makes inversion unstable.\n\nA more stable algorithm reduces unnecessary numerical error. It cannot make an inherently sensitive problem insensitive. Likewise, increasing precision does not remove uncertainty already present in the measurements.\n\nExplore the foundations in [MIT Linear Algebra](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/) and [ask about condition numbers](/chat/linear-algebra-chat/?q=Explain%20condition%20number)."
+}

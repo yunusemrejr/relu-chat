@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Q-learning vs SARSA: One Update, Worked Through — ReLU.chat</title>
+<meta name="description" content="Calculate Q-learning and SARSA updates on the same transition, and see why their targets differ during exploration.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/q-learning-sarsa-worked-example/">
+
+<meta property="og:title" content="Q-learning vs SARSA: One Update, Worked Through">
+<meta property="og:description" content="Calculate Q-learning and SARSA updates on the same transition, and see why their targets differ during exploration.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/q-learning-sarsa-worked-example/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="reinforcement-learning">
+<meta property="article:tag" content="worked-example">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Q-learning vs SARSA: One Update, Worked Through">
+<meta name="twitter:description" content="Calculate Q-learning and SARSA updates on the same transition, and see why their targets differ during exploration.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/q-learning-sarsa-worked-example/#webpage",
+      "url": "https://relu.chat/blog/q-learning-sarsa-worked-example/",
+      "name": "Q-learning vs SARSA: One Update, Worked Through",
+      "description": "Calculate Q-learning and SARSA updates on the same transition, and see why their targets differ during exploration.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/q-learning-sarsa-worked-example/#article",
+      "headline": "Q-learning vs SARSA: One Update, Worked Through",
+      "description": "Calculate Q-learning and SARSA updates on the same transition, and see why their targets differ during exploration.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/q-learning-sarsa-worked-example/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "reinforcement-learning, worked-example"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Q-learning vs SARSA: One Update, Worked Through</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">reinforcement-learning</span><span class="article-tag">worked-example</span></div>
+
+  <h1 class="article-hero-title">Q-learning vs SARSA: One Update, Worked Through</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-fix-one-transition">Fix one transition</a></li><li><a href="#section-calculate-q-learning">Calculate Q-learning</a></li><li><a href="#section-calculate-sarsa">Calculate SARSA</a></li><li><a href="#section-what-changes-at-termination">What changes at termination?</a></li><li><a href="#section-compare-algorithms-fairly">Compare algorithms fairly</a></li></ol></nav><div class="article-body">
+    <p>Q-learning and SARSA can observe the same transition and make different updates. The difference is the value they use for the next action.</p>
+
+<p>Both methods maintain Q(s, a), an estimate of future return after taking action a in state s. Both move the estimate partway toward a target. Neither algorithm needs a neural network for a small finite state space.</p>
+
+<h2 id="section-fix-one-transition">Fix one transition</h2>
+
+<p>Suppose the current estimate is 2. The action produces reward 1 and moves to a nonterminal state. The discount factor is 0.9 and the learning rate is 0.5. At the next state, action A has estimated value 4 and action B has estimated value 1.</p>
+
+<p>The behavior policy explores and chooses B. This is the crucial detail: the best estimated action and the action actually taken differ.</p>
+
+<h2 id="section-calculate-q-learning">Calculate Q-learning</h2>
+
+<p>Q-learning uses the maximum next-state action value, 4. Its target is 1 + 0.9 × 4 = 4.6. The prediction error is 4.6 − 2 = 2.6. Moving halfway gives a new estimate of 2 + 0.5 × 2.6 = 3.3.</p>
+
+<p>The update evaluates a greedy target even though the behavior policy chose B. This is why Q-learning is called off-policy. The behavior that collects experience and the policy represented by the target can differ.</p>
+
+<h2 id="section-calculate-sarsa">Calculate SARSA</h2>
+
+<p>SARSA uses the next action actually selected, B, whose estimate is 1. Its target is 1 + 0.9 × 1 = 1.9. The prediction error is 1.9 − 2 = −0.1. The new estimate is 2 + 0.5 × (−0.1) = 1.95.</p>
+
+<p>That lower value accounts for what the exploratory policy is about to do. It is not an arithmetic mistake or evidence that SARSA always learns worse policies. It is a different target.</p>
+
+<h2 id="section-what-changes-at-termination">What changes at termination?</h2>
+
+<p>If this transition ends the task, both methods use immediate reward alone. The target is 1, so the updated estimate is 1.5. There is no next action’s future reward to include.</p>
+
+<p>A time limit is more subtle. If the simulator stops while the underlying task continues, dropping the bootstrap term may be wrong. Store termination and truncation separately so the update can reflect the environment’s meaning.</p>
+
+<h2 id="section-compare-algorithms-fairly">Compare algorithms fairly</h2>
+
+<p>Use the same environment, reward, training budget, and exploration schedule. Measure both behavior during training and the fixed policy used for evaluation. Risky exploration can matter even when the eventual greedy policies look similar.</p>
+
+<p>Try explaining the two targets without the formulas. If you can identify whose next action is evaluated, you understand the central distinction. <a href="/chat/reinforcement-learning-chat/?q=Compare%20Q-learning%20and%20SARSA" rel="noopener">Ask the RL bot for another example</a>.</p>
+
+<p>Further reading: <a href="https://incompleteideas.net/book/the-book-2nd.html" rel="noopener">Sutton and Barto’s Reinforcement Learning textbook</a> and <a href="https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/" rel="noopener">Gymnasium on time limits</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/reinforcement-learning-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/dot-product-cosine-worked-example/">Dot Product and Cosine Similarity, Step by Step</a></li><li><a href="/blog/least-squares-without-inverse/">Least Squares Without Computing an Inverse</a></li><li><a href="/blog/nash-equilibrium-best-response-table/">Find a Nash Equilibrium with Best Responses</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Q-learning%20vs%20SARSA%3A%20One%20Update%2C%20Worked%20Through&url=https%3A%2F%2Frelu.chat%2Fblog%2Fq-learning-sarsa-worked-example%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fq-learning-sarsa-worked-example%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>

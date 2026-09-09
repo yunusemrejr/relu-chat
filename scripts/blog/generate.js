@@ -38,7 +38,7 @@ function generate() {
   }
 
   // Clean output directory
-  cleanDir(BLOG_OUT);
+  ensureDir(BLOG_OUT); // Do not delete unrelated files or manually maintained routes.
 
   // Generate index page
   const indexHTML = engine.generateIndexHTML(posts);

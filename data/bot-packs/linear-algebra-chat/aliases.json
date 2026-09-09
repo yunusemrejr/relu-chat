@@ -1,0 +1,374 @@
+{
+  "vector": [
+    [
+      0,
+      1
+    ]
+  ],
+  "vectors": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "coordinate": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "magnitude": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "dot product": [
+    [
+      1,
+      1
+    ]
+  ],
+  "inner product": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "scalar product": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "vector norm": [
+    [
+      2,
+      1
+    ]
+  ],
+  "length": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "l2 norm": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "euclidean norm": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "l1 norm": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "matrix multiplication": [
+    [
+      3,
+      1
+    ]
+  ],
+  "matrix product": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "multiply matrices": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "matrix": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "linear independence": [
+    [
+      4,
+      1
+    ]
+  ],
+  "independent vectors": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "linear dependence": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "basis and span": [
+    [
+      5,
+      1
+    ]
+  ],
+  "basis": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "span": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "dimension": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "matrix rank": [
+    [
+      6,
+      1
+    ]
+  ],
+  "rank": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "full rank": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "column space": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "null space": [
+    [
+      7,
+      1
+    ]
+  ],
+  "nullspace": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "kernel": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "nullity": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "linear system": [
+    [
+      8,
+      1
+    ]
+  ],
+  "linear equations": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "ax b": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "solve system": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "matrix inverse": [
+    [
+      9,
+      1
+    ]
+  ],
+  "inverse": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "invertible": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "singular matrix": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "determinant": [
+    [
+      10,
+      1
+    ]
+  ],
+  "det": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "volume scaling": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "eigenvalues and eigenvectors": [
+    [
+      11,
+      1
+    ]
+  ],
+  "eigenvalue": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "eigenvector": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "eigendecomposition": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "orthogonal projection": [
+    [
+      12,
+      1
+    ]
+  ],
+  "projection": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "orthogonal": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "perpendicular": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "least squares": [
+    [
+      13,
+      1
+    ]
+  ],
+  "least square": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "linear regression": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "normal equation": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "singular value decomposition": [
+    [
+      14,
+      1
+    ]
+  ],
+  "svd": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "singular values": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "low rank": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "condition number": [
+    [
+      15,
+      1
+    ]
+  ],
+  "conditioning": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "numerical stability": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "ill conditioned": [
+    [
+      15,
+      0.9
+    ]
+  ]
+}

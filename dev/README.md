@@ -1,3 +1,5 @@
+> Current laptop training workflow (September 2026): see the root README and `scripts/train-policy-fast.py`. The supported NumPy trainer is bounded below ten minutes. Older training experiments below are retained for reference.
+
 # ReLU.chat — Development Workspace
 
 This directory contains development-only assets used for training, testing, and

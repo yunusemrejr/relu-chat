@@ -336,6 +336,12 @@ export function extractEntities(query, KB) {
     }
   }
 
+  // Exact names win over fuzzy overlap with related but different concepts.
+  if (found.length) return found.sort((a, b) => {
+    const specificity = i => Math.max(0, ...KB[i].aliases.filter(alias => qClean.includes(alias.toLowerCase())).map(alias => alias.length));
+    return specificity(b) - specificity(a) || a - b;
+  });
+
   // Second pass: word-overlap scoring for entries not found by exact match
   // Only check if we found fewer than 3 entities
   if (found.length < 3) {
@@ -424,11 +430,11 @@ export async function classifyIntent(qEmb, intentEmb, intents, thresholds) {
   }
   const scores = {}, rawMax = {};
   const qLen = qEmb.length; // not useful here, but keep for API compat
-  
+
   for (const k of Object.keys(intents)) {
     const protos = intentEmb[k];
     if (!Array.isArray(protos) || protos.length === 0) continue;
-    
+
     // Score each prototype, weight by recency (later prototypes are more specific)
     let max = -1;
     let weightedSum = 0;
@@ -443,15 +449,15 @@ export async function classifyIntent(qEmb, intentEmb, intents, thresholds) {
       weightedSum += s * weight;
       totalWeight += weight;
     }
-    
+
     rawMax[k] = max > -1 ? max : 0;
-    
+
     // Combined score: best match + weighted average (prevents one lucky match from dominating)
     const avgScore = totalWeight > 0 ? weightedSum / totalWeight : 0;
     const countNorm = Math.log(protos.length + 1);
     scores[k] = (0.7 * rawMax[k] + 0.3 * avgScore) * countNorm;
   }
-  
+
   let best = 'definition', bs = -1;
   for (const k in scores) {
     if (Number.isFinite(scores[k]) && scores[k] > bs) {
@@ -459,13 +465,13 @@ export async function classifyIntent(qEmb, intentEmb, intents, thresholds) {
       best = k;
     }
   }
-  
+
   // Adaptive confidence threshold: shorter queries need higher confidence
   const confThresholds = thresholds?.CONFIDENCE || {};
   if (confThresholds[best] !== undefined && rawMax[best] < confThresholds[best]) {
     best = 'definition';
   }
-  
+
   return { intent: best, scores, rawScores: rawMax };
 }
 

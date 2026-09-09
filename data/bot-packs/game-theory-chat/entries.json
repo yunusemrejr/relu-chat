@@ -1896,5 +1896,63 @@
       "form",
       "app"
     ]
+  },
+  {
+    "id": "best_response_worked",
+    "idx": 77,
+    "name": "Best-response table",
+    "aliases": [
+      "best-response table",
+      "best response",
+      "find nash equilibrium",
+      "2x2 equilibrium"
+    ],
+    "summary": "A best-response table marks the actions that maximize each player’s payoff against each fixed action of the opponent. Mutual best responses are pure Nash equilibria.",
+    "related": [],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "mixed_equilibrium_worked",
+    "idx": 78,
+    "name": "Mixed-equilibrium calculation",
+    "aliases": [
+      "mixed-equilibrium calculation",
+      "calculate mixed equilibrium",
+      "indifference method"
+    ],
+    "summary": "To find an interior mixed equilibrium, choose each player’s mixing probability to make the other player indifferent between actions in their support.",
+    "related": [],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
+  },
+  {
+    "id": "equilibrium_limits",
+    "idx": 79,
+    "name": "Limits of equilibrium predictions",
+    "aliases": [
+      "limits of equilibrium predictions",
+      "equilibrium prediction",
+      "rationality assumptions"
+    ],
+    "summary": "An equilibrium is a consistency condition on strategies and beliefs under a specified model. It does not guarantee that people will discover or play it.",
+    "related": [],
+    "fragmentKeys": [
+      "def",
+      "int",
+      "ex",
+      "form",
+      "app"
+    ]
   }
 ]

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+        />
+        <title>Web Platform Chat — Free Private Learning Chat | ReLU.chat</title>
+        <meta
+            name="description"
+            content="Understand browser JavaScript, HTTP caching, WebAssembly, workers, accessibility, and local data storage."
+        />
+        <meta name="robots" content="index, follow" />
+        <link
+            rel="canonical"
+            href="https://relu.chat/chat/web-platform-chat/"
+        />
+        <!-- Rocket Loader disabled for ES module compatibility -->
+        <meta property="og:title" content="Web Platform Chat — ReLU.chat" />
+        <meta
+            property="og:description"
+            content="Understand browser JavaScript, HTTP caching, WebAssembly, workers, accessibility, and local data storage."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+            property="og:url"
+            content="https://relu.chat/chat/web-platform-chat/"
+        />
+        <meta
+            property="og:image"
+            content="https://relu.chat/assets/logo.png?v=7"
+        />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Web Platform Chat — ReLU.chat" />
+        <meta
+            name="twitter:description"
+            content="Understand browser JavaScript, HTTP caching, WebAssembly, workers, accessibility, and local data storage."
+        />
+
+        <link rel="stylesheet" href="../../assets/fonts/sora.css" />
+        <link rel="stylesheet" href="../../assets/shared-design.css?v=14" />
+        <link rel="stylesheet" href="../../assets/katex/katex.min.css" />
+
+        <link rel="stylesheet" href="/assets/css/diagrams.css?v=7" />
+
+        <link rel="icon" href="../../assets/logo.png?v=7" type="image/png" />
+        <link rel="apple-touch-icon" href="/assets/logo.png?v=7" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+
+        <!-- Performance: preload critical assets for faster model initialization -->
+        <link rel="modulepreload" href="../../core/chatbot-engine.js" />
+        <link rel="modulepreload" href="../../core/ui.js" />
+        <link rel="modulepreload" href="../../core/nlp.js" />
+        <link rel="modulepreload" href="../../core/cache.js" />
+        <link rel="modulepreload" href="../../core/session.js" />
+        <link rel="modulepreload" href="../../core/signal-layer.js" />
+        <link rel="modulepreload" href="../../policy/policy-runtime.js" />
+        <link rel="modulepreload" href="../../policy/feature-extractor.js" />
+        <link rel="modulepreload" href="../../policy/mlp-inference.js" />
+        <link rel="modulepreload" href="../../policy/action-schema.js" />
+        <link rel="modulepreload" href="../../core/bot-pack-loader.js" />
+        <link rel="modulepreload" href="../../core/math-utils.js" />
+
+
+
+
+        <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "@id": "https://relu.chat/chat/web-platform-chat/#app", "name": "Web Platform Chat", "url": "https://relu.chat/chat/web-platform-chat/", "description": "Understand browser JavaScript, HTTP caching, WebAssembly, workers, accessibility, and local data storage.", "applicationCategory": "EducationalApplication", "operatingSystem": "Web browser", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://relu.chat/"}, {"@type": "ListItem", "position": 2, "name": "Chatbots", "item": "https://relu.chat/chat/"}, {"@type": "ListItem", "position": 3, "name": "Web Platform Chat", "item": "https://relu.chat/chat/web-platform-chat/"}]}]}</script>
+        <style>
+            /* Toolkit strip */
+            .kit-strip {
+                max-width: 780px;
+                margin: 0 auto;
+                padding: var(--space-6) var(--space-4) var(--space-10);
+                text-align: center;
+                color: var(--text-muted);
+                font-size: 0.8125rem;
+                line-height: 1.6;
+            }
+            .kit-strip a {
+                color: var(--accent);
+                text-decoration: none;
+                font-weight: 600;
+            }
+            .kit-strip a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    <link rel="stylesheet" href="/assets/css/chat-experience.css?v=14">
+</head>
+    <body>
+        <a class="skip-link" href="#input">Skip to message input</a>
+        <nav class="site-nav" aria-label="Primary navigation"><div class="nav-container">
+          <a class="nav-logo" href="/" aria-label="ReLU.chat home"><img src="/assets/logo.png?v=7" alt="" width="28" height="28"><span>ReLU.chat</span></a>
+          <a class="all-bots" href="/chat/">All chatbots</a>
+          <div class="nav-status" id="status-container" role="status"><span class="status-dot" id="dot"></span><span id="status-text">Preparing chat…</span></div>
+        </div></nav>
+        <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+        <main class="chat-layout" id="main-content">
+          <header class="chat-intro"><div><p class="eyebrow">Private learning · No account</p><h1>Web Platform Chat</h1><p>Understand browser JavaScript, HTTP caching, WebAssembly, workers, accessibility, and local data storage.</p></div>
+            <div class="chat-actions"><button type="button" id="clear-chat">New chat</button><button type="button" id="export-chat">Save chat</button></div>
+          </header>
+          <div class="chat-container"><div id="messages" role="log" aria-live="polite" aria-relevant="additions" aria-label="Chat messages"></div><div class="suggestions" id="suggestions" aria-label="Try a question"></div></div>
+          <form id="form"><label class="sr-only" for="input">Your question</label><div class="input-container"><textarea id="input" rows="1" maxlength="2000" placeholder="Ask about this subject…" aria-describedby="composer-hint"></textarea><button id="send" type="submit" disabled aria-label="Send message">Send <span aria-hidden="true">↑</span></button></div><div class="composer-footer"><span id="composer-hint">Enter to send · Shift+Enter for a new line</span><button id="enhance" type="button">Enhance matching · ~22 MB</button></div></form>
+        </main>
+        <section class="topic-library" aria-label="Topics and learning resources"><details><summary>Browse 16 topics and sources</summary><div id="topic-list"><button type="button" data-question="Explain WebAssembly">WebAssembly</button><button type="button" data-question="Explain Linear memory">Linear memory</button><button type="button" data-question="Explain Web Worker">Web Worker</button><button type="button" data-question="Explain Transferable objects">Transferable objects</button><button type="button" data-question="Explain Service worker">Service worker</button><button type="button" data-question="Explain Cache strategies">Cache strategies</button><button type="button" data-question="Explain HTTP caching">HTTP caching</button><button type="button" data-question="Explain IndexedDB">IndexedDB</button><button type="button" data-question="Explain Promises and async functions">Promises and async functions</button><button type="button" data-question="Explain Event loop">Event loop</button><button type="button" data-question="Explain AbortController">AbortController</button><button type="button" data-question="Explain Content Security Policy">Content Security Policy</button><button type="button" data-question="Explain Cross-origin isolation">Cross-origin isolation</button><button type="button" data-question="Explain Accessible form">Accessible form</button><button type="button" data-question="Explain Responsive layout">Responsive layout</button><button type="button" data-question="Explain Performance measurement">Performance measurement</button></div><p>Answers are assembled from a curated knowledge base. Check sources for important details. This bot explains concepts; it does not execute code or solve arbitrary exercises.</p></details></section>
+        <section
+            class="kit-strip"
+            aria-label="On-Device Chatbot Builder Toolkit"
+        >
+            Built with the ReLU.chat architecture. Want to build your own? The
+            <a
+                href="https://theknowledgeproject.gumroad.com/l/ekuidr"
+                target="_blank"
+                rel="noopener noreferrer"
+                >On-Device Chatbot Builder Toolkit</a
+            >
+            gives you the frameworks, templates, and evaluation guides — $29,
+            runs entirely on-device.
+        </section>
+
+        <script
+            src="../../assets/katex/katex.min.js"
+            data-cfasync="false"
+        ></script>
+        <script
+            src="../../assets/katex/auto-render.min.js"
+            data-cfasync="false"
+        ></script>
+        <script type="module" src="js/app.js" data-cfasync="false"></script>
+
+        <!-- ================= Gumroad Products Promoter Widget (minified, paste-ready) ================= -->
+
+        <!-- ================= /Gumroad Products Promoter Widget ================= -->
+
+    </body>
+</html>

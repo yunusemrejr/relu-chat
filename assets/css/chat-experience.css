@@ -1,0 +1,48 @@
+/* Shared chat refinements, using ReLU's existing typography and palette. */
+html:has(.chat-intro) { scroll-padding-top: 80px; }
+body:has(.chat-intro) { min-height:100dvh; height:auto; overflow:auto; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+.all-bots { color:var(--text-secondary); font-size:.85rem; margin-left:auto; }
+.chat-layout { max-width:980px; margin:0 auto; padding-top:76px; height:auto; min-height:calc(100dvh - 110px); }
+.chat-intro { padding:28px 32px 18px; display:flex; align-items:flex-start; gap:24px; border-bottom:1px solid var(--border); }
+.chat-intro h1 { font-size:clamp(1.5rem,3vw,2.1rem); letter-spacing:-.045em; margin:6px 0 10px; line-height:1.2; }
+.chat-intro p { color:var(--text-secondary); max-width:650px; font-size:.9rem; line-height:1.7; }
+.chat-intro .eyebrow { font-size:.7rem; color:var(--accent); letter-spacing:.08em; text-transform:uppercase; }
+.chat-actions { display:flex; gap:8px; flex-shrink:0; }
+.chat-actions button, #enhance, #topic-list button { font:inherit; font-size:.75rem; color:var(--text-secondary); border:1px solid var(--border); border-radius:6px; background:transparent; padding:9px 12px; cursor:pointer; min-height:40px; }
+.chat-actions button:hover, #topic-list button:hover, #enhance:hover { color:var(--accent); border-color:var(--accent); }
+.chat-container { flex:1; min-height:230px; }
+#messages { flex:none; overflow:visible; padding:24px 32px 12px; }
+.msg-body { overflow-wrap:anywhere; }
+.msg-body > div:not(.meta) { line-height:1.8; }
+.answer-sources { border-top:1px solid var(--border); padding-top:12px; margin-top:18px; font-size:.75rem; color:var(--text-secondary); }
+.answer-sources a { display:inline-block; color:var(--accent); margin:0 8px 4px 0; text-decoration:underline; text-underline-offset:3px; }
+.suggestions { padding:0 32px 20px; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.suggestion { text-align:left; white-space:normal; border-radius:7px; padding:12px 14px; min-height:46px; }
+.suggestions.has-conversation { display:none; }
+#form { position:sticky; bottom:0; background:var(--bg-primary,#14181d); z-index:5; padding:16px 32px max(16px,env(safe-area-inset-bottom)); border-top:1px solid var(--border); }
+#input { resize:none; font:inherit; font-size:.95rem; min-height:52px; max-height:140px; padding:13px 16px; min-width:0; overflow-y:hidden; }
+#send { width:auto; min-width:68px; height:52px; align-self:flex-end; border-radius:6px;  font-size:.8rem; padding:8px; }
+.composer-footer { margin-top:9px; display:flex; justify-content:space-between; align-items:center; gap:12px; color:var(--text-secondary); font-size:.65rem; }
+#enhance { border:0; padding:2px 0; min-height:32px; font-size:.65rem; }
+#enhance:disabled { opacity:.65; cursor:default; }
+.topic-library { max-width:916px; margin:20px auto; padding:0 16px; }
+.topic-library summary { color:var(--text-secondary); font-size:.85rem; cursor:pointer; padding:12px 0; }
+.topic-library p { color:var(--text-secondary); font-size:.8rem; line-height:1.7; margin-top:14px; }
+#topic-list { display:flex; flex-wrap:wrap; gap:7px; }
+:where(button,a,textarea,summary):focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+.kit-strip { font-size:.75rem; padding:18px 20px 28px; }
+@media(max-width:650px) {
+ .chat-layout { padding-top:62px; min-height:calc(100dvh - 60px); }
+ .chat-intro { padding:20px 18px 14px; display:block; }
+ .chat-actions { margin-top:14px; }
+ #messages { padding:20px 18px 10px; }
+ .suggestions { padding:0 18px 16px; grid-template-columns:1fr; }
+ #form { padding:12px 14px max(12px,env(safe-area-inset-bottom)); }
+ #input { font-size:16px; }
+ .nav-status { display:flex; max-width:46%; font-size:.65rem; white-space:normal; line-height:1.4; }
+ .all-bots { margin-left:0; font-size:.75rem; }
+ .composer-footer { align-items:flex-start; }
+ .composer-footer > * { max-width:50%; }
+}
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation:none!important; transition:none!important; } }

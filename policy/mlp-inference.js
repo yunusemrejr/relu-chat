@@ -13,7 +13,7 @@
  */
 
 import { softmax, sigmoid, argmax, clamp01 } from '../core/math-utils.js';
-import { INTENT_CAT_ORDERS } from './action-schema.js';
+import { INTENT_CAT_ORDERS, DEFAULT_PLAN } from './action-schema.js';
 
 // ---------------------------------------------------------------------------
 // Label vocabularies — must match the training pipeline
@@ -257,7 +257,34 @@ export class MLPPolicy {
     this._qWeights = null; // { scale, w1q: Int8Array, w2q: Int8Array, headQ: [...] }
     this._totalParams = this._countParams();
     this._quantizedBytes = 0;
-    this.loadQuantized();
+    // Quantization is opt-in; avoid building unused duplicate weight buffers.
+  }
+
+  async attachWasm(bytes) {
+    const { instance } = await WebAssembly.instantiate(bytes, {});
+    const api = instance.exports;
+    if (api.parameter_count() !== this._totalParams) throw new Error('WASM parameter count mismatch');
+    const flattened = WEIGHT_SHAPES.flatMap(([name]) => this.weights[name].flat());
+    new Float32Array(api.memory.buffer, api.weights_ptr(), flattened.length).set(flattened);
+    this._wasm = api;
+    this._wasmInput = new Float32Array(api.memory.buffer, api.input_ptr(), 25);
+    this._wasmOutput = new Float32Array(api.memory.buffer, api.output_ptr(), 23);
+  }
+
+  forwardWasm(features) {
+    if (!this._wasm) return this.forward(features);
+    if (features.length !== 25 || !Array.from(features).every(Number.isFinite)) throw new Error('Invalid policy features');
+    this._wasmInput.set(features);
+    this._wasm.infer();
+    const values = this._wasmOutput;
+    return {
+      modeProbs: softmax(values.subarray(0, 5)),
+      intentProbs: softmax(values.subarray(5, 10)),
+      topicCountProbs: softmax(values.subarray(10, 14)),
+      fragCountProbs: softmax(values.subarray(14, 18)),
+      creativity: sigmoid(values[18]),
+      toneProbs: softmax(values.subarray(19, 23)),
+    };
   }
 
   /**
@@ -566,7 +593,7 @@ export class MLPPolicy {
    */
   planAnswer(features, context = {}, botProfile = {}, overrides = {}) {
     const f32 = featuresToF32(features, this._version);
-    const probs = this._qWeights ? this.forwardQuantized(f32) : this.forward(f32);
+    const probs = this._wasm ? this.forwardWasm(f32) : this.forward(f32);
     const decisionPath = ['mlp'];
 
     // ---- Mode ----
@@ -852,6 +879,7 @@ export class MLPPolicy {
 
     // ---- Assemble final plan ----
     return {
+      ...DEFAULT_PLAN,
       mode,
       topics,
       intent,

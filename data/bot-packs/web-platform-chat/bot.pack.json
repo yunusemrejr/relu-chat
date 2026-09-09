@@ -1,0 +1,30 @@
+{
+  "botId": "web-platform-chat",
+  "kbVersion": "2.0.0",
+  "model": {
+    "embedding": "all-MiniLM-L6-v2",
+    "dim": 384,
+    "vectorDtype": "float32",
+    "vectors": "browser-generated-content-hash-cache"
+  },
+  "config": {
+    "thresholds": {
+      "minSim": 0.15,
+      "entityBoost": 0.2,
+      "followUpBoost": 0.15
+    }
+  },
+  "entries": "entries.json",
+  "fragments": "fragments.json",
+  "aliasIndex": "aliases.json",
+  "bm25Index": "bm25.json",
+  "entryVectors": null,
+  "fragmentVectors": null,
+  "diagrams": "diagrams.json",
+  "overrides": "overrides.json",
+  "intents": "intents.json",
+  "policy": {
+    "weights": "policy.weights.json",
+    "manifest": "policy.manifest.json"
+  }
+}

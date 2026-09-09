@@ -1,43 +1,39 @@
-name: Train Policy
+name: Release checks
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'policy/**'
-      - 'dev/scripts/**'
-      - 'core/**'
+    branches: [main]
   pull_request:
-    branches: [ main ]
-    paths:
-      - 'policy/**'
-      - 'dev/scripts/**'
-      - 'core/**'
-  schedule:
-    - cron: '0 0 * * *'  # nightly
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-checks-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
+  verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run JS test suite
-        run: node dev/scripts/test-policy-runtime.js
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Python deps
-        run: |
-          pip install -r dev/scripts/requirements.txt
-      - name: Validate training pipeline (skip mode)
-        run: python dev/scripts/train-policy.py --bot game-theory --skip-train
-      - name: Upload test results
+      - name: Check runtime, model parity, content, and deployment safety
+        run: npm test
+      - name: Upload verification results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: release-check-results
           path: |
-            dev/datasets/*.json
-            dev/exports/*.json
+            dev/exports/release-test-results.json
+            dev/exports/site-validation.json
+          retention-days: 14

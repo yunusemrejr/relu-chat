@@ -9,6 +9,29 @@
       "data_cleaning",
       "eda"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "pandas provides DataFrames — two-dimensional tables with labeled rows and columns — for working with structured data.",
+        "NumPy supplies ndarrays, n-dimensional arrays that enable fast vectorized operations without explicit loops."
+      ],
+      "int": [
+        "Think of pandas as Excel with code — you get the flexibility of a spreadsheet but the repeatability of a script.",
+        "NumPy arrays are like Python lists but designed for math: they're homogeneous and support element-wise operations directly."
+      ],
+      "ex": [
+        "pd.read_csv(\"sales.csv\") loads a CSV into a DataFrame; df.groupby(\"region\").sales.sum() aggregates by region.",
+        "np.array([1, 2, 3]) * 2 yields array([2, 4, 6]) — the multiplication applied element-wise automatically."
+      ],
+      "form": [
+        "A Series has an index and a dtype; its data can use NumPy arrays or extension arrays, including nullable and Arrow-backed types.",
+        "NumPy uses BLAS/LAPACK for optimized linear algebra under the hood."
+      ],
+      "app": [
+        "The pandas/NumPy stack is the foundation for nearly all Python-based data analysis and machine learning.",
+        "Libraries like scikit-learn, statsmodels, and seaborn all consume pandas DataFrames or NumPy arrays."
+      ]
+    },
     "fragmentCount": 10
   },
   "pandas": {
@@ -21,6 +44,29 @@
       "data_cleaning",
       "eda"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "A DataFrame is pd.DataFrame(data, index=rows, columns=cols) where each column is a pandas Series.",
+        "Key operations include select (df[\"col\"]), filter (df[df[\"col\"] > 0]), transform (df.apply), and aggregate (df.groupby)."
+      ],
+      "int": [
+        "Every column is a Series sharing the same index; think of it as a dictionary of arrays that all line up by row.",
+        "The index makes alignment automatic — when you add two DataFrames, rows match by label, not by position."
+      ],
+      "ex": [
+        "df[df[\"age\"] > 30][[\"name\", \"city\"]] selects adults and keeps only name and city columns.",
+        "df.groupby(\"department\")[\"salary\"].mean() computes average salary per department."
+      ],
+      "form": [
+        "df.merge(other, on=\"id\", how=\"left\") performs SQL-style joins; pandas aligns on the \"id\" column.",
+        "Method chaining df.pipe(clean).groupby(\"x\").agg({\"y\": \"mean\"}) composes operations cleanly."
+      ],
+      "app": [
+        "Used for loading CSVs, Excel files, SQL query results, and any rectangular dataset.",
+        "Essential for exploratory data analysis, data cleaning, and feature engineering in Python ML pipelines."
+      ]
+    },
     "fragmentCount": 10
   },
   "numpy": {
@@ -33,6 +79,29 @@
       "linear_regression",
       "statistics"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "np.array([1, 2, 3]) creates a 1-D array; np.zeros((3, 4)) creates a 3×4 matrix of zeros.",
+        "Broadcasting rules let you add a 1-D array to a 2-D array along compatible dimensions without explicit tiling."
+      ],
+      "int": [
+        "NumPy operations run in C under the hood — they're orders of magnitude faster than Python for-loops.",
+        "NumPy arrays have a dtype and strides; views can be non-contiguous. Layout and vectorization affect speed."
+      ],
+      "ex": [
+        "np.mean(arr), np.std(arr), np.sum(arr) compute statistics in one call across the whole array.",
+        "arr[arr > 5] filters an array to only elements greater than 5 (boolean indexing)."
+      ],
+      "form": [
+        "np.dot(a, b) computes the dot product; np.matmul(a, b) or a @ b computes matrix multiplication.",
+        "np.linalg.solve(A, b) solves the linear system Ax = b directly, faster and more numerically stable than computing A⁻¹."
+      ],
+      "app": [
+        "Foundation for all numerical computing in Python: pandas uses it, scikit-learn uses it, deep learning frameworks use it.",
+        "Used for manual implementations of algorithms when you need full control over the math."
+      ]
+    },
     "fragmentCount": 10
   },
   "data_cleaning": {
@@ -45,6 +114,29 @@
       "eda",
       "outliers"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Common issues: duplicate rows, mis-typed values (\"N/A\" vs NaN), column names with extra spaces, and date formats that don't parse.",
+        "Cleaning steps include parsing, deduplication, type coercion, and standardization."
+      ],
+      "int": [
+        "Garbage in, garbage out — even the best model fails if trained on messy data. Cleaning is where most data scientists spend the most time.",
+        "Aim for \"tidy data\": each column is a variable, each row is an observation, each cell is a single value."
+      ],
+      "ex": [
+        "df.columns = df.columns.str.strip() removes leading/trailing spaces from column names.",
+        "df.drop_duplicates() removes duplicate rows; df[\"price\"] = pd.to_numeric(df[\"price\"], errors=\"coerce\") converts strings to numbers."
+      ],
+      "form": [
+        "df.replace({\"N/A\": np.nan, \"null\": np.nan}) maps error strings to NaN in one pass.",
+        "df.duplicated().sum() counts duplicates; df.isnull().sum() counts NaNs per column."
+      ],
+      "app": [
+        "Always check for outliers and impossible values (e.g., negative age, future dates) as part of cleaning.",
+        "Clean data enables reliable analysis and prevents subtle bugs in downstream model training."
+      ]
+    },
     "fragmentCount": 10
   },
   "missing_values": {
@@ -57,6 +149,29 @@
       "feature_engineering",
       "cross_validation"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "df.isnull().sum() counts NaNs per column; df.dropna() removes rows with any NaN, df.fillna(value) replaces them.",
+        "Imputation replaces NaN with a substituted value — mean, median, mode, or a predicted value from other features."
+      ],
+      "int": [
+        "Dropping rows with NaN is safe if missingness is random and small; otherwise you lose data and potentially introduce bias.",
+        "Mean imputation preserves the mean but reduces variance; model-based imputation (e.g., using a regressor) can do better."
+      ],
+      "ex": [
+        "df[\"age\"].fillna(df[\"age\"].median(), inplace=True) fills missing ages with the median age.",
+        "Sklearn's SimpleImputer(strategy=\"most_frequent\") fills with the most common value for categorical columns."
+      ],
+      "form": [
+        "Missing at Random (MAR): the probability of missing depends on observed data; Missing Completely at Random (MCAR): no systematic relationship.",
+        "Multiple imputation (creating several imputed datasets and combining) accounts for imputation uncertainty."
+      ],
+      "app": [
+        "Check if missingness in a column correlates with the target — if so, the missingness itself is a signal (informative missingness).",
+        "Some models like decision trees handle NaN natively; others like logistic regression require complete data."
+      ]
+    },
     "fragmentCount": 10
   },
   "visualization": {
@@ -69,6 +184,29 @@
       "eda",
       "outliers"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "matplotlib is the low-level foundation: plt.plot(), plt.scatter(), plt.hist() give fine-grained control over every element.",
+        "seaborn builds on matplotlib with statistical plots: sns.boxplot(), sns.pairplot(), sns.heatmap(corr) with built-in styling."
+      ],
+      "int": [
+        "The right chart type depends on what you're showing: scatter for relationships, bars for categories, lines for time series, histograms for distributions.",
+        "Good visualizations reduce cognitive load — the viewer should grasp the key takeaway in seconds."
+      ],
+      "ex": [
+        "sns.scatterplot(data=df, x=\"income\", y=\"spending\", hue=\"segment\") reveals how spending varies by income and segment.",
+        "sns.histplot(df[\"age\"], kde=True) shows the distribution of ages with an overlaid density curve."
+      ],
+      "form": [
+        "matplotlib uses a figure-canvas-axes hierarchy: fig, ax = plt.subplots(); ax.plot(x, y) adds data to the axes.",
+        "seaborn's Relationalplot, Categoricalplot, and Distributionplot offer structured interfaces for common chart families."
+      ],
+      "app": [
+        "Use visualizations to validate assumptions (normality, linearity), spot outliers, and communicate findings to non-technical audiences.",
+        "Exploratory visualizations guide feature engineering and model selection before any modeling begins."
+      ]
+    },
     "fragmentCount": 10
   },
   "statistics": {
@@ -81,6 +219,29 @@
       "visualization",
       "outliers"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Central tendency: mean (average), median (middle value), mode (most frequent). Spread: variance, standard deviation, range, IQR.",
+        "The shape is described by skewness (asymmetry) and kurtosis (tail weight relative to a normal distribution)."
+      ],
+      "int": [
+        "Mean is sensitive to outliers — a single extreme value pulls the mean far from the median. Use median when your data is skewed.",
+        "Standard deviation is in the same units as the data, making it more interpretable than variance."
+      ],
+      "ex": [
+        "np.std([2, 4, 4, 4, 5, 5, 7, 9]) ≈ 2.0 — most values cluster within 2 of the mean of 5.",
+        "df.describe() prints a table with count, mean, std, min, 25%, 50%, 75%, max for all numeric columns."
+      ],
+      "form": [
+        "Sample variance: $s^2 = \\frac{1}{n-1}\\sum(x_i - \\bar{x})^2$ (uses $n-1$ for unbiased estimation).",
+        "IQR = Q3 - Q1; data points outside $[Q1 - 1.5\\cdot IQR,\\; Q3 + 1.5\\cdot IQR]$ are considered outliers by Tukey's rule."
+      ],
+      "app": [
+        "Always inspect descriptive stats before modeling — they guide outlier handling, transformation choice, and model selection.",
+        "Correlation coefficients (Pearson $r$, Spearman $\\rho$) quantify linear and monotonic relationships between pairs of variables."
+      ]
+    },
     "fragmentCount": 10
   },
   "probability": {
@@ -92,6 +253,29 @@
       "statistics",
       "model_evaluation"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "P(A ∪ B) = P(A) + P(B) − P(A ∩ B); P(A ∩ B) = P(A) · P(B | A) for dependent events.",
+        "Bayes' theorem: $P(A | B) = \\frac{P(B | A) \\cdot P(A)}{P(B)}$, updating belief in A after observing B."
+      ],
+      "int": [
+        "Conditional probability $P(A | B)$ is the probability of A given that B has occurred — it restricts the sample space.",
+        "The \"base rate fallacy\" ignores $P(A)$: a rare event with high false-positive rate often has low true positive predictive value."
+      ],
+      "ex": [
+        "If 1% of people have a disease and the test is 99% accurate, $P(\\text{positive} | \\text{sick}) = 0.99$ but $P(\\text{sick} | \\text{positive}) \\approx 50\\%$ due to the low base rate.",
+        "Drawing two aces without replacement from a deck: $P(\\text{2nd ace} | \\text{1st ace}) = 3/51$."
+      ],
+      "form": [
+        "Random variable $X$ maps outcomes to numbers; the PMF $P(X = x)$ gives probabilities for discrete $X$, the PDF $f(x)$ for continuous $X$.",
+        "Expectation $E[X] = \\sum x \\cdot P(X = x)$; variance $\\text{Var}(X) = E[(X - E[X])^2]$."
+      ],
+      "app": [
+        "Powers Bayes' theorem for spam filtering, medical diagnosis, and A/B testing — everywhere you update beliefs with evidence.",
+        "Probability distributions model real phenomena: binomial for coin flips, Poisson for rare events per time interval, normal for measurement errors."
+      ]
+    },
     "fragmentCount": 10
   },
   "distributions": {
@@ -103,6 +287,29 @@
       "probability",
       "linear_regression"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Binomial $B(n, p)$: number of successes in $n$ independent Bernoulli trials, PMF $P(k) = \\binom{n}{k}p^k(1-p)^{n-k}$.",
+        "Normal (Gaussian) $N(\\mu, \\sigma^2)$: PDF $\\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-(x-\\mu)^2/2\\sigma^2}$; symmetric, bell-shaped, defined by mean $\\mu$ and std $\\sigma$."
+      ],
+      "int": [
+        "The central limit theorem says the sum/mean of i.i.d. random variables converges to normal as $n$ grows — this is why normal appears everywhere.",
+        "Poisson models \"events per interval\" — arrivals per minute, defects per item — with a single rate parameter $\\lambda$."
+      ],
+      "ex": [
+        "Heights of adult humans approximate $N(170, 9^2)$ cm; IQ is centered at 100 with std 15.",
+        "Number of spam emails in an hour might follow Poisson(7) if you average 7 per hour."
+      ],
+      "form": [
+        "Normal properties: 68% of mass within $1\\sigma$, 95% within $2\\sigma$, 99.7% within $3\\sigma$ of $\\mu$.",
+        "Standard normal $Z = (X - \\mu)/\\sigma$; used to compute normal probabilities via $Z$-tables or scipy.stats.norm.cdf."
+      ],
+      "app": [
+        "Assume normal errors in linear regression; check residuals visually to validate.",
+        "Use Poisson regression for count data; binomial for binary outcomes."
+      ]
+    },
     "fragmentCount": 10
   },
   "train_test_split": {
@@ -115,6 +322,29 @@
       "overfitting",
       "underfitting"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "A common split is 80/20 or 70/30; the test set should mirror the real-world distribution the model will face.",
+        "Stratified splitting preserves class proportions in classification problems: pd.get_dummiesummies(sample(frac=0.8, stratify=y))."
+      ],
+      "int": [
+        "The test set is a simulation of future data — if it's leaky (contains future information), your evaluation is optimistic and misleading.",
+        "Never tune your model on the test set; it's only for final honest evaluation after all tuning is done."
+      ],
+      "ex": [
+        "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) from sklearn.",
+        "If your dataset has a time column, split chronologically rather than randomly to simulate a real forecasting scenario."
+      ],
+      "form": [
+        "Training error $\\hat{R}_{train}$ is biased low; test error $\\hat{R}_{test}$ estimates the true generalization error $R^*$.",
+        "The train-test gap $\\hat{R}_{test} - \\hat{R}_{train}$ diagnoses overfitting: large gaps indicate the model memorized noise."
+      ],
+      "app": [
+        "For time-series data, use a temporal split (train on older data, test on newer) rather than random shuffling.",
+        "Multiple train-test splits (cross-validation) give more stable error estimates than a single split."
+      ]
+    },
     "fragmentCount": 10
   },
   "classification": {
@@ -127,6 +357,29 @@
       "model_evaluation",
       "accuracy"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Binary classification: two classes (0/1, True/False). Multiclass: three or more mutually exclusive classes.",
+        "The model outputs a predicted class directly (logistic regression's threshold at 0.5) or a probability (predict_proba returns $P(Y=1|X)$)."
+      ],
+      "int": [
+        "Classification draws a decision boundary through feature space — each point gets the label of the region it falls into.",
+        "The predicted probability lets you calibrate confidence and adjust the decision threshold based on the cost of false positives vs. false negatives."
+      ],
+      "ex": [
+        "Email spam detection: input features are words/patterns, output is \"spam\" or \"not spam\".",
+        "Medical diagnosis: input is patient vitals, output is \"disease present\" or \"absent\"."
+      ],
+      "form": [
+        "For $K$ classes, use one-vs-rest (OvR) or one-vs-one (OvO) to extend binary classifiers; softmax regression generalizes logistic regression directly.",
+        "Decision trees classify by recursively splitting on feature thresholds that maximize information gain or Gini impurity."
+      ],
+      "app": [
+        "Fraud detection, churn prediction, loan approval, image labeling, and sentiment analysis are all classification tasks.",
+        "Choose accuracy for balanced classes; use precision-recall or F1 when classes are imbalanced."
+      ]
+    },
     "fragmentCount": 10
   },
   "logistic_regression": {
@@ -139,6 +392,29 @@
       "cross_validation",
       "accuracy"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "$P(Y=1|X) = \\sigma(w^Tx + b)$ where $\\sigma(z) = 1/(1 + e^{-z})$ squashes the linear output to [0, 1].",
+        "Parameters $w, b$ are fit by maximizing the likelihood — equivalent to minimizing binary cross-entropy loss."
+      ],
+      "int": [
+        "Despite \"regression\" in the name, it's a classification method — the sigmoid converts a raw score to a calibrated probability.",
+        "Log-odds $\\log(P/(1-P))$ is linear in the features, so each unit increase in $x_j$ multiplies the odds by $e^{w_j}$."
+      ],
+      "ex": [
+        "Predicting loan default: $P(\\text{default}=1) = \\sigma(-3.2 + 0.71 \\cdot \\text{income} - 0.42 \\cdot \\text{debt})$.",
+        "If $w_1 = 0.71$, a one-unit increase in income multiplies the odds of default by $e^{0.71} \\approx 2.0$."
+      ],
+      "form": [
+        "Loss: $\\mathcal{L} = -\\sum[y_i\\log\\hat{y}_i + (1-y_i)\\log(1-\\hat{y}_i)]$, minimized by gradient descent.",
+        "Multinomial logistic regression (softmax) extends to $K > 2$ classes with $\\softmax_k(z) = e^{z_k}/\\sum_j e^{z_j}$."
+      ],
+      "app": [
+        "Baseline classifier for binary problems — fast, interpretable (coefficients show direction and magnitude), and often competitive.",
+        "Used in epidemiology, credit scoring, and any domain where you need both predictions and calibrated probabilities."
+      ]
+    },
     "fragmentCount": 10
   },
   "decision_trees": {
@@ -151,6 +427,29 @@
       "overfitting",
       "feature_importance"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "At each node, the tree chooses the feature and threshold that best separates the target classes (using Gini impurity or entropy).",
+        "Leaves hold the final prediction — a class label for classification or a real value for regression."
+      ],
+      "int": [
+        "Trees naturally model non-linear relationships and interactions without explicit feature engineering.",
+        "A shallow tree is interpretable: you can trace any prediction back through a few \"if-then\" rules."
+      ],
+      "ex": [
+        "A tree for loan approval might split first on \"income > 50k\", then \"debt < 20k\", then \"employment length\".",
+        "A depth-3 tree can capture \"X > 5 AND Y < 3\" as a path of three splits."
+      ],
+      "form": [
+        "Gini impurity: $G = 1 - \\sum_k p_k^2$; entropy: $H = -\\sum_k p_k \\log_2 p_k$; information gain = $H_{parent} - \\sum_{children} \\frac{n_{child}}{n_{parent}} H_{child}$.",
+        "Pruning (pre- or post-) reduces overfitting by cutting branches that add more complexity than predictive power."
+      ],
+      "app": [
+        "Good for exploratory analysis and as building blocks (random forests, gradient boosting) that combine many trees for better accuracy.",
+        "Can handle mixed numeric and categorical features and are robust to outliers after splitting."
+      ]
+    },
     "fragmentCount": 10
   },
   "regression": {
@@ -163,6 +462,29 @@
       "overfitting",
       "feature_engineering"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Regression outputs a real number rather than a class — the target is ordered and infinite (in theory).",
+        "Metrics differ from classification: use $R^2$, MAE (Mean Absolute Error), or RMSE (Root Mean Squared Error) instead of accuracy."
+      ],
+      "int": [
+        "Regression finds the best-fit line (or hyperplane in higher dimensions) through your data in some loss sense.",
+        "The key question is whether the predicted values are meaningful across the full range of the target — extrapolating beyond training data is always risky."
+      ],
+      "ex": [
+        "Predicting house price from size, location, and age: output might be $285,000 dollars.",
+        "Forecasting monthly sales from advertising spend and seasonality: output is a number of units."
+      ],
+      "form": [
+        "Linear regression minimizes MSE; more robust variants minimize MAE (ladder regression) or Huber loss (less sensitive to outliers).",
+        "Polynomial regression adds $x^2, x^3$ terms to capture non-linear relationships while staying within the linear regression framework."
+      ],
+      "app": [
+        "Used for forecasting, pricing models, risk assessment (where the output is a score), and any scenario where the target is continuous.",
+        "Validate regression with residual plots — patterns in residuals reveal missed non-linearity or heteroscedasticity."
+      ]
+    },
     "fragmentCount": 10
   },
   "linear_regression": {
@@ -175,6 +497,29 @@
       "bias_variance",
       "cross_validation"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "$\\hat{y} = w^Tx + b$ where $w$ minimizes $\\sum_i (y_i - w^Tx_i - b)^2$, the residual sum of squares (RSS).",
+        "Closed-form solution: $w = (X^TX)^{-1}X^Ty$ (when $X^TX$ is invertible)."
+      ],
+      "int": [
+        "Each coefficient $w_j$ tells you the expected change in $y$ for a one-unit increase in $x_j$, holding all else constant.",
+        "OLS is the best linear unbiased estimator (BLUE) under Gauss-Markov assumptions: linearity, exogeneity, homoscedasticity, no perfect multicollinearity."
+      ],
+      "ex": [
+        "Predicting weight from height: $\\hat{y} = -100 + 0.9 \\times \\text{height(cm)}$, so each extra cm adds about 0.9 kg.",
+        "If $w_2 = 3.5$, then feature $x_2$ has a positive association with $y$ after controlling for other features."
+      ],
+      "form": [
+        "Assumptions: $y = Xw + \\epsilon$, with $E[\\epsilon|X] = 0$, $\\text{Var}(\\epsilon|X) = \\sigma^2 I$, and $\\epsilon \\sim N(0, \\sigma^2)$ for inference.",
+        "Hypothesis test on $w_j$: $H_0: w_j = 0$ (feature has no effect); p-value from $t$-statistic $t = w_j / \\text{SE}(w_j)$."
+      ],
+      "app": [
+        "Baseline regression model; interpretable coefficients make it the go-to for explanatory modeling.",
+        "Check residual plots for non-linearity, heteroscedasticity, and outliers — violations indicate model misspecification."
+      ]
+    },
     "fragmentCount": 10
   },
   "clustering": {
@@ -187,6 +532,29 @@
       "eda",
       "pca"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Clustering assigns each point to a cluster so that intra-cluster points are more similar than inter-cluster points.",
+        "No \"true\" labels are used — the algorithm defines what a cluster is based on the metric and linkage criterion."
+      ],
+      "int": [
+        "The right number of clusters is often ambiguous; use domain knowledge, elbow plots (total within-cluster variance vs. $k$), or silhouette scores.",
+        "Clustering is sensitive to scale — always standardize features (zero mean, unit variance) before clustering, or features with large ranges dominate distance."
+      ],
+      "ex": [
+        "Customer segmentation: group shoppers by purchase behavior to target marketing differently for each group.",
+        "Document clustering groups news articles by topic without predefined categories."
+      ],
+      "form": [
+        "K-means minimizes within-cluster sum of squares (WCSS): $\\sum_{k}\\sum_{x \\in C_k} ||x - \\mu_k||^2$.",
+        "Hierarchical agglomerative clustering builds a dendrogram bottom-up, stopping when the desired number of clusters is reached."
+      ],
+      "app": [
+        "Used for market segmentation, image compression, anomaly detection (points far from any cluster center), and exploratory data analysis.",
+        "DBSCAN is an alternative that finds clusters of arbitrary shape and labels others as noise."
+      ]
+    },
     "fragmentCount": 10
   },
   "kmeans": {
@@ -199,6 +567,29 @@
       "feature_engineering",
       "standardization"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Algorithm: (1) initialize $k$ centroids, (2) assign each point to nearest centroid, (3) update centroids as the mean of assigned points, (4) repeat until convergence.",
+        "Converges to a local minimum — different initializations can yield different results."
+      ],
+      "int": [
+        "The centroid is the \"representative point\" of a cluster; new points are assigned to the cluster of their nearest centroid.",
+        "K-means assumes clusters are spherical and evenly sized — it struggles with elongated or unequally-sized clusters."
+      ],
+      "ex": [
+        "With $k=3$ on customer data, you might discover clusters corresponding to \"budget shoppers\", \"regulars\", and \"high spenders\".",
+        "Compressing colors in an image: cluster pixel colors into $k$ palette values, then replace each pixel with its centroid."
+      ],
+      "form": [
+        "Within-cluster sum of squares: $\\text{WCSS} = \\sum_{j=1}^k \\sum_{x \\in C_j} ||x - \\mu_j||^2$.",
+        "Elbow method: plot WCSS vs $k$; the \"elbow\" where adding more clusters gives diminishing returns suggests a good $k$."
+      ],
+      "app": [
+        "Used for market segmentation, image quantization, and as a preprocessing step before supervised learning.",
+        "For high-dimensional data, consider PCA first to reduce dimensionality and speed up clustering."
+      ]
+    },
     "fragmentCount": 10
   },
   "feature_engineering": {
@@ -211,6 +602,29 @@
       "cross_validation",
       "leakage"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Techniques: creating interaction terms ($x_1 \\cdot x_2$), polynomial features ($x^2$), binning continuous variables, and encoding categoricals.",
+        "Date features: extract year, month, day, day-of-week, is_weekend, days_since_reference from a date column."
+      ],
+      "int": [
+        "The model can only learn relationships that exist in the features — thoughtful feature construction gives the model something to work with.",
+        "Domain knowledge helps: for housing prices, \"age at sale\" (sale_year - build_year) is often more predictive than either alone."
+      ],
+      "ex": [
+        "For text: bag-of-words, TF-IDF, or word embeddings convert text to numeric vectors.",
+        "For timestamps: \"hour_of_day\" captures different behaviors for morning vs. evening; \"is_holiday\" captures event spikes."
+      ],
+      "form": [
+        "One-hot encoding for low-cardinality categoricals: $K$ categories become $K-1$ binary columns (drop one to avoid multicollinearity).",
+        "Target encoding replaces a categorical with the mean of the target for that category — use carefully with cross-validation to avoid leakage."
+      ],
+      "app": [
+        "Good feature engineering reduces the complexity needed from the model, improving interpretability and generalization.",
+        "Always create features on the training set and apply the same transformation to test/production data."
+      ]
+    },
     "fragmentCount": 10
   },
   "model_evaluation": {
@@ -224,6 +638,29 @@
       "roc_auc",
       "train_test_split"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Classification metrics: accuracy, precision, recall, F1, AUC-ROC. Regression metrics: $R^2$, RMSE, MAE, MAPE.",
+        "Always evaluate on held-out data — never on training data, which gives an optimistically biased estimate."
+      ],
+      "int": [
+        "No single metric tells the whole story; the right metric depends on class imbalance, asymmetric costs, and whether you need calibrated probabilities.",
+        "A model with 99% accuracy on a 1% fraud dataset might just predict \"not fraud\" for everything."
+      ],
+      "ex": [
+        "In a cancer screening test, missing a cancer (false negative) is far costlier than a false alarm — use recall-oriented metrics.",
+        "For a recommendation system, ranking quality (AUC, NDCG) matters more than per-user prediction accuracy."
+      ],
+      "form": [
+        "Confusion matrix: rows = actual, columns = predicted. From it: Precision = $TP/(TP+FP)$, Recall = $TP/(TP+FN)$.",
+        "$F_1 = 2\\cdot\\frac{\\text{Precision} \\cdot \\text{Recall}}{\\text{Precision} + \\text{Recall}}$, the harmonic mean favoring balance."
+      ],
+      "app": [
+        "Use a validation set during development to compare models; report final metrics on the test set once.",
+        "For business metrics, translate model metrics (e.g., AUC) into expected revenue or cost impact when possible."
+      ]
+    },
     "fragmentCount": 10
   },
   "accuracy": {
@@ -236,6 +673,29 @@
       "f1_score",
       "confusion_matrix"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "$\\text{Accuracy} = \\frac{TP + TN}{TP + TN + FP + FN}$, the fraction of predictions that are correct.",
+        "Accuracy alone is misleading for imbalanced datasets — a model predicting \"not fraud\" 99% of the time has 99% accuracy."
+      ],
+      "int": [
+        "Use accuracy when classes are roughly balanced and all errors have similar costs.",
+        "For skewed classes, accuracy can be gamed by predicting the majority class — always check the confusion matrix."
+      ],
+      "ex": [
+        "99 fraud cases out of 10,000: predicting \"no fraud\" for all gives 99.01% accuracy but zero recall for fraud.",
+        "A medical test with 95% accuracy means 5% of sick patients are misdiagnosed — is that acceptable?"
+      ],
+      "form": [
+        "Accuracy is the complement of the error rate: $\\text{Error Rate} = 1 - \\text{Accuracy}$.",
+        "For $K$-class classification, accuracy is $\\frac{1}{n}\\sum_i \\mathbf{1}\\{\\hat{y}_i = y_i\\}$."
+      ],
+      "app": [
+        "Appropriate when baseline (predicting majority class) is the main competitor and classes are balanced.",
+        "Always report alongside precision, recall, and F1 when publishing results."
+      ]
+    },
     "fragmentCount": 10
   },
   "precision_recall": {
@@ -248,6 +708,29 @@
       "roc_auc",
       "accuracy"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Precision = $TP/(TP + FP)$: \"of the things you predicted as positive, how many are actually positive?\"",
+        "Recall = $TP/(TP + FN)$: \"of all the actual positives, how many did you catch?\""
+      ],
+      "int": [
+        "Precision and recall trade off — a model that predicts only the most certain positives has high precision but low recall.",
+        "Spam filtering: high precision means few real emails are flagged (low false positives); high recall means most spam is caught."
+      ],
+      "ex": [
+        "A model that flags every transaction as fraud: recall = 1.0 (catches all fraud) but precision is near 0 (many false alarms).",
+        "A model that only predicts fraud for the most obvious case: precision near 1.0 but low recall."
+      ],
+      "form": [
+        "Specificity = $TN/(TN + FP)$, the true negative rate — useful in medical testing alongside recall (sensitivity).",
+        "The precision-recall curve plots precision vs. recall at different thresholds; AUC-PR summarizes performance across thresholds."
+      ],
+      "app": [
+        "Use precision when false positives are costly (reputational damage, unnecessary interventions).",
+        "Use recall when false negatives are costly (missed cancer, undetected fraud)."
+      ]
+    },
     "fragmentCount": 10
   },
   "f1_score": {
@@ -260,6 +743,29 @@
       "accuracy",
       "roc_auc"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "$F_1 = 2 \\cdot \\frac{\\text{Precision} \\cdot \\text{Recall}}{\\text{Precision} + \\text{Recall}} = \\frac{2\\cdot TP}{2\\cdot TP + FP + FN}$.",
+        "F1 ranges from 0 to 1; 1 is perfect precision and recall."
+      ],
+      "int": [
+        "The harmonic mean penalizes extreme imbalance — a model with precision 1.0 and recall 0.1 gets F1 = 0.18, not 0.55.",
+        "Use F1 when you need a single number balancing precision and recall without tuning a threshold."
+      ],
+      "ex": [
+        "Model A: precision=0.9, recall=0.5 → F1 = 0.64. Model B: precision=0.7, recall=0.7 → F1 = 0.70. Model B is better overall.",
+        "For imbalanced datasets, F1 is preferred over accuracy."
+      ],
+      "form": [
+        "Generalized to $F_\\beta$: $F_\\beta = (1+\\beta^2)\\frac{P\\cdot R}{\\beta^2 P + R}$; $\\beta=1$ (standard F1), $\\beta=0.5$ weights precision more, $\\beta=2$ weights recall more.",
+        "Macro F1 averages F1 per class; micro F1 aggregates TP, FP, FN globally before computing."
+      ],
+      "app": [
+        "Standard metric for NLP tasks like named entity recognition and text classification on imbalanced corpora.",
+        "F1 is widely used in Kaggle competitions and academic benchmarks for classification."
+      ]
+    },
     "fragmentCount": 10
   },
   "roc_auc": {
@@ -272,6 +778,29 @@
       "f1_score",
       "accuracy"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "AUC = probability that a randomly chosen positive instance ranks higher than a randomly chosen negative one.",
+        "AUC = 0.5 means random guessing; AUC = 1.0 means perfect separation; AUC < 0.5 means the model is worse than random (invert predictions)."
+      ],
+      "int": [
+        "AUC is threshold-independent — it measures ranking quality across all possible thresholds.",
+        "Unlike accuracy, AUC is robust to class imbalance because it uses rank rather than raw counts."
+      ],
+      "ex": [
+        "AUC = 0.85 means an 85% chance that a randomly chosen positive sample scores higher than a randomly chosen negative one.",
+        "Comparing two models: AUC 0.92 vs 0.87 — the first has better overall ranking ability."
+      ],
+      "form": [
+        "At threshold $t$, $\\text{TPR}(t) = P(\\hat{Y}=1 | Y=1)$ and $\\text{FPR}(t) = P(\\hat{Y}=1 | Y=0)$.",
+        "AUC can be interpreted as $\\int_0^1 \\text{TPR}(FPR^{-1}(x)) dx$, the area under the ROC curve."
+      ],
+      "app": [
+        "Used when you care about ranking (search, recommendation, fraud ranking) rather than a single class decision.",
+        "For calibrated probabilities, also report Brier score $E[(Y - \\hat{p})^2]$ to measure probability estimation quality."
+      ]
+    },
     "fragmentCount": 10
   },
   "overfitting": {
@@ -284,6 +813,29 @@
       "cross_validation",
       "bias_variance"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "A overfit model has low training error but high test error; it has memorized patterns that don't hold in the real world.",
+        "Symptoms: complexity too high (tree too deep, neural net too wide), too many features, insufficient regularization."
+      ],
+      "int": [
+        "Every dataset has genuine signal and random noise; the model's job is to capture signal without fitting noise.",
+        "Double descent: very large models can again decrease test error after an initial overfitting peak — modern deep learning exploits this."
+      ],
+      "ex": [
+        "A degree-9 polynomial fit to 10 data points goes through every point (zero training error) but oscillates wildly between them.",
+        "A decision tree trained to pure depth on a small dataset memorizes every training example including outliers."
+      ],
+      "form": [
+        "The bias-variance decomposition: $\\text{Total Error} = \\text{Bias}^2 + \\text{Variance} + \\text{Irreducible Error}$.",
+        "Overfitting corresponds to high variance — small changes in training data cause large changes in the learned model."
+      ],
+      "app": [
+        "Combat overfitting with: more training data, simpler models, regularization, dropout (neural nets), early stopping, or cross-validation.",
+        "Always monitor validation error during training — if it starts rising while training error falls, you're overfitting."
+      ]
+    },
     "fragmentCount": 10
   },
   "underfitting": {
@@ -296,6 +848,29 @@
       "feature_engineering",
       "regularization"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "An underfit model has high training error and high test error — it hasn't learned the signal, not just the noise.",
+        "Causes: model too simple for the true relationship, features not informative, training stopped too early."
+      ],
+      "int": [
+        "Underfitting is the opposite problem from overfitting — you need a more powerful model or better features, not more regularization.",
+        "The bias-variance tradeoff: reducing overfitting increases variance; reducing underfitting increases bias."
+      ],
+      "ex": [
+        "Fitting a straight line to data that has a quadratic relationship — no matter how much data you add, the line will always miss the curve.",
+        "A sentiment classifier that just counts positive and negative words, missing context and negation."
+      ],
+      "form": [
+        "Irreducible error sets a floor: even the best possible model has some error due to noise in $Y = f(X) + \\epsilon$.",
+        "The \"just noticeable difference\" in model capacity: compare training error to a human-baseline or theoretical minimum."
+      ],
+      "app": [
+        "Diagnose underfitting by comparing training error to the Bayes error (ideally zero for deterministic problems).",
+        "Fix underfitting by increasing model capacity, adding non-linear features, reducing regularization, or engineering better features."
+      ]
+    },
     "fragmentCount": 10
   },
   "cross_validation": {
@@ -308,6 +883,29 @@
       "model_selection",
       "leakage"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "$k$-fold CV trains $k$ models on $\\frac{k-1}{k}$ of the data each, giving $k$ validation scores averaged into a robust estimate.",
+        "Leave-one-out CV (LOOCV) is $k = n$, using all $n-1$ points per fold — unbiased but computationally expensive."
+      ],
+      "int": [
+        "CV estimates how the model will perform on unseen data, accounting for the fact that a single train-test split might be unlucky.",
+        "The $k$ validation scores themselves have variance — a high variance across folds suggests an unstable model."
+      ],
+      "ex": [
+        "5-fold CV on 1000 samples: 5 models each trained on 800 samples and tested on 200, giving 5 accuracy scores averaged.",
+        "Stratified KFold preserves class proportions in each fold, important for imbalanced classification."
+      ],
+      "form": [
+        "Expected generalization error estimate: $\\hat{E} = \\frac{1}{k}\\sum_{i=1}^k \\hat{\\mathcal{L}}_i$, where $\\hat{\\mathcal{L}}_i$ is the validation loss on fold $i$.",
+        "Nested CV separates model selection (inner loop) from evaluation (outer loop), giving an unbiased performance estimate."
+      ],
+      "app": [
+        "Use CV to compare models, tune hyperparameters (grid search over $C$, $k$, etc.), and select features without overfitting to the validation set.",
+        "For time series, use forward-chaining (expanding window) or blocked CV to avoid lookahead bias."
+      ]
+    },
     "fragmentCount": 10
   },
   "leakage": {
@@ -320,6 +918,29 @@
       "train_test_split",
       "time_series"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Leakage means your model sees the answer during training — either directly (test features in training) or indirectly (future information encoded in features).",
+        "Common forms: using the target as an input feature, normalizing before splitting (test statistics influence training), duplicate rows across splits."
+      ],
+      "int": [
+        "A model with leakage has a misleadingly high evaluation — in production on truly new data, it will perform much worse.",
+        "The key principle: any transformation applied to the full dataset before splitting leaks information from the test set into training."
+      ],
+      "ex": [
+        "Including \"has_defaulted_next_month\" as a feature is direct leakage — by definition it contains future information.",
+        "Computing mean encoding on the combined train+test set lets test-set means influence training features."
+      ],
+      "form": [
+        "Proper pipeline: split first, then fit any statistics (mean, std, encoder) on training data only, then transform both train and test.",
+        "For target encoding, use only the training fold's target means — fold-wise encoding avoids leakage in CV."
+      ],
+      "app": [
+        "Always audit features for leakage before training; ask \"would I have this feature at prediction time in production?\"",
+        "If a feature's importance disappears after removing leakage, it wasn't a real signal."
+      ]
+    },
     "fragmentCount": 10
   },
   "bias_variance": {
@@ -332,6 +953,29 @@
       "ensemble",
       "regularization"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Bias: error from overly simplistic assumptions — the model consistently gets it wrong in the same direction.",
+        "Variance: error from sensitivity to small fluctuations in training data — different training sets produce very different models."
+      ],
+      "int": [
+        "High bias = underfitting (model is too simple to capture the pattern). High variance = overfitting (model is too complex and memorizes noise).",
+        "The total error is $\\text{Bias}^2 + \\text{Variance} + \\text{Irreducible Noise}$. You can reduce one only at the cost of increasing the other."
+      ],
+      "ex": [
+        "Linear regression on a truly linear relationship: low bias, low variance. On a non-linear relationship: high bias (systematically misses the curve).",
+        "A depth-20 decision tree on small data: low bias (fits complex patterns) but high variance (different trees on different data)."
+      ],
+      "form": [
+        "$\\mathbb{E}[(y - \\hat{f}(x))^2] = (\\mathbb{E}[\\hat{f}(x)] - f(x))^2 + \\mathbb{E}[(\\hat{f}(x) - \\mathbb{E}[\\hat{f}(x)])^2] + \\sigma^2$.",
+        "Bagging (bootstrap aggregating) reduces variance by averaging predictions from models trained on different bootstrapped samples."
+      ],
+      "app": [
+        "Use bias-variance thinking to choose models: simple models (linear regression) for noisy/simple problems; complex models (trees, neural nets) for signal-rich problems.",
+        "Ensemble methods like random forests and gradient boosting trade bias for variance reduction to improve overall prediction."
+      ]
+    },
     "fragmentCount": 10
   },
   "regularization": {
@@ -344,6 +988,29 @@
       "cross_validation",
       "bias_variance"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "L2 regularization (Ridge): adds $\\lambda\\sum_j w_j^2$ to the loss, shrinking all weights toward zero proportionally.",
+        "L1 regularization (Lasso): adds $\\lambda\\sum_j |w_j|$, which drives some weights exactly to zero (feature selection)."
+      ],
+      "int": [
+        "Regularization trades a small increase in training error for a larger decrease in test error by preventing the model from fitting noise.",
+        "L1 sparse solutions are interpretable — only the most important features survive. L2 solutions are dense but more stable when features are correlated."
+      ],
+      "ex": [
+        "Ridge regression: $\\min_w \\sum(y - Xw)^2 + \\lambda||w||_2^2$. As $\\lambda \\to \\infty$, all $w \\to 0$ (predictions approach the mean).",
+        "Lasso on a dataset with 1000 features but only 50 relevant: sets 950 coefficients to exactly 0."
+      ],
+      "form": [
+        "Elastic Net combines L1 and L2: $\\lambda(\\rho\\sum|w_j| + (1-\\rho)\\sum w_j^2/2)$, with $\\rho \\in [0,1]$ controlling the mix.",
+        "The regularization path traces how each coefficient changes as $\\lambda$ varies from 0 (OLS) to $\\infty$ (all zeros)."
+      ],
+      "app": [
+        "Always standardize features before regularization — regularization penalizes the magnitude of coefficients, which should be on comparable scales.",
+        "Use cross-validation to choose $\\lambda$: too small lets overfitting through; too large underfits by suppressing all signal."
+      ]
+    },
     "fragmentCount": 10
   },
   "ensemble": {
@@ -356,6 +1023,29 @@
       "cross_validation",
       "bias_variance"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Bagging (Bootstrap Aggregating): train many models on bootstrapped datasets, average predictions. Random forests extend this by also randomizing feature subsets at each split.",
+        "Boosting: train models sequentially; each new model focuses on the residuals (errors) of the ensemble so far. Popular variants: AdaBoost, Gradient Boosting, XGBoost, LightGBM."
+      ],
+      "int": [
+        "The \"wisdom of the crowd\" effect: individual models make different errors, and averaging cancels out uncorrelated mistakes.",
+        "Boosting reduces both bias and variance but is more prone to overfitting than bagging — careful tuning of the number of rounds is needed."
+      ],
+      "ex": [
+        "A random forest with 500 trees is more stable and accurate than any single decision tree drawn from the same data.",
+        "XGBoost on a tabular dataset often beats deep learning for structured data with fewer than ~10,000 features."
+      ],
+      "form": [
+        "Random forest variance reduction: each tree sees $\\approx 63\\%$ unique data points per bootstrap; averaging $B$ trees reduces variance by a factor of $B$.",
+        "Gradient boosting: fit $h_m(x)$ to pseudo-residuals $r_i = y_i - \\hat{y}_i^{(m-1)}$; update $\\hat{y}^{(m)} = \\hat{y}^{(m-1)} + \\eta \\cdot h_m(x)$."
+      ],
+      "app": [
+        "Ensemble methods are the workhorses of Kaggle competitions and production ML for tabular data.",
+        "Stacking (a meta-learner on top of base model predictions) can further improve but adds complexity."
+      ]
+    },
     "fragmentCount": 10
   },
   "pca": {
@@ -368,6 +1058,29 @@
       "feature_engineering",
       "standardization"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "PCA finds the $k$ orthogonal axes (principal components) that capture the most variance; projecting onto them loses as little information as possible.",
+        "Each component is a linear combination of the original features; components are ordered by explained variance."
+      ],
+      "int": [
+        "Dimensionality reduction helps when features outnumber samples, mitigates overfitting, and enables visualization (2-3 principal components).",
+        "PCA is unsupervised — it doesn't use the target variable, only the feature covariance structure."
+      ],
+      "ex": [
+        "With 100 features but only 50 samples, PCA to 10-20 components before classification can dramatically improve generalization.",
+        "Visualizing high-dimensional data by plotting the first two principal components reveals clusters and outliers."
+      ],
+      "form": [
+        "PCA solves $\\max_{||v||=1} \\text{Var}(Xv) = \\max \\frac{v^TX^TXv}{v^Tv}$, the leading eigenvector of the covariance matrix $X^TX$.",
+        "Variance explained by component $j$: $\\lambda_j / \\sum_i \\lambda_i$. A scree plot shows this to choose $k$."
+      ],
+      "app": [
+        "Used for noise filtering, compression, feature extraction, and as preprocessing before clustering or regression.",
+        "Note: PCA directions may not be interpretable as meaningful \"factors\" — they are purely statistical."
+      ]
+    },
     "fragmentCount": 10
   },
   "time_series": {
@@ -380,6 +1093,29 @@
       "feature_engineering",
       "visualization"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Key feature: autocorrelation — $y_t$ is correlated with $y_{t-1}$, $y_{t-2}$, etc. (unlike i.i.d. data).",
+        "Trends (long-term direction) and seasonality (cyclical patterns) are core components: $Y_t = T_t + S_t + R_t$ (additive) or multiplicative."
+      ],
+      "int": [
+        "Standard regression assumes independent observations — time series violates this, so standard errors and p-values are wrong if you ignore it.",
+        "The autocorrelation function (ACF) plots correlation vs. lag; the partial autocorrelation (PACF) controls for intermediate lags."
+      ],
+      "ex": [
+        "Monthly retail sales: trend (growing over years) + seasonality (holiday spike in December) + remainder.",
+        "Stock prices are nearly random walk (autocorrelation near zero) — difficult to predict."
+      ],
+      "form": [
+        "ARIMA$(p,d,q)$: autoregressive (AR) order $p$, differencing order $d$, moving-average order $q$. $\\nabla^d y_t$ is stationary and modeled as ARMA$(p,q)$.",
+        "A time series is stationary if mean, variance, and autocorrelation are constant over time — differencing achieves this."
+      ],
+      "app": [
+        "Used for demand forecasting, inventory planning, financial prediction, and anomaly detection in monitoring systems.",
+        "Modern methods (Prophet, Temporal Fusion Transformers) handle multiple seasonality and external regressors (holidays, promotions)."
+      ]
+    },
     "fragmentCount": 10
   },
   "deployment": {
@@ -392,6 +1128,29 @@
       "leakage",
       "cross_validation"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "A deployed model takes features $X$ as input and returns a prediction — via REST API, batch prediction job, or embedded in an application.",
+        "Key requirements: low latency, high availability, monitoring for data drift and model staleness."
+      ],
+      "int": [
+        "A model that can't be deployed is just an experiment. Deployment exposes the gap between notebooks and production systems.",
+        "Data drift (input distribution changes) and concept drift (relationship between $X$ and $y$ changes) degrade models over time."
+      ],
+      "ex": [
+        "A fraud model called via API: receive transaction features, run model, return fraud score in <100ms at 99.9% uptime.",
+        "Batch scoring: nightly job reads today's transactions, outputs risk scores for review the next morning."
+      ],
+      "form": [
+        "Model serialization: pickle (Python), ONNX (cross-platform), or framework-specific formats (TensorFlow SavedModel, PyTorch jit).",
+        "A/B testing a new model: route 10% of traffic to the new model and compare metrics before full rollout."
+      ],
+      "app": [
+        "Monitor prediction distributions — a sudden shift in average fraud score may indicate a new fraud pattern.",
+        "Shadow mode: new model runs alongside old one without affecting responses, building confidence before switching."
+      ]
+    },
     "fragmentCount": 10
   },
   "browser_ml": {
@@ -403,6 +1162,29 @@
       "model_evaluation",
       "regularization"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "TensorFlow.js converts models to a web format and runs inference in the browser using WebGL or WebAssembly (WASM) for acceleration.",
+        "ONNX Runtime can run models locally on CPU or GPU, enabling serverless and edge deployment."
+      ],
+      "int": [
+        "Browser-based ML keeps data on the user's device — no server round-trip, no privacy risk for sensitive inputs.",
+        "Smaller models (quantized, distilled) are needed for real-time browser performance — there's a size/speed/accuracy tradeoff."
+      ],
+      "ex": [
+        "A sentiment analysis model running entirely in the browser analyzing text as you type, never sending data to a server.",
+        "A pose estimation model in the browser using the webcam for real-time movement tracking."
+      ],
+      "form": [
+        "Quantization reduces model size by using int8 or float16 weights instead of float32: typical for 4x size reduction with minimal accuracy loss.",
+        "Knowledge distillation trains a smaller \"student\" model to mimic a larger \"teacher\" model's outputs."
+      ],
+      "app": [
+        "Privacy-sensitive applications (health, finance) where data cannot leave the user's device.",
+        "Offline-capable applications, reduced server costs, and reduced latency for real-time applications."
+      ]
+    },
     "fragmentCount": 10
   },
   "eda": {
@@ -415,6 +1197,29 @@
       "visualization",
       "statistics"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "EDA uses summary statistics (mean, median, std, quantiles) and visualizations (histograms, scatter plots, box plots) to understand data.",
+        "There is no fixed procedure — EDA is open-ended curiosity-driven exploration before formal modeling."
+      ],
+      "int": [
+        "Understanding the data first prevents building models for the wrong problem or missing critical data issues.",
+        "Start broad: what is this data? Who/what are the rows? What does each column represent? Are there missing values?"
+      ],
+      "ex": [
+        "A scatter plot of income vs. spending by age group might reveal a spending peak at retirement age that suggests a new feature.",
+        "A bar chart of customer count by country might show 80% of data comes from one country — important for train-test splitting."
+      ],
+      "form": [
+        "Correlation matrices (sns.heatmap(df.corr())) reveal which numeric features move together.",
+        "Pair plots (sns.pairplot) show joint distributions for key variables — look for clusters, gaps, and outliers."
+      ],
+      "app": [
+        "Every data science project should start with EDA; it guides cleaning, feature engineering, and model choice.",
+        "Revisit EDA on residuals after modeling — structure in residuals reveals model misspecification."
+      ]
+    },
     "fragmentCount": 10
   },
   "outliers": {
@@ -427,6 +1232,29 @@
       "visualization",
       "data_cleaning"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Detection methods: Z-score ( $|z| > 3$ flags outliers), IQR rule ( $< Q1 - 1.5\\cdot IQR$ or $> Q3 + 1.5\\cdot IQR$ ), and DBSCAN (points labeled as noise).",
+        "Context matters: an outlier in one domain may be normal in another (e.g., a $10M house price is extreme but real)."
+      ],
+      "int": [
+        "Not all outliers are errors — some represent the most interesting cases (fraud, rare diseases, high-value customers).",
+        "Outliers disproportionately affect mean-based statistics and models assuming normality — median and robust methods are less affected."
+      ],
+      "ex": [
+        "Age = 250 in a customer dataset is likely a data entry error (replace or drop).",
+        "A single transaction of $1M might be an outlier but also a genuine signal worth investigating."
+      ],
+      "form": [
+        "Winsorizing caps extreme values at a percentile (e.g., all values above 99th percentile set to the 99th percentile value) instead of dropping them.",
+        "Robust statistics: median absolute deviation (MAD) replaces std for location estimation: $\\text{MAD} = \\text{median}(|x_i - \\tilde{x}|)$."
+      ],
+      "app": [
+        "Always investigate outliers before deciding what to do with them — understanding their cause prevents accidentally discarding signal.",
+        "Some models (decision trees, random forests) are robust to outliers; linear regression and logistic regression are not."
+      ]
+    },
     "fragmentCount": 10
   },
   "standardization": {
@@ -439,6 +1267,29 @@
       "kmeans",
       "cross_validation"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "Standardization (z-score): $x' = (x - \\mu) / \\sigma$, giving features mean 0 and std 1.",
+        "Min-max scaling: $x' = (x - x_{\\min}) / (x_{\\max} - x_{\\min})$, mapping to [0, 1]."
+      ],
+      "int": [
+        "Distance-based models (k-NN, SVM, k-means, neural nets) are sensitive to feature scale — a feature with large values dominates Euclidean distance.",
+        "Linear models, tree-based models, and probability-based models are generally invariant to scaling — but it doesn't hurt them."
+      ],
+      "ex": [
+        "Height (cm) and weight (kg): height ~[150, 200], weight ~[40, 120] — weight has higher variance but not necessarily more predictive power.",
+        "Image pixel values [0, 255] are often standardized to roughly [-1, 1] for neural network training."
+      ],
+      "form": [
+        "RobustScaler uses median and IQR instead of mean and std — appropriate when data has outliers.",
+        "For highly skewed data, log transform or Box-Cox transform can make distributions more symmetric before scaling."
+      ],
+      "app": [
+        "Always fit scaling on the training set only, then apply the same transformation to test/production data.",
+        "In a cross-validation pipeline, scaling must be done inside each fold to avoid leakage."
+      ]
+    },
     "fragmentCount": 10
   },
   "dimensionality_reduction": {
@@ -451,6 +1302,119 @@
       "clustering",
       "standardization"
     ],
+    "sources": [],
+    "fragments": {
+      "def": [
+        "PCA projects onto orthogonal axes of maximum variance. t-SNE and UMAP are non-linear methods that emphasize preserving local neighborhood structure for visualization.",
+        "Autoencoders learn a compressed latent representation by training a neural network to reconstruct its input."
+      ],
+      "int": [
+        "The \"curse of dimensionality\" says that distance-based methods degrade as dimensions grow — fewer dimensions with the same information is better.",
+        "Non-linear methods (t-SNE, UMAP) can reveal clusters and manifolds that PCA misses, but are not reversible (no inverse mapping)."
+      ],
+      "ex": [
+        "Compressing 784-pixel MNIST images to 50 dimensions via PCA retains most variance; a classifier trained on 50-D data is faster and more robust.",
+        "Visualizing a 100-feature dataset in 2D using UMAP reveals natural clusters."
+      ],
+      "form": [
+        "PCA closed-form solution: eigenvectors of $X^TX$ sorted by eigenvalue. t-SNE uses KL divergence between neighborhood distributions in high and low dimensions.",
+        "Intrinsic dimensionality: the number of dimensions actually needed to describe the data — estimable by the \"elbow\" in the explained variance plot."
+      ],
+      "app": [
+        "Used for visualization (2-3D), noise reduction, compression, and as a preprocessing step to reduce overfitting in supervised learning.",
+        "For supervised dimensionality reduction, Linear Discriminant Analysis (LDA) maximizes class separability rather than variance."
+      ]
+    },
     "fragmentCount": 10
+  },
+  "grouped_validation": {
+    "entry_id": "grouped_validation",
+    "name": "Grouped cross-validation",
+    "summary": "Grouped cross-validation keeps observations from the same entity together in one fold. It tests transfer to unseen entities rather than recognition of familiar ones.",
+    "related": [],
+    "sources": [
+      {
+        "title": "scikit-learn: Model evaluation",
+        "url": "https://scikit-learn.org/stable/model_selection.html"
+      }
+    ],
+    "fragments": {
+      "def": [
+        "Grouped cross-validation keeps observations from the same entity together in one fold. It tests transfer to unseen entities rather than recognition of familiar ones."
+      ],
+      "int": [
+        "Rows are not always independent. Repeated observations from one person or device can leak identity across a random split."
+      ],
+      "ex": [
+        "If one customer has 20 purchases, place all 20 in the same fold when evaluating performance on new customers."
+      ],
+      "form": [
+        "Use a group identifier to partition samples. For future prediction, also respect time; grouping alone does not prevent temporal leakage."
+      ],
+      "app": [
+        "Use grouped evaluation for users, machines, experiments, or subjects with repeated measurements."
+      ]
+    },
+    "fragmentCount": 5
+  },
+  "calibration": {
+    "entry_id": "calibration",
+    "name": "Probability calibration",
+    "summary": "Calibration asks whether predicted probabilities agree with observed frequencies. A model can rank cases well while assigning misleading probability values.",
+    "related": [],
+    "sources": [
+      {
+        "title": "scikit-learn: Model evaluation",
+        "url": "https://scikit-learn.org/stable/model_selection.html"
+      }
+    ],
+    "fragments": {
+      "def": [
+        "Calibration asks whether predicted probabilities agree with observed frequencies. A model can rank cases well while assigning misleading probability values."
+      ],
+      "int": [
+        "Among cases assigned a probability near 0.7, roughly 70% should be positive in a well-calibrated, representative sample."
+      ],
+      "ex": [
+        "A classifier predicts 0.9 for 100 cases but only 60 are positive. Those predictions are overconfident even if the ranking is useful."
+      ],
+      "form": [
+        "For binary outcomes, Brier score is the mean of (p−y)². It reflects calibration and other predictive properties, not calibration alone."
+      ],
+      "app": [
+        "Fit a calibrator without leaking test labels, then assess reliability and task-specific decision costs."
+      ]
+    },
+    "fragmentCount": 5
+  },
+  "dataset_shift": {
+    "entry_id": "dataset_shift",
+    "name": "Dataset shift",
+    "summary": "Dataset shift occurs when the distribution encountered during use differs from the training distribution. It can affect inputs, labels, or their relationship.",
+    "related": [],
+    "sources": [
+      {
+        "title": "scikit-learn: Model evaluation",
+        "url": "https://scikit-learn.org/stable/model_selection.html"
+      }
+    ],
+    "fragments": {
+      "def": [
+        "Dataset shift occurs when the distribution encountered during use differs from the training distribution. It can affect inputs, labels, or their relationship."
+      ],
+      "int": [
+        "An accurate past model may fail when the world or the measurement process changes."
+      ],
+      "ex": [
+        "A sensor replacement changes the range of measured values even though the physical process is similar."
+      ],
+      "form": [
+        "Covariate shift changes P(X); label shift changes P(Y); concept drift commonly refers to a change in P(Y|X). Real changes may combine them."
+      ],
+      "app": [
+        "Monitor input quality and labeled performance where available. A drift detector signals change, not necessarily a need to retrain."
+      ]
+    },
+    "fragmentCount": 5
   }
 }

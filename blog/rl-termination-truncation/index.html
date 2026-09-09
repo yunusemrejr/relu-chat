@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Termination vs Truncation in RL Targets — ReLU.chat</title>
+<meta name="description" content="A small numerical example shows why environment termination and time-limit truncation should not share one done flag.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/rl-termination-truncation/">
+
+<meta property="og:title" content="Termination vs Truncation in RL Targets">
+<meta property="og:description" content="A small numerical example shows why environment termination and time-limit truncation should not share one done flag.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/rl-termination-truncation/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="reinforcement-learning">
+<meta property="article:tag" content="debugging">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Termination vs Truncation in RL Targets">
+<meta name="twitter:description" content="A small numerical example shows why environment termination and time-limit truncation should not share one done flag.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/rl-termination-truncation/#webpage",
+      "url": "https://relu.chat/blog/rl-termination-truncation/",
+      "name": "Termination vs Truncation in RL Targets",
+      "description": "A small numerical example shows why environment termination and time-limit truncation should not share one done flag.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/rl-termination-truncation/#article",
+      "headline": "Termination vs Truncation in RL Targets",
+      "description": "A small numerical example shows why environment termination and time-limit truncation should not share one done flag.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/rl-termination-truncation/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "reinforcement-learning, debugging"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Termination vs Truncation in RL Targets</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">reinforcement-learning</span><span class="article-tag">debugging</span></div>
+
+  <h1 class="article-hero-title">Termination vs Truncation in RL Targets</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-the-numerical-consequence">The numerical consequence</a></li><li><a href="#section-a-finite-horizon-is-different">A finite horizon is different</a></li><li><a href="#section-store-enough-information">Store enough information</a></li><li><a href="#section-a-compact-test">A compact test</a></li></ol></nav><div class="article-body">
+    <p>An episode can stop because the task ended or because an external limit interrupted it. Those events look similar in a training loop but can require different value targets.</p>
+
+<p>Termination means the modeled process reached an end state. Truncation means observation stopped for a reason outside that process, such as a simulator’s maximum step count. The correct interpretation comes from the environment definition, not the name of the variable in your code.</p>
+
+<h2 id="section-the-numerical-consequence">The numerical consequence</h2>
+
+<p>Suppose a transition gives reward 1, the discount factor is 0.9, and the estimated value of the next observation is 5. For a continuing transition, the one-step target is 1 + 0.9 × 5 = 5.5.</p>
+
+<p>For a genuinely terminal transition, the target is just 1. Future return after termination is zero by the task definition. Using 5.5 would invent future opportunities that do not exist.</p>
+
+<p>For an external time-limit truncation of a continuing task, retaining the bootstrap estimate can be appropriate. Treating it as terminal gives target 1 and can systematically undervalue states near the arbitrary cutoff.</p>
+
+<h2 id="section-a-finite-horizon-is-different">A finite horizon is different</h2>
+
+<p>Sometimes the horizon is part of the actual task. A game may end after ten moves, or a controller may have a fixed number of actions to reach a target. Remaining time then belongs in the state if it affects optimal decisions.</p>
+
+<p>A genuine end at the task horizon can be termination. An external training limit imposed on an otherwise continuing task is truncation. Do not decide solely by checking whether a timer was involved.</p>
+
+<h2 id="section-store-enough-information">Store enough information</h2>
+
+<p>A replay record should preserve reward, the next observation, and separate terminated and truncated flags. If an environment automatically resets, ensure that the next observation in the record is the final observation of the transition, not the first observation of the next episode.</p>
+
+<p>The update also needs a policy for bootstrapping each boundary type. Write down that policy next to the environment definition so future refactors do not silently change the learning objective.</p>
+
+<h2 id="section-a-compact-test">A compact test</h2>
+
+<p>Construct one continuing transition, one terminal transition, and one externally truncated transition with the same reward and next-state estimate. Verify the expected targets explicitly. Then test the auto-reset path, where a final observation can be easy to lose.</p>
+
+<p>This check is cheap and often more informative than another long training run. A model cannot reliably compensate for a target that erases the wrong future rewards.</p>
+
+<p>See <a href="https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/" rel="noopener">Gymnasium’s time-limit explanation</a> for the API distinction, or <a href="/chat/reinforcement-learning-chat/?q=Explain%20termination%20and%20truncation" rel="noopener">ask about termination and truncation</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/reinforcement-learning-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/q-learning-sarsa-worked-example/">Q-learning vs SARSA: One Update, Worked Through</a></li><li><a href="/blog/reward-design-small-chatbot/">Reward Design for a Small Learning Chatbot</a></li><li><a href="/blog/tiny-policy-training-cpu/">Training a Chatbot Policy on a Laptop</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Termination%20vs%20Truncation%20in%20RL%20Targets&url=https%3A%2F%2Frelu.chat%2Fblog%2Frl-termination-truncation%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Frl-termination-truncation%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>

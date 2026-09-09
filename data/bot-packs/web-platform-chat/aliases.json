@@ -1,0 +1,404 @@
+{
+  "304": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "webassembly": [
+    [
+      0,
+      1
+    ]
+  ],
+  "wasm": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "web assembly": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "linear memory": [
+    [
+      1,
+      1
+    ]
+  ],
+  "wasm memory": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "memory grow": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "typed array views": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "web worker": [
+    [
+      2,
+      1
+    ]
+  ],
+  "worker": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "background thread": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "workers": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "transferable objects": [
+    [
+      3,
+      1
+    ]
+  ],
+  "transfer": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "arraybuffer": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "postmessage": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "service worker": [
+    [
+      4,
+      1
+    ]
+  ],
+  "service workers": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "offline": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "pwa": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "cache strategies": [
+    [
+      5,
+      1
+    ]
+  ],
+  "cache first": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "network first": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "stale while revalidate": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "http caching": [
+    [
+      6,
+      1
+    ]
+  ],
+  "cache control": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "etag": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "revalidation": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "indexeddb": [
+    [
+      7,
+      1
+    ]
+  ],
+  "indexed db": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "browser database": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "local persistence": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "promises and async functions": [
+    [
+      8,
+      1
+    ]
+  ],
+  "promise": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "async await": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "asynchronous": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "event loop": [
+    [
+      9,
+      1
+    ]
+  ],
+  "microtask": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "task": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "main thread": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "abortcontroller": [
+    [
+      10,
+      1
+    ]
+  ],
+  "abort": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "cancel fetch": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "timeout": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "content security policy": [
+    [
+      11,
+      1
+    ]
+  ],
+  "csp": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "script src": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "connect src": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "cross origin isolation": [
+    [
+      12,
+      1
+    ]
+  ],
+  "coop": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "coep": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "sharedarraybuffer": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "accessible form": [
+    [
+      13,
+      1
+    ]
+  ],
+  "accessibility": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "label": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "keyboard": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "aria": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "responsive layout": [
+    [
+      14,
+      1
+    ]
+  ],
+  "responsive": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "viewport": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "mobile": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "media query": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "performance measurement": [
+    [
+      15,
+      1
+    ]
+  ],
+  "latency": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "p95": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "benchmark": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "cold start": [
+    [
+      15,
+      0.9
+    ]
+  ]
+}

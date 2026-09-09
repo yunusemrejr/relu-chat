@@ -1,0 +1,18 @@
+{
+  "id": "q-learning-sarsa-worked-example",
+  "slug": "q-learning-sarsa-worked-example",
+  "title": "Q-learning vs SARSA: One Update, Worked Through",
+  "meta_title": "Q-learning vs SARSA: One Update, Worked Through",
+  "meta_description": "Calculate Q-learning and SARSA updates on the same transition, and see why their targets differ during exploration.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "reinforcement-learning",
+    "worked-example"
+  ],
+  "excerpt": "Calculate Q-learning and SARSA updates on the same transition, and see why their targets differ during exploration.",
+  "related_bot": "reinforcement-learning-chat",
+  "content": "# Q-learning vs SARSA: One Update, Worked Through\n\nQ-learning and SARSA can observe the same transition and make different updates. The difference is the value they use for the next action.\n\nBoth methods maintain Q(s, a), an estimate of future return after taking action a in state s. Both move the estimate partway toward a target. Neither algorithm needs a neural network for a small finite state space.\n\n## Fix one transition\n\nSuppose the current estimate is 2. The action produces reward 1 and moves to a nonterminal state. The discount factor is 0.9 and the learning rate is 0.5. At the next state, action A has estimated value 4 and action B has estimated value 1.\n\nThe behavior policy explores and chooses B. This is the crucial detail: the best estimated action and the action actually taken differ.\n\n## Calculate Q-learning\n\nQ-learning uses the maximum next-state action value, 4. Its target is 1 + 0.9 × 4 = 4.6. The prediction error is 4.6 − 2 = 2.6. Moving halfway gives a new estimate of 2 + 0.5 × 2.6 = 3.3.\n\nThe update evaluates a greedy target even though the behavior policy chose B. This is why Q-learning is called off-policy. The behavior that collects experience and the policy represented by the target can differ.\n\n## Calculate SARSA\n\nSARSA uses the next action actually selected, B, whose estimate is 1. Its target is 1 + 0.9 × 1 = 1.9. The prediction error is 1.9 − 2 = −0.1. The new estimate is 2 + 0.5 × (−0.1) = 1.95.\n\nThat lower value accounts for what the exploratory policy is about to do. It is not an arithmetic mistake or evidence that SARSA always learns worse policies. It is a different target.\n\n## What changes at termination?\n\nIf this transition ends the task, both methods use immediate reward alone. The target is 1, so the updated estimate is 1.5. There is no next action’s future reward to include.\n\nA time limit is more subtle. If the simulator stops while the underlying task continues, dropping the bootstrap term may be wrong. Store termination and truncation separately so the update can reflect the environment’s meaning.\n\n## Compare algorithms fairly\n\nUse the same environment, reward, training budget, and exploration schedule. Measure both behavior during training and the fixed policy used for evaluation. Risky exploration can matter even when the eventual greedy policies look similar.\n\nTry explaining the two targets without the formulas. If you can identify whose next action is evaluated, you understand the central distinction. [Ask the RL bot for another example](/chat/reinforcement-learning-chat/?q=Compare%20Q-learning%20and%20SARSA).\n\nFurther reading: [Sutton and Barto’s Reinforcement Learning textbook](https://incompleteideas.net/book/the-book-2nd.html) and [Gymnasium on time limits](https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/)."
+}

@@ -1,0 +1,14 @@
+{
+  "openers": [
+    ""
+  ],
+  "closers": [
+    ""
+  ],
+  "greetingResponse": "Welcome. Ask about web platform, request a worked example, or compare two topics.",
+  "helpResponse": "I explain web platform using a local knowledge base. Try “What is webassembly?” or ask for an example. I explain concepts; I do not execute code or solve arbitrary exercises.",
+  "offTopicResponse": "I could not match that to my web platform topics. Try naming a concept from the topic list, or choose another bot.",
+  "transitions": [
+    "\n\n"
+  ]
+}

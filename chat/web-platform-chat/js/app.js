@@ -1,0 +1,2 @@
+import { bootChat } from '/core/chat-page.js';
+bootChat({"id": "web-platform-chat", "name": "Web Platform Chat", "url": "/chat/web-platform-chat/", "description": "Understand browser JavaScript, HTTP caching, WebAssembly, workers, accessibility, and local data storage.", "tags": ["Web platform", "education", "on-device"], "kb_version": "2.0.0", "kb_updated": "2026-09-09", "topic_count": 16, "engine": "shared", "suggestions": ["What is WebAssembly?", "Compare cache first and network first", "Explain Web Worker", "Example of IndexedDB"]});

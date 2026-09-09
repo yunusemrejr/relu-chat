@@ -1,0 +1,352 @@
+[
+  {
+    "id": "vector",
+    "idx": 0,
+    "name": "Vector",
+    "aliases": [
+      "vector",
+      "vectors",
+      "coordinate",
+      "magnitude"
+    ],
+    "summary": "A vector is an element of a vector space. In coordinates it can be represented by an ordered list of numbers with rules for addition and scalar multiplication.",
+    "related": [
+      "dot-product"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "dot-product",
+    "idx": 1,
+    "name": "Dot product",
+    "aliases": [
+      "dot product",
+      "inner product",
+      "scalar product"
+    ],
+    "summary": "The Euclidean dot product multiplies corresponding coordinates and sums the products. It measures directional alignment together with magnitude.",
+    "related": [
+      "vector-norm"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "vector-norm",
+    "idx": 2,
+    "name": "Vector norm",
+    "aliases": [
+      "vector norm",
+      "length",
+      "l2 norm",
+      "euclidean norm",
+      "l1 norm"
+    ],
+    "summary": "A norm assigns a nonnegative size to a vector and satisfies definiteness, homogeneity, and the triangle inequality.",
+    "related": [
+      "matrix-multiplication"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "matrix-multiplication",
+    "idx": 3,
+    "name": "Matrix multiplication",
+    "aliases": [
+      "matrix multiplication",
+      "matrix product",
+      "multiply matrices",
+      "matrix"
+    ],
+    "summary": "Matrix multiplication composes linear maps. Each result entry is a row-column dot product, and the inner dimensions must match.",
+    "related": [
+      "linear-independence"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "linear-independence",
+    "idx": 4,
+    "name": "Linear independence",
+    "aliases": [
+      "linear independence",
+      "independent vectors",
+      "linear dependence"
+    ],
+    "summary": "Vectors are linearly independent when no nontrivial linear combination of them equals zero.",
+    "related": [
+      "basis-span"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "basis-span",
+    "idx": 5,
+    "name": "Basis and span",
+    "aliases": [
+      "basis and span",
+      "basis",
+      "span",
+      "dimension"
+    ],
+    "summary": "The span of vectors contains all their linear combinations. A basis is an independent set that spans a vector space.",
+    "related": [
+      "matrix-rank"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "matrix-rank",
+    "idx": 6,
+    "name": "Matrix rank",
+    "aliases": [
+      "matrix rank",
+      "rank",
+      "full rank",
+      "column space"
+    ],
+    "summary": "The rank of a matrix is the dimension of its column space, equal to the dimension of its row space.",
+    "related": [
+      "null-space"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "null-space",
+    "idx": 7,
+    "name": "Null space",
+    "aliases": [
+      "null space",
+      "nullspace",
+      "kernel",
+      "nullity"
+    ],
+    "summary": "The null space of A is the set of vectors mapped to zero by A. It is a subspace of the input space.",
+    "related": [
+      "linear-system"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "linear-system",
+    "idx": 8,
+    "name": "Linear system",
+    "aliases": [
+      "linear system",
+      "linear equations",
+      "ax b",
+      "solve system"
+    ],
+    "summary": "A linear system asks for x satisfying Ax = b. It can have no solution, one solution, or infinitely many.",
+    "related": [
+      "matrix-inverse"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "matrix-inverse",
+    "idx": 9,
+    "name": "Matrix inverse",
+    "aliases": [
+      "matrix inverse",
+      "inverse",
+      "invertible",
+      "singular matrix"
+    ],
+    "summary": "An inverse reverses a square linear transformation. A square matrix is invertible exactly when it has full rank.",
+    "related": [
+      "determinant"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "determinant",
+    "idx": 10,
+    "name": "Determinant",
+    "aliases": [
+      "determinant",
+      "det",
+      "volume scaling"
+    ],
+    "summary": "The determinant of a square matrix is the signed volume scaling factor of its linear transformation. A zero determinant indicates singularity.",
+    "related": [
+      "eigenvalues-eigenvectors"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "eigenvalues-eigenvectors",
+    "idx": 11,
+    "name": "Eigenvalues and eigenvectors",
+    "aliases": [
+      "eigenvalues and eigenvectors",
+      "eigenvalue",
+      "eigenvector",
+      "eigendecomposition"
+    ],
+    "summary": "An eigenvector is a nonzero vector whose direction is preserved by a square linear map. Its eigenvalue is the corresponding scaling factor.",
+    "related": [
+      "orthogonal-projection"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "orthogonal-projection",
+    "idx": 12,
+    "name": "Orthogonal projection",
+    "aliases": [
+      "orthogonal projection",
+      "projection",
+      "orthogonal",
+      "perpendicular"
+    ],
+    "summary": "Orthogonal projection finds the closest vector in a subspace under the Euclidean norm. The residual is perpendicular to that subspace.",
+    "related": [
+      "least-squares"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "least-squares",
+    "idx": 13,
+    "name": "Least squares",
+    "aliases": [
+      "least squares",
+      "least square",
+      "linear regression",
+      "normal equation"
+    ],
+    "summary": "Least squares chooses parameters that minimize the sum of squared residuals when exact agreement may be impossible.",
+    "related": [
+      "singular-value-decomposition"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "singular-value-decomposition",
+    "idx": 14,
+    "name": "Singular value decomposition",
+    "aliases": [
+      "singular value decomposition",
+      "svd",
+      "singular values",
+      "low rank"
+    ],
+    "summary": "SVD factors a real matrix into orthogonal directions, nonnegative scale factors, and another orthogonal change of coordinates. It applies to rectangular matrices too.",
+    "related": [
+      "condition-number"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "condition-number",
+    "idx": 15,
+    "name": "Condition number",
+    "aliases": [
+      "condition number",
+      "conditioning",
+      "numerical stability",
+      "ill conditioned"
+    ],
+    "summary": "A condition number measures how sensitive a problem solution is to input perturbations. It describes the problem, distinct from algorithmic stability.",
+    "related": [
+      "vector"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  }
+]

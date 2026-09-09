@@ -83,9 +83,11 @@ const { MLPPolicy } = require(`${ROOT}/policy/mlp-inference.js`);
 const { extractPolicyFeatures, packFeatures, unpackFeatures } = require(`${ROOT}/policy/feature-extractor.js`);
 const { planAnswerHeuristic } = require(`${ROOT}/policy/policy-runtime.js`);
 const {
-  tokens, cosine, rankEntries, extractEntities, classifyIntent,
+  tokens, cosine, rankTopK, extractEntities, classifyIntent,
   compileAliasRegex, entryText
 } = require(`${ROOT}/core/nlp.js`);
+
+const rankEntries = (q, entries) => rankTopK(q, entries, entries.length);
 
 // DEFAULT_INTENTS (from nlp.js)
 const DEFAULT_INTENTS = {

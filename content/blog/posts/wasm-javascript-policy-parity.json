@@ -1,0 +1,19 @@
+{
+  "id": "wasm-javascript-policy-parity",
+  "slug": "wasm-javascript-policy-parity",
+  "title": "WASM vs JavaScript: Verify the Same Model First",
+  "meta_title": "WASM vs JavaScript: Verify the Same Model First",
+  "meta_description": "A small MLP shows why export parity, fixed memory, startup costs, and end-to-end latency matter more than assuming WASM is faster.",
+  "status": "published",
+  "published_at": "2026-09-09T14:00:00.000Z",
+  "updated_at": "2026-09-09T14:00:00.000Z",
+  "author": "ReLU.chat",
+  "tags": [
+    "webassembly",
+    "performance",
+    "engineering"
+  ],
+  "excerpt": "A small MLP shows why export parity, fixed memory, startup costs, and end-to-end latency matter more than assuming WASM is faster.",
+  "related_bot": "web-platform-chat",
+  "content": "# WASM vs JavaScript: Verify the Same Model First\n\nMoving an inference kernel into WebAssembly is not automatically an optimization. The first question is whether both implementations compute the same model. The second is whether the complete user interaction becomes faster.\n\nReLU.chat’s policy is deliberately small: 25 inputs, two hidden layers, and 13,079 parameters. At that size, both JavaScript and WASM can finish quickly. Integration mistakes can matter more than arithmetic throughput.\n\n## Establish the numerical contract\n\nThe kernel reads raw feature values, applies a linear layer and ReLU twice, and produces logits for action heads. Softmax and final answer-plan construction remain in JavaScript.\n\nWeight order, bias placement, floating-point rounding, feature scaling, and head order all need to match. A shape check alone cannot detect a transposed matrix whose dimensions happen to be square.\n\nThe September implementation uses fixed buffers, no imports, and a fixed 128 KiB linear memory. Its compiled module is 3,685 bytes. JavaScript copies weights once, then writes a 25-element input vector and reads the output logits.\n\n## Compare outputs before labels\n\nTwo implementations can choose the same top action while producing substantially different probabilities. That difference may become visible on an ambiguous question or after retraining.\n\nOur fixture check compared 40 exported Python examples against JavaScript. The maximum probability difference was below 0.000001. JavaScript and WASM outputs were identical on those fixtures. This is evidence for those cases, not a proof covering every floating-point input.\n\n## Measure the small result honestly\n\nOn the development laptop with Node.js 22, a 3,000-call warm benchmark measured median times around 14 microseconds for both implementations. The difference was small. These numbers exclude browser model downloads and do not establish a universal WASM speedup.\n\nThe practical improvement was replacing a placeholder module with verified computation and a dependable JavaScript fallback. A tiny policy did not need a large runtime download or dynamic allocation to accomplish that.\n\n## Include first-load work\n\nFor a browser experience, measure transfer, decoding, compilation, model initialization, query processing, and rendering. Test an empty cache separately from a warm one. A fast kernel can coexist with a slow first visit if the page downloads several unused runtime variants.\n\nKeep mutable manifests and weights fresh. Verify hashes before attaching a new kernel. If an optional asset fails, retain a usable basic path rather than making the entire chat unavailable.\n\nRead [MDN’s WebAssembly overview](https://developer.mozilla.org/en-US/docs/WebAssembly), inspect [the evaluation summary](/data/policy-evaluation.json), or [explore WASM in the web-platform chatbot](/chat/web-platform-chat/?q=Explain%20WebAssembly)."
+}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Dot Product and Cosine Similarity, Step by Step — ReLU.chat</title>
+<meta name="description" content="Work through a dot product, vector norms, and cosine similarity, including the zero-vector case that retrieval code must handle.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/dot-product-cosine-worked-example/">
+
+<meta property="og:title" content="Dot Product and Cosine Similarity, Step by Step">
+<meta property="og:description" content="Work through a dot product, vector norms, and cosine similarity, including the zero-vector case that retrieval code must handle.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/dot-product-cosine-worked-example/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="linear-algebra">
+<meta property="article:tag" content="worked-example">
+<meta property="article:tag" content="retrieval">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dot Product and Cosine Similarity, Step by Step">
+<meta name="twitter:description" content="Work through a dot product, vector norms, and cosine similarity, including the zero-vector case that retrieval code must handle.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/dot-product-cosine-worked-example/#webpage",
+      "url": "https://relu.chat/blog/dot-product-cosine-worked-example/",
+      "name": "Dot Product and Cosine Similarity, Step by Step",
+      "description": "Work through a dot product, vector norms, and cosine similarity, including the zero-vector case that retrieval code must handle.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/dot-product-cosine-worked-example/#article",
+      "headline": "Dot Product and Cosine Similarity, Step by Step",
+      "description": "Work through a dot product, vector norms, and cosine similarity, including the zero-vector case that retrieval code must handle.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/dot-product-cosine-worked-example/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "linear-algebra, worked-example, retrieval"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Dot Product and Cosine Similarity, Step by Step</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">linear-algebra</span><span class="article-tag">worked-example</span><span class="article-tag">retrieval</span></div>
+
+  <h1 class="article-hero-title">Dot Product and Cosine Similarity, Step by Step</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-multiply-and-add">Multiply and add</a></li><li><a href="#section-compute-the-lengths">Compute the lengths</a></li><li><a href="#section-scale-one-vector">Scale one vector</a></li><li><a href="#section-handle-a-zero-vector-deliberately">Handle a zero vector deliberately</a></li><li><a href="#section-apply-it-to-chatbot-loading">Apply it to chatbot loading</a></li></ol></nav><div class="article-body">
+    <p>The dot product and cosine similarity are closely related, but they answer different questions. A dot product includes vector magnitude. Cosine similarity divides out the magnitudes to compare direction.</p>
+
+<p>That distinction matters in retrieval. If one embedding has twice the norm of another, its dot product can be larger even when its direction is no better aligned with the query.</p>
+
+<h2 id="section-multiply-and-add">Multiply and add</h2>
+
+<p>Take x = (1, 2) and y = (3, 4). Multiply matching coordinates and sum: x · y = 1 × 3 + 2 × 4 = 11. The result is a scalar, not a vector.</p>
+
+<p>The coordinates must describe the same space. A 384-dimensional sentence vector and an unrelated 384-dimensional feature vector are not comparable merely because their lengths match.</p>
+
+<h2 id="section-compute-the-lengths">Compute the lengths</h2>
+
+<p>The Euclidean norm of x is the square root of 1² + 2², which is the square root of 5. The norm of y is the square root of 3² + 4², which is 5.</p>
+
+<p>Cosine similarity is therefore 11 divided by 5 times the square root of 5, approximately 0.98387. The vectors point in very similar directions, though their lengths differ.</p>
+
+<h2 id="section-scale-one-vector">Scale one vector</h2>
+
+<p>Double y to obtain (6, 8). The dot product doubles to 22, and y’s norm doubles to 10. Cosine similarity remains 22 divided by 10 times the square root of 5, again approximately 0.98387.</p>
+
+<p>Positive rescaling changes magnitude while preserving direction. Multiplying by a negative scalar reverses direction, so the sign of cosine similarity changes.</p>
+
+<h2 id="section-handle-a-zero-vector-deliberately">Handle a zero vector deliberately</h2>
+
+<p>A zero vector has no direction, so its cosine similarity is undefined mathematically. Retrieval code needs an explicit convention. Returning zero is a common engineering choice meaning no useful directional signal, but it should not be confused with a mathematical angle of ninety degrees.</p>
+
+<p>Also check finite values and matching dimensions. Silently comparing only a prefix can produce a believable score from incompatible embeddings. A safe failure is preferable to a false match.</p>
+
+<h2 id="section-apply-it-to-chatbot-loading">Apply it to chatbot loading</h2>
+
+<p>A bag-of-words vector and a transformer embedding use different coordinates. During progressive loading, update query encoding and all stored knowledge vectors together. Clearing memoized query vectors is essential when switching spaces.</p>
+
+<p>Even normalized vectors do not make every similarity threshold universal. Different models and corpora produce different score distributions. Evaluate ranking quality on representative questions rather than transferring a threshold blindly.</p>
+
+<p>Continue with <a href="https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/" rel="noopener">MIT’s linear algebra course</a> or <a href="/chat/linear-algebra-chat/?q=Explain%20dot%20product" rel="noopener">ask the linear algebra bot about dot products</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/linear-algebra-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/least-squares-without-inverse/">Least Squares Without Computing an Inverse</a></li><li><a href="/blog/nash-equilibrium-best-response-table/">Find a Nash Equilibrium with Best Responses</a></li><li><a href="/blog/precision-recall-small-example/">Precision and Recall: A 100-Case Example</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Dot%20Product%20and%20Cosine%20Similarity%2C%20Step%20by%20Step&url=https%3A%2F%2Frelu.chat%2Fblog%2Fdot-product-cosine-worked-example%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fdot-product-cosine-worked-example%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>

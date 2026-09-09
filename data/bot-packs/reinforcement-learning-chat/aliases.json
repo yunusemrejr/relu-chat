@@ -1,0 +1,386 @@
+{
+  "reinforcement learning": [
+    [
+      0,
+      1
+    ]
+  ],
+  "rl": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "agent": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "environment": [
+    [
+      0,
+      0.9
+    ]
+  ],
+  "markov decision process": [
+    [
+      1,
+      1
+    ]
+  ],
+  "mdp": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "markov property": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "state": [
+    [
+      1,
+      0.9
+    ]
+  ],
+  "reward and return": [
+    [
+      2,
+      1
+    ]
+  ],
+  "return": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "discount factor": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "gamma": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "cumulative reward": [
+    [
+      2,
+      0.9
+    ]
+  ],
+  "exploration and exploitation": [
+    [
+      3,
+      1
+    ]
+  ],
+  "exploration": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "exploitation": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "epsilon greedy": [
+    [
+      3,
+      0.9
+    ]
+  ],
+  "contextual bandit": [
+    [
+      4,
+      1
+    ]
+  ],
+  "bandit": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "multi armed bandit": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "one step rl": [
+    [
+      4,
+      0.9
+    ]
+  ],
+  "value function": [
+    [
+      5,
+      1
+    ]
+  ],
+  "state value": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "v function": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "value estimate": [
+    [
+      5,
+      0.9
+    ]
+  ],
+  "bellman equation": [
+    [
+      6,
+      1
+    ]
+  ],
+  "bellman expectation": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "bellman optimality": [
+    [
+      6,
+      0.9
+    ]
+  ],
+  "q learning": [
+    [
+      7,
+      1
+    ]
+  ],
+  "q value": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "temporal difference": [
+    [
+      7,
+      0.9
+    ]
+  ],
+  "sarsa": [
+    [
+      8,
+      1
+    ]
+  ],
+  "on policy td": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "state action reward state action": [
+    [
+      8,
+      0.9
+    ]
+  ],
+  "policy gradient": [
+    [
+      9,
+      1
+    ]
+  ],
+  "reinforce": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "score function": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "policy gradients": [
+    [
+      9,
+      0.9
+    ]
+  ],
+  "actor critic": [
+    [
+      10,
+      1
+    ]
+  ],
+  "advantage": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "baseline": [
+    [
+      10,
+      0.9
+    ]
+  ],
+  "experience replay": [
+    [
+      11,
+      1
+    ]
+  ],
+  "replay buffer": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "off policy": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "replay": [
+    [
+      11,
+      0.9
+    ]
+  ],
+  "reward shaping": [
+    [
+      12,
+      1
+    ]
+  ],
+  "potential shaping": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "reward hacking": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "reward design": [
+    [
+      12,
+      0.9
+    ]
+  ],
+  "rl evaluation": [
+    [
+      13,
+      1
+    ]
+  ],
+  "evaluation": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "held out": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "random seed": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "test set": [
+    [
+      13,
+      0.9
+    ]
+  ],
+  "efficient rl on a laptop": [
+    [
+      14,
+      1
+    ]
+  ],
+  "cpu training": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "fast training": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "ten minute": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "small policy": [
+    [
+      14,
+      0.9
+    ]
+  ],
+  "termination and truncation": [
+    [
+      15,
+      1
+    ]
+  ],
+  "terminal": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "truncated": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "time limit": [
+    [
+      15,
+      0.9
+    ]
+  ],
+  "episode": [
+    [
+      15,
+      0.9
+    ]
+  ]
+}

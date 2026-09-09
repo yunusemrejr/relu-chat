@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0d1117"/>
+  <rect x="0" y="0" width="1200" height="630" fill="#151b23" opacity="0.55"/>
+  <g><line x1="553" y1="430" x2="496" y2="428" stroke="rgba(20,184,166,0.20)" stroke-width="1.5"/><line x1="553" y1="430" x2="523" y2="312" stroke="rgba(20,184,166,0.10)" stroke-width="1.5"/><line x1="553" y1="430" x2="388" y2="451" stroke="rgba(20,184,166,0.22)" stroke-width="1.5"/><line x1="496" y1="428" x2="523" y2="312" stroke="rgba(20,184,166,0.11)" stroke-width="1.5"/><line x1="496" y1="428" x2="388" y2="451" stroke="rgba(20,184,166,0.14)" stroke-width="1.5"/><circle cx="553" cy="430" r="3.0" fill="rgba(20,184,166,0.26)"/><circle cx="496" cy="428" r="2.1" fill="rgba(20,184,166,0.27)"/><circle cx="523" cy="312" r="1.7" fill="rgba(20,184,166,0.36)"/><circle cx="1098" cy="513" r="2.2" fill="rgba(20,184,166,0.29)"/><circle cx="286" cy="286" r="1.7" fill="rgba(20,184,166,0.40)"/><circle cx="686" cy="131" r="3.1" fill="rgba(20,184,166,0.26)"/><circle cx="393" cy="106" r="2.6" fill="rgba(20,184,166,0.39)"/><circle cx="129" cy="521" r="2.5" fill="rgba(20,184,166,0.25)"/><circle cx="388" cy="451" r="2.2" fill="rgba(20,184,166,0.27)"/><circle cx="833" cy="525" r="3.1" fill="rgba(20,184,166,0.34)"/><circle cx="846" cy="292" r="1.7" fill="rgba(20,184,166,0.27)"/></g>
+  <line x1="61" y1="552" x2="157" y2="552" stroke="#14b8a6" stroke-width="3"/>
+  <text x="173" y="562" font-family="Sora, system-ui, sans-serif" font-size="30" font-weight="600" letter-spacing="7" fill="#f9fafb">DATA-SCIENCE</text>
+  <circle cx="1124" cy="76" r="5" fill="#14b8a6"/>
+</svg>

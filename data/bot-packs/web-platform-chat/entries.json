@@ -1,0 +1,357 @@
+[
+  {
+    "id": "webassembly",
+    "idx": 0,
+    "name": "WebAssembly",
+    "aliases": [
+      "webassembly",
+      "wasm",
+      "web assembly"
+    ],
+    "summary": "WebAssembly is a portable binary instruction format that runs inside a host such as a browser. JavaScript loads modules and provides host capabilities.",
+    "related": [
+      "linear-memory"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "linear-memory",
+    "idx": 1,
+    "name": "Linear memory",
+    "aliases": [
+      "linear memory",
+      "wasm memory",
+      "memory grow",
+      "typed array views"
+    ],
+    "summary": "WebAssembly linear memory is a byte-addressed buffer accessed from JavaScript through typed-array views. Its bounds are checked by the runtime.",
+    "related": [
+      "web-worker"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "web-worker",
+    "idx": 2,
+    "name": "Web Worker",
+    "aliases": [
+      "web worker",
+      "worker",
+      "background thread",
+      "workers"
+    ],
+    "summary": "A Web Worker runs JavaScript in a separate execution context, helping keep long computations away from the main UI thread.",
+    "related": [
+      "transferable-objects"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "transferable-objects",
+    "idx": 3,
+    "name": "Transferable objects",
+    "aliases": [
+      "transferable objects",
+      "transfer",
+      "arraybuffer",
+      "postmessage"
+    ],
+    "summary": "Transferable objects allow ownership of a resource such as an ArrayBuffer to move between contexts without copying the buffer contents.",
+    "related": [
+      "service-worker"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "service-worker",
+    "idx": 4,
+    "name": "Service worker",
+    "aliases": [
+      "service worker",
+      "service workers",
+      "offline",
+      "pwa"
+    ],
+    "summary": "A service worker is an event-driven script that can intercept requests within its scope and support offline behavior. It is separate from a page worker.",
+    "related": [
+      "cache-strategies"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "cache-strategies",
+    "idx": 5,
+    "name": "Cache strategies",
+    "aliases": [
+      "cache strategies",
+      "cache first",
+      "network first",
+      "stale while revalidate"
+    ],
+    "summary": "A cache strategy chooses when to read stored responses and when to request fresh content. Different assets need different freshness rules.",
+    "related": [
+      "http-caching"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "http-caching",
+    "idx": 6,
+    "name": "HTTP caching",
+    "aliases": [
+      "http caching",
+      "cache control",
+      "etag",
+      "304",
+      "revalidation"
+    ],
+    "summary": "HTTP caching uses response headers and validators to control reuse by browsers and intermediaries. It is separate from service-worker Cache Storage.",
+    "related": [
+      "indexeddb"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "indexeddb",
+    "idx": 7,
+    "name": "IndexedDB",
+    "aliases": [
+      "indexeddb",
+      "indexed db",
+      "browser database",
+      "local persistence"
+    ],
+    "summary": "IndexedDB is an asynchronous transactional database for structured browser data. It supports keys, indexes, and large records.",
+    "related": [
+      "promises-async-functions"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "promises-async-functions",
+    "idx": 8,
+    "name": "Promises and async functions",
+    "aliases": [
+      "promises and async functions",
+      "promise",
+      "async await",
+      "asynchronous"
+    ],
+    "summary": "A Promise represents eventual completion or failure. An async function returns a Promise, and await pauses that function until a value settles.",
+    "related": [
+      "event-loop"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "event-loop",
+    "idx": 9,
+    "name": "Event loop",
+    "aliases": [
+      "event loop",
+      "microtask",
+      "task",
+      "main thread"
+    ],
+    "summary": "The browser event loop coordinates tasks, microtasks, and rendering opportunities. Long-running JavaScript can delay user input and painting.",
+    "related": [
+      "abortcontroller"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "abortcontroller",
+    "idx": 10,
+    "name": "AbortController",
+    "aliases": [
+      "abortcontroller",
+      "abort",
+      "cancel fetch",
+      "timeout"
+    ],
+    "summary": "AbortController signals cancellation to operations that support AbortSignal, including fetch. Cancellation is cooperative.",
+    "related": [
+      "content-security-policy"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "content-security-policy",
+    "idx": 11,
+    "name": "Content Security Policy",
+    "aliases": [
+      "content security policy",
+      "csp",
+      "script src",
+      "connect src"
+    ],
+    "summary": "Content Security Policy restricts which sources and execution forms a page may use. It can reduce the impact of script injection.",
+    "related": [
+      "cross-origin-isolation"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "cross-origin-isolation",
+    "idx": 12,
+    "name": "Cross-origin isolation",
+    "aliases": [
+      "cross-origin isolation",
+      "coop",
+      "coep",
+      "sharedarraybuffer"
+    ],
+    "summary": "Cross-origin isolation is a browser state enabled by compatible opener and embedder policies. It allows capabilities such as shared memory in supported contexts.",
+    "related": [
+      "accessible-form"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "accessible-form",
+    "idx": 13,
+    "name": "Accessible form",
+    "aliases": [
+      "accessible form",
+      "accessibility",
+      "label",
+      "keyboard",
+      "aria"
+    ],
+    "summary": "An accessible form gives controls meaningful labels, supports keyboard use, and exposes feedback without relying only on color.",
+    "related": [
+      "responsive-layout"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "responsive-layout",
+    "idx": 14,
+    "name": "Responsive layout",
+    "aliases": [
+      "responsive layout",
+      "responsive",
+      "viewport",
+      "mobile",
+      "media query"
+    ],
+    "summary": "Responsive layout adapts to available space, input methods, and user settings. It includes content behavior as well as breakpoints.",
+    "related": [
+      "performance-measurement"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  },
+  {
+    "id": "performance-measurement",
+    "idx": 15,
+    "name": "Performance measurement",
+    "aliases": [
+      "performance measurement",
+      "latency",
+      "p95",
+      "benchmark",
+      "cold start"
+    ],
+    "summary": "Performance measurement separates startup, steady-state work, and user-visible response time. One fast average can hide expensive first visits.",
+    "related": [
+      "webassembly"
+    ],
+    "fragmentKeys": [
+      "int",
+      "ex",
+      "form",
+      "app",
+      "def"
+    ]
+  }
+]

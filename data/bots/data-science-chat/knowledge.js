@@ -1,5 +1,5 @@
-export const KB_VERSION = '1.0.0';
-export const KB_UPDATED = '2026-05-23';
+export const KB_VERSION = '2.0.0';
+export const KB_UPDATED = '2026-09-09';
 
 export function kb(id, name, aliases, summary, f, related = []) {
   return { id, name, aliases: [name.toLowerCase(), ...aliases.map(a => a.toLowerCase())], summary, f, related };
@@ -19,7 +19,7 @@ export const KB = [
            'NumPy arrays are like Python lists but designed for math: they\'re homogeneous and support element-wise operations directly.'],
     ex: ['pd.read_csv("sales.csv") loads a CSV into a DataFrame; df.groupby("region").sales.sum() aggregates by region.',
          'np.array([1, 2, 3]) * 2 yields array([2, 4, 6]) — the multiplication applied element-wise automatically.'],
-    form: ['pandas is built on top of NumPy; a DataFrame column (Series) is essentially a NumPy array with an index.',
+    form: ['A Series has an index and a dtype; its data can use NumPy arrays or extension arrays, including nullable and Arrow-backed types.',
            'NumPy uses BLAS/LAPACK for optimized linear algebra under the hood.'],
     app: ['The pandas/NumPy stack is the foundation for nearly all Python-based data analysis and machine learning.',
           'Libraries like scikit-learn, statsmodels, and seaborn all consume pandas DataFrames or NumPy arrays.']},
@@ -46,7 +46,7 @@ export const KB = [
     def: ['np.array([1, 2, 3]) creates a 1-D array; np.zeros((3, 4)) creates a 3×4 matrix of zeros.',
            'Broadcasting rules let you add a 1-D array to a 2-D array along compatible dimensions without explicit tiling.'],
     int: ['NumPy operations run in C under the hood — they\'re orders of magnitude faster than Python for-loops.',
-           'Arrays are fixed-type and stored contiguously in memory, which makes them cache-friendly and parallelizable.'],
+           'NumPy arrays have a dtype and strides; views can be non-contiguous. Layout and vectorization affect speed.'],
     ex: ['np.mean(arr), np.std(arr), np.sum(arr) compute statistics in one call across the whole array.',
          'arr[arr > 5] filters an array to only elements greater than 5 (boolean indexing).'],
     form: ['np.dot(a, b) computes the dot product; np.matmul(a, b) or a @ b computes matrix multiplication.',
@@ -580,3 +580,112 @@ export const KB = [
           'For supervised dimensionality reduction, Linear Discriminant Analysis (LDA) maximizes class separability rather than variance.']},
     ['pca', 'feature_engineering', 'clustering', 'standardization']),
 ];
+
+// September 2026: worked examples and evaluation literacy.
+KB.push(...[
+  {
+    "id": "grouped_validation",
+    "name": "Grouped cross-validation",
+    "aliases": [
+      "grouped cross-validation",
+      "group leakage",
+      "groupkfold",
+      "patient split"
+    ],
+    "summary": "Grouped cross-validation keeps observations from the same entity together in one fold. It tests transfer to unseen entities rather than recognition of familiar ones.",
+    "f": {
+      "def": [
+        "Grouped cross-validation keeps observations from the same entity together in one fold. It tests transfer to unseen entities rather than recognition of familiar ones."
+      ],
+      "int": [
+        "Rows are not always independent. Repeated observations from one person or device can leak identity across a random split."
+      ],
+      "ex": [
+        "If one customer has 20 purchases, place all 20 in the same fold when evaluating performance on new customers."
+      ],
+      "form": [
+        "Use a group identifier to partition samples. For future prediction, also respect time; grouping alone does not prevent temporal leakage."
+      ],
+      "app": [
+        "Use grouped evaluation for users, machines, experiments, or subjects with repeated measurements."
+      ]
+    },
+    "related": [],
+    "sources": [
+      {
+        "title": "scikit-learn: Model evaluation",
+        "url": "https://scikit-learn.org/stable/model_selection.html"
+      }
+    ]
+  },
+  {
+    "id": "calibration",
+    "name": "Probability calibration",
+    "aliases": [
+      "probability calibration",
+      "calibrated probabilities",
+      "reliability diagram",
+      "brier score"
+    ],
+    "summary": "Calibration asks whether predicted probabilities agree with observed frequencies. A model can rank cases well while assigning misleading probability values.",
+    "f": {
+      "def": [
+        "Calibration asks whether predicted probabilities agree with observed frequencies. A model can rank cases well while assigning misleading probability values."
+      ],
+      "int": [
+        "Among cases assigned a probability near 0.7, roughly 70% should be positive in a well-calibrated, representative sample."
+      ],
+      "ex": [
+        "A classifier predicts 0.9 for 100 cases but only 60 are positive. Those predictions are overconfident even if the ranking is useful."
+      ],
+      "form": [
+        "For binary outcomes, Brier score is the mean of (p−y)². It reflects calibration and other predictive properties, not calibration alone."
+      ],
+      "app": [
+        "Fit a calibrator without leaking test labels, then assess reliability and task-specific decision costs."
+      ]
+    },
+    "related": [],
+    "sources": [
+      {
+        "title": "scikit-learn: Model evaluation",
+        "url": "https://scikit-learn.org/stable/model_selection.html"
+      }
+    ]
+  },
+  {
+    "id": "dataset_shift",
+    "name": "Dataset shift",
+    "aliases": [
+      "dataset shift",
+      "data drift",
+      "distribution shift",
+      "concept drift"
+    ],
+    "summary": "Dataset shift occurs when the distribution encountered during use differs from the training distribution. It can affect inputs, labels, or their relationship.",
+    "f": {
+      "def": [
+        "Dataset shift occurs when the distribution encountered during use differs from the training distribution. It can affect inputs, labels, or their relationship."
+      ],
+      "int": [
+        "An accurate past model may fail when the world or the measurement process changes."
+      ],
+      "ex": [
+        "A sensor replacement changes the range of measured values even though the physical process is similar."
+      ],
+      "form": [
+        "Covariate shift changes P(X); label shift changes P(Y); concept drift commonly refers to a change in P(Y|X). Real changes may combine them."
+      ],
+      "app": [
+        "Monitor input quality and labeled performance where available. A drift detector signals change, not necessarily a need to retrain."
+      ]
+    },
+    "related": [],
+    "sources": [
+      {
+        "title": "scikit-learn: Model evaluation",
+        "url": "https://scikit-learn.org/stable/model_selection.html"
+      }
+    ]
+  }
+]);

@@ -1,35 +1,19 @@
 # ReLU.chat
 
-> Free, browser-based, privacy-first open-source chatbots that run entirely in your browser. No servers, no LLMs, no tracking.
+> Six free learning assistants. Questions are processed locally in the browser; page and optional model downloads use the network.
 
-## Overview
+## Chatbots
+- [Game Theory Chat](https://relu.chat/chat/game-theory-chat/): On-device NLU assistant for game theory concepts 80 topics.
+- [Golden Age Inquiry](https://relu.chat/chat/golden-age-inquiry/): Explore Islamic Golden Age science and philosophy 50 topics.
+- [Data Science Chat](https://relu.chat/chat/data-science-chat/): On-device NLU assistant for data science and ML concepts 41 topics.
+- [Reinforcement Learning Chat](https://relu.chat/chat/reinforcement-learning-chat/): Learn how agents choose actions: rewards, value functions, bandits, Q-learning, and policy gradients. 16 topics.
+- [Linear Algebra Chat](https://relu.chat/chat/linear-algebra-chat/): Build intuition for vectors, matrices, eigenvalues, projections, and the linear algebra behind machine learning. 16 topics.
+- [Web Platform Chat](https://relu.chat/chat/web-platform-chat/): Understand browser JavaScript, HTTP caching, WebAssembly, workers, accessibility, and local data storage. 16 topics.
 
-ReLU.chat is an open-source platform for interactive on-device chatbots. All NLP processing happens in the browser using a quantized ONNX sentence-transformer (all-MiniLM-L6-v2, 384-dim, ~22MB), field-weighted BM25 sparse retrieval, dense-sparse ensemble ranking, and a reinforcement-learning-trained MLP policy network. No data ever leaves the device.
+## Learn and inspect
+- [Learning guides](https://relu.chat/blog/)
+- [Interactive ML tools](https://relu.chat/tools/)
+- [Architecture and limits](https://relu.chat/how-it-works.html)
+- [Policy evaluation](https://relu.chat/data/policy-evaluation.json)
 
-## Key Pages
-
-- [Home](https://relu.chat/) — Landing page with feature overview
-- [How It Works](https://relu.chat/how-it-works.html) — Full technical architecture
-- [Blog](https://relu.chat/blog/) — Technical articles on on-device AI and NLP (48 posts)
-
-## Chatbots (try them in your browser)
-
-- [Game Theory Chat](https://relu.chat/chat/game-theory-chat/) — On-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma and 55+ topics with LaTeX math.
-- [Golden Age Inquiry](https://relu.chat/chat/golden-age-inquiry/) — On-device assistant for the science and philosophy of the Islamic Golden Age (8th-14th centuries): algebra, optics, astronomy, medicine.
-- [Data Science Chat](https://relu.chat/chat/data-science-chat/) — On-device assistant for data science and ML: pandas, NumPy, statistics, classification, regression, clustering.
-
-## Architecture
-
-- **Embedding**: all-MiniLM-L6-v2 (quantized ONNX, 384-dim)
-- **Retrieval**: BM25 sparse (k1=1.5, b=0.75, field-weighted + bigrams) + dense cosine ensemble
-- **Policy**: MLP 25->128->64->6 action heads (~13K params), RL-trained (REINFORCE), int8-quantized
-- **Runtime**: Pure browser JavaScript, WebAssembly, ONNX Runtime, Web Workers
-- **Storage**: Client-side only (IndexedDB, no server state)
-
-## Source Code
-
-GitHub: https://github.com/yunusemrejr/relu-chat (MIT license)
-
-## Contact
-
-For questions, open an issue on GitHub or visit the repository.
+These are curated retrieval assistants, not general-purpose language models. They can misunderstand questions and do not execute code or solve arbitrary exercises. Offline use requires previously loaded assets.

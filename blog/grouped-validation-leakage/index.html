@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Data Leakage: Split by Entity Before You Train — ReLU.chat</title>
+<meta name="description" content="Why random row splits overstate performance on repeated users, devices, or experiments, and how grouped validation changes the question.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/grouped-validation-leakage/">
+
+<meta property="og:title" content="Data Leakage: Split by Entity Before You Train">
+<meta property="og:description" content="Why random row splits overstate performance on repeated users, devices, or experiments, and how grouped validation changes the question.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/grouped-validation-leakage/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-09T14:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="data-science">
+<meta property="article:tag" content="evaluation">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Data Leakage: Split by Entity Before You Train">
+<meta name="twitter:description" content="Why random row splits overstate performance on repeated users, devices, or experiments, and how grouped validation changes the question.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<meta name="theme-color" content="#060708">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/fonts/sora.css">
+<link rel="stylesheet" href="/assets/shared-design.css?v=14">
+<link rel="stylesheet" href="/assets/css/article.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/grouped-validation-leakage/#webpage",
+      "url": "https://relu.chat/blog/grouped-validation-leakage/",
+      "name": "Data Leakage: Split by Entity Before You Train",
+      "description": "Why random row splits overstate performance on repeated users, devices, or experiments, and how grouped validation changes the question.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/grouped-validation-leakage/#article",
+      "headline": "Data Leakage: Split by Entity Before You Train",
+      "description": "Why random row splits overstate performance on repeated users, devices, or experiments, and how grouped validation changes the question.",
+      "datePublished": "2026-09-09T14:00:00.000Z",
+      "dateModified": "2026-09-09T14:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/grouped-validation-leakage/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "data-science, evaluation"
+    }
+  ]
+}
+</script>
+
+
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/assets/logo.png" alt="" width="24" height="24">ReLU.chat</a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/chat/">Chat</a></li>
+      <li><a href="/how-it-works.html">How It Works</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+    <a href="/#showcase" class="nav-cta"><span class="nav-label">Try Chat</span></a>
+  </div>
+</nav>
+
+<main id="main-content">
+<article class="article-container">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Data Leakage: Split by Entity Before You Train</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">data-science</span><span class="article-tag">evaluation</span></div>
+
+  <h1 class="article-hero-title">Data Leakage: Split by Entity Before You Train</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-09T14:00:00.000Z">September 9, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+
+  </div>
+
+  <div class="article-divider"></div>
+
+
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-rows-versus-independent-entities">Rows versus independent entities</a></li><li><a href="#section-fit-preprocessing-inside-each-split">Fit preprocessing inside each split</a></li><li><a href="#section-time-is-a-separate-constraint">Time is a separate constraint</a></li><li><a href="#section-inspect-the-split-not-just-the-score">Inspect the split, not just the score</a></li><li><a href="#section-interpret-a-lower-score-usefully">Interpret a lower score usefully</a></li></ol></nav><div class="article-body">
+    <p>A model can appear to generalize while recognizing examples it has effectively seen before. Randomly splitting rows does not prevent that when several rows belong to the same person, device, experiment, or document.</p>
+
+<p>The first question is not which splitter to call. It is what future situation the evaluation should represent.</p>
+
+<h2 id="section-rows-versus-independent-entities">Rows versus independent entities</h2>
+
+<p>Suppose a dataset contains 1,000 measurements from 50 machines. Each machine contributes 20 measurements and has a characteristic sensor offset. A random row split will usually put measurements from the same machine in both training and test sets.</p>
+
+<p>A model may use the offset as a shortcut. Its score then describes additional measurements from familiar machines more closely than performance on a new machine.</p>
+
+<p>If deployment means new machines, assign every row from one machine to the same fold. The model must then transfer across entities rather than relying on their repeated signatures.</p>
+
+<h2 id="section-fit-preprocessing-inside-each-split">Fit preprocessing inside each split</h2>
+
+<p>Grouping does not fix preprocessing leakage. Imputation values, scaling statistics, feature selection, and dimensionality reduction must be learned from the training portion only.</p>
+
+<p>A pipeline can keep those operations together with the estimator. During cross-validation, the training fold fits the preprocessing and model; the validation fold only receives the resulting transformations and predictions.</p>
+
+<p>A feature built from the full dataset can leak even if the final estimator is inside a pipeline. Inspect feature construction as well as the split code.</p>
+
+<h2 id="section-time-is-a-separate-constraint">Time is a separate constraint</h2>
+
+<p>If the task predicts future observations, preserve chronology. Grouping alone can still train on future measurements and evaluate on earlier ones. Conversely, a time split may retain familiar entities when the intended task is transfer to new entities.</p>
+
+<p>Sometimes both constraints matter. State the deployment question explicitly: future data from existing machines, data from unseen machines, or future data from unseen machines. Each requires a different evaluation design.</p>
+
+<h2 id="section-inspect-the-split-not-just-the-score">Inspect the split, not just the score</h2>
+
+<p>Count unique entities in each fold and check that the intended intersections are empty. Inspect date ranges and label availability. Verify that duplicated records, derived windows, or near-identical documents do not cross the boundary under different identifiers.</p>
+
+<p>Report the number of independent entities as well as the number of rows. Ten thousand rows from five machines do not provide the same evidence as ten thousand independent machines.</p>
+
+<h2 id="section-interpret-a-lower-score-usefully">Interpret a lower score usefully</h2>
+
+<p>A grouped score may drop sharply. That can be a better estimate of the actual task rather than a worse model. Use the result to identify missing variation, unstable features, and the need for more representative data.</p>
+
+<p>See <a href="https://scikit-learn.org/stable/common_pitfalls.html" rel="noopener">scikit-learn’s common pitfalls</a> and <a href="https://scikit-learn.org/stable/model_selection.html" rel="noopener">model-selection documentation</a>. <a href="/chat/data-science-chat/?q=Explain%20grouped%20cross-validation" rel="noopener">Ask Data Science Chat about grouped validation</a>.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><p><a href="/chat/data-science-chat/">Explore this subject with a free chatbot →</a></p><ul><li><a href="/blog/least-squares-without-inverse/">Least Squares Without Computing an Inverse</a></li><li><a href="/blog/precision-recall-small-example/">Precision and Recall: A 100-Case Example</a></li><li><a href="/blog/reward-design-small-chatbot/">Reward Design for a Small Learning Chatbot</a></li></ul></aside><div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Data%20Leakage%3A%20Split%20by%20Entity%20Before%20You%20Train&url=https%3A%2F%2Frelu.chat%2Fblog%2Fgrouped-validation-leakage%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fgrouped-validation-leakage%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <p><a href="/">ReLU.chat</a> — MIT licensed open-source project</p>
+  <p style="margin-top:4px"><a href="https://github.com/yunusemrejr/relu-chat">View on GitHub</a> &middot; <a href="/blog/feed.xml">RSS</a> &middot; <a href="/llms.txt">llms.txt</a></p>
+</footer>
+
+
+</body>
+</html>
