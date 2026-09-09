@@ -1,8 +1,8 @@
-export const KB_VERSION = '2.0.0';
+export const KB_VERSION = '2.0.1';
 export const KB_UPDATED = '2026-09-09';
 
-export function kb(id, name, aliases, summary, f, related = []) {
-  return { id, name, aliases: [name.toLowerCase(), ...aliases.map(a => a.toLowerCase())], summary, f, related };
+export function kb(id, name, aliases, summary, f, related = [], sources = []) {
+  return { id, name, aliases: [name.toLowerCase(), ...aliases.map(a => a.toLowerCase())], summary, f, related, sources };
 }
 
 export function entryText(e) {
@@ -376,29 +376,31 @@ export const KB = [
     def: ['An underfit model has high training error and high test error — it hasn\'t learned the signal, not just the noise.',
            'Causes: model too simple for the true relationship, features not informative, training stopped too early.'],
     int: ['Underfitting is the opposite problem from overfitting — you need a more powerful model or better features, not more regularization.',
-           'The bias-variance tradeoff: reducing overfitting increases variance; reducing underfitting increases bias.'],
+           'In the classical bias-variance tradeoff, increasing model flexibility can reduce bias while increasing variance; stronger regularization often does the reverse.'],
     ex: ['Fitting a straight line to data that has a quadratic relationship — no matter how much data you add, the line will always miss the curve.',
          'A sentiment classifier that just counts positive and negative words, missing context and negation.'],
     form: ['Irreducible error sets a floor: even the best possible model has some error due to noise in $Y = f(X) + \\epsilon$.',
            'The "just noticeable difference" in model capacity: compare training error to a human-baseline or theoretical minimum.'],
     app: ['Diagnose underfitting by comparing training error to the Bayes error (ideally zero for deterministic problems).',
           'Fix underfitting by increasing model capacity, adding non-linear features, reducing regularization, or engineering better features.']},
-    ['overfitting', 'bias_variance', 'feature_engineering', 'regularization']),
+    ['overfitting', 'bias_variance', 'feature_engineering', 'regularization'],
+    [{title: 'scikit-learn: Validation curves and bias–variance', url: 'https://scikit-learn.org/stable/modules/learning_curve.html'}]),
 
   kb('cross_validation', 'Cross-Validation', ['cross validation', 'cv', 'k-fold'],
-    'Cross-validation splits data into $k$ folds, training on $k-1$ and validating on the held-out fold, rotating until every fold has been the test set.',
+    'Cross-validation evaluates a learning procedure on held-out data. In k-fold CV, each fold takes a turn as the validation set while the model trains on the remaining folds.',
     {
     def: ['$k$-fold CV trains $k$ models on $\\frac{k-1}{k}$ of the data each, giving $k$ validation scores averaged into a robust estimate.',
-           'Leave-one-out CV (LOOCV) is $k = n$, using all $n-1$ points per fold — unbiased but computationally expensive.'],
+           'Leave-one-out CV uses $k = n$ folds and trains on $n-1$ observations each time. Its test-error estimate often has low bias but can have high variance, and fitting $n$ models can be expensive.'],
     int: ['CV estimates how the model will perform on unseen data, accounting for the fact that a single train-test split might be unlucky.',
-           'The $k$ validation scores themselves have variance — a high variance across folds suggests an unstable model.'],
+           'Scores can vary across folds because of model instability or differences in the held-out observations. The folds share training data, so their scores are not independent.'],
     ex: ['5-fold CV on 1000 samples: 5 models each trained on 800 samples and tested on 200, giving 5 accuracy scores averaged.',
          'Stratified KFold preserves class proportions in each fold, important for imbalanced classification.'],
     form: ['Expected generalization error estimate: $\\hat{E} = \\frac{1}{k}\\sum_{i=1}^k \\hat{\\mathcal{L}}_i$, where $\\hat{\\mathcal{L}}_i$ is the validation loss on fold $i$.',
-           'Nested CV separates model selection (inner loop) from evaluation (outer loop), giving an unbiased performance estimate.'],
+           'Nested CV separates hyperparameter selection in the inner loop from evaluation in the outer loop, reducing the optimistic bias from selecting and evaluating on the same validation scores.'],
     app: ['Use CV to compare models, tune hyperparameters (grid search over $C$, $k$, etc.), and select features without overfitting to the validation set.',
           'For time series, use forward-chaining (expanding window) or blocked CV to avoid lookahead bias.']},
-    ['train_test_split', 'overfitting', 'model_selection', 'leakage']),
+    ['train_test_split', 'overfitting', 'model_selection', 'leakage'],
+    [{title: 'scikit-learn: Cross-validation', url: 'https://scikit-learn.org/stable/modules/cross_validation.html'}]),
 
   kb('leakage', 'Data Leakage', ['data leakage', 'leak', 'lookahead bias'],
     'Data leakage occurs when information from the test set sneaks into the training process, making evaluation overly optimistic.',

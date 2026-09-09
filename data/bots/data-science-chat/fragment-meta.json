@@ -5416,7 +5416,7 @@
         },
         {
           "id": "frag_underfitting_int_002",
-          "text": "The bias-variance tradeoff: reducing overfitting increases variance; reducing underfitting increases bias.",
+          "text": "In the classical bias-variance tradeoff, increasing model flexibility can reduce bias while increasing variance; stronger regularization often does the reverse.",
           "meta": {
             "truth_confidence": 0.95,
             "difficulty": 1,
@@ -5431,7 +5431,7 @@
             "avoid_with": [],
             "compatible_with": [],
             "source_confidence": 0.9,
-            "length_tokens": 15
+            "length_tokens": 20
           }
         }
       ],
@@ -5561,12 +5561,18 @@
           }
         }
       ]
-    }
+    },
+    "sources": [
+      {
+        "title": "scikit-learn: Validation curves and bias–variance",
+        "url": "https://scikit-learn.org/stable/modules/learning_curve.html"
+      }
+    ]
   },
   "cross_validation": {
     "entry_id": "cross_validation",
     "name": "Cross-Validation",
-    "summary": "Cross-validation splits data into $k$ folds, training on $k-1$ and validating on the held-out fold, rotating until every fold has been the test set.",
+    "summary": "Cross-validation evaluates a learning procedure on held-out data. In k-fold CV, each fold takes a turn as the validation set while the model trains on the remaining folds.",
     "related": [
       "train_test_split",
       "overfitting",
@@ -5597,7 +5603,7 @@
         },
         {
           "id": "frag_cross_validation_def_002",
-          "text": "Leave-one-out CV (LOOCV) is $k = n$, using all $n-1$ points per fold — unbiased but computationally expensive.",
+          "text": "Leave-one-out CV uses $k = n$ folds and trains on $n-1$ observations each time. Its test-error estimate often has low bias but can have high variance, and fitting $n$ models can be expensive.",
           "meta": {
             "truth_confidence": 0.95,
             "difficulty": 3,
@@ -5612,7 +5618,7 @@
             "avoid_with": [],
             "compatible_with": [],
             "source_confidence": 0.9,
-            "length_tokens": 24
+            "length_tokens": 33
           }
         }
       ],
@@ -5639,7 +5645,7 @@
         },
         {
           "id": "frag_cross_validation_int_002",
-          "text": "The $k$ validation scores themselves have variance — a high variance across folds suggests an unstable model.",
+          "text": "Scores can vary across folds because of model instability or differences in the held-out observations. The folds share training data, so their scores are not independent.",
           "meta": {
             "truth_confidence": 0.95,
             "difficulty": 3,
@@ -5654,7 +5660,7 @@
             "avoid_with": [],
             "compatible_with": [],
             "source_confidence": 0.9,
-            "length_tokens": 23
+            "length_tokens": 26
           }
         }
       ],
@@ -5723,7 +5729,7 @@
         },
         {
           "id": "frag_cross_validation_form_002",
-          "text": "Nested CV separates model selection (inner loop) from evaluation (outer loop), giving an unbiased performance estimate.",
+          "text": "Nested CV separates hyperparameter selection in the inner loop from evaluation in the outer loop, reducing the optimistic bias from selecting and evaluating on the same validation scores.",
           "meta": {
             "truth_confidence": 0.95,
             "difficulty": 1,
@@ -5738,7 +5744,7 @@
             "avoid_with": [],
             "compatible_with": [],
             "source_confidence": 0.9,
-            "length_tokens": 21
+            "length_tokens": 28
           }
         }
       ],
@@ -5784,7 +5790,13 @@
           }
         }
       ]
-    }
+    },
+    "sources": [
+      {
+        "title": "scikit-learn: Cross-validation",
+        "url": "https://scikit-learn.org/stable/modules/cross_validation.html"
+      }
+    ]
   },
   "leakage": {
     "entry_id": "leakage",

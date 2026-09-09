@@ -653,7 +653,11 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
       const wantFrag = plan.fragmentPlan && plan.fragmentPlan[ei] && plan.fragmentPlan[ei].cats && plan.fragmentPlan[ei].cats.includes(cat);
       if (!wantFrag) continue;
 
-      const frag = await selectFragment(entry, cat, qEmb, embedCached, config, plan._recentlyUsedFragments);
+      // Introduce a new subject with its overview before selecting narrower details.
+      const introduce = cat === 'def' && intent === 'definition' && plan.mode !== 'comparison'
+        && lastTopic !== topEntries[ei] && typeof entry.summary === 'string' && entry.summary.trim();
+      const frag = introduce ? entry.summary
+        : await selectFragment(entry, cat, qEmb, embedCached, config, plan._recentlyUsedFragments);
       if (!frag) continue;
       selectedFragments.push(frag);
 
@@ -764,7 +768,7 @@ export async function composeV2(query, qEmb, embedCached, entryEmb, intentEmb, l
   if (lastEntry?.related && lastEntry.related.length > 0 && plan.guardrails?.requireCite !== true && budgetConstraints.allowRelated) {
     const relNames = lastEntry.related.slice(0, 3).map(rid => {
       const found = KB.findIndex(e => e.id === rid);
-      return found >= 0 ? KB[found].name : rid;
+      return found >= 0 ? KB[found].name : null;
     }).filter(Boolean);
     if (relNames.length > 0) {
       text += '\n\n' + pick(SEE_ALSO_PREFIXES) + relNames.join(', ') + '.';

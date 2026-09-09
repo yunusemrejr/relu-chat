@@ -4,6 +4,8 @@ Six learning assistants now cover 219 topics: Game Theory, Golden Age Inquiry, D
 
 The shared chat interface understands casual messages such as “hey sup,” “what do you mean?”, “howww,” and “ok got it,” without losing the current topic. It includes clearer topic routing and follow-ups, source links, mobile input improvements, chat reset/export, immediate complete answers, and optional semantic matching. The homepage, article navigation, blog search, structured data, and 79-page sitemap were updated. Timed sales popups were removed.
 
+Definitions introduce a new subject with its curated overview before moving into details. Related-topic suggestions omit unresolved internal IDs. Data Science knowledge and exported packs include corrected bias–variance and cross-validation explanations, with scikit-learn references.
+
 A CPU-only trainer matches the deployed architecture and completes the recorded run in 3.101 seconds. Joint held-out routing accuracy improved from 93.6% to 98.6%; supervised and REINFORCE checkpoints tied on that test. These scores do not measure factual-answer accuracy. Reproducible results and scope are in `data/policy-evaluation.json`.
 
 The policy now has real fixed-memory WebAssembly inference with JavaScript parity. Keyword indexing is substantially faster in the recorded microbenchmark. Large model downloads are optional, public embeddings can be cached, and mutable assets bypass CDN freshness overrides.

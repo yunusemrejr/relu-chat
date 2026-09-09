@@ -1,6 +1,6 @@
 {
   "botId": "data-science-chat",
-  "kbVersion": "2.0.0",
+  "kbVersion": "2.0.1",
   "model": {
     "embedding": "all-MiniLM-L6-v2",
     "dim": 384,

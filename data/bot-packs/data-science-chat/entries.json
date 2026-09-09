@@ -639,7 +639,7 @@
       "cv",
       "k-fold"
     ],
-    "summary": "Cross-validation splits data into $k$ folds, training on $k-1$ and validating on the held-out fold, rotating until every fold has been the test set.",
+    "summary": "Cross-validation evaluates a learning procedure on held-out data. In k-fold CV, each fold takes a turn as the validation set while the model trains on the remaining folds.",
     "related": [
       "train_test_split",
       "overfitting",

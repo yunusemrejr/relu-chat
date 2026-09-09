@@ -41,8 +41,10 @@ for(const bot of bots)test(bot.name+' real retrieval, composition, follow-up and
  }
  const [q,id,next,nextId]=prompts[bot.id];
  const first=await ask(q);assert.equal(KB[first.plan.topics[0]]?.id,id,JSON.stringify(first.plan));
+ assert.ok(first.result.text.includes(KB[first.plan.topics[0]].summary),'A new subject starts with its overview');
  const follow=await ask('Give an example');assert.equal(KB[follow.plan.topics[0]]?.id,id);assert.equal(follow.plan.intent,'example');
  const switched=await ask(next);assert.equal(KB[switched.plan.topics[0]]?.id,nextId);
+ assert.ok(switched.result.text.includes(KB[switched.plan.topics[0]].summary),'Switching subjects introduces the new overview');
  session.reset();const social=await ask('hello');assert.equal(social.plan.mode,'greeting');assert.equal(social.plan.topics.length,0);
  const help=await ask('help');assert.equal(help.plan.mode,'help');
  session.reset();const unknown=await ask('Book me a taxi to the airport');assert.equal(unknown.plan.mode,'off_topic',bot.id+': '+unknown.result.text);
