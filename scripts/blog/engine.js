@@ -882,6 +882,10 @@ The fixed-memory WASM module uses 128 KiB and matches JavaScript outputs on 40 e
 
 Chat questions are not sent to a language-generation API. The host receives normal page and asset requests. Optional model downloads use the site origin. Following external links, purchasing an ebook, or submitting a separate signup form involves the respective service. Browser storage contains public assets and knowledge embeddings, not saved chat transcripts.
 
+## Book
+
+- [How to Remain Valuable When Intelligence Becomes Cheap](https://theknowledgeproject.gumroad.com/l/remainvaluable) — a 240-page practical guide to the human, economic, and strategic advantages that stay valuable when AI can perform most cognitive work. PDF and EPUB.
+
 ## Learning guides
 
 ${sortedPosts.length} original technical articles at https://relu.chat/blog/ (RSS: https://relu.chat/blog/feed.xml):
