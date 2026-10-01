@@ -13,6 +13,13 @@
  *   node test-policy-runtime.js --json                 # JSON output for CI
  */
 
+// Deterministic randomness: the tests build random MLP weights and sample plans, and an
+// unseeded run occasionally produced a comparison plan with <2 topics (flaky CI).
+{
+  let s = 0x2f6e2b1;
+  Math.random = () => { s = (s + 0x6d2b79f5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+
 import { validatePlan, DEFAULT_PLAN, PLAN_SCHEMA, isAnswerPlanLike } from '../../policy/action-schema.js';
 import { extractPolicyFeatures, packFeatures, unpackFeatures } from '../../policy/feature-extractor.js';
 import { planAnswerHeuristic } from '../../policy/policy-runtime.js';
