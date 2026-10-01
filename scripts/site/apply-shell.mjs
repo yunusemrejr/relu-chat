@@ -60,6 +60,7 @@ export function transform(file, html) {
     out = out.replace('</head>', () => `${head()}\n</head>`);
   }
   out = out.replace(CSS_LINK, (m, a, _s, p, _v, z) => `${a}/${p}?v=${versioned('/' + p).split('?v=')[1]}${z}`);
+  out = out.replace(/(src=")\/assets\/js\/(home|learn-filter)\.js(\?v=[^"]*)?(")/g, (m, a, n, _v, z) => `${a}${versioned(`/assets/js/${n}.js`)}${z}`);
 
   // 2) nav
   let navHtml;

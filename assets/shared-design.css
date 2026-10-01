@@ -528,7 +528,10 @@ svg.is-in .a-slide { animation: slideIn 0.7s var(--ease-out) both; animation-del
 
 /* Word-by-word headline rise: each word sits in its own clip, set up by fx.js */
 .split-words .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.12em; margin-bottom: -0.12em; }
-.split-words .w > span { display: inline-block; transform: translateY(105%); animation: wordUp 0.8s var(--ease-out) forwards; animation-delay: calc(var(--i, 0) * 60ms + 120ms); }
+.split-words .w > span { display: inline-block; transform: translateY(105%); animation: wordUp 0.65s var(--ease-out) forwards; animation-delay: calc(var(--i, 0) * 45ms); }
+/* Hold the heading until fx.js has split it, so it never flashes whole and then re-animates */
+.js .split-words:not([data-split]) { visibility: hidden; }
+.no-fx .split-words:not([data-split]) { visibility: visible; }
 
 /* Links in prose: the underline draws in */
 .prose-link, .link-draw {

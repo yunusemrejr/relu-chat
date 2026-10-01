@@ -6,6 +6,7 @@ import { SITE, BOOK_COPY, TOOLS, BOTS } from './config.mjs';
 import { bookCard } from './book.mjs';
 import { esc, richText, plain, clip, fmtDate, breadcrumbLd, orgLd, authorLd, document_ } from './render.mjs';
 import { plate } from './home.mjs';
+import { versioned } from './shell.mjs';
 
 // Topics with fewer own words than this stay out of the index (noindex,follow)
 // and the sitemap until the knowledge base grows them. Avoids thin pages.
@@ -180,7 +181,7 @@ export function renderLearnHub(bots) {
 ${index}</section>
 ${bookCard(BOOK_COPY.ml)}
 </div>`;
-  const scripts = `<script src="/assets/js/learn-filter.js" defer data-cfasync="false"></script>`;
+  const scripts = `<script src="${versioned('/assets/js/learn-filter.js')}" defer data-cfasync="false"></script>`;
   const ld = {
     '@context': 'https://schema.org',
     '@graph': [

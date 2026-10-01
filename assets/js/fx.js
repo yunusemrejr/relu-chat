@@ -157,6 +157,7 @@
 
   function init() {
     if (!calm) splitWords();
+    else $$('.split-words').forEach(function (el) { el.dataset.split = '1'; });
     initReveal();
     initInView();
     initTilt();
