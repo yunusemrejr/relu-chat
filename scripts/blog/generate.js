@@ -88,6 +88,12 @@ function generate() {
   console.log('\nCopied discovery files to project root: sitemap.xml, robots.txt, llms.txt, llms-full.txt');
 
   console.log(`\nDone. ${posts.length} posts generated to ${BLOG_OUT}/`);
+
+  // Re-apply everything layered on top of generated pages: book cards, the shared
+  // shell (nav/footer/head), sitemap, llms.txt and the homepage's latest-guides region.
+  const { execFileSync } = require('child_process');
+  execFileSync(process.execPath, [path.join(__dirname, 'add-book-promo.js')], { stdio: 'inherit' });
+  execFileSync(process.execPath, [path.join(ROOT, 'scripts/build-site.mjs')], { stdio: 'inherit' });
 }
 
 generate();

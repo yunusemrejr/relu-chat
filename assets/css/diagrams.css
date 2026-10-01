@@ -9,9 +9,9 @@
   max-width: 100%;
   overflow-x: auto;
   margin: 1rem 0;
-  border: 1px solid var(--border, #1f2937);
+  border: 1px solid var(--border);
   border-radius: var(--radius, 6px);
-  background: var(--bg-elevated, #151b23);
+  background: var(--bg-elevated);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +27,7 @@
 
 /* ----- Caption ----- */
 .relu-diagram .caption {
-  color: var(--text-muted, #6b7280);
+  color: var(--text-muted);
   font-size: 0.8125rem;
   font-style: italic;
   margin-top: 0.5rem;
@@ -41,9 +41,9 @@
   font-family: monospace, 'Courier New', Courier;
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: var(--text-secondary, #9ca3af);
+  color: var(--text-secondary);
   padding: 1rem;
-  background: var(--bg-surface, #1f2937);
+  background: var(--bg-surface);
   border-radius: var(--radius, 6px);
   white-space: pre-wrap;
   overflow-x: auto;
@@ -62,39 +62,39 @@
 .relu-diagram table th,
 .relu-diagram table td {
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border, #1f2937);
+  border: 1px solid var(--border);
   text-align: center;
-  color: var(--text-primary, #f9fafb);
+  color: var(--text-primary);
 }
 
 .relu-diagram table th {
-  background: var(--bg-surface, #1f2937);
+  background: var(--bg-surface);
   font-weight: 600;
-  color: var(--text-secondary, #9ca3af);
+  color: var(--text-secondary);
 }
 
 .relu-diagram table .highlight {
-  border: 2px solid var(--accent, #14b8a6);
-  background: var(--bg-surface, #1f2937);
+  border: 2px solid var(--accent);
+  background: var(--bg-surface);
   font-weight: 600;
 }
 
 /* ----- Highlight styling (payoff matrices) ----- */
 .relu-diagram .highlight {
-  border-color: var(--accent, #14b8a6) !important;
-  background: var(--bg-surface, #1f2937) !important;
+  border-color: var(--accent) !important;
+  background: var(--bg-surface) !important;
 }
 
 /* ----- SVG text label classes ----- */
 .relu-diagram-cell-label {
   text-anchor: middle;
-  fill: var(--text-muted, #6b7280);
+  fill: var(--text-muted);
   font-size: 11px;
 }
 
 .relu-diagram-edge-label {
   text-anchor: middle;
-  fill: var(--text-muted, #6b7280);
+  fill: var(--text-muted);
   font-size: 11px;
 }
 
@@ -150,7 +150,7 @@
   height: 100vh;
   z-index: 9999;
   overflow: auto;
-  background: var(--bg, #0d1117);
+  background: var(--bg);
   border: none;
   border-radius: 0;
   padding: 2rem;

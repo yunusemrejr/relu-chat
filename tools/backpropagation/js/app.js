@@ -1,5 +1,7 @@
 (() => {
   'use strict';
+  // Theme-aware canvas colours (see window.reluColors in assets/js/shell.js).
+  const C = new Proxy({}, { get: (_, k) => window.reluColors()[k] });
 
   const canvas = document.getElementById('bp-canvas');
   const ctx = canvas.getContext('2d');
@@ -205,7 +207,7 @@
     // Color code positive/negative gradients
     Object.entries(gradEls).forEach(([key, el]) => {
       const v = g[key] || 0;
-      el.style.color = v > 0.01 ? '#c44130' : v < -0.01 ? '#14b8a6' : 'var(--text-primary)';
+      el.style.color = v > 0.01 ? C.accent2 : v < -0.01 ? C.accent : 'var(--text-primary)';
     });
   }
 
@@ -258,14 +260,14 @@
         if (showBackward && Math.abs(grad) > 0.001) {
           const intensity = Math.min(1, Math.abs(grad) * 3);
           ctx.strokeStyle = grad > 0
-            ? `rgba(196, 65, 48, ${intensity * 0.6})`
-            : `rgba(20, 184, 166, ${intensity * 0.6})`;
+            ? `rgba(${C.accent2Rgb}, ${intensity * 0.6})`
+            : `rgba(${C.accentRgb}, ${intensity * 0.6})`;
           ctx.lineWidth = 1 + intensity * 3;
         } else if (showForward) {
-          ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+          ctx.strokeStyle = `rgba(${C.inkRgb}, 0.06)`;
           ctx.lineWidth = 1;
         } else {
-          ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+          ctx.strokeStyle = `rgba(${C.inkRgb}, 0.04)`;
           ctx.lineWidth = 0.5;
         }
         ctx.stroke();
@@ -285,14 +287,14 @@
       if (showBackward && Math.abs(grad) > 0.001) {
         const intensity = Math.min(1, Math.abs(grad) * 3);
         ctx.strokeStyle = grad > 0
-          ? `rgba(196, 65, 48, ${intensity * 0.6})`
-          : `rgba(20, 184, 166, ${intensity * 0.6})`;
+          ? `rgba(${C.accent2Rgb}, ${intensity * 0.6})`
+          : `rgba(${C.accentRgb}, ${intensity * 0.6})`;
         ctx.lineWidth = 1 + intensity * 3;
       } else if (showForward) {
-        ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+        ctx.strokeStyle = `rgba(${C.inkRgb}, 0.06)`;
         ctx.lineWidth = 1;
       } else {
-        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        ctx.strokeStyle = `rgba(${C.inkRgb}, 0.04)`;
         ctx.lineWidth = 0.5;
       }
       ctx.stroke();
@@ -302,7 +304,7 @@
     const inputVals = [parseFloat(x1Slider.value), parseFloat(x2Slider.value)];
     for (let i = 0; i < 2; i++) {
       drawBpNode(ctx, inputPos[i].x, inputPos[i].y, 22, inputVals[i].toFixed(1), false);
-      ctx.fillStyle = '#9ca3af';
+      ctx.fillStyle = C.text2;
       ctx.font = '10px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`x${i+1}`, inputPos[i].x, inputPos[i].y + 36);
@@ -312,7 +314,7 @@
     for (let j = 0; j < 2; j++) {
       const val = showForward ? (j === 0 ? state.a1 : state.a2) : null;
       drawBpNode(ctx, hiddenPos[j].x, hiddenPos[j].y, 22, val !== null ? val.toFixed(2) : '—', showForward);
-      ctx.fillStyle = '#6b7280';
+      ctx.fillStyle = C.muted;
       ctx.font = '9px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`h${j+1}`, hiddenPos[j].x, hiddenPos[j].y + 36);
@@ -321,19 +323,19 @@
     // Draw output node
     const outVal = showForward ? state.y.toFixed(4) : '—';
     drawBpNode(ctx, outputPos.x, outputPos.y, 26, outVal, showForward);
-    ctx.fillStyle = '#f9fafb';
+    ctx.fillStyle = C.text;
     ctx.font = 'bold 10px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('y', outputPos.x, outputPos.y + 40);
 
     // Draw target
-    ctx.fillStyle = '#6b7280';
+    ctx.fillStyle = C.muted;
     ctx.font = '9px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(`target: ${parseFloat(targetSlider.value).toFixed(1)}`, outputPos.x, outputPos.y + 54);
 
     // Layer labels
-    ctx.fillStyle = '#6b7280';
+    ctx.fillStyle = C.muted;
     ctx.font = '10px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Input (2)', xIn, H_ - 16);
@@ -342,12 +344,12 @@
 
     // Status indicator
     if (showBackward) {
-      ctx.fillStyle = '#14b8a6';
+      ctx.fillStyle = C.accent;
       ctx.font = '9px Inter, sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText('✓ Backpropagation complete — gradients shown on edges', 12, 18);
     } else if (showForward) {
-      ctx.fillStyle = '#6b7280';
+      ctx.fillStyle = C.muted;
       ctx.font = '9px Inter, sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText('Forward pass complete — click Backward Pass for gradients', 12, 18);
@@ -357,8 +359,8 @@
   function drawBpNode(ctx, x, y, r, label, active) {
     if (active) {
       const grad = ctx.createRadialGradient(x, y, r * 0.3, x, y, r * 1.6);
-      grad.addColorStop(0, 'rgba(20, 184, 166, 0.08)');
-      grad.addColorStop(1, 'rgba(20, 184, 166, 0)');
+      grad.addColorStop(0, `rgba(${C.accentRgb}, 0.08)`);
+      grad.addColorStop(1, `rgba(${C.accentRgb}, 0)`);
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(x, y, r * 1.6, 0, Math.PI * 2);
@@ -367,14 +369,14 @@
 
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = active || label !== '—' ? '#1f2937' : '#151b23';
+    ctx.fillStyle = active || label !== '—' ? C.border : C.elev;
     ctx.fill();
-    ctx.strokeStyle = active ? '#14b8a6' : '#374151';
+    ctx.strokeStyle = active ? C.accent : C.borderStrong;
     ctx.lineWidth = active ? 1.5 : 1;
     ctx.stroke();
 
     if (label !== undefined && label !== null) {
-      ctx.fillStyle = active ? '#14b8a6' : '#6b7280';
+      ctx.fillStyle = active ? C.accent : C.muted;
       ctx.font = `${Math.max(9, r * 0.5)}px Inter, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -410,4 +412,5 @@
 
   // Exports for testing
   window.__bp = { forward, backward, reset, state, W, B, sigmoid, relu, sigmoidPrime, reluPrime };
+  document.addEventListener('relu:theme', () => resizeCanvas());
 })();

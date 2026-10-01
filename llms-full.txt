@@ -37,7 +37,7 @@ Chat questions are not sent to a language-generation API. The host receives norm
 
 ## Book
 
-- [How to Remain Valuable When Intelligence Becomes Cheap](https://theknowledgeproject.gumroad.com/l/remainvaluable) — a 240-page practical guide to the human, economic, and strategic advantages that stay valuable when AI can perform most cognitive work. PDF and EPUB.
+- [How to Remain Valuable When Intelligence Becomes Cheap](https://theknowledgeproject.gumroad.com/l/remainvaluable) — a 224-page practical guide to the human, economic, and strategic advantages that stay valuable when AI can perform most cognitive work. PDF and EPUB.
 
 ## Learning guides
 
@@ -109,3 +109,238 @@ Chat questions are not sent to a language-generation API. The host receives norm
 ## Development
 
 The repository contains the shared runtime in core/, policy inference in policy/, six chatbot pages in chat/, and authored knowledge in data/bots/. The bounded CPU trainer is dev/scripts/train-policy-fast.py; its maximum allowed training budget is 540 seconds. See README.md for dataset, training, parity, and regression commands. Source code is MIT licensed.
+
+<!-- learn:start -->
+## Learn: 219 explained topics
+
+### Game theory
+- [Nash Equilibrium](https://relu.chat/learn/game-theory/nash-equilibrium/): A profile of strategies where no player can profit by unilateral deviation.
+- [Prisoner's Dilemma](https://relu.chat/learn/game-theory/prisoners-dilemma/): Canonical 2x2 game where individually rational defection leads to a Pareto-inferior outcome.
+- [Dominant Strategy](https://relu.chat/learn/game-theory/dominant-strategy/): A strategy that yields at least as high a payoff as any alternative regardless of others' play.
+- [Mixed Strategy](https://relu.chat/learn/game-theory/mixed-strategy/): A probability distribution over a player's pure strategies.
+- [Pure Strategy](https://relu.chat/learn/game-theory/pure-strategy/): A deterministic choice of an action from a player's strategy set.
+- [Zero-Sum Game](https://relu.chat/learn/game-theory/zero-sum-game/): A game in which one player's gain exactly offsets the others' losses.
+- [Cooperative Game](https://relu.chat/learn/game-theory/cooperative-game/): A game where binding agreements among coalitions are allowed; analysis focuses on joint payoffs.
+- [Non-Cooperative Game](https://relu.chat/learn/game-theory/non-cooperative-game/): A game in which binding agreements are not possible; each player chooses independently.
+- [Minimax Theorem](https://relu.chat/learn/game-theory/minimax-theorem/): In any finite two-player zero-sum game, max-min and min-max values coincide in mixed strategies.
+- [Extensive-Form Game](https://relu.chat/learn/game-theory/extensive-form-game/): A representation of sequential play using a rooted tree with information sets.
+- [Normal-Form Game](https://relu.chat/learn/game-theory/normal-form-game/): A simultaneous-move representation via strategy sets and payoff functions.
+- [Bayesian Game](https://relu.chat/learn/game-theory/bayesian-game/): A game in which players have private information (types) drawn from a common prior.
+- [Repeated Game](https://relu.chat/learn/game-theory/repeated-game/): A stage game played repeatedly, allowing histories to influence future play.
+- [Evolutionary Game Theory](https://relu.chat/learn/game-theory/evolutionary-game-theory/): Studies strategy frequencies in large populations under selection and mutation.
+- [Evolutionarily Stable Strategy](https://relu.chat/learn/game-theory/evolutionarily-stable-strategy/): A strategy that, if adopted by the population, cannot be invaded by any rare mutant.
+- [Replicator Dynamics](https://relu.chat/learn/game-theory/replicator-dynamics/): ODEs describing how strategy frequencies evolve under selection proportional to fitness.
+- [Stackelberg Competition](https://relu.chat/learn/game-theory/stackelberg-competition/): A sequential duopoly in which a leader commits to an output and the follower best-responds.
+- [Cournot Competition](https://relu.chat/learn/game-theory/cournot-competition/): A simultaneous-move duopoly/oligopoly with quantity as the strategic variable.
+- [Bertrand Competition](https://relu.chat/learn/game-theory/bertrand-competition/): Simultaneous price-setting competition among firms producing a homogeneous good.
+- [Auction Theory](https://relu.chat/learn/game-theory/auction-theory/): Study of resource allocation via bidding mechanisms.
+- [Vickrey Auction](https://relu.chat/learn/game-theory/vickrey-auction/): A sealed-bid auction where the highest bidder wins and pays the second-highest bid.
+- [Mechanism Design](https://relu.chat/learn/game-theory/mechanism-design/): Designing the rules of a game so that equilibrium behavior yields desired outcomes.
+- [Revelation Principle](https://relu.chat/learn/game-theory/revelation-principle/): Any equilibrium outcome of any mechanism can be reproduced by a direct truthful mechanism.
+- [Shapley Value](https://relu.chat/learn/game-theory/shapley-value/): A unique fair allocation in cooperative games satisfying efficiency, symmetry, dummy, and additivity.
+- [Core (of a Cooperative Game)](https://relu.chat/learn/game-theory/core-of-a-cooperative-game/): The set of coalition-stable payoff allocations.
+- [Coalition Formation](https://relu.chat/learn/game-theory/coalition-formation/): Study of which coalitions form and how they share surplus.
+- [Nash Bargaining Solution](https://relu.chat/learn/game-theory/nash-bargaining-solution/): The unique allocation satisfying Pareto-efficiency, symmetry, scale invariance, and IIA.
+- [Rubinstein Bargaining](https://relu.chat/learn/game-theory/rubinstein-bargaining/): A non-cooperative alternating-offers model of bargaining with a unique subgame-perfect outcome.
+- [Correlated Equilibrium](https://relu.chat/learn/game-theory/correlated-equilibrium/): An equilibrium in which players obey recommendations from a common randomization device.
+- [Subgame Perfect Equilibrium](https://relu.chat/learn/game-theory/subgame-perfect-equilibrium/): A Nash equilibrium that also prescribes a Nash equilibrium in every subgame.
+- [Perfect Bayesian Equilibrium](https://relu.chat/learn/game-theory/perfect-bayesian-equilibrium/): A refinement for dynamic games of incomplete information pairing strategies with beliefs.
+- [Trembling-Hand Perfection](https://relu.chat/learn/game-theory/trembling-hand-perfection/): An equilibrium robust to small probabilities of mistakes.
+- [Battle of the Sexes](https://relu.chat/learn/game-theory/battle-of-the-sexes/): A coordination game with asymmetric preferences over the two coordinated outcomes.
+- [Hawk-Dove Game](https://relu.chat/learn/game-theory/hawk-dove-game/): A symmetric 2x2 conflict game used to model animal contests.
+- [Stag Hunt](https://relu.chat/learn/game-theory/stag-hunt/): A coordination game where mutual cooperation on the risky action maximizes welfare.
+- [Chicken Game](https://relu.chat/learn/game-theory/chicken-game/): An anti-coordination game where both players prefer to yield if the other stays the course.
+- [Matching Pennies](https://relu.chat/learn/game-theory/matching-pennies/): A zero-sum 2 2 game with no pure equilibrium and a unique uniform mixed equilibrium.
+- [Ultimatum Game](https://relu.chat/learn/game-theory/ultimatum-game/): A two-stage bargaining game highlighting the gap between rational prediction and observed fairness.
+- [Centipede Game](https://relu.chat/learn/game-theory/centipede-game/): A multi-stage game where backward induction predicts immediate termination despite cooperative gains.
+- [Public-Goods Game](https://relu.chat/learn/game-theory/public-goods-game/): A game in which individuals contribute to a shared good; the efficient outcome is not individually rational.
+- [Tragedy of the Commons](https://relu.chat/learn/game-theory/tragedy-of-the-commons/): Overuse of a shared resource when individual users ignore the externality they impose on others.
+- [Signaling Games](https://relu.chat/learn/game-theory/signaling-games/): Dynamic incomplete-information games where an informed sender chooses a signal that a receiver observes.
+- [Screening Games](https://relu.chat/learn/game-theory/screening-games/): Games where an uninformed principal offers a menu of contracts to sort informed agents.
+- [Principal-Agent Problem](https://relu.chat/learn/game-theory/principal-agent-problem/): A contracting problem where an agent's action is unobservable to the principal.
+- [Folk Theorem](https://relu.chat/learn/game-theory/folk-theorem/): Any individually rational feasible payoff can be sustained in an infinitely repeated game with patient enough players.
+- [Tit-for-Tat](https://relu.chat/learn/game-theory/tit-for-tat/): A simple reciprocal strategy — cooperate first, then mimic the opponent's previous action.
+- [Backward Induction](https://relu.chat/learn/game-theory/backward-induction/): Algorithm for solving finite perfect-information games by reasoning from terminal nodes back to the root.
+- [Iterated Elimination of Dominated Strategies](https://relu.chat/learn/game-theory/iterated-elimination-of-dominated-strategies/): Iteratively removing strategies that are strictly dominated.
+- [Rationalizability](https://relu.chat/learn/game-theory/rationalizability/): The set of strategies surviving iterated elimination of strategies that are never a best response.
+- [Common Knowledge](https://relu.chat/learn/game-theory/common-knowledge/): An event is common knowledge if everyone knows it, everyone knows that everyone knows it, and so on ad infinitum.
+- [Potential Games](https://relu.chat/learn/game-theory/potential-games/): Games where all unilateral payoff changes are captured by a single real-valued function.
+- [Congestion Games](https://relu.chat/learn/game-theory/congestion-games/): Games where each player's payoff depends on the load each facility carries.
+- [Price of Anarchy](https://relu.chat/learn/game-theory/price-of-anarchy/): The worst-case ratio between the social cost of a Nash equilibrium and the social optimum.
+- [Zermelo's Theorem](https://relu.chat/learn/game-theory/zermelos-theorem/): In finite two-player zero-sum games of perfect information without chance and draws allowed, either one player has a winning strategy or both can force a draw.
+- [Harsanyi Transformation](https://relu.chat/learn/game-theory/harsanyi-transformation/): Transforms games of incomplete information into games of imperfect information via a type space.
+- [Pareto Efficiency](https://relu.chat/learn/game-theory/pareto-efficiency/): An allocation is Pareto efficient if no player can be made strictly better off without making someone else worse off.
+- [Sequential Equilibrium](https://relu.chat/learn/game-theory/sequential-equilibrium/): A refinement of PBE requiring beliefs to be limits of fully mixed strategy perturbations.
+- [Proper Equilibrium](https://relu.chat/learn/game-theory/proper-equilibrium/): A refinement of trembling-hand perfection where more costly mistakes are infinitely less likely.
+- [Quantal Response Equilibrium](https://relu.chat/learn/game-theory/quantal-response-equilibrium/): An equilibrium where players best-respond noisily with choice probabilities increasing in expected payoff.
+- [Level-k Reasoning](https://relu.chat/learn/game-theory/level-k-reasoning/): A bounded-rationality model where players best-respond to lower-level opponents in a hierarchy of strategic depth.
+- [Global Games](https://relu.chat/learn/game-theory/global-games/): Games of incomplete information where players observe noisy signals of an underlying state, often producing unique equilibrium.
+- [Supermodular Games](https://relu.chat/learn/game-theory/supermodular-games/): A game in which a player's incentive to raise their action increases with opponents' actions (strategic complements).
+- [Wardrop Equilibrium](https://relu.chat/learn/game-theory/wardrop-equilibrium/): A flow assignment in which every used path has equal cost and no unused path has lower cost.
+- [Price of Stability](https://relu.chat/learn/game-theory/price-of-stability/): The best-case ratio between the social cost of a Nash equilibrium and the social optimum.
+- [Smoothed Analysis of Price of Anarchy](https://relu.chat/learn/game-theory/smoothed-analysis-of-price-of-anarchy/): A framework showing that worst-case PoA bounds can be overly pessimistic — typical-case bounds are often dramatically better.
+- [No-Regret Learning](https://relu.chat/learn/game-theory/no-regret-learning/): Learning dynamics where a player's cumulative payoff is no worse than the best fixed action in hindsight, up to a vanishing average error.
+- [Fictitious Play](https://relu.chat/learn/game-theory/fictitious-play/): A learning process in which players best-respond to the empirical distribution of past opponent play.
+- [Evolutionarily Stable Sets](https://relu.chat/learn/game-theory/evolutionarily-stable-sets/): A set of strategies such that every strategy in the set resists invasion by any outside mutant.
+- [Cheap Talk](https://relu.chat/learn/game-theory/cheap-talk/): Costless, non-binding, and verifiable communication prior to play that can influence equilibrium selection.
+- [Berge Equilibrium](https://relu.chat/learn/game-theory/berge-equilibrium/): An equilibrium where each player maximizes the payoff of all others, assuming they do not deviate from their Berge strategies.
+- [Mean Field Game](https://relu.chat/learn/game-theory/mean-field-game/): A game with a continuum of players where each player's influence on aggregate is negligible, simplifying equilibrium to a PDE system.
+- [Algorithmic Mechanism Design](https://relu.chat/learn/game-theory/algorithmic-mechanism-design/): The interface of mechanism design and computer science, concerned with computational tractability of incentive-compatible outcomes.
+- [Fair Division](https://relu.chat/learn/game-theory/fair-division/): The study of how to divide resources among agents so that each receives a fair share according to some criterion.
+- [Voting Theory](https://relu.chat/learn/game-theory/voting-theory/): The study of procedures for aggregating individual preferences into a collective decision.
+- [Social Choice Theory](https://relu.chat/learn/game-theory/social-choice-theory/): The theoretical study of how individual preferences and judgments can be aggregated into collective decisions.
+- [Banzhaf Power Index](https://relu.chat/learn/game-theory/banzhaf-power-index/): A measure of a voter's ability to influence the outcome of a vote, calculated as the number of coalitions in which they are pivotal.
+- [Core Selection (Matching)](https://relu.chat/learn/game-theory/core-selection-matching/): The selection of an allocation from the core of a matching market, typically via deferred-acceptance algorithms.
+- [Best-response table](https://relu.chat/learn/game-theory/best-response-table/): A best-response table marks the actions that maximize each player’s payoff against each fixed action of the opponent. Mutual best responses are pure Nash equilibria.
+- [Mixed-equilibrium calculation](https://relu.chat/learn/game-theory/mixed-equilibrium-calculation/): To find an interior mixed equilibrium, choose each player’s mixing probability to make the other player indifferent between actions in their support.
+- [Limits of equilibrium predictions](https://relu.chat/learn/game-theory/limits-of-equilibrium-predictions/): An equilibrium is a consistency condition on strategies and beliefs under a specified model. It does not guarantee that people will discover or play it.
+
+### Islamic Golden Age
+- [House of Wisdom](https://relu.chat/learn/golden-age/house-of-wisdom/): Major intellectual center in Abbasid Baghdad that housed a vast library and translation institute.
+- [Al-Khwarizmi](https://relu.chat/learn/golden-age/al-khwarizmi/): Persian mathematician, astronomer, and geographer whose influential works systematized algebra and described arithmetic methods.
+- [Algebra](https://relu.chat/learn/golden-age/algebra/): Mathematical discipline founded by Al-Khwarizmi for solving equations through systematic transformation.
+- [Al-Kindi](https://relu.chat/learn/golden-age/al-kindi/): First major Islamic philosopher who synthesized Greek philosophy with Islamic thought.
+- [Ibn Sina (Avicenna)](https://relu.chat/learn/golden-age/ibn-sina-avicenna/): Persian polymath whose "Canon of Medicine" was the standard medical text in Europe and the Islamic world for 600 years.
+- [Canon of Medicine](https://relu.chat/learn/golden-age/canon-of-medicine/): Ibn Sina's medical encyclopedia that systematized all known medical knowledge and remained authoritative for six centuries.
+- [Ibn al-Haytham (Alhazen)](https://relu.chat/learn/golden-age/ibn-al-haytham-alhazen/): Arab scientist who founded optics as an experimental science and pioneered the scientific method.
+- [Optics in the Golden Age](https://relu.chat/learn/golden-age/optics-in-the-golden-age/): The science of light and vision as developed by Golden Age scholars, founded by Ibn al-Haytham.
+- [Translation Movement](https://relu.chat/learn/golden-age/translation-movement/): Massive project to translate Greek, Persian, Indian, and Syriac scientific works into Arabic.
+- [Al-Razi (Rhazes)](https://relu.chat/learn/golden-age/al-razi-rhazes/): Persian physician and alchemist who distinguished smallpox from measles and pioneered clinical observation.
+- [Astrolabe](https://relu.chat/learn/golden-age/astrolabe/): Sophisticated astronomical instrument for solving problems relating to time, position, and celestial motion.
+- [Astronomy in the Golden Age](https://relu.chat/learn/golden-age/astronomy-in-the-golden-age/): Highly advanced astronomical science developed in the Islamic world, combining Greek, Persian, and Indian traditions.
+- [Development of Algebra](https://relu.chat/learn/golden-age/development-of-algebra/): The evolution of algebra from Al-Khwarizmi's rhetorical algebra to symbolic notation.
+- [Maragha School](https://relu.chat/learn/golden-age/maragha-school/): School of astronomers at the Maragha Observatory who developed alternatives to Ptolemaic astronomy.
+- [Paper Making](https://relu.chat/learn/golden-age/paper-making/): Introduction and spread of papermaking technology from China through the Islamic world to Europe.
+- [Ibn Rushd (Averroes)](https://relu.chat/learn/golden-age/ibn-rushd-averroes/): Andalusian philosopher and jurist whose commentaries on Aristotle shaped medieval European thought.
+- [Al-Ghazali](https://relu.chat/learn/golden-age/al-ghazali/): Influential Islamic theologian, jurist, and mystic who critiqued excessive rationalism in philosophy.
+- [Medicine in the Golden Age](https://relu.chat/learn/golden-age/medicine-in-the-golden-age/): Medical science as practiced and advanced in the Islamic world, combining Greek theory with clinical observation.
+- [Al-Biruni](https://relu.chat/learn/golden-age/al-biruni/): Persian scholar who made groundbreaking contributions to astronomy, geography, and comparative religion.
+- [Al-Zahrawi (Abulcasis)](https://relu.chat/learn/golden-age/al-zahrawi-abulcasis/): Andalusian surgeon whose medical encyclopedia was the standard surgical text in Europe for 500 years.
+- [Ibn al-Nafis](https://relu.chat/learn/golden-age/ibn-al-nafis/): Arab physician who discovered pulmonary circulation 300 years before William Harvey.
+- [Philosophy in the Golden Age](https://relu.chat/learn/golden-age/philosophy-in-the-golden-age/): The philosophical tradition that synthesized Greek philosophy with Islamic theology.
+- [Al-Farabi](https://relu.chat/learn/golden-age/al-farabi/): Central Asian philosopher and political theorist who systematized Islamic philosophy and wrote on the ideal state.
+- [Omar Khayyam](https://relu.chat/learn/golden-age/omar-khayyam/): Persian polymath who solved cubic equations geometrically and is also renowned for his poetry.
+- [Al-Zarqali](https://relu.chat/learn/golden-age/al-zarqali/): Andalusian astronomer and instrument maker who invented the universal astrolabe and improved astronomical tables.
+- [Nasir al-Din al-Tusi](https://relu.chat/learn/golden-age/nasir-al-din-al-tusi/): Persian polymath who founded the Maragha Observatory and developed the Tusi couple, influencing Copernican astronomy.
+- [Ibn al-Shatir](https://relu.chat/learn/golden-age/ibn-al-shatir/): Damascene astronomer whose lunar and planetary models were mathematically identical to Copernicus' later formulations.
+- [Ulugh Beg](https://relu.chat/learn/golden-age/ulugh-beg/): Timurid sultan, mathematician, and astronomer who built the world's largest observatory and compiled a stellar catalog of unprecedented accuracy.
+- [Al-Battani](https://relu.chat/learn/golden-age/al-battani/): Arab astronomer and mathematician who made remarkably accurate astronomical observations and improved Ptolemy's star catalog.
+- [Hunayn ibn Ishaq](https://relu.chat/learn/golden-age/hunayn-ibn-ishaq/): Nestorian Christian translator, physician, and scholar who led the translation of Greek medical texts into Arabic.
+- [Al-Idrisi](https://relu.chat/learn/golden-age/al-idrisi/): Arab geographer and cartographer who created the most accurate world map and geographical encyclopedia of the pre-modern era.
+- [Ibn Khaldun](https://relu.chat/learn/golden-age/ibn-khaldun/): Arab historian, philosopher, and social scientist whose Muqaddimah laid foundations for modern historiography and sociology.
+- [Al-Jazari](https://relu.chat/learn/golden-age/al-jazari/): Greatest mechanical engineer of the medieval Islamic world, known for his automata and programmable machines.
+- [Banu Musa Brothers](https://relu.chat/learn/golden-age/banu-musa-brothers/): Three Persian brothers who produced the "Book of Ingenious Devices," a major work on mechanical engineering and automata.
+- [Thabit ibn Qurra](https://relu.chat/learn/golden-age/thabit-ibn-qurra/): Sabian mathematician, physician, and translator who made fundamental contributions to number theory and geometry.
+- [Al-Karaji](https://relu.chat/learn/golden-age/al-karaji/): Persian mathematician who freed algebra from geometry by arithmetizing algebraic operations.
+- [Al-Samawal](https://relu.chat/learn/golden-age/al-samawal/): Arab mathematician who developed techniques for polynomial arithmetic and division.
+- [Ibn Sahl](https://relu.chat/learn/golden-age/ibn-sahl/): Persian mathematician and optician who discovered the law of refraction (Snell's law) 600 years before Snell.
+- [Al-Farghani](https://relu.chat/learn/golden-age/al-farghani/): Central Asian astronomer whose summary of Ptolemaic astronomy became a standard textbook in Europe and the Islamic world.
+- [Qusta ibn Luqa](https://relu.chat/learn/golden-age/qusta-ibn-luqa/): Melkite Christian translator, physician, and philosopher who bridged Greek and Arabic medicine and science.
+- [Al-Majriti](https://relu.chat/learn/golden-age/al-majriti/): Andalusian mathematician, astronomer, and alchemist who established science in Islamic Spain.
+- [Fatima al-Fihri](https://relu.chat/learn/golden-age/fatima-al-fihri/): Arab woman who founded the University of al-Qarawiyyin, the oldest existing degree-granting university in the world.
+- [Mariam al-Astrulabi](https://relu.chat/learn/golden-age/mariam-al-astrulabi/): 10th-century Syrian female astronomer and astrolabe maker, one of the few known women scientists of the Golden Age.
+- [Lubana of Cordoba](https://relu.chat/learn/golden-age/lubana-of-cordoba/): Andalusian female mathematician and librarian who served at the Library of Cordoba.
+- [Abbas ibn Firnas](https://relu.chat/learn/golden-age/abbas-ibn-firnas/): Andalusian polymath who made the first recorded attempt at controlled human flight and invented various devices.
+- [Ibn Bajjah (Avempace)](https://relu.chat/learn/golden-age/ibn-bajjah-avempace/): Andalusian philosopher, astronomer, and physician who developed a naturalistic philosophy and anticipated Galilean motion.
+- [Ibn Tufayl](https://relu.chat/learn/golden-age/ibn-tufayl/): Andalusian philosopher and physician whose novel "Hayy ibn Yaqzan" explored the nature of reason and revelation.
+- [Reading historical sources](https://relu.chat/learn/golden-age/reading-historical-sources/): Historical claims should distinguish surviving primary texts, later copies, translations, and modern interpretation. An attribution can be plausible without being certain.
+- [Networks of knowledge transmission](https://relu.chat/learn/golden-age/networks-of-knowledge-transmission/): Scholarship across medieval Islamic societies developed through networks of translation, teaching, travel, correspondence, and manuscript copying.
+- [Periodization of the Islamic Golden Age](https://relu.chat/learn/golden-age/periodization-of-the-islamic-golden-age/): The Islamic Golden Age is a broad modern label for periods of intellectual activity across diverse societies. Exact starting and ending dates depend on the field and region.
+
+### Data science
+- [Python for Data Work](https://relu.chat/learn/data-science/python-for-data-work/): Python's data ecosystem centers on pandas for tabular data and NumPy for numerical computing.
+- [Pandas DataFrame](https://relu.chat/learn/data-science/pandas-dataframe/): A pandas DataFrame is a two-dimensional labeled data structure resembling a table with named columns and a row index.
+- [NumPy Arrays](https://relu.chat/learn/data-science/numpy-arrays/): NumPy's ndarray is a homogeneous n-dimensional array enabling efficient vectorized computation.
+- [Data Cleaning](https://relu.chat/learn/data-science/data-cleaning/): Data cleaning is the process of fixing errors, inconsistencies, and structural issues in raw data before analysis.
+- [Missing Values](https://relu.chat/learn/data-science/missing-values/): Missing values (NaN in pandas, null in SQL) represent unknown or uncollected data that must be handled before modeling.
+- [Data Visualization](https://relu.chat/learn/data-science/data-visualization/): Visualization translates data into graphics to reveal patterns, trends, and anomalies that numbers alone obscure.
+- [Descriptive Statistics](https://relu.chat/learn/data-science/descriptive-statistics/): Descriptive statistics summarize the central tendency, spread, and shape of a dataset.
+- [Probability Basics](https://relu.chat/learn/data-science/probability-basics/): Probability quantifies uncertainty, measuring how likely an event is on a scale from 0 (impossible) to 1 (certain).
+- [Probability Distributions](https://relu.chat/learn/data-science/probability-distributions/): A probability distribution assigns probabilities to outcomes of a random variable; key distributions model common data-generating processes.
+- [Train/Test Split](https://relu.chat/learn/data-science/train-test-split/): Splitting data into training and test sets evaluates how a model generalizes to unseen data.
+- [Classification](https://relu.chat/learn/data-science/classification/): Classification predicts a discrete class label (spam/not spam, iris species) from input features.
+- [Logistic Regression](https://relu.chat/learn/data-science/logistic-regression/): Logistic regression models the probability of a binary outcome as a logistic (sigmoid) function of a linear combination of features.
+- [Decision Trees](https://relu.chat/learn/data-science/decision-trees/): A decision tree splits data recursively on feature values, creating a flowchart-like model that's easy to interpret.
+- [Regression](https://relu.chat/learn/data-science/regression/): Regression predicts a continuous numerical outcome (house price, GDP growth) from input features.
+- [Linear Regression](https://relu.chat/learn/data-science/linear-regression/): Linear regression predicts a continuous target as a weighted sum of features, fit by ordinary least squares (OLS).
+- [Clustering](https://relu.chat/learn/data-science/clustering/): Clustering groups similar data points without predefined labels — an unsupervised technique for discovering structure.
+- [K-Means Clustering](https://relu.chat/learn/data-science/k-means-clustering/): K-means partitions n points into k clusters, each represented by its centroid, minimizing within-cluster variance.
+- [Feature Engineering](https://relu.chat/learn/data-science/feature-engineering/): Feature engineering transforms raw data into model-friendly inputs, often determining model success more than algorithm choice.
+- [Model Evaluation](https://relu.chat/learn/data-science/model-evaluation/): Model evaluation quantifies how well a model performs, using metrics tailored to the problem type and business goal.
+- [Accuracy](https://relu.chat/learn/data-science/accuracy/): Accuracy is the proportion of correct predictions (both true positives and true negatives) out of all predictions.
+- [Precision and Recall](https://relu.chat/learn/data-science/precision-and-recall/): Precision measures how trustworthy positive predictions are; recall measures how many actual positives the model captures.
+- [F1 Score](https://relu.chat/learn/data-science/f1-score/): The F1 score is the harmonic mean of precision and recall, balancing both in a single metric.
+- [ROC and AUC](https://relu.chat/learn/data-science/roc-and-auc/): The ROC curve plots true positive rate (recall) against false positive rate at every classification threshold; AUC summarizes it.
+- [Overfitting](https://relu.chat/learn/data-science/overfitting/): Overfitting occurs when a model learns the training data too well — including its noise — and generalizes poorly.
+- [Underfitting](https://relu.chat/learn/data-science/underfitting/): Underfitting occurs when a model is too simple to capture the underlying pattern, performing poorly on both training and test data.
+- [Cross-Validation](https://relu.chat/learn/data-science/cross-validation/): Cross-validation evaluates a learning procedure on held-out data. In k-fold CV, each fold takes a turn as the validation set while the model trains on the remaining folds.
+- [Data Leakage](https://relu.chat/learn/data-science/data-leakage/): Data leakage occurs when information from the test set sneaks into the training process, making evaluation overly optimistic.
+- [Bias-Variance Tradeoff](https://relu.chat/learn/data-science/bias-variance-tradeoff/): Bias-variance decomposition separates a model's error into bias (systematic error from wrong assumptions) and variance (sensitivity to training data).
+- [Regularization](https://relu.chat/learn/data-science/regularization/): Regularization adds a penalty to the loss function to discourage overly complex models, reducing overfitting.
+- [Ensemble Methods](https://relu.chat/learn/data-science/ensemble-methods/): Ensemble methods combine multiple models into one prediction, typically reducing variance (bagging) or bias (boosting).
+- [Principal Component Analysis](https://relu.chat/learn/data-science/principal-component-analysis/): PCA finds orthogonal directions of maximum variance in data, projecting onto a lower-dimensional subspace.
+- [Time Series Analysis](https://relu.chat/learn/data-science/time-series-analysis/): Time series analysis handles data ordered chronologically, where temporal dependencies matter.
+- [Model Deployment](https://relu.chat/learn/data-science/model-deployment/): Deploying a model means making it available to make predictions on new data in a production environment.
+- [Browser and Local ML](https://relu.chat/learn/data-science/browser-and-local-ml/): Running ML models directly in the browser or on the local machine without a server enables privacy-preserving, low-latency inference.
+- [Exploratory Data Analysis](https://relu.chat/learn/data-science/exploratory-data-analysis/): EDA is the initial investigation of a dataset to understand its structure, spot anomalies, and generate hypotheses.
+- [Outlier Detection](https://relu.chat/learn/data-science/outlier-detection/): Outliers are data points that deviate significantly from the overall pattern; they may indicate errors, rare events, or genuine extreme behavior.
+- [Feature Scaling](https://relu.chat/learn/data-science/feature-scaling/): Feature scaling standardizes the range or distribution of features so that no single feature dominates distance calculations.
+- [Dimensionality Reduction](https://relu.chat/learn/data-science/dimensionality-reduction/): Dimensionality reduction transforms high-dimensional data into a lower-dimensional representation while preserving key structure.
+- [Grouped cross-validation](https://relu.chat/learn/data-science/grouped-cross-validation/): Grouped cross-validation keeps observations from the same entity together in one fold. It tests transfer to unseen entities rather than recognition of familiar ones.
+- [Probability calibration](https://relu.chat/learn/data-science/probability-calibration/): Calibration asks whether predicted probabilities agree with observed frequencies. A model can rank cases well while assigning misleading probability values.
+- [Dataset shift](https://relu.chat/learn/data-science/dataset-shift/): Dataset shift occurs when the distribution encountered during use differs from the training distribution. It can affect inputs, labels, or their relationship.
+
+### Reinforcement learning
+- [Reinforcement learning](https://relu.chat/learn/reinforcement-learning/reinforcement-learning/): Reinforcement learning studies agents that improve decisions through interaction and reward. The objective is expected return over time, not simply predicting a labeled answer.
+- [Markov decision process](https://relu.chat/learn/reinforcement-learning/markov-decision-process/): An MDP describes states, actions, transition probabilities, rewards, and a discount factor. A state is Markov when it contains the information needed to predict the next transition given the action.
+- [Reward and return](https://relu.chat/learn/reinforcement-learning/reward-and-return/): Reward is feedback for one transition; return aggregates rewards across future steps. They are different learning targets.
+- [Exploration and exploitation](https://relu.chat/learn/reinforcement-learning/exploration-and-exploitation/): Exploration tries actions to learn about their outcomes; exploitation chooses actions that currently appear best.
+- [Contextual bandit](https://relu.chat/learn/reinforcement-learning/contextual-bandit/): A contextual bandit chooses an action using the current context and receives one-step reward. It does not model how the action changes future states.
+- [Value function](https://relu.chat/learn/reinforcement-learning/value-function/): A state-value function estimates expected return from a state when following a particular policy. It depends on both the environment and the policy.
+- [Bellman equation](https://relu.chat/learn/reinforcement-learning/bellman-equation/): A Bellman equation relates value now to expected immediate reward plus discounted value after the next transition.
+- [Q-learning](https://relu.chat/learn/reinforcement-learning/q-learning/): Q-learning is an off-policy temporal-difference method that updates an action-value estimate toward a reward plus the best estimated next-state value.
+- [SARSA](https://relu.chat/learn/reinforcement-learning/sarsa/): SARSA updates an action-value estimate using the next action actually chosen by the behavior policy. It is an on-policy TD control method.
+- [Policy gradient](https://relu.chat/learn/reinforcement-learning/policy-gradient/): Policy-gradient methods adjust a parameterized action distribution to increase expected return. REINFORCE uses sampled returns to weight log-probability gradients.
+- [Actor-critic](https://relu.chat/learn/reinforcement-learning/actor-critic/): Actor-critic methods combine a policy, the actor, with a learned value estimator, the critic. The critic supplies a lower-variance learning signal.
+- [Experience replay](https://relu.chat/learn/reinforcement-learning/experience-replay/): Experience replay stores transitions and samples them later for learning. It can reduce sample correlation and reuse expensive experience.
+- [Reward shaping](https://relu.chat/learn/reinforcement-learning/reward-shaping/): Reward shaping adds learning guidance. Poorly designed rewards can teach an agent to optimize a proxy while failing the intended task.
+- [RL evaluation](https://relu.chat/learn/reinforcement-learning/rl-evaluation/): RL evaluation measures a fixed policy on tasks, seeds, or environments that were not used to choose its parameters. Training reward alone is insufficient.
+- [Efficient RL on a laptop](https://relu.chat/learn/reinforcement-learning/efficient-rl-on-a-laptop/): Efficient laptop training starts with a small decision problem, compact features, vectorized batches, and a fixed wall-clock budget.
+- [Termination and truncation](https://relu.chat/learn/reinforcement-learning/termination-and-truncation/): Termination means the task reached an end state. Truncation means an external limit stopped observation, even if the underlying task could continue.
+
+### Linear algebra
+- [Vector](https://relu.chat/learn/linear-algebra/vector/): A vector is an element of a vector space. In coordinates it can be represented by an ordered list of numbers with rules for addition and scalar multiplication.
+- [Dot product](https://relu.chat/learn/linear-algebra/dot-product/): The Euclidean dot product multiplies corresponding coordinates and sums the products. It measures directional alignment together with magnitude.
+- [Vector norm](https://relu.chat/learn/linear-algebra/vector-norm/): A norm assigns a nonnegative size to a vector and satisfies definiteness, homogeneity, and the triangle inequality.
+- [Matrix multiplication](https://relu.chat/learn/linear-algebra/matrix-multiplication/): Matrix multiplication composes linear maps. Each result entry is a row-column dot product, and the inner dimensions must match.
+- [Linear independence](https://relu.chat/learn/linear-algebra/linear-independence/): Vectors are linearly independent when no nontrivial linear combination of them equals zero.
+- [Basis and span](https://relu.chat/learn/linear-algebra/basis-and-span/): The span of vectors contains all their linear combinations. A basis is an independent set that spans a vector space.
+- [Matrix rank](https://relu.chat/learn/linear-algebra/matrix-rank/): The rank of a matrix is the dimension of its column space, equal to the dimension of its row space.
+- [Null space](https://relu.chat/learn/linear-algebra/null-space/): The null space of A is the set of vectors mapped to zero by A. It is a subspace of the input space.
+- [Linear system](https://relu.chat/learn/linear-algebra/linear-system/): A linear system asks for x satisfying Ax = b. It can have no solution, one solution, or infinitely many.
+- [Matrix inverse](https://relu.chat/learn/linear-algebra/matrix-inverse/): An inverse reverses a square linear transformation. A square matrix is invertible exactly when it has full rank.
+- [Determinant](https://relu.chat/learn/linear-algebra/determinant/): The determinant of a square matrix is the signed volume scaling factor of its linear transformation. A zero determinant indicates singularity.
+- [Eigenvalues and eigenvectors](https://relu.chat/learn/linear-algebra/eigenvalues-and-eigenvectors/): An eigenvector is a nonzero vector whose direction is preserved by a square linear map. Its eigenvalue is the corresponding scaling factor.
+- [Orthogonal projection](https://relu.chat/learn/linear-algebra/orthogonal-projection/): Orthogonal projection finds the closest vector in a subspace under the Euclidean norm. The residual is perpendicular to that subspace.
+- [Least squares](https://relu.chat/learn/linear-algebra/least-squares/): Least squares chooses parameters that minimize the sum of squared residuals when exact agreement may be impossible.
+- [Singular value decomposition](https://relu.chat/learn/linear-algebra/singular-value-decomposition/): SVD factors a real matrix into orthogonal directions, nonnegative scale factors, and another orthogonal change of coordinates. It applies to rectangular matrices too.
+- [Condition number](https://relu.chat/learn/linear-algebra/condition-number/): A condition number measures how sensitive a problem solution is to input perturbations. It describes the problem, distinct from algorithmic stability.
+
+### Web platform
+- [WebAssembly](https://relu.chat/learn/web-platform/webassembly/): WebAssembly is a portable binary instruction format that runs inside a host such as a browser. JavaScript loads modules and provides host capabilities.
+- [Linear memory](https://relu.chat/learn/web-platform/linear-memory/): WebAssembly linear memory is a byte-addressed buffer accessed from JavaScript through typed-array views. Its bounds are checked by the runtime.
+- [Web Worker](https://relu.chat/learn/web-platform/web-worker/): A Web Worker runs JavaScript in a separate execution context, helping keep long computations away from the main UI thread.
+- [Transferable objects](https://relu.chat/learn/web-platform/transferable-objects/): Transferable objects allow ownership of a resource such as an ArrayBuffer to move between contexts without copying the buffer contents.
+- [Service worker](https://relu.chat/learn/web-platform/service-worker/): A service worker is an event-driven script that can intercept requests within its scope and support offline behavior. It is separate from a page worker.
+- [Cache strategies](https://relu.chat/learn/web-platform/cache-strategies/): A cache strategy chooses when to read stored responses and when to request fresh content. Different assets need different freshness rules.
+- [HTTP caching](https://relu.chat/learn/web-platform/http-caching/): HTTP caching uses response headers and validators to control reuse by browsers and intermediaries. It is separate from service-worker Cache Storage.
+- [IndexedDB](https://relu.chat/learn/web-platform/indexeddb/): IndexedDB is an asynchronous transactional database for structured browser data. It supports keys, indexes, and large records.
+- [Promises and async functions](https://relu.chat/learn/web-platform/promises-and-async-functions/): A Promise represents eventual completion or failure. An async function returns a Promise, and await pauses that function until a value settles.
+- [Event loop](https://relu.chat/learn/web-platform/event-loop/): The browser event loop coordinates tasks, microtasks, and rendering opportunities. Long-running JavaScript can delay user input and painting.
+- [AbortController](https://relu.chat/learn/web-platform/abortcontroller/): AbortController signals cancellation to operations that support AbortSignal, including fetch. Cancellation is cooperative.
+- [Content Security Policy](https://relu.chat/learn/web-platform/content-security-policy/): Content Security Policy restricts which sources and execution forms a page may use. It can reduce the impact of script injection.
+- [Cross-origin isolation](https://relu.chat/learn/web-platform/cross-origin-isolation/): Cross-origin isolation is a browser state enabled by compatible opener and embedder policies. It allows capabilities such as shared memory in supported contexts.
+- [Accessible form](https://relu.chat/learn/web-platform/accessible-form/): An accessible form gives controls meaningful labels, supports keyboard use, and exposes feedback without relying only on color.
+- [Responsive layout](https://relu.chat/learn/web-platform/responsive-layout/): Responsive layout adapts to available space, input methods, and user settings. It includes content behavior as well as breakpoints.
+- [Performance measurement](https://relu.chat/learn/web-platform/performance-measurement/): Performance measurement separates startup, steady-state work, and user-visible response time. One fast average can hide expensive first visits.
+<!-- learn:end -->

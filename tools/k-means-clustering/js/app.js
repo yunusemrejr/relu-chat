@@ -1,5 +1,7 @@
 (() => {
   'use strict';
+  // Theme-aware canvas colours (see window.reluColors in assets/js/shell.js).
+  const C = new Proxy({}, { get: (_, k) => window.reluColors()[k] });
 
   const canvas = document.getElementById('km-canvas');
   const ctx = canvas.getContext('2d');
@@ -18,7 +20,8 @@
 
   const W = 800, H = 500, PAD = 34;
   const D = 10;                       // data coords: [0, 10] x [0, 10]
-  const COLORS = ['#14b8a6', '#60a5fa', '#fbbf24', '#a78bfa', '#f472b6', '#4ade80'];
+  const catColors = () => [C.accent, C.accent2, C.cat3, C.cat4, C.cat5, C.cat6];
+  const N_COLORS = 6;
   const REDUCE = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let points = [];
@@ -186,7 +189,7 @@
     ctx.clearRect(0, 0, W, H);
 
     // grid
-    ctx.strokeStyle = 'rgba(148,163,184,0.08)';
+    ctx.strokeStyle = `rgba(${C.inkRgb}, 0.08)`;
     ctx.lineWidth = 1;
     for (let i = 0; i <= 5; i++) {
       const [px] = dataToPx(i * 2, 0);
@@ -194,14 +197,14 @@
       const [, py] = dataToPx(0, i * 2);
       ctx.beginPath(); ctx.moveTo(PAD, py); ctx.lineTo(W - PAD, py); ctx.stroke();
     }
-    ctx.strokeStyle = 'rgba(148,163,184,0.35)';
+    ctx.strokeStyle = `rgba(${C.inkRgb}, 0.35)`;
     ctx.strokeRect(PAD, PAD, W - 2 * PAD, H - 2 * PAD);
 
     // points
     for (let i = 0; i < points.length; i++) {
       const p = points[i];
       const [px, py] = dataToPx(p.x, p.y);
-      const c = assignments[i] >= 0 ? COLORS[assignments[i] % COLORS.length] : '#8b95a3';
+      const c = assignments[i] >= 0 ? catColors()[assignments[i] % N_COLORS] : C.muted;
       ctx.fillStyle = c;
       ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
     }
@@ -209,9 +212,9 @@
     // centroids
     for (let c = 0; c < centroids.length; c++) {
       const [px, py] = dataToPx(centroids[c].x, centroids[c].y);
-      ctx.fillStyle = COLORS[c % COLORS.length];
+      ctx.fillStyle = catColors()[c % N_COLORS];
       ctx.beginPath(); ctx.arc(px, py, 9, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#f9fafb';
+      ctx.fillStyle = C.text;
       ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
     }
   }
@@ -226,12 +229,14 @@
   }
 
   // legend
-  for (let c = 0; c < COLORS.length; c++) {
+  const legendDots = [];
+  for (let c = 0; c < N_COLORS; c++) {
     const item = document.createElement('span');
     item.className = 'legend-item';
     const dot = document.createElement('span');
     dot.className = 'legend-dot';
-    dot.style.background = COLORS[c];
+    dot.style.background = catColors()[c];
+    legendDots.push(dot);
     item.appendChild(dot);
     item.appendChild(document.createTextNode('cluster ' + (c + 1)));
     legend.appendChild(item);
@@ -240,8 +245,8 @@
   cItem.className = 'legend-item';
   const cDot = document.createElement('span');
   cDot.className = 'legend-dot';
-  cDot.style.background = '#f9fafb';
-  cDot.style.border = '2px solid #14b8a6';
+  cDot.style.background = C.text;
+  cDot.style.border = '2px solid ' + C.accent;
   cItem.appendChild(cDot);
   cItem.appendChild(document.createTextNode('centroid'));
   legend.appendChild(cItem);
@@ -278,4 +283,9 @@
   kSelect.addEventListener('change', reset);
 
   generateData();
+  document.addEventListener('relu:theme', () => {
+    catColors().forEach((col, i) => { legendDots[i].style.background = col; });
+    cDot.style.background = C.text; cDot.style.border = '2px solid ' + C.accent;
+    update();
+  });
 })();

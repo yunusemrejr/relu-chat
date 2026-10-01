@@ -1,7 +1,7 @@
 """The shared allowlist for deployment, packaging, and release verification."""
 import re
 from pathlib import PurePosixPath
-PUBLIC_ROOTS = {'assets', 'chat', 'core', 'policy', 'data', 'blog', 'tools', 'errors', 'api'}
+PUBLIC_ROOTS = {'assets', 'chat', 'core', 'policy', 'data', 'blog', 'tools', 'learn', 'errors', 'api'}
 PUBLIC_FILES = {'.htaccess', 'index.html', 'how-it-works.html', 'sw.js', 'manifest.webmanifest',
                 'robots.txt', 'sitemap.xml', 'llms.txt', 'llms-full.txt', 'policy.manifest.json', 'LICENSE'}
 WELL_KNOWN = {'.well-known/security.txt', '.well-known/ai-plugin.json',

@@ -4,7 +4,7 @@ const APP_CACHE = `${CACHE_PREFIX}-v${CACHE_VERSION}`;
 // Keep downloaded embedding/runtime bytes across UI releases. Version the URL
 // when changing these model files; mutable policy artifacts use APP_CACHE.
 const MODEL_CACHE = `${CACHE_PREFIX}-models-v13`;
-const APP_ASSETS = ['/', '/chat/', '/errors/offline.html', '/assets/fonts/sora.css', '/assets/shared-design.css?v=14', '/manifest.webmanifest'];
+const APP_ASSETS = ['/', '/chat/', '/errors/offline.html', '/assets/fonts/plex.css', '/assets/shared-design.css', '/manifest.webmanifest'];
 const isModel = url => url.pathname.startsWith('/assets/models/all-MiniLM-L6-v2/') || url.pathname.startsWith('/assets/transformers/');
 const openCache = name => caches.open(name).catch(() => null);
 const readCache = (cache, request) => cache ? cache.match(request).catch(() => undefined) : Promise.resolve(undefined);

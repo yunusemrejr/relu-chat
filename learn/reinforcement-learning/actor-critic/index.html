@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Actor-critic: explained with an example | ReLU.chat</title>
+<meta name="description" content="Actor-critic methods combine a policy, the actor, with a learned value estimator, the critic. The critic supplies a lower-variance learning signal…">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://relu.chat/learn/reinforcement-learning/actor-critic/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="og:title" content="Actor-critic: explained with an example | ReLU.chat">
+<meta property="og:description" content="Actor-critic methods combine a policy, the actor, with a learned value estimator, the critic. The critic supplies a lower-variance learning signal…">
+<meta property="og:url" content="https://relu.chat/learn/reinforcement-learning/actor-critic/">
+<meta property="og:image" content="https://relu.chat/assets/og/reinforcement-learning.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Actor-critic: explained with an example | ReLU.chat">
+<meta name="twitter:description" content="Actor-critic methods combine a policy, the actor, with a learned value estimator, the critic. The critic supplies a lower-variance learning signal…">
+<meta name="twitter:image" content="https://relu.chat/assets/og/reinforcement-learning.png">
+<link rel="stylesheet" href="/assets/shared-design.css?v=3b140e1c">
+<link rel="stylesheet" href="/assets/css/learn.css?v=fb3b97f1">
+<link rel="stylesheet" href="/assets/css/remain-valuable.css?v=9d4a4019">
+<link rel="stylesheet" href="/assets/katex/katex.min.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Article","LearningResource"],"@id":"https://relu.chat/learn/reinforcement-learning/actor-critic/#article","url":"https://relu.chat/learn/reinforcement-learning/actor-critic/","mainEntityOfPage":"https://relu.chat/learn/reinforcement-learning/actor-critic/","headline":"Actor-critic: explained with an example","description":"Actor-critic methods combine a policy, the actor, with a learned value estimator, the critic. The critic supplies a lower-variance learning signal.","inLanguage":"en","isAccessibleForFree":true,"datePublished":"2026-09-09","dateModified":"2026-09-09","author":{"@type":"Person","name":"Yunus Emre Vurgun","url":"https://yunusemrevurgun.com","sameAs":["https://github.com/yunusemrejr"]},"publisher":{"@type":"Organization","@id":"https://relu.chat/#organization","name":"ReLU.chat","url":"https://relu.chat/","logo":{"@type":"ImageObject","url":"https://relu.chat/assets/logo.png"}},"image":"https://relu.chat/assets/og/reinforcement-learning.png","about":{"@type":"Thing","name":"Actor-critic","description":"Actor-critic methods combine a policy, the actor, with a learned value estimator, the critic. The critic supplies a lower-variance learning signal."},"teaches":"Actor-critic","learningResourceType":"explanation","isPartOf":{"@id":"https://relu.chat/learn/reinforcement-learning/#collection"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://relu.chat/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://relu.chat/learn/"},{"@type":"ListItem","position":3,"name":"Reinforcement learning","item":"https://relu.chat/learn/reinforcement-learning/"},{"@type":"ListItem","position":4,"name":"Actor-critic","item":"https://relu.chat/learn/reinforcement-learning/actor-critic/"}]}]}</script>
+<!--shell:head-->
+<script data-cfasync="false">(function(){var d=document.documentElement;d.classList.add("js");try{var t=localStorage.getItem("relu-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})()</script>
+<meta name="theme-color" content="#0b1017" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f6fa" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/logo.png?v=77cfb49b" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/logo.png?v=77cfb49b">
+<link rel="preload" href="/assets/fonts/plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/plex.css?v=76b88732">
+<script src="/assets/js/shell.js?v=d1bc5ff3" defer data-cfasync="false"></script>
+<!--/shell:head-->
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<!--shell:nav-->
+<nav class="site-nav" id="navbar" aria-label="Primary">
+<div class="nav-container">
+<a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a>
+<ul class="nav-links" id="nav-links"><li><a href="/chat/">Chat</a></li><li><a href="/learn/" aria-current="page">Learn</a></li><li><a href="/tools/">Tools</a></li><li><a href="/blog/">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li></ul>
+<div class="nav-tools"><button class="theme-toggle" type="button" aria-label="Switch color theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><a class="btn btn-primary btn-sm nav-cta" href="/chat/">Start chatting</a><button class="nav-menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</div>
+</nav>
+<!--/shell:nav-->
+<main id="main-content">
+<article class="topic">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/learn/">Learn</a></li><li><a href="/learn/reinforcement-learning/">Reinforcement learning</a></li><li aria-current="page">Actor-critic</li></ol></nav>
+<header class="topic-head">
+<p class="eyebrow"><a href="/learn/reinforcement-learning/">Reinforcement learning</a></p>
+<h1>Actor-critic</h1>
+<p class="topic-lead">Actor-critic methods combine a policy, the actor, with a learned value estimator, the critic. The critic supplies a lower-variance learning signal.</p>
+<div class="topic-actions"><a class="btn btn-primary" href="/chat/reinforcement-learning-chat/?q=Explain+Actor-critic">Ask the Reinforcement learning assistant</a><span class="topic-meta">1 min read · Updated September 9, 2026</span></div>
+</header>
+<nav class="topic-toc" aria-label="On this page"><span>On this page</span><ol><li><a href="#definition">Definition</a></li><li><a href="#intuition">Intuition</a></li><li><a href="#example">Worked example</a></li><li><a href="#details">The math</a></li><li><a href="#applications">In practice</a></li><li><a href="#related">Related topics</a></li></ol></nav>
+<div class="topic-body">
+<section class="topic-section" id="definition"><h2>Definition</h2><p>Actor-critic methods combine a policy, the actor, with a learned value estimator, the critic. The critic supplies a lower-variance learning signal.</p></section>
+<section class="topic-section" id="intuition"><h2>Intuition</h2><p>The actor chooses; the critic estimates how much better an outcome was than expected.</p></section>
+<section class="topic-section" id="example"><h2>Worked example</h2><p>For reward 1, discount 0.9, next value 4, and current value 3, the one-step TD advantage estimate is 1.6.</p></section>
+<section class="topic-section" id="details"><h2>The math</h2><p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mi>t</mi></msub><mo>=</mo><msub><mi>r</mi><mi>t</mi></msub><mo>+</mo><mi>γ</mi><mi>V</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>−</mo><mi>V</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\delta_t=r_t+\gamma V(s_{t+1})-V(s_t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0379em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">γV</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>. A terminal transition uses zero next-state value.</p></section>
+<section class="topic-section" id="applications"><h2>In practice</h2><p>Inspect critic loss and policy behavior together: an inaccurate critic can confidently push the actor in the wrong direction.</p></section>
+</div>
+<section class="topic-related" id="related"><h2>Related topics</h2><ul class="topic-cards"><li><a href="/learn/reinforcement-learning/experience-replay/"><strong>Experience replay</strong><span>Experience replay stores transitions and samples them later for learning. It can reduce sample correlation and reuse…</span></a></li><li><a href="/learn/reinforcement-learning/policy-gradient/"><strong>Policy gradient</strong><span>Policy-gradient methods adjust a parameterized action distribution to increase expected return. REINFORCE uses sampled…</span></a></li></ul></section>
+
+<aside class="topic-ask" aria-label="Ask a follow-up"><div><h2>Still unsure?</h2><p>Ask a follow-up in the Reinforcement learning assistant. It answers in your browser and keeps the conversation on your device.</p></div><a class="btn btn-secondary" href="/chat/reinforcement-learning-chat/?q=Explain+Actor-critic">Open the assistant</a></aside>
+<aside class="rv-note rv-note--wide" aria-label="Recommended book"><a class="rv-thumb" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/assets/remain-valuable-cover-sm.webp" alt="" width="68" height="91" loading="lazy" decoding="async"></a><div class="rv-note-body"><span class="rv-note-label">Going further</span><p class="rv-note-text">This page covered one corner of machine intelligence. <em>How to Remain Valuable When Intelligence Becomes Cheap</em> zooms out: a 224-page practical guide to the human strengths and strategic advantages that stay valuable as AI takes on more cognitive work. <a class="rv-note-link" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Get the book <span class="rv-arrow" aria-hidden="true">&rarr;</span></a></p></div></aside>
+<section class="topic-sources" id="sources"><h2>Sources</h2><ul><li><a href="https://incompleteideas.net/book/RLbook2020.pdf" target="_blank" rel="noopener noreferrer">Sutton &amp; Barto, Reinforcement Learning</a></li></ul></section>
+<section class="topic-more"><h2>More in Reinforcement learning</h2><ul class="topic-chips"><li><a href="/learn/reinforcement-learning/sarsa/">SARSA</a></li><li><a href="/learn/reinforcement-learning/policy-gradient/">Policy gradient</a></li><li><a href="/learn/reinforcement-learning/experience-replay/">Experience replay</a></li><li><a href="/learn/reinforcement-learning/reward-shaping/">Reward shaping</a></li><li><a class="chip-all" href="/learn/reinforcement-learning/">All 16 topics</a></li></ul></section>
+<p class="topic-note">Assembled from the ReLU.chat curated knowledge base. These explanations are concise on purpose; check the sources for anything important.</p>
+</article>
+</main>
+<!--shell:footer-->
+<footer class="site-footer">
+<div class="footer-grid">
+<div class="footer-brand"><a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a><p>Six free learning assistants, interactive ML tools and worked examples. Questions are answered in your browser.</p></div>
+<nav class="footer-col" aria-label="Learn"><h2 class="footer-h">Learn</h2><ul><li><a href="/learn/game-theory/">Game theory</a></li><li><a href="/learn/golden-age/">Islamic Golden Age</a></li><li><a href="/learn/data-science/">Data science</a></li><li><a href="/learn/reinforcement-learning/">Reinforcement learning</a></li><li><a href="/learn/linear-algebra/">Linear algebra</a></li><li><a href="/learn/web-platform/">Web platform</a></li><li><a href="/learn/">All topics</a></li></ul></nav>
+<nav class="footer-col" aria-label="Explore"><h2 class="footer-h">Explore</h2><ul><li><a href="/chat/">Chat assistants</a></li><li><a href="/tools/">Interactive tools</a></li><li><a href="/blog/">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li><li><a href="/blog/feed.xml">RSS feed</a></li></ul></nav>
+<nav class="footer-col" aria-label="More from the makers"><h2 class="footer-h">From the makers</h2><ul><li><a href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Remain Valuable (book) <span aria-hidden="true">↗</span></a></li><li><a href="https://theknowledgeproject.gumroad.com/l/ekuidr" target="_blank" rel="noopener noreferrer">Chatbot builder toolkit <span aria-hidden="true">↗</span></a></li><li><a href="https://github.com/yunusemrejr/relu-chat" target="_blank" rel="noopener noreferrer">Source on GitHub <span aria-hidden="true">↗</span></a></li><li><a href="/llms.txt">llms.txt</a></li></ul></nav>
+</div>
+<div class="footer-base"><p>© 2026 ReLU.chat · MIT-licensed open source</p><p>Chat questions are processed in your browser.</p></div>
+</footer>
+<!--/shell:footer-->
+
+</body>
+</html>

@@ -66,6 +66,9 @@ export async function renderDiagramElement(ast, options = {}) {
   }
 }
 
+// Shorthand macros used by knowledge-base text (KaTeX has no built-in \softmax).
+const KATEX_MACROS = { '\\softmax': '\\operatorname{softmax}' };
+
 export function pushMessage(role, html, meta) {
   const messagesEl = document.getElementById('messages');
   const div = document.createElement('div');
@@ -110,7 +113,8 @@ export function pushMessage(role, html, meta) {
     if (target) {
       renderMathInElement(target, {
         delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],
-        throwOnError: false
+        throwOnError: false,
+        macros: KATEX_MACROS
       });
     }
   }
@@ -169,7 +173,8 @@ export function pushMessageStream(role, meta) {
         if (target) {
           renderMathInElement(target, {
             delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],
-            throwOnError: false
+            throwOnError: false,
+        macros: KATEX_MACROS
           });
         }
       }

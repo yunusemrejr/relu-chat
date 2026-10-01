@@ -1,5 +1,7 @@
 (() => {
   'use strict';
+  // Theme-aware canvas colours (see window.reluColors in assets/js/shell.js).
+  const C = new Proxy({}, { get: (_, k) => window.reluColors()[k] });
 
   const canvas = document.getElementById('nn-canvas');
   const ctx = canvas.getContext('2d');
@@ -283,8 +285,8 @@
         ctx.moveTo(inputPos[i].x + 24, inputPos[i].y);
         ctx.lineTo(hiddenPos[j].x - 20, hiddenPos[j].y);
         ctx.strokeStyle = w >= 0
-          ? `rgba(20, 184, 166, ${s * 0.6})`
-          : `rgba(196, 65, 48, ${s * 0.5})`;
+          ? `rgba(${C.accentRgb}, ${s * 0.6})`
+          : `rgba(${C.accent2Rgb}, ${s * 0.5})`;
         ctx.lineWidth = 1 + s * 2.5;
         ctx.stroke();
       }
@@ -298,8 +300,8 @@
       ctx.moveTo(hiddenPos[j].x + 24, hiddenPos[j].y);
       ctx.lineTo(outputPos.x - 20, outputPos.y);
       ctx.strokeStyle = w >= 0
-        ? `rgba(20, 184, 166, ${s * 0.6})`
-        : `rgba(196, 65, 48, ${s * 0.5})`;
+        ? `rgba(${C.accentRgb}, ${s * 0.6})`
+        : `rgba(${C.accent2Rgb}, ${s * 0.5})`;
       ctx.lineWidth = 1 + s * 2.5;
       ctx.stroke();
     }
@@ -307,7 +309,7 @@
     // Draw input nodes
     for (let i = 0; i < 2; i++) {
       drawNode(ctx, inputPos[i].x, inputPos[i].y, 20, [i === 0 ? x1 : x2], actName, false);
-      ctx.fillStyle = '#9ca3af';
+      ctx.fillStyle = C.text2;
       ctx.font = '11px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`x${i+1} = ${(i === 0 ? x1 : x2).toFixed(2)}`, inputPos[i].x, inputPos[i].y + 36);
@@ -316,7 +318,7 @@
     // Draw hidden nodes
     for (let j = 0; j < hiddenCount; j++) {
       drawNode(ctx, hiddenPos[j].x, hiddenPos[j].y, 20, [hidden[j]], actName, true);
-      ctx.fillStyle = '#6b7280';
+      ctx.fillStyle = C.muted;
       ctx.font = '9px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`h${j+1}`, hiddenPos[j].x, hiddenPos[j].y + 34);
@@ -324,13 +326,13 @@
 
     // Draw output node
     drawNode(ctx, outputPos.x, outputPos.y, 24, [output], actName, true);
-    ctx.fillStyle = '#f9fafb';
+    ctx.fillStyle = C.text;
     ctx.font = 'bold 11px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(`y = ${output.toFixed(4)}`, outputPos.x, outputPos.y + 40);
 
     // Layer labels
-    ctx.fillStyle = '#6b7280';
+    ctx.fillStyle = C.muted;
     ctx.font = '10px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Input', xIn, H - 16);
@@ -338,7 +340,7 @@
     ctx.fillText('Output', xOut, H - 16);
 
     // Activation label
-    ctx.fillStyle = '#4b5563';
+    ctx.fillStyle = C.muted;
     ctx.font = '9px Inter, sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(`σ = ${actName}  |  ${hiddenCount} hidden`, 12, 18);
@@ -348,8 +350,8 @@
     // Outer glow for active nodes
     if (active && values[0] !== undefined) {
       const grad = ctx.createRadialGradient(x, y, r * 0.5, x, y, r * 1.8);
-      grad.addColorStop(0, 'rgba(20, 184, 166, 0.08)');
-      grad.addColorStop(1, 'rgba(20, 184, 166, 0)');
+      grad.addColorStop(0, `rgba(${C.accentRgb}, 0.08)`);
+      grad.addColorStop(1, `rgba(${C.accentRgb}, 0)`);
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(x, y, r * 1.8, 0, Math.PI * 2);
@@ -358,14 +360,14 @@
 
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = active ? '#1f2937' : '#151b23';
+    ctx.fillStyle = active ? C.border : C.elev;
     ctx.fill();
-    ctx.strokeStyle = active ? '#14b8a6' : '#374151';
+    ctx.strokeStyle = active ? C.accent : C.borderStrong;
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
     if (values[0] !== undefined && active) {
-      ctx.fillStyle = '#14b8a6';
+      ctx.fillStyle = C.accent;
       ctx.font = `${Math.max(9, r * 0.55)}px Inter, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -407,4 +409,5 @@
 
   // Exports for testing
   window.__nn = { activation, activationPrime, compute, weights, biases, initNetwork };
+  document.addEventListener('relu:theme', () => resizeCanvas());
 })();

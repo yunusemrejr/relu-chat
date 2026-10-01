@@ -1,0 +1,27 @@
+name: Notify search engines
+
+# Event-driven, no cron: runs when the sitemap changes on main, waits for the
+# production deploy of the same commit, then pings IndexNow with only the URLs
+# that are new or whose lastmod changed.
+on:
+  push:
+    branches: [main]
+    paths: ['sitemap.xml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/site/indexnow.mjs
+        continue-on-error: true

@@ -57,6 +57,7 @@
 ^\.htaccess$
 ^assets/
 ^chat/
+^learn/
 ^core/
 ^data/
 ^policy/

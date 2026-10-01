@@ -1,5 +1,7 @@
 (() => {
   'use strict';
+  // Theme-aware canvas colours (see window.reluColors in assets/js/shell.js).
+  const C = new Proxy({}, { get: (_, k) => window.reluColors()[k] });
 
   const canvas = document.getElementById('dt-canvas');
   const ctx = canvas.getContext('2d');
@@ -17,7 +19,7 @@
 
   const W = 800, H = 500, PAD = 34;
   const D = 10;
-  const C_A = '#14b8a6', C_B = '#fbbf24';
+  const P = { get A() { return C.accent; }, get B() { return C.cat3; } };
   const MIN_LEAF = 4;
 
   let points = [];        // {x, y, cls: 0|1}
@@ -204,7 +206,7 @@
     ctx.clearRect(0, 0, W, H);
 
     // grid
-    ctx.strokeStyle = 'rgba(148,163,184,0.08)';
+    ctx.strokeStyle = `rgba(${C.inkRgb}, 0.08)`;
     ctx.lineWidth = 1;
     for (let i = 0; i <= 5; i++) {
       const [px] = dataToPx(i * 2, 0);
@@ -212,11 +214,11 @@
       const [, py] = dataToPx(0, i * 2);
       ctx.beginPath(); ctx.moveTo(PAD, py); ctx.lineTo(W - PAD, py); ctx.stroke();
     }
-    ctx.strokeStyle = 'rgba(148,163,184,0.35)';
+    ctx.strokeStyle = `rgba(${C.inkRgb}, 0.35)`;
     ctx.strokeRect(PAD, PAD, W - 2 * PAD, H - 2 * PAD);
 
     if (!root) {
-      ctx.fillStyle = 'rgba(148,163,184,0.7)';
+      ctx.fillStyle = `rgba(${C.inkRgb}, 0.7)`;
       ctx.font = '13px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('Press "Train full tree" or "Step" to grow the tree', W / 2, H / 2);
@@ -227,12 +229,12 @@
         const r = leaf.region;
         const [x0, y1] = dataToPx(r.x0, r.y0);
         const [x1, y0] = dataToPx(r.x1, r.y1);
-        ctx.fillStyle = (leaf.cls === 0 ? C_A : C_B) + '1f';
+        ctx.fillStyle = (leaf.cls === 0 ? P.A : P.B) + '1f';
         ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
       }
       // split boundaries (revealed internal nodes)
       const revealedSet = new Set(nodeOrder.slice(0, revealed));
-      ctx.strokeStyle = 'rgba(248,250,252,0.6)';
+      ctx.strokeStyle = `rgba(${C.inkRgb}, 0.6)`;
       ctx.lineWidth = 1.5;
       for (const n of nodeOrder.slice(0, revealed)) {
         const r = n.region;
@@ -251,11 +253,11 @@
       // points: fill true color; white ring when misclassified by current tree
       for (const p of points) {
         const [px, py] = dataToPx(p.x, p.y);
-        ctx.fillStyle = p.cls === 0 ? C_A : C_B;
+        ctx.fillStyle = p.cls === 0 ? P.A : P.B;
         ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
         const pred = predict(p);
         if (pred !== -1 && pred !== p.cls) {
-          ctx.strokeStyle = 'rgba(248,250,252,0.9)';
+          ctx.strokeStyle = `rgba(${C.inkRgb}, 0.9)`;
           ctx.lineWidth = 1.5;
           ctx.setLineDash([3, 3]);
           ctx.beginPath(); ctx.arc(px, py, 6.5, 0, Math.PI * 2); ctx.stroke();
@@ -296,4 +298,5 @@
   depthSelect.addEventListener('change', resetTree);
 
   generateData();
+  document.addEventListener('relu:theme', () => update());
 })();

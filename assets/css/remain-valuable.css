@@ -1,216 +1,81 @@
 /* ============================================================
-   ReLU.chat — "Remain Valuable" book promotion · shared module v1
-   Quiet, site-native placements for "How to Remain Valuable
-   When Intelligence Becomes Cheap" (Gumroad). Text-led treatments
-   that reuse the shared design tokens; no glow, no glass, no motion
-   beyond a small arrow nudge.
-   Variants: banner (homepage) · note (articles) · strip (blog hub) ·
-   tool-note (interactive tools).
+   "How to Remain Valuable When Intelligence Becomes Cheap" — book placements
+   One quiet card component (cover + label + copy + link) used at the end of
+   articles, tools and the blog hub; the homepage has a larger feature block
+   in home.css. The cover's red thread is the same vermilion as the site accent.
    ============================================================ */
 
-/* ----- Shared bits ----- */
-.rv-banner-label,
 .rv-note-label,
-.rv-strip-label {
-  color: var(--accent, #14b8a6);
+.rv-strip-label,
+.rv-eyebrow {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--accent);
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
+.rv-note,
+.rv-strip {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+  margin: var(--space-8) 0 0;
+  padding: var(--space-5);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.rv-note--wide,
+.rv-strip { max-width: 760px; margin-left: auto; margin-right: auto; }
+.rv-strip { margin-top: var(--space-12); }
+
+.rv-thumb { flex-shrink: 0; line-height: 0; }
+.rv-thumb img {
+  width: 68px;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  border-radius: 3px;
+  border: 1px solid var(--border-strong);
+}
+
+.rv-note-body { min-width: 0; }
+
+.rv-note-text,
+.rv-strip-text {
+  margin: 0;
+  max-width: 64ch;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+.rv-note-text em,
+.rv-strip-text em { color: var(--text-primary); font-style: normal; font-weight: 600; }
+
 .rv-note-link,
 .rv-strip-link,
-.rv-tool-note a,
-.rv-chat-note a {
-  color: var(--accent, #14b8a6);
+.rv-note-text a {
+  color: var(--text-primary);
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
   white-space: nowrap;
 }
-
 .rv-note-link:hover,
 .rv-strip-link:hover,
-.rv-tool-note a:hover,
-.rv-chat-note a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
+.rv-note-text a:hover { color: var(--accent); }
 
-.rv-arrow {
-  display: inline-block;
-  transition: transform 0.15s ease;
-}
-
-.rv-note-link:hover .rv-arrow,
-.rv-strip-link:hover .rv-arrow,
-.rv-tool-note a:hover .rv-arrow,
-.rv-chat-note a:hover .rv-arrow {
-  transform: translateX(3px);
-}
-
-/* ----- Homepage banner ----- */
-.rv-banner {
-  padding: 0 var(--space-6, 24px) var(--space-12, 48px);
-  background: var(--bg, #0d1117);
-}
-
-.rv-banner-card {
-  max-width: 1000px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: var(--space-6, 24px);
-  padding: var(--space-5, 20px) var(--space-6, 24px);
-  background: var(--bg-elevated, #151b23);
-  border: 1px solid var(--border, #1f2937);
-  border-radius: var(--radius, 6px);
-}
-
-.rv-banner-cover {
-  width: 104px;
-  height: auto;
-  aspect-ratio: 633 / 845;
-  object-fit: cover;
-  border-radius: var(--radius, 6px);
-  border: 1px solid var(--border-strong, #374151);
-  flex-shrink: 0;
-}
-
-.rv-banner-copy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1, 4px);
-  min-width: 0;
-  flex: 1;
-}
-
-.rv-banner-title {
-  color: var(--text-primary, #f9fafb);
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.rv-banner-text {
-  color: var(--text-secondary, #9ca3af);
-  font-size: 0.875rem;
-  line-height: 1.6;
-}
-
-.rv-banner-meta {
-  color: var(--text-tertiary, #7a8494);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
-}
-
-.rv-banner-card .btn {
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
-/* ----- Article end-note (below related reading) ----- */
-.rv-note {
-  margin: var(--space-6, 24px) 0 0;
-  padding: var(--space-4, 16px) 0 0;
-  border-top: 1px solid var(--border, #1f2937);
-}
-
-.rv-note-label {
-  display: block;
-  margin-bottom: var(--space-2, 8px);
-}
-
-.rv-note-text {
-  margin: 0;
-  max-width: 68ch;
-  color: var(--text-secondary, #9ca3af);
-  font-size: 0.875rem;
-  line-height: 1.7;
-}
-
-.rv-note-text em {
-  color: var(--text-primary, #f9fafb);
-}
-
-/* ----- Blog hub strip (below the post grid) ----- */
-.rv-strip {
-  margin: var(--space-12, 48px) auto 0;
-  padding: var(--space-6, 24px) var(--space-4, 16px) 0;
-  border-top: 1px solid var(--border, #1f2937);
-  text-align: center;
-}
-
-.rv-strip-label {
-  display: block;
-  margin-bottom: var(--space-2, 8px);
-}
-
-.rv-strip-text {
-  margin: 0 auto;
-  max-width: 62ch;
-  color: var(--text-secondary, #9ca3af);
-  font-size: 0.875rem;
-  line-height: 1.7;
-}
-
-.rv-strip-text em {
-  color: var(--text-primary, #f9fafb);
-}
-
-/* ----- Interactive tools note (below the main demo) ----- */
-.rv-tool-note {
-  margin: var(--space-8, 32px) auto 0;
-  padding: var(--space-5, 20px) var(--space-4, 16px) 0;
-  border-top: 1px solid var(--border, #1f2937);
-  max-width: 62ch;
-  text-align: center;
-  color: var(--text-secondary, #9ca3af);
-  font-size: 0.875rem;
-  line-height: 1.7;
-}
-
-.rv-tool-note em {
-  color: var(--text-primary, #f9fafb);
-}
-
-/* ----- Responsive ----- */
-@media (max-width: 768px) {
-  .rv-banner-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .rv-banner-cover {
-    width: 96px;
-  }
-
-  .rv-banner-card .btn {
-    width: 100%;
-  }
-}
+.rv-arrow { display: inline-block; transition: transform 0.15s ease; }
+a:hover > .rv-arrow, a:hover .rv-arrow { transform: translateX(3px); }
 
 @media (max-width: 480px) {
-  .rv-banner {
-    padding: 0 var(--space-4, 16px) var(--space-10, 40px);
-  }
-
-  .rv-banner-card {
-    padding: var(--space-4, 16px);
-  }
-
-  .rv-strip {
-    text-align: left;
-  }
-
-  .rv-tool-note {
-    text-align: left;
-  }
+  .rv-note, .rv-strip { gap: var(--space-4); padding: var(--space-4); }
+  .rv-thumb img { width: 56px; }
 }
-
-/* ----- Reduced motion ----- */
-@media (prefers-reduced-motion: reduce) {
-  .rv-arrow {
-    transition: none;
-  }
-}
+@media (prefers-reduced-motion: reduce) { .rv-arrow { transition: none; } }

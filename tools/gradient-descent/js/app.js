@@ -1,5 +1,7 @@
 (() => {
   'use strict';
+  // Theme-aware canvas colours (see window.reluColors in assets/js/shell.js).
+  const C = new Proxy({}, { get: (_, k) => window.reluColors()[k] });
 
   const canvas = document.getElementById('gd-canvas');
   const ctx = canvas.getContext('2d');
@@ -190,7 +192,7 @@
     }
 
     // Draw grid
-    ctx.strokeStyle = '#1f2937';
+    ctx.strokeStyle = C.border;
     ctx.lineWidth = 1;
     for (let gx = Math.ceil(xMin); gx <= xMax; gx++) {
       const p = toScreen(gx, 0);
@@ -211,7 +213,7 @@
 
     // Draw function curve
     ctx.beginPath();
-    ctx.strokeStyle = '#14b8a6';
+    ctx.strokeStyle = C.accent;
     ctx.lineWidth = 2;
     for (let i = 0; i < fnSamples.length; i++) {
       const p = toScreen(fnSamples[i].x, fnSamples[i].y);
@@ -231,7 +233,7 @@
     const last = toScreen(fnSamples[fnSamples.length - 1].x, yMin);
     ctx.lineTo(last.x, last.y);
     ctx.closePath();
-    ctx.fillStyle = 'rgba(20, 184, 166, 0.05)';
+    ctx.fillStyle = `rgba(${C.accentRgb}, 0.05)`;
     ctx.fill();
 
     // Draw zero line
@@ -240,7 +242,7 @@
       ctx.beginPath();
       ctx.moveTo(pad.left, zeroLine.y);
       ctx.lineTo(W - pad.right, zeroLine.y);
-      ctx.strokeStyle = '#374151';
+      ctx.strokeStyle = C.borderStrong;
       ctx.lineWidth = 1;
       ctx.setLineDash([3, 3]);
       ctx.stroke();
@@ -255,7 +257,7 @@
         if (i === 0) ctx.moveTo(p.x, p.y);
         else ctx.lineTo(p.x, p.y);
       }
-      ctx.strokeStyle = 'rgba(20, 184, 166, 0.4)';
+      ctx.strokeStyle = `rgba(${C.accentRgb}, 0.4)`;
       ctx.lineWidth = 2;
       ctx.setLineDash([4, 4]);
       ctx.stroke();
@@ -268,7 +270,7 @@
       const alpha = 0.2 + 0.8 * (i / Math.max(1, history.length - 1));
       ctx.beginPath();
       ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(20, 184, 166, ${alpha})`;
+      ctx.fillStyle = `rgba(${C.accentRgb}, ${alpha})`;
       ctx.fill();
     }
 
@@ -276,9 +278,9 @@
     const curP = toScreen(pos.x, pos.y);
     ctx.beginPath();
     ctx.arc(curP.x, curP.y, 6, 0, Math.PI * 2);
-    ctx.fillStyle = '#14b8a6';
+    ctx.fillStyle = C.accent;
     ctx.fill();
-    ctx.strokeStyle = '#0d1117';
+    ctx.strokeStyle = C.bg;
     ctx.lineWidth = 2;
     ctx.stroke();
 
@@ -292,7 +294,7 @@
       ctx.beginPath();
       ctx.moveTo(curP.x, curP.y);
       ctx.lineTo(arrowEnd.x, arrowEnd.y);
-      ctx.strokeStyle = 'rgba(196, 65, 48, 0.6)';
+      ctx.strokeStyle = `rgba(${C.accent2Rgb}, 0.6)`;
       ctx.lineWidth = 2;
       ctx.stroke();
 
@@ -303,13 +305,13 @@
       ctx.lineTo(arrowEnd.x - 8 * Math.cos(angle - 0.4), arrowEnd.y - 8 * Math.sin(angle - 0.4));
       ctx.moveTo(arrowEnd.x, arrowEnd.y);
       ctx.lineTo(arrowEnd.x - 8 * Math.cos(angle + 0.4), arrowEnd.y - 8 * Math.sin(angle + 0.4));
-      ctx.strokeStyle = 'rgba(196, 65, 48, 0.6)';
+      ctx.strokeStyle = `rgba(${C.accent2Rgb}, 0.6)`;
       ctx.lineWidth = 2;
       ctx.stroke();
     }
 
     // Axis labels
-    ctx.fillStyle = '#6b7280';
+    ctx.fillStyle = C.muted;
     ctx.font = '10px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('x', W - pad.right + 12, H - pad.bottom + 5);
@@ -400,4 +402,5 @@
 
   // Exports for testing
   window.__gd = { functions, step, resetAll, setFunction, computeDerivative };
+  document.addEventListener('relu:theme', () => resizeCanvas());
 })();

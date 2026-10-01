@@ -1,5 +1,7 @@
 (() => {
   'use strict';
+  // Theme-aware canvas colours (see window.reluColors in assets/js/shell.js).
+  const C = new Proxy({}, { get: (_, k) => window.reluColors()[k] });
 
   const canvas = document.getElementById('af-canvas');
   const ctx = canvas.getContext('2d');
@@ -141,7 +143,7 @@
     const ymax = computeYmax();
 
     // grid
-    ctx.strokeStyle = 'rgba(148,163,184,0.10)';
+    ctx.strokeStyle = `rgba(${C.inkRgb}, 0.10)`;
     ctx.lineWidth = 1;
     for (let gx = Math.ceil(XMIN); gx <= XMAX; gx++) {
       ctx.beginPath(); ctx.moveTo(xToPx(gx), PAD.t); ctx.lineTo(xToPx(gx), H - PAD.b); ctx.stroke();
@@ -153,12 +155,12 @@
     }
 
     // axes
-    ctx.strokeStyle = 'rgba(148,163,184,0.45)';
+    ctx.strokeStyle = `rgba(${C.inkRgb}, 0.45)`;
     ctx.beginPath(); ctx.moveTo(PAD.l, yToPx(0, ymax)); ctx.lineTo(W - PAD.r, yToPx(0, ymax)); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(xToPx(0), PAD.t); ctx.lineTo(xToPx(0), H - PAD.b); ctx.stroke();
 
     // tick labels
-    ctx.fillStyle = 'rgba(148,163,184,0.7)';
+    ctx.fillStyle = `rgba(${C.inkRgb}, 0.7)`;
     ctx.font = '10px sans-serif';
     ctx.textAlign = 'center';
     for (let gx = Math.ceil(XMIN); gx <= XMAX; gx++) {
@@ -182,10 +184,10 @@
       ctx.stroke();
     };
     ctx.lineWidth = 1.5;
-    ctx.strokeStyle = '#60a5fa';
+    ctx.strokeStyle = C.accent2;
     plot((x) => fn.fp(x, p));
     ctx.lineWidth = 2;
-    ctx.strokeStyle = '#14b8a6';
+    ctx.strokeStyle = C.accent;
     plot((x) => fn.f(x, p));
 
     // marker at x0
@@ -194,7 +196,7 @@
     const mx = xToPx(x0), my = yToPx(f0, ymax);
 
     ctx.setLineDash([4, 4]);
-    ctx.strokeStyle = 'rgba(248,250,252,0.35)';
+    ctx.strokeStyle = `rgba(${C.inkRgb}, 0.35)`;
     ctx.beginPath(); ctx.moveTo(mx, PAD.t); ctx.lineTo(mx, H - PAD.b); ctx.stroke();
     ctx.setLineDash([]);
 
@@ -202,7 +204,7 @@
     const tExt = 1.6;
     const xa = x0 - tExt, xb = x0 + tExt;
     const ya = f0 - fp0 * tExt, yb = f0 + fp0 * tExt;
-    ctx.strokeStyle = 'rgba(248,250,252,0.7)';
+    ctx.strokeStyle = `rgba(${C.inkRgb}, 0.7)`;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(xToPx(xa), yToPx(ya, ymax));
@@ -210,9 +212,9 @@
     ctx.stroke();
 
     // value dots
-    ctx.fillStyle = '#14b8a6';
+    ctx.fillStyle = C.accent;
     ctx.beginPath(); ctx.arc(mx, my, 4, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#60a5fa';
+    ctx.fillStyle = C.accent2;
     ctx.beginPath(); ctx.arc(mx, yToPx(fp0, ymax), 4, 0, Math.PI * 2); ctx.fill();
   }
 
@@ -269,4 +271,5 @@
   window.addEventListener('resize', draw);
 
   update();
+  document.addEventListener('relu:theme', () => update());
 })();

@@ -377,6 +377,22 @@ export async function createChatbot(config) {
   sendBtn.disabled = true;
   init();
   const initialQuestion = new URLSearchParams(location.search).get('q');
-  if (initialQuestion) { input.value = initialQuestion.slice(0, 2000); input.focus(); }
+  if (initialQuestion) {
+    input.value = initialQuestion.slice(0, 2000);
+    input.focus();
+    // Deep links (?q=...) should ask the question, not just prefill it: submit once
+    // the engine has finished loading and enabled the send button.
+    const submitWhenReady = () => {
+      if (sendBtn.disabled || !input.value.trim()) return false;
+      history.replaceState(null, '', location.pathname);
+      sendBtn.click();
+      return true;
+    };
+    if (!submitWhenReady()) {
+      const observer = new MutationObserver(() => { if (submitWhenReady()) observer.disconnect(); });
+      observer.observe(sendBtn, { attributes: true, attributeFilter: ['disabled'] });
+      setTimeout(() => observer.disconnect(), 30000);
+    }
+  }
 
 }

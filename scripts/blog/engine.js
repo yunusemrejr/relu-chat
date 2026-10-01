@@ -236,7 +236,6 @@ ${post.tags ? post.tags.map(t => `<meta property="article:tag" content="${escape
 <meta name="theme-color" content="#060708">
 <link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="icon" href="/assets/logo.png" type="image/png">
-<link rel="stylesheet" href="/assets/fonts/sora.css">
 <link rel="stylesheet" href="/assets/shared-design.css?v=14">
 <link rel="stylesheet" href="/assets/css/article.css">
 
@@ -535,7 +534,6 @@ function generateIndexHTML(posts) {
 <meta name="theme-color" content="#060708">
 <link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="icon" href="/assets/logo.png" type="image/png">
-<link rel="stylesheet" href="/assets/fonts/sora.css">
 <link rel="stylesheet" href="/assets/shared-design.css?v=14">
 <link rel="stylesheet" href="/assets/css/blog-index.css">
 
@@ -884,7 +882,7 @@ Chat questions are not sent to a language-generation API. The host receives norm
 
 ## Book
 
-- [How to Remain Valuable When Intelligence Becomes Cheap](https://theknowledgeproject.gumroad.com/l/remainvaluable) — a 240-page practical guide to the human, economic, and strategic advantages that stay valuable when AI can perform most cognitive work. PDF and EPUB.
+- [How to Remain Valuable When Intelligence Becomes Cheap](https://theknowledgeproject.gumroad.com/l/remainvaluable) — a 224-page practical guide to the human, economic, and strategic advantages that stay valuable when AI can perform most cognitive work. PDF and EPUB.
 
 ## Learning guides
 

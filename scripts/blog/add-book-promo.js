@@ -62,10 +62,10 @@ const MATH_TAGS = new Set([
 ]);
 
 const COPY = {
-  ml: `This guide covered one corner of machine intelligence. <em>${BOOK_TITLE}</em> zooms out: a 240-page practical guide to the human strengths and strategic advantages that stay valuable as AI takes on more cognitive work.`,
-  web: `Fast, private software that runs anywhere is one way to stay ahead of the curve. The bigger picture is in <em>${BOOK_TITLE}</em>: a 240-page practical guide to the human and strategic advantages that compound as AI improves.`,
-  math: `Fundamentals like these compound for decades. <em>${BOOK_TITLE}</em> applies the same long-view thinking to your career: a 240-page practical guide to the advantages that stay valuable when intelligence gets cheap.`,
-  strategy: `Systems change; judgment stays scarce. <em>${BOOK_TITLE}</em> is a 240-page practical guide to the human, economic, and strategic advantages that remain valuable even when AI can do most cognitive work.`,
+  ml: `This guide covered one corner of machine intelligence. <em>${BOOK_TITLE}</em> zooms out: a 224-page practical guide to the human strengths and strategic advantages that stay valuable as AI takes on more cognitive work.`,
+  web: `Fast, private software that runs anywhere is one way to stay ahead of the curve. The bigger picture is in <em>${BOOK_TITLE}</em>: a 224-page practical guide to the human and strategic advantages that compound as AI improves.`,
+  math: `Fundamentals like these compound for decades. <em>${BOOK_TITLE}</em> applies the same long-view thinking to your career: a 224-page practical guide to the advantages that stay valuable when intelligence gets cheap.`,
+  strategy: `Systems change; judgment stays scarce. <em>${BOOK_TITLE}</em> is a 224-page practical guide to the human, economic, and strategic advantages that remain valuable even when AI can do most cognitive work.`,
 };
 
 function pickVariant(tags) {

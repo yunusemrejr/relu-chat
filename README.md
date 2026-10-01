@@ -13,7 +13,7 @@ Six free learning assistants that retrieve and explain curated knowledge in your
 | [Linear Algebra](https://relu.chat/chat/linear-algebra-chat/) | 16 |
 | [Web Platform](https://relu.chat/chat/web-platform-chat/) | 16 |
 
-There are also six interactive ML tools and 62 learning guides. The assistants can misunderstand questions. They assemble curated fragments, do not execute code, and cannot solve arbitrary exercises.
+There are also six interactive ML tools, 62 learning guides and a crawlable page for every assistant topic under `/learn/`. The assistants can misunderstand questions. They assemble curated fragments, do not execute code, and cannot solve arbitrary exercises.
 
 ## Runtime
 
@@ -50,6 +50,19 @@ Training has a supervised warm-up followed by fresh on-policy contextual-bandit 
 The September 9 release used 2,688 authored cases, split into 1,830 train, 420 validation, and 438 test cases. Topics are disjoint across splits; training templates differ from validation/test templates. The final run took 3.10 seconds. Joint test mode/intent accuracy was 93.6% for the old policy and 98.6% for both the supervised and RL checkpoints. No additional RL test gain was measured. Two development training runs took 6.33 seconds in total.
 
 Before promotion, inspect the validation gate, compare against the prior model, check Python/JS/WASM parity, and run chat regressions. Publish matching model bytes and SHA-256 manifests together. The public report at `data/policy-evaluation.json` includes the scope and measurements. Learned action heads do not replace retrieval, and these figures do not establish general chatbot accuracy.
+
+## Site generation (SEO and shared design)
+
+`node scripts/build-site.mjs` (or `npm run build`) keeps every generated part of the site in sync. `npm test` runs it with `--check`, so CI fails if anything is stale:
+
+- `/learn/` topic pages, subject hubs and the index, generated from `data/bot-packs/*` (math pre-rendered with KaTeX). Add a topic to a knowledge base and it gets a page, internal links, JSON-LD and a sitemap entry on the next build. Topics under 70 words stay `noindex` until they grow.
+- The shared shell (head assets, navigation, footer, theme toggle) applied to every static page, with content-hashed asset URLs so deploys never serve stale CSS.
+- `sitemap.xml` (`lastmod` only advances when a page's main content changes), `llms.txt`, the topic index in `llms-full.txt`, and the homepage counts, assistant list, tool list and latest guides.
+- Error pages, and the book cards (`scripts/site/book.mjs`).
+
+Social images in `assets/og/` are rendered with `npm run build:og` (needs Chrome) and committed. After a deploy that changes the sitemap, `.github/workflows/indexnow.yml` waits for production to serve it and submits only the new or changed URLs to IndexNow. The `blog` generator (`scripts/blog/generate.js`) finishes by running this build.
+
+Design tokens (ink and paper themes, one vermilion accent) live in `assets/shared-design.css`; the type pairing is self-hosted IBM Plex Sans and Mono.
 
 ## Content
 
