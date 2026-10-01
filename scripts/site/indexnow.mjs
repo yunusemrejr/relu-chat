@@ -13,8 +13,10 @@ const parse = (xml) => new Map([...xml.matchAll(/<loc>([^<]+)<\/loc>\s*(?:<lastm
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const current = readFileSync('sitemap.xml', 'utf8');
+// Base = the commit before this push (all commits of a multi-commit push count), else the parent.
+const base = process.env.BASE_SHA && !/^0+$/.test(process.env.BASE_SHA) ? process.env.BASE_SHA : 'HEAD~1';
 let previous = '';
-try { previous = execFileSync('git', ['show', 'HEAD~1:sitemap.xml'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch { /* first commit */ }
+try { previous = execFileSync('git', ['show', `${base}:sitemap.xml`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch { /* new branch or first commit: submit everything */ }
 const now = parse(current), before = parse(previous);
 const changed = [...now].filter(([url, mod]) => before.get(url) !== mod).map(([url]) => url);
 if (!changed.length) { console.log('No new or changed URLs; nothing to submit.'); process.exit(0); }
@@ -30,6 +32,7 @@ for (let i = 0; i < 40 && !live; i++) {
 }
 if (!live) { console.log('Production sitemap does not match this commit yet; skipping (next deploy will cover it).'); process.exit(0); }
 
+if (process.argv.includes('--dry-run')) { console.log(`[dry-run] would submit ${changed.length} URL(s), e.g. ${changed.slice(0, 3).join(', ')}`); process.exit(0); }
 for (let i = 0; i < changed.length; i += 9000) {
   const res = await fetch('https://api.indexnow.org/indexnow', {
     method: 'POST',
