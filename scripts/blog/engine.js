@@ -391,42 +391,10 @@ function mulberry32(seed) {
 }
 
 function defaultCoverSvg(post) {
-  // Deterministic, on-brand thumbnail (dark, teal accent) derived from the
-  // slug. Used for every post without a cover_image so cards never show a
-  // bare placeholder. Decorative: alt text is empty in the card markup.
-  const rand = mulberry32(hashStr(post.slug));
-  const tag = (post.tags && post.tags[0] ? post.tags[0] : 'ml').toUpperCase();
-  const W = 1200, H = 630;
-  let shapes = '';
-  const nodes = [];
-  const N = 11;
-  for (let i = 0; i < N; i++) {
-    nodes.push({ x: 60 + rand() * (W - 120), y: 70 + rand() * (H - 170) });
-  }
-  for (let i = 0; i < nodes.length; i++) {
-    for (let j = i + 1; j < nodes.length; j++) {
-      const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
-      const d2 = dx * dx + dy * dy;
-      if (d2 < 170 * 170) {
-        const alpha = (0.10 + rand() * 0.14).toFixed(2);
-        shapes += `<line x1="${nodes[i].x.toFixed(0)}" y1="${nodes[i].y.toFixed(0)}" x2="${nodes[j].x.toFixed(0)}" y2="${nodes[j].y.toFixed(0)}" stroke="rgba(20,184,166,${alpha})" stroke-width="1.5"/>`;
-      }
-    }
-  }
-  for (const n of nodes) {
-    shapes += `<circle cx="${n.x.toFixed(0)}" cy="${n.y.toFixed(0)}" r="${(1.5 + rand() * 2.2).toFixed(1)}" fill="rgba(20,184,166,${(0.22 + rand() * 0.25).toFixed(2)})"/>`;
-  }
-  const labelX = Math.round(60 + rand() * 40);
-  const labelY = H - 78;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
-  <rect width="${W}" height="${H}" fill="#0d1117"/>
-  <rect x="0" y="0" width="${W}" height="${H}" fill="#151b23" opacity="0.55"/>
-  <g>${shapes}</g>
-  <line x1="${labelX}" y1="${labelY}" x2="${labelX + 96}" y2="${labelY}" stroke="#14b8a6" stroke-width="3"/>
-  <text x="${labelX + 112}" y="${labelY + 10}" font-family="Sora, system-ui, sans-serif" font-size="30" font-weight="600" letter-spacing="7" fill="#f9fafb">${tag}</text>
-  <circle cx="${W - 76}" cy="76" r="5" fill="#14b8a6"/>
-</svg>
-`;
+  // Deterministic subject plate (see scripts/site/art.cjs): colour = subject,
+  // picture drawn from the subject's own vocabulary, varied by the slug.
+  const art = require('../site/art.cjs');
+  return art.coverSvg(art.subjectOfPost(post), post.slug);
 }
 
 function generateDefaultCovers(posts) {

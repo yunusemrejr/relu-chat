@@ -38,7 +38,7 @@
 /* ----- Text fallback ----- */
 .relu-diagram .text-fallback {
   display: none;
-  font-family: monospace, 'Courier New', Courier;
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   line-height: 1.5;
   color: var(--text-secondary);

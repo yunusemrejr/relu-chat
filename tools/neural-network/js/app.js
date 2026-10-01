@@ -310,7 +310,7 @@
     for (let i = 0; i < 2; i++) {
       drawNode(ctx, inputPos[i].x, inputPos[i].y, 20, [i === 0 ? x1 : x2], actName, false);
       ctx.fillStyle = C.text2;
-      ctx.font = '11px Inter, sans-serif';
+      ctx.font = '11px "Atkinson Hyperlegible Next", sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`x${i+1} = ${(i === 0 ? x1 : x2).toFixed(2)}`, inputPos[i].x, inputPos[i].y + 36);
     }
@@ -319,7 +319,7 @@
     for (let j = 0; j < hiddenCount; j++) {
       drawNode(ctx, hiddenPos[j].x, hiddenPos[j].y, 20, [hidden[j]], actName, true);
       ctx.fillStyle = C.muted;
-      ctx.font = '9px Inter, sans-serif';
+      ctx.font = '9px "Atkinson Hyperlegible Next", sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`h${j+1}`, hiddenPos[j].x, hiddenPos[j].y + 34);
     }
@@ -327,13 +327,13 @@
     // Draw output node
     drawNode(ctx, outputPos.x, outputPos.y, 24, [output], actName, true);
     ctx.fillStyle = C.text;
-    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.font = 'bold 11px "Atkinson Hyperlegible Next", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(`y = ${output.toFixed(4)}`, outputPos.x, outputPos.y + 40);
 
     // Layer labels
     ctx.fillStyle = C.muted;
-    ctx.font = '10px Inter, sans-serif';
+    ctx.font = '10px "Atkinson Hyperlegible Next", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Input', xIn, H - 16);
     ctx.fillText('Hidden', xHidden, H - 16);
@@ -341,7 +341,7 @@
 
     // Activation label
     ctx.fillStyle = C.muted;
-    ctx.font = '9px Inter, sans-serif';
+    ctx.font = '9px "Atkinson Hyperlegible Next", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(`σ = ${actName}  |  ${hiddenCount} hidden`, 12, 18);
   }
@@ -368,7 +368,7 @@
 
     if (values[0] !== undefined && active) {
       ctx.fillStyle = C.accent;
-      ctx.font = `${Math.max(9, r * 0.55)}px Inter, sans-serif`;
+      ctx.font = `${Math.max(9, r * 0.55)}px "Atkinson Hyperlegible Next", sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       const v = values[0];

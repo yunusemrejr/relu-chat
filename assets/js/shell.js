@@ -1,11 +1,11 @@
-/* ReLU.chat shell behaviour — theme toggle, mobile menu, scroll reveal.
+/* ReLU.chat shell behaviour — theme toggle, mobile menu. Motion lives in fx.js.
    Loaded with defer on every page. Everything here is progressive
    enhancement: the site is fully readable and navigable without it. */
 (function () {
   'use strict';
   var root = document.documentElement;
   var KEY = 'relu-theme';
-  var COLORS = { dark: '#0b1017', light: '#f4f6fa' };
+  var COLORS = { dark: '#0d1210', light: '#f3f5f2' };
   var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
 
 
@@ -86,19 +86,6 @@
 
   if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (!root.getAttribute('data-theme')) syncChrome(); });
 
-  // Scroll reveal. Hidden state exists only under .js, so no-JS and failures stay visible.
-  function initReveal() {
-    var els = document.querySelectorAll('.reveal');
-    if (!els.length) return;
-    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('visible'); }); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
-    els.forEach(function (el) { io.observe(el); });
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { syncChrome(); initReveal(); });
-  else { syncChrome(); initReveal(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', syncChrome);
+  else syncChrome();
 })();

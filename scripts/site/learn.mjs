@@ -5,6 +5,7 @@
 import { SITE, BOOK_COPY, TOOLS, BOTS } from './config.mjs';
 import { bookCard } from './book.mjs';
 import { esc, richText, plain, clip, fmtDate, breadcrumbLd, orgLd, authorLd, document_ } from './render.mjs';
+import { plate } from './home.mjs';
 
 // Topics with fewer own words than this stay out of the index (noindex,follow)
 // and the sitemap until the knowledge base grows them. Avoids thin pages.
@@ -65,25 +66,30 @@ function topicBody(bot, topic, ctx) {
   const sources = topic.sources.length ? `<section class="topic-sources" id="sources"><h2>Sources</h2><ul>${topic.sources.map((s) => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title || s.url)}</a></li>`).join('')}</ul></section>` : '';
   const trail = `<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/learn/">Learn</a></li><li><a href="/learn/${bot.cfg.slug}/">${esc(bot.cfg.subject)}</a></li><li aria-current="page">${esc(topic.name)}</li></ol></nav>`;
   const mins = Math.max(1, Math.round(topic.words / 200));
-  return `<article class="topic">
+  return `<article class="topic" data-subject="${bot.cfg.slug}">
+<header class="topic-hero cut">
+<div class="topic-hero-text">
 ${trail}
-<header class="topic-head">
-<p class="eyebrow"><a href="/learn/${bot.cfg.slug}/">${esc(bot.cfg.subject)}</a></p>
+<p class="kicker"><a href="/learn/${bot.cfg.slug}/">${esc(bot.cfg.subject)}</a></p>
 <h1>${esc(topic.name)}</h1>
 <p class="topic-lead">${richText(topic.summary, where)}</p>
-<div class="topic-actions"><a class="btn btn-primary" href="${chatLink(bot, topic)}">Ask the ${esc(bot.cfg.subject)} assistant</a><span class="topic-meta">${mins} min read · Updated ${fmtDate(bot.updated)}</span></div>
+<div class="topic-actions"><a class="btn btn-ink" href="${chatLink(bot, topic)}">Ask the ${esc(bot.cfg.subject)} assistant <span class="arrow" aria-hidden="true">→</span></a><span class="topic-meta">${mins} min read · Updated ${fmtDate(bot.updated)}</span></div>
+</div>
+<div class="topic-hero-art plate">${plate(bot.cfg.slug, topic.slug)}</div>
 </header>
+<div class="topic-main">
 <nav class="topic-toc" aria-label="On this page"><span>On this page</span><ol>${toc}${rel.length ? '<li><a href="#related">Related topics</a></li>' : ''}</ol></nav>
 <div class="topic-body">
 ${sec}
 </div>
 ${relHtml}
 ${deeper}
-<aside class="topic-ask" aria-label="Ask a follow-up"><div><h2>Still unsure?</h2><p>Ask a follow-up in the ${esc(bot.cfg.subject)} assistant. It answers in your browser and keeps the conversation on your device.</p></div><a class="btn btn-secondary" href="${chatLink(bot, topic)}">Open the assistant</a></aside>
+<aside class="topic-ask" aria-label="Ask a follow-up"><div><h2>Still unsure?</h2><p>Ask a follow-up in the ${esc(bot.cfg.subject)} assistant. It answers in your browser and keeps the conversation on your device.</p></div><a class="btn btn-subject" href="${chatLink(bot, topic)}">Open the assistant <span class="arrow" aria-hidden="true">→</span></a></aside>
 ${bookCard(BOOK_COPY[bot.cfg.kind])}
 ${sources}
 ${more}
 <p class="topic-note">Assembled from the ReLU.chat curated knowledge base. These explanations are concise on purpose; check the sources for anything important.</p>
+</div>
 </article>`;
 }
 
@@ -133,13 +139,20 @@ export function renderBotHub(bot) {
   const jump = groups.map(([k]) => `<li><a href="#az-${k}">${k}</a></li>`).join('');
   const list = groups.map(([k, ts]) => `<section class="az-group" id="az-${k}"><h2>${k}</h2><ul class="az-list">${ts.map((t) => `<li><a href="${topicUrl(bot, t)}"><strong>${esc(t.name)}</strong><span>${esc(clip(plain(t.summary), 140))}</span></a></li>`).join('')}</ul></section>`).join('\n');
   const feat = bot.cfg.featured.map((id) => bot.byId.get(id));
-  const body = `<div class="hub">
+  const body = `<div class="hub" data-subject="${bot.cfg.slug}">
+<header class="topic-hero cut hub-hero">
+<div class="topic-hero-text">
 <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/learn/">Learn</a></li><li aria-current="page">${esc(bot.cfg.subject)}</li></ol></nav>
-<header class="hub-head"><p class="eyebrow">${n} topics</p><h1>${esc(bot.cfg.subject)}</h1><p class="topic-lead">${esc(bot.cfg.lead)}</p>
-<div class="topic-actions"><a class="btn btn-primary" href="/chat/${bot.id}/">Chat with the ${esc(bot.cfg.subject)} assistant</a><span class="topic-meta">Start with: ${feat.map((t) => `<a href="${topicUrl(bot, t)}">${esc(t.name)}</a>`).join(', ')}</span></div></header>
+<p class="kicker">${n} topics</p><h1>${esc(bot.cfg.subject)}</h1><p class="topic-lead">${esc(bot.cfg.lead)}</p>
+<div class="topic-actions"><a class="btn btn-ink" href="/chat/${bot.id}/">Chat with the ${esc(bot.cfg.subject)} assistant <span class="arrow" aria-hidden="true">→</span></a><span class="topic-meta">Start with: ${feat.map((t) => `<a href="${topicUrl(bot, t)}">${esc(t.name)}</a>`).join(', ')}</span></div>
+</div>
+<div class="topic-hero-art plate">${plate(bot.cfg.slug, bot.id + 'hub')}</div>
+</header>
+<div class="hub-main">
 <nav class="az-jump" aria-label="Jump to letter"><ol>${jump}</ol></nav>
 ${list}
 ${bookCard(BOOK_COPY[bot.cfg.kind])}
+</div>
 </div>`;
   const ld = {
     '@context': 'https://schema.org',
@@ -157,12 +170,12 @@ export function renderLearnHub(bots) {
   const total = bots.reduce((n, b) => n + b.topics.length, 0);
   const title = `Learn: ${total} topics across ${bots.length} subjects | ReLU.chat`;
   const description = clip(`Plain-language explanations with the math shown: game theory, data science, reinforcement learning, linear algebra, the web platform and the Islamic Golden Age. ${total} topics, free.`, 158);
-  const cards = bots.map((b) => `<section class="subject" id="${b.cfg.slug}"><div class="subject-head"><h2><a href="/learn/${b.cfg.slug}/">${esc(b.cfg.subject)}</a></h2><span class="subject-count">${b.topics.length} topics</span></div><p>${esc(b.cfg.lead)}</p><ul class="topic-chips">${b.cfg.featured.map((id) => b.byId.get(id)).map((t) => `<li><a href="${topicUrl(b, t)}">${esc(t.name)}</a></li>`).join('')}<li><a class="chip-all" href="/learn/${b.cfg.slug}/">All ${b.topics.length}</a></li></ul></section>`).join('\n');
-  const index = bots.map((b) => `<section class="index-group" data-subject="${esc(b.cfg.subject)}"><h3>${esc(b.cfg.subject)}</h3><ul class="index-list">${b.topics.map((t) => `<li data-name="${esc((t.name + ' ' + t.aliases.join(' ')).toLowerCase())}"><a href="${topicUrl(b, t)}">${esc(t.name)}</a></li>`).join('')}</ul></section>`).join('\n');
+  const cards = bots.map((b) => `<li class="tile cut reveal" id="${b.cfg.slug}" data-subject="${b.cfg.slug}"><div class="tile-art plate">${plate(b.cfg.slug, b.id + 'learn')}</div><div class="tile-body"><p class="tile-count"><b>${b.topics.length}</b> topics</p><h2><a href="/learn/${b.cfg.slug}/">${esc(b.cfg.subject)}</a></h2><p>${esc(b.cfg.lead)}</p><p class="tile-try">${b.cfg.featured.map((id) => b.byId.get(id)).map((t) => `<a href="${topicUrl(b, t)}">${esc(t.name)}</a>`).join('')}</p><div class="tile-actions"><a class="btn btn-ink btn-sm" href="/learn/${b.cfg.slug}/">All ${b.topics.length} topics <span class="arrow" aria-hidden="true">→</span></a><a class="panel-link" href="/chat/${b.id}/">Ask the assistant</a></div></div></li>`).join('\n');
+  const index = bots.map((b) => `<section class="index-group" data-subject="${b.cfg.slug}" data-label="${esc(b.cfg.subject)}"><h3>${esc(b.cfg.subject)}</h3><ul class="index-list">${b.topics.map((t) => `<li data-name="${esc((t.name + ' ' + t.aliases.join(' ')).toLowerCase())}"><a href="${topicUrl(b, t)}">${esc(t.name)}</a></li>`).join('')}</ul></section>`).join('\n');
   const body = `<div class="hub">
 <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Learn</li></ol></nav>
-<header class="hub-head"><p class="eyebrow">Free · No account</p><h1>Learn the concept, then ask about it</h1><p class="topic-lead">${total} short explanations, each with a definition, intuition, a worked example and the math. Every topic links to a chat assistant you can ask follow-ups.</p></header>
-<div class="subjects">${cards}</div>
+<header class="hub-head"><p class="kicker">Free · No account</p><h1 class="split-words">Learn the concept, then ask about it</h1><p class="topic-lead">${total} short explanations, each with a definition, intuition, a worked example and the math. Every topic links to a chat assistant you can ask follow-ups.</p></header>
+<ul class="tile-grid">${cards}</ul>
 <section class="index" aria-labelledby="index-h"><div class="index-top"><h2 id="index-h">Every topic</h2><label class="index-search"><span class="sr-only">Filter topics</span><input type="search" id="topic-filter" placeholder="Filter ${total} topics…" autocomplete="off"></label></div><p class="index-empty" id="index-empty" hidden>No topic matches that filter.</p>
 ${index}</section>
 ${bookCard(BOOK_COPY.ml)}

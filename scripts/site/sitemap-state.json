@@ -1,286 +1,286 @@
 {
  "/": {
-  "hash": "014d436ed113",
+  "hash": "487ec4e97439",
   "lastmod": "2026-10-01"
  },
  "/blog/": {
-  "hash": "4755468dcbd3",
+  "hash": "2bf0b34b2219",
   "lastmod": "2026-10-01"
  },
  "/blog/accessibility-ai-chatbots-wcag/": {
-  "hash": "aff8f3897048",
+  "hash": "8b61581b0801",
   "lastmod": "2026-10-01"
  },
  "/blog/bias-in-retrieval-chatbots/": {
-  "hash": "8d791bd6d326",
+  "hash": "1b799ea06a05",
   "lastmod": "2026-10-01"
  },
  "/blog/bm25-browser-field-weighted-retrieval/": {
-  "hash": "992772814bbf",
+  "hash": "807e2859f7da",
   "lastmod": "2026-10-01"
  },
  "/blog/bm25-math-worked-example/": {
-  "hash": "51fe05b5f81a",
+  "hash": "3f47c4588239",
   "lastmod": "2026-10-01"
  },
  "/blog/bm25-vs-dense-retrieval/": {
-  "hash": "163b872bc905",
+  "hash": "24e1fe55e51b",
   "lastmod": "2026-10-01"
  },
  "/blog/browser-vector-math-optimization/": {
-  "hash": "f1e9e79e553e",
+  "hash": "fc4089aeb485",
   "lastmod": "2026-10-01"
  },
  "/blog/chunking-strategies-knowledge-base/": {
-  "hash": "f13bbf84925a",
+  "hash": "f3ebd452d6e6",
   "lastmod": "2026-10-01"
  },
  "/blog/conversation-state-machines/": {
-  "hash": "6105608cfd9f",
+  "hash": "7e5b6887ddd5",
   "lastmod": "2026-10-01"
  },
  "/blog/cosine-similarity-vector-search/": {
-  "hash": "8413cdbf449f",
+  "hash": "32f9ebb9efff",
   "lastmod": "2026-10-01"
  },
  "/blog/debugging-browser-ml/": {
-  "hash": "9d2fba7369e9",
+  "hash": "b5e5f8074c8b",
   "lastmod": "2026-10-01"
  },
  "/blog/dense-sparse-ensemble-ranking/": {
-  "hash": "d0f8b16f1940",
+  "hash": "f9cda59a118c",
   "lastmod": "2026-10-01"
  },
  "/blog/dot-product-cosine-worked-example/": {
-  "hash": "75229bbdadd2",
+  "hash": "a48a53d9e8cb",
   "lastmod": "2026-10-01"
  },
  "/blog/float32-vs-float64-precision/": {
-  "hash": "d1594dc1f5f7",
+  "hash": "36b4029fb979",
   "lastmod": "2026-10-01"
  },
  "/blog/follow-up-detection-20-patterns/": {
-  "hash": "09de494c534c",
+  "hash": "ba10cfa2be2b",
   "lastmod": "2026-10-01"
  },
  "/blog/grouped-validation-leakage/": {
-  "hash": "5094e8cecbb7",
+  "hash": "d7264f0081f4",
   "lastmod": "2026-10-01"
  },
  "/blog/heuristic-fallback-cold-start/": {
-  "hash": "6eb273a60e94",
+  "hash": "5a42da86c633",
   "lastmod": "2026-10-01"
  },
  "/blog/how-browser-based-chatbots-work/": {
-  "hash": "62600f89e248",
+  "hash": "a3334d04627c",
   "lastmod": "2026-10-01"
  },
  "/blog/indexeddb-client-storage/": {
-  "hash": "12197128ea65",
+  "hash": "ee76be387e1b",
   "lastmod": "2026-10-01"
  },
  "/blog/int8-quantization-browser-mlp/": {
-  "hash": "e81a5b5a7b0b",
+  "hash": "1799129515fa",
   "lastmod": "2026-10-01"
  },
  "/blog/int8-quantization-explained/": {
-  "hash": "7dd1f483af60",
+  "hash": "80865fa96735",
   "lastmod": "2026-10-01"
  },
  "/blog/katex-vs-mathjax-math-rendering/": {
-  "hash": "a98ca8d4d62a",
+  "hash": "ce264e25dc0e",
   "lastmod": "2026-10-01"
  },
  "/blog/knowledge-base-fragments-fields-metadata/": {
-  "hash": "841d4543ef28",
+  "hash": "2b4c664df0f7",
   "lastmod": "2026-10-01"
  },
  "/blog/knowledge-fragment-composition/": {
-  "hash": "90eedfe35ace",
+  "hash": "34d736aa46e0",
   "lastmod": "2026-10-01"
  },
  "/blog/latency-budgets-conversational-ui/": {
-  "hash": "46e8db16bbae",
+  "hash": "7ee39e410475",
   "lastmod": "2026-10-01"
  },
  "/blog/least-squares-without-inverse/": {
-  "hash": "ba19d3c3ad11",
+  "hash": "08d1f88c1ca0",
   "lastmod": "2026-10-01"
  },
  "/blog/linguistic-connectors-naturalness/": {
-  "hash": "f7f59c29daf6",
+  "hash": "a708187349dc",
   "lastmod": "2026-10-01"
  },
  "/blog/local-chat-privacy-network/": {
-  "hash": "9e6ca7d345e4",
+  "hash": "4eb2117ac914",
   "lastmod": "2026-10-01"
  },
  "/blog/memory-leaks-long-chat-sessions/": {
-  "hash": "9cacb76d3157",
+  "hash": "d09e1ca5c87e",
   "lastmod": "2026-10-01"
  },
  "/blog/model-size-vs-quality/": {
-  "hash": "216f3abc48c5",
+  "hash": "8aeac3b63d6c",
   "lastmod": "2026-10-01"
  },
  "/blog/named-entity-recognition-no-llm/": {
-  "hash": "afdb7c8fb726",
+  "hash": "38dd7cfc8c5e",
   "lastmod": "2026-10-01"
  },
  "/blog/nash-equilibrium-best-response-table/": {
-  "hash": "63e68d28f7b7",
+  "hash": "ede1cdecfb81",
   "lastmod": "2026-10-01"
  },
  "/blog/offline-first-chat-architecture/": {
-  "hash": "0e108e30ac87",
+  "hash": "074e094f6fb9",
   "lastmod": "2026-10-01"
  },
  "/blog/onnx-runtime-web-quantization/": {
-  "hash": "6406ddd366f4",
+  "hash": "3285db1b079e",
   "lastmod": "2026-10-01"
  },
  "/blog/ppo-reward-design-policy-network/": {
-  "hash": "6a5d2384cdf8",
+  "hash": "032218dd68b1",
   "lastmod": "2026-10-01"
  },
  "/blog/precision-recall-small-example/": {
-  "hash": "c25b38de08bc",
+  "hash": "1a69c251f282",
   "lastmod": "2026-10-01"
  },
  "/blog/privacy-checklist-browser-ai/": {
-  "hash": "3c70d0965ab1",
+  "hash": "cf6260ef7b50",
   "lastmod": "2026-10-01"
  },
  "/blog/privacy-first-ai-browsers/": {
-  "hash": "d8be1a523e57",
+  "hash": "b55110ea4203",
   "lastmod": "2026-10-01"
  },
  "/blog/progressive-loading-bow-mlp-transformer/": {
-  "hash": "b5e5a39a6d45",
+  "hash": "83ce18f50fcd",
   "lastmod": "2026-10-01"
  },
  "/blog/progressive-streaming-rendering-chatbots/": {
-  "hash": "548b651256da",
+  "hash": "726212a7c4c3",
   "lastmod": "2026-10-01"
  },
  "/blog/prototype-intent-classification/": {
-  "hash": "d7f04193fa77",
+  "hash": "7c4608e6e9b7",
   "lastmod": "2026-10-01"
  },
  "/blog/q-learning-sarsa-worked-example/": {
-  "hash": "b4bdb5b8684a",
+  "hash": "4539058e281f",
   "lastmod": "2026-10-01"
  },
  "/blog/query-expansion-without-llm/": {
-  "hash": "373abf28b3e9",
+  "hash": "3a82e297a60b",
   "lastmod": "2026-10-01"
  },
  "/blog/rank-svd-conditioning/": {
-  "hash": "545b03796fd9",
+  "hash": "22f7f0755ae3",
   "lastmod": "2026-10-01"
  },
  "/blog/reading-islamic-science-sources/": {
-  "hash": "557efbb578f9",
+  "hash": "82992f5eb116",
   "lastmod": "2026-10-01"
  },
  "/blog/reinforcement-learning-for-chatbots/": {
-  "hash": "84c68ccce50b",
+  "hash": "a0efee7b0728",
   "lastmod": "2026-10-01"
  },
  "/blog/retrieval-metrics-precision-recall-mrr/": {
-  "hash": "28465eabe741",
+  "hash": "d8b20372df37",
   "lastmod": "2026-10-01"
  },
  "/blog/reward-design-small-chatbot/": {
-  "hash": "4cb25d70ecd8",
+  "hash": "072e7274f6aa",
   "lastmod": "2026-10-01"
  },
  "/blog/rl-termination-truncation/": {
-  "hash": "5641c8350d62",
+  "hash": "21e64dd9da98",
   "lastmod": "2026-10-01"
  },
  "/blog/sentence-embeddings-384-dim-minilm/": {
-  "hash": "e984b73e4980",
+  "hash": "b1393e5f24f3",
   "lastmod": "2026-10-01"
  },
  "/blog/sentence-vs-word-embeddings/": {
-  "hash": "411fd0b1174d",
+  "hash": "b12a6b9585a7",
   "lastmod": "2026-10-01"
  },
  "/blog/service-worker-caching-strategies/": {
-  "hash": "1ab45a32a7f9",
+  "hash": "24833dc6b63c",
   "lastmod": "2026-10-01"
  },
  "/blog/service-worker-model-pre-caching/": {
-  "hash": "18a216733fea",
+  "hash": "43187d094284",
   "lastmod": "2026-10-01"
  },
  "/blog/service-worker-model-updates/": {
-  "hash": "09cecad955f9",
+  "hash": "e6a99a89f42d",
   "lastmod": "2026-10-01"
  },
  "/blog/service-workers-offline-ai/": {
-  "hash": "f8979260de1b",
+  "hash": "ddc31455b4a4",
   "lastmod": "2026-10-01"
  },
  "/blog/session-memory-architecture-30-turns/": {
-  "hash": "1303f70f314a",
+  "hash": "5b8a3386031a",
   "lastmod": "2026-10-01"
  },
  "/blog/tiny-policy-training-cpu/": {
-  "hash": "840dac87bcdb",
+  "hash": "d96cf2888ca0",
   "lastmod": "2026-10-01"
  },
  "/blog/tokenization-subword-bpe-on-device/": {
-  "hash": "9029e21baee6",
+  "hash": "1e32b6d1b5ce",
   "lastmod": "2026-10-01"
  },
  "/blog/topic-correction-when-users-redirect/": {
-  "hash": "ae8af4c1f0c9",
+  "hash": "874f618ee007",
   "lastmod": "2026-10-01"
  },
  "/blog/wasm-javascript-policy-parity/": {
-  "hash": "4327e8eaf2cd",
+  "hash": "cb605236982e",
   "lastmod": "2026-10-01"
  },
  "/blog/web-workers-ui-thread/": {
-  "hash": "78d3d8c33618",
+  "hash": "d15de2ec1ac8",
   "lastmod": "2026-10-01"
  },
  "/blog/webassembly-browser-ml/": {
-  "hash": "6705a010023f",
+  "hash": "37e4260fce49",
   "lastmod": "2026-10-01"
  },
  "/blog/webgpu-future-browser-inference/": {
-  "hash": "f9e3effc31e4",
+  "hash": "9fc1fc328a3b",
   "lastmod": "2026-10-01"
  },
  "/chat/": {
-  "hash": "91dab5303982",
+  "hash": "7efe90b4fe59",
   "lastmod": "2026-10-01"
  },
  "/chat/data-science-chat/": {
-  "hash": "55b0ed810462",
+  "hash": "90015f447e4e",
   "lastmod": "2026-10-01"
  },
  "/chat/game-theory-chat/": {
-  "hash": "86a48cd0641e",
+  "hash": "f068c2890942",
   "lastmod": "2026-10-01"
  },
  "/chat/golden-age-inquiry/": {
-  "hash": "a770d2a8e1ef",
+  "hash": "db08946833dd",
   "lastmod": "2026-10-01"
  },
  "/chat/linear-algebra-chat/": {
-  "hash": "8ebd514920bb",
+  "hash": "c95104a8f1be",
   "lastmod": "2026-10-01"
  },
  "/chat/reinforcement-learning-chat/": {
-  "hash": "fcf0a110e46c",
+  "hash": "ad46f70f4a1f",
   "lastmod": "2026-10-01"
  },
  "/chat/web-platform-chat/": {
-  "hash": "0c0bd2dc60c3",
+  "hash": "b74aad641bf7",
   "lastmod": "2026-10-01"
  },
  "/how-it-works.html": {
@@ -288,911 +288,911 @@
   "lastmod": "2026-10-01"
  },
  "/learn/": {
-  "hash": "146400756fc6",
+  "hash": "c4b6a2ce03d0",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/": {
-  "hash": "b4482b262745",
+  "hash": "252f079b4096",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/accuracy/": {
-  "hash": "2d35dd4701cc",
+  "hash": "02a89c4d2ed2",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/bias-variance-tradeoff/": {
-  "hash": "4972e64bda63",
+  "hash": "cea11de700d0",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/browser-and-local-ml/": {
-  "hash": "9eb20474443e",
+  "hash": "c4ff4df70409",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/classification/": {
-  "hash": "104b489a6404",
+  "hash": "85c14615b6c3",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/clustering/": {
-  "hash": "046c082650d7",
+  "hash": "bb8bab9fff5d",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/cross-validation/": {
-  "hash": "3cf58032d00b",
+  "hash": "d2277438671d",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/data-cleaning/": {
-  "hash": "e04b46734bf7",
+  "hash": "929707456b0e",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/data-leakage/": {
-  "hash": "ab749e948023",
+  "hash": "090e53d996a4",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/data-visualization/": {
-  "hash": "44aa04c42aa1",
+  "hash": "4160fa9f41e8",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/dataset-shift/": {
-  "hash": "01c1e2deb57e",
+  "hash": "64159dfea117",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/decision-trees/": {
-  "hash": "f00cdeff60dc",
+  "hash": "d8226111ccc1",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/descriptive-statistics/": {
-  "hash": "ac6fcd28c907",
+  "hash": "a6afaa6a546a",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/dimensionality-reduction/": {
-  "hash": "c4f59b5d1b88",
+  "hash": "1a9b62628375",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/ensemble-methods/": {
-  "hash": "09fab6044797",
+  "hash": "30f5c125dd27",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/exploratory-data-analysis/": {
-  "hash": "646561e7f719",
+  "hash": "5c4957904f36",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/f1-score/": {
-  "hash": "4f38caf19c9b",
+  "hash": "b1a67d44bfe0",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/feature-engineering/": {
-  "hash": "236f6159e268",
+  "hash": "43ad3b7ad6ae",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/feature-scaling/": {
-  "hash": "04d3a3f1dcac",
+  "hash": "398f17d2fae2",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/grouped-cross-validation/": {
-  "hash": "a68ef689d933",
+  "hash": "488c4d3303d1",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/k-means-clustering/": {
-  "hash": "fdcde7c8f753",
+  "hash": "7aa6fd25af75",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/linear-regression/": {
-  "hash": "13b7d1436cb8",
+  "hash": "20cf462bfed5",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/logistic-regression/": {
-  "hash": "998c4a7893c7",
+  "hash": "3fa3bd781653",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/missing-values/": {
-  "hash": "60aad91612c9",
+  "hash": "085139d3645d",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/model-deployment/": {
-  "hash": "c1c3d404477c",
+  "hash": "263c15c0a6dc",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/model-evaluation/": {
-  "hash": "a44d87038c85",
+  "hash": "32efa9e22158",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/numpy-arrays/": {
-  "hash": "e68ef133a27a",
+  "hash": "556659792a0f",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/outlier-detection/": {
-  "hash": "5f0be8b4bc79",
+  "hash": "10fbc25fdd02",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/overfitting/": {
-  "hash": "126105bbde44",
+  "hash": "22f2128b80d9",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/pandas-dataframe/": {
-  "hash": "a9ec949fd974",
+  "hash": "112a1680eace",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/precision-and-recall/": {
-  "hash": "e8f575ba3c6c",
+  "hash": "ba3868a6abb1",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/principal-component-analysis/": {
-  "hash": "7bac6638b89e",
+  "hash": "25b1898486c7",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/probability-basics/": {
-  "hash": "e610dec0c5aa",
+  "hash": "5f435ec742a5",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/probability-calibration/": {
-  "hash": "06e7ba1f6afd",
+  "hash": "68f8efab3655",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/probability-distributions/": {
-  "hash": "a3efbd597bf0",
+  "hash": "a69424c5ab25",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/python-for-data-work/": {
-  "hash": "606d9da1536f",
+  "hash": "63cdd66032f5",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/regression/": {
-  "hash": "db90dc671588",
+  "hash": "bee45d6cf48e",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/regularization/": {
-  "hash": "23bf833e3f66",
+  "hash": "5b495ea233d1",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/roc-and-auc/": {
-  "hash": "426a2edcd5a0",
+  "hash": "931fc9897d97",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/time-series-analysis/": {
-  "hash": "48874b93b35b",
+  "hash": "750c02f51f65",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/train-test-split/": {
-  "hash": "f71530710f40",
+  "hash": "5d7674c5e730",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/underfitting/": {
-  "hash": "b7538046d2ff",
+  "hash": "f943bba4e9e7",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/": {
-  "hash": "db5a4e0a7044",
+  "hash": "9a40e014a682",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/algorithmic-mechanism-design/": {
-  "hash": "63dd41a1bcd7",
+  "hash": "bf0fe624d4f8",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/auction-theory/": {
-  "hash": "29b9d14ba804",
+  "hash": "2105bbf13c24",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/backward-induction/": {
-  "hash": "e7e8054a4c8b",
+  "hash": "4c3772330003",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/banzhaf-power-index/": {
-  "hash": "cbf950961f80",
+  "hash": "2ad54fda36f2",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/battle-of-the-sexes/": {
-  "hash": "d9ee84ac08e8",
+  "hash": "13fb899fcc0a",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/bayesian-game/": {
-  "hash": "fd54bb3d4e5f",
+  "hash": "4464f0f1f4d0",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/berge-equilibrium/": {
-  "hash": "af5b06b7a5a0",
+  "hash": "dbd404e395aa",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/bertrand-competition/": {
-  "hash": "239879669332",
+  "hash": "ca797af59e36",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/best-response-table/": {
-  "hash": "ee908309bec6",
+  "hash": "8964a8e66c01",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/centipede-game/": {
-  "hash": "47b53210c7d0",
+  "hash": "763a3244714f",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/cheap-talk/": {
-  "hash": "c172cf67b376",
+  "hash": "2864caca840d",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/chicken-game/": {
-  "hash": "c9488ef0da0e",
+  "hash": "ff6829225445",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/coalition-formation/": {
-  "hash": "040e49dee66a",
+  "hash": "4216fd1d6d10",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/common-knowledge/": {
-  "hash": "f00c3cc4a64a",
+  "hash": "8b16ed544c7b",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/congestion-games/": {
-  "hash": "352c78f28f89",
+  "hash": "9984894d5231",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/cooperative-game/": {
-  "hash": "6851b96e9878",
+  "hash": "a51e4ec6fa8b",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/core-of-a-cooperative-game/": {
-  "hash": "0262133d66e8",
+  "hash": "01bb7961823d",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/core-selection-matching/": {
-  "hash": "80dea73c44d5",
+  "hash": "dabcbcef5ecf",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/correlated-equilibrium/": {
-  "hash": "ff57ccf4d83b",
+  "hash": "859785ee2054",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/cournot-competition/": {
-  "hash": "256b2fcca1cc",
+  "hash": "5a61f188dd55",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/dominant-strategy/": {
-  "hash": "9d0518679354",
+  "hash": "b92f99fce8f5",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/evolutionarily-stable-sets/": {
-  "hash": "65979829b86d",
+  "hash": "b9b7ae856eb3",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/evolutionarily-stable-strategy/": {
-  "hash": "05ac3e3dce21",
+  "hash": "bc4a4e7004da",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/evolutionary-game-theory/": {
-  "hash": "8b84cb9a4c80",
+  "hash": "fd615d9a6205",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/extensive-form-game/": {
-  "hash": "27738185485f",
+  "hash": "457d1bb80aa7",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/fair-division/": {
-  "hash": "fd21b9f267a8",
+  "hash": "a7b2f49f23fc",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/fictitious-play/": {
-  "hash": "75ccf815bd66",
+  "hash": "4378bfa002b3",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/folk-theorem/": {
-  "hash": "733fafcca85b",
+  "hash": "3f18bee2b3f6",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/global-games/": {
-  "hash": "5097c60610ab",
+  "hash": "d66db1f1678c",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/harsanyi-transformation/": {
-  "hash": "39cb480e4596",
+  "hash": "f7a390d0fd1b",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/hawk-dove-game/": {
-  "hash": "6c48befe62b9",
+  "hash": "13bd157fce80",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/iterated-elimination-of-dominated-strategies/": {
-  "hash": "2628840e002d",
+  "hash": "15a32f646245",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/level-k-reasoning/": {
-  "hash": "790436e382a2",
+  "hash": "a628874d2b77",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/limits-of-equilibrium-predictions/": {
-  "hash": "21defd6c1ae9",
+  "hash": "039021a193fa",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/matching-pennies/": {
-  "hash": "e469de6bf94d",
+  "hash": "b3b471b8c848",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/mean-field-game/": {
-  "hash": "03a77458e4c6",
+  "hash": "6c98553a4ca2",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/mechanism-design/": {
-  "hash": "3838b4315a73",
+  "hash": "0dbd3fac36b4",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/minimax-theorem/": {
-  "hash": "924cc00a0312",
+  "hash": "cf42cad6229a",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/mixed-equilibrium-calculation/": {
-  "hash": "c1edde5d3636",
+  "hash": "5eeb4d87b30a",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/mixed-strategy/": {
-  "hash": "05228c599889",
+  "hash": "2be43f042e14",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/nash-bargaining-solution/": {
-  "hash": "89e147fa9e81",
+  "hash": "0b800a094cd4",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/nash-equilibrium/": {
-  "hash": "88c444debbde",
+  "hash": "63c65554dda4",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/no-regret-learning/": {
-  "hash": "664a977cf649",
+  "hash": "c5035cb01977",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/non-cooperative-game/": {
-  "hash": "bfed64e7f26e",
+  "hash": "a8a0c0331f92",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/normal-form-game/": {
-  "hash": "14205feff521",
+  "hash": "95c4ea691193",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/pareto-efficiency/": {
-  "hash": "1751a967c2ee",
+  "hash": "761483491b73",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/perfect-bayesian-equilibrium/": {
-  "hash": "83464855b03f",
+  "hash": "ec96e4df36d0",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/potential-games/": {
-  "hash": "e8c9e5b4829e",
+  "hash": "b2e26af594e8",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/price-of-anarchy/": {
-  "hash": "0084d3684863",
+  "hash": "c0380c55fe37",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/price-of-stability/": {
-  "hash": "1fdeb1ff2005",
+  "hash": "cbcc59ede8d6",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/principal-agent-problem/": {
-  "hash": "652a3fb1cf2f",
+  "hash": "7a4d09d2e4d9",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/prisoners-dilemma/": {
-  "hash": "8b33a1de5191",
+  "hash": "095ee7d660b9",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/proper-equilibrium/": {
-  "hash": "773916cfd3ba",
+  "hash": "5d5b957badc1",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/public-goods-game/": {
-  "hash": "e1b7b3224931",
+  "hash": "0de723d15831",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/pure-strategy/": {
-  "hash": "7ec0ccb20f93",
+  "hash": "0b6926b30d0e",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/quantal-response-equilibrium/": {
-  "hash": "ef63e8f4d60e",
+  "hash": "73b9e5a241be",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/rationalizability/": {
-  "hash": "80ed2bbb2b3a",
+  "hash": "a48528e1750b",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/repeated-game/": {
-  "hash": "00699b6b723c",
+  "hash": "3398a3e7c6de",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/replicator-dynamics/": {
-  "hash": "26de4b0a158a",
+  "hash": "08a44ebe62c2",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/revelation-principle/": {
-  "hash": "aaa51f43a62a",
+  "hash": "fbd19775ec84",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/rubinstein-bargaining/": {
-  "hash": "da551a27be02",
+  "hash": "3157b0268be7",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/screening-games/": {
-  "hash": "152ded1e6d52",
+  "hash": "3ad25c707b5c",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/sequential-equilibrium/": {
-  "hash": "269ca181b961",
+  "hash": "2d17844da175",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/shapley-value/": {
-  "hash": "4a996fe8233e",
+  "hash": "fea118e4824c",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/signaling-games/": {
-  "hash": "509ce774bafa",
+  "hash": "48d61e4ad991",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/smoothed-analysis-of-price-of-anarchy/": {
-  "hash": "a98e09af77da",
+  "hash": "db8f2d11e67b",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/social-choice-theory/": {
-  "hash": "f88032c3c9a3",
+  "hash": "77877b489604",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/stackelberg-competition/": {
-  "hash": "84f08a0d0b09",
+  "hash": "27a42854aa5f",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/stag-hunt/": {
-  "hash": "9834448aa19f",
+  "hash": "519baa950f2b",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/subgame-perfect-equilibrium/": {
-  "hash": "e7166058881d",
+  "hash": "8a342553a857",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/supermodular-games/": {
-  "hash": "63f5210f6652",
+  "hash": "cfe149da8bfb",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/tit-for-tat/": {
-  "hash": "4e7c1c4c7267",
+  "hash": "7436bd344e8f",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/tragedy-of-the-commons/": {
-  "hash": "852fd730e9ff",
+  "hash": "0d311a65fb26",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/trembling-hand-perfection/": {
-  "hash": "edee0b1b39d7",
+  "hash": "11f17cb84aa5",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/ultimatum-game/": {
-  "hash": "a0c55f5d50df",
+  "hash": "f1f7b8b7798d",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/vickrey-auction/": {
-  "hash": "ed16f2bbbd7a",
+  "hash": "61636996fe5e",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/voting-theory/": {
-  "hash": "d5a4dd68e45a",
+  "hash": "fcf73a58547b",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/wardrop-equilibrium/": {
-  "hash": "8935abb0bb17",
+  "hash": "755b9bec82e4",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/zermelos-theorem/": {
-  "hash": "cfedb80dc5ca",
+  "hash": "1dbf3470a787",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/zero-sum-game/": {
-  "hash": "dd9327672b98",
+  "hash": "ae46bfe35609",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/": {
-  "hash": "046eccc60545",
+  "hash": "9bd47e6c69fd",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/abbas-ibn-firnas/": {
-  "hash": "283e4775566a",
+  "hash": "b1ba03a5b0ea",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-battani/": {
-  "hash": "d0a468aa4557",
+  "hash": "0a3bf0eb37d0",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-biruni/": {
-  "hash": "4d55fc5cc9d5",
+  "hash": "dbd46f2118f3",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-farabi/": {
-  "hash": "d08b2222e3bf",
+  "hash": "7f9176cac56f",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-farghani/": {
-  "hash": "31a2762e955d",
+  "hash": "66d587d70598",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-ghazali/": {
-  "hash": "0ded08ba2f3a",
+  "hash": "b98a6cbefc87",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-idrisi/": {
-  "hash": "0d7312e9bacd",
+  "hash": "d6d9a1fd0c78",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-jazari/": {
-  "hash": "830e55882fc4",
+  "hash": "4922a7ac21cd",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-karaji/": {
-  "hash": "bfa201572fd5",
+  "hash": "4ba01202561e",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-khwarizmi/": {
-  "hash": "66721c043745",
+  "hash": "924814df25e5",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-kindi/": {
-  "hash": "5c1af78d22ef",
+  "hash": "dddd29467c4b",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-majriti/": {
-  "hash": "7d920406fdf2",
+  "hash": "f668ca03b137",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-razi-rhazes/": {
-  "hash": "d5dec1e587ac",
+  "hash": "5f47e7fc3200",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-samawal/": {
-  "hash": "03bd0f08980b",
+  "hash": "19ea85db68bc",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-zahrawi-abulcasis/": {
-  "hash": "0eb3bc7fb159",
+  "hash": "e748c574e394",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/al-zarqali/": {
-  "hash": "35d92c0b0ed0",
+  "hash": "a429562d3d80",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/algebra/": {
-  "hash": "638af4277e5c",
+  "hash": "7f36bd8ec018",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/astrolabe/": {
-  "hash": "d7c094b67d51",
+  "hash": "0dd3422b31e5",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/astronomy-in-the-golden-age/": {
-  "hash": "fb9848380e29",
+  "hash": "034e5a0c6f92",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/banu-musa-brothers/": {
-  "hash": "a96782467c0e",
+  "hash": "744827e45d2a",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/canon-of-medicine/": {
-  "hash": "d7cf2c1d1e5c",
+  "hash": "8c55cc86abb6",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/development-of-algebra/": {
-  "hash": "9bd50eb6f46e",
+  "hash": "9d8ba0a6bb94",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/fatima-al-fihri/": {
-  "hash": "369a05cdcab4",
+  "hash": "1307ec7cd0f4",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/house-of-wisdom/": {
-  "hash": "94ecdbccfd05",
+  "hash": "8aa801c37167",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/hunayn-ibn-ishaq/": {
-  "hash": "df5c3386a382",
+  "hash": "a30f21a6191b",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ibn-al-haytham-alhazen/": {
-  "hash": "2d7ee3a94c52",
+  "hash": "99075d167973",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ibn-al-nafis/": {
-  "hash": "a92bdcad8452",
+  "hash": "8ca27901e1a9",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ibn-al-shatir/": {
-  "hash": "3decc753b450",
+  "hash": "76588ace5650",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ibn-bajjah-avempace/": {
-  "hash": "c2c9f7ab1a15",
+  "hash": "fee2d601b86d",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ibn-khaldun/": {
-  "hash": "e587aa2c6495",
+  "hash": "66e57267a9e7",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ibn-rushd-averroes/": {
-  "hash": "4b2a78944eff",
+  "hash": "572e373abff0",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ibn-sahl/": {
-  "hash": "23b78b598295",
+  "hash": "1fe627e433cb",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ibn-sina-avicenna/": {
-  "hash": "b0cc4066149a",
+  "hash": "4d2716e4ad26",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ibn-tufayl/": {
-  "hash": "566e8f6b1833",
+  "hash": "9aab072b8ebd",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/lubana-of-cordoba/": {
-  "hash": "907fcbff878c",
+  "hash": "4cac716db992",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/maragha-school/": {
-  "hash": "9bd34c5064fd",
+  "hash": "63ba352639aa",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/mariam-al-astrulabi/": {
-  "hash": "24e30b2c59f7",
+  "hash": "7d161b89747a",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/medicine-in-the-golden-age/": {
-  "hash": "981d6deb714f",
+  "hash": "b10484e82283",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/nasir-al-din-al-tusi/": {
-  "hash": "54996d479e8a",
+  "hash": "79f68f7b1348",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/networks-of-knowledge-transmission/": {
-  "hash": "02d058da99f6",
+  "hash": "f64b99a66d6d",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/omar-khayyam/": {
-  "hash": "10743c9ab874",
+  "hash": "26377e6dd8bd",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/optics-in-the-golden-age/": {
-  "hash": "c307c9a65add",
+  "hash": "ea505c228c94",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/paper-making/": {
-  "hash": "6cd096591f9d",
+  "hash": "d605691ce19b",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/periodization-of-the-islamic-golden-age/": {
-  "hash": "82c2684f65d5",
+  "hash": "d61bd59611aa",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/philosophy-in-the-golden-age/": {
-  "hash": "98417da403a6",
+  "hash": "09538c8f6feb",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/qusta-ibn-luqa/": {
-  "hash": "0b8a89c18523",
+  "hash": "944000d31352",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/reading-historical-sources/": {
-  "hash": "4d4ea2a033a6",
+  "hash": "3eb68637755e",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/thabit-ibn-qurra/": {
-  "hash": "eed5981cf959",
+  "hash": "ed5df21f7529",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/translation-movement/": {
-  "hash": "629e62ccdd15",
+  "hash": "85077b40041e",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ulugh-beg/": {
-  "hash": "5358da48d4e8",
+  "hash": "9cf4972d5220",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/": {
-  "hash": "3d57eff71e54",
+  "hash": "587f94af4ed3",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/basis-and-span/": {
-  "hash": "c9afd442d7b9",
+  "hash": "3524d698ccbe",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/condition-number/": {
-  "hash": "ece8f7e36941",
+  "hash": "4f7f742226d4",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/determinant/": {
-  "hash": "a597d7615131",
+  "hash": "a72881ce891e",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/eigenvalues-and-eigenvectors/": {
-  "hash": "6de12ff6896e",
+  "hash": "b19347d8d60f",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/least-squares/": {
-  "hash": "6b83edb15855",
+  "hash": "34d8e3b822e7",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/linear-system/": {
-  "hash": "6a28562c4d38",
+  "hash": "5dc66f482bda",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/matrix-multiplication/": {
-  "hash": "511d684362e0",
+  "hash": "22140ac06b6c",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/matrix-rank/": {
-  "hash": "9f12d77db7c3",
+  "hash": "53045c298d8f",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/singular-value-decomposition/": {
-  "hash": "21e8585d3ff9",
+  "hash": "f0cac50bcf26",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/vector/": {
-  "hash": "275cd0272b98",
+  "hash": "36454e628155",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/": {
-  "hash": "8aa6e2b1d186",
+  "hash": "6329d94ff96f",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/actor-critic/": {
-  "hash": "51982f06378e",
+  "hash": "be797bbe8737",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/bellman-equation/": {
-  "hash": "155144d754ba",
+  "hash": "9c1590dc8f0c",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/contextual-bandit/": {
-  "hash": "9bbb1bf9190c",
+  "hash": "ac917055f4fb",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/efficient-rl-on-a-laptop/": {
-  "hash": "1e463f71a5d5",
+  "hash": "2b3b08507e1e",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/experience-replay/": {
-  "hash": "66eded8000bf",
+  "hash": "ca6237c0a337",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/exploration-and-exploitation/": {
-  "hash": "412c337fc065",
+  "hash": "06b2d272f9c0",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/markov-decision-process/": {
-  "hash": "bc61953a151e",
+  "hash": "3009d8f297d1",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/policy-gradient/": {
-  "hash": "4448d9b058f1",
+  "hash": "f7cd1d259a7e",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/q-learning/": {
-  "hash": "da7ae51042aa",
+  "hash": "4703f4bc5ba7",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/reinforcement-learning/": {
-  "hash": "7f89616ec0f1",
+  "hash": "3fa9d8fc22e2",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/reward-and-return/": {
-  "hash": "af4b8785767f",
+  "hash": "116511ebc80b",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/reward-shaping/": {
-  "hash": "18659b40ef6b",
+  "hash": "ac28fc1a3efb",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/rl-evaluation/": {
-  "hash": "31640bd9693d",
+  "hash": "1edca5e7abf4",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/sarsa/": {
-  "hash": "ff17a0d769b6",
+  "hash": "acccdb001304",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/termination-and-truncation/": {
-  "hash": "7d9e07f370db",
+  "hash": "1e6fd20c6cc7",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/value-function/": {
-  "hash": "d3e1276f2b06",
+  "hash": "334ba9c8925e",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/": {
-  "hash": "6b41664b77d3",
+  "hash": "a0cdd8361c47",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/abortcontroller/": {
-  "hash": "eace7826b015",
+  "hash": "cbdbf071e76f",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/accessible-form/": {
-  "hash": "b3f1a5fd5236",
+  "hash": "926fd5c18849",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/cache-strategies/": {
-  "hash": "cb9601ca518b",
+  "hash": "40a1679c4960",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/content-security-policy/": {
-  "hash": "cff60662fdd8",
+  "hash": "846e5d76cb80",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/cross-origin-isolation/": {
-  "hash": "b80b63cc3d36",
+  "hash": "17813aa06bac",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/event-loop/": {
-  "hash": "4cffdf779f6a",
+  "hash": "b1872e2178ee",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/http-caching/": {
-  "hash": "16d722e80053",
+  "hash": "ca2b72df252d",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/indexeddb/": {
-  "hash": "e7e06a33faa3",
+  "hash": "45ec3c72b45e",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/linear-memory/": {
-  "hash": "996ab95c3a98",
+  "hash": "5bd67aa4a593",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/performance-measurement/": {
-  "hash": "79885f5b0406",
+  "hash": "a116e662c8e9",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/promises-and-async-functions/": {
-  "hash": "cd426db05672",
+  "hash": "a9fceb3ebada",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/responsive-layout/": {
-  "hash": "15fb67dc1bf3",
+  "hash": "bc149f837562",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/service-worker/": {
-  "hash": "d48c043b5724",
+  "hash": "02cafd1b9043",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/transferable-objects/": {
-  "hash": "82f011989c78",
+  "hash": "3d5e31bd363c",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/web-worker/": {
-  "hash": "78a7da137764",
+  "hash": "7a76a76405e8",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/webassembly/": {
-  "hash": "ed406cb3b899",
+  "hash": "ecd0243194ab",
   "lastmod": "2026-09-09"
  },
  "/tools/": {
-  "hash": "7134a29e187e",
+  "hash": "46d8d3e289b5",
   "lastmod": "2026-10-01"
  },
  "/tools/activation-functions/": {
-  "hash": "14495fe4f65a",
+  "hash": "e98fa726cc1c",
   "lastmod": "2026-10-01"
  },
  "/tools/backpropagation/": {
-  "hash": "fcd2fff9fb3e",
+  "hash": "b6a9a918cffd",
   "lastmod": "2026-10-01"
  },
  "/tools/decision-tree/": {
-  "hash": "4af389413344",
+  "hash": "d58a07e31248",
   "lastmod": "2026-10-01"
  },
  "/tools/gradient-descent/": {
-  "hash": "8de3120efedb",
+  "hash": "bc70388b5e49",
   "lastmod": "2026-10-01"
  },
  "/tools/k-means-clustering/": {
-  "hash": "7d3ff0b3df87",
+  "hash": "f93b8098552b",
   "lastmod": "2026-10-01"
  },
  "/tools/neural-network/": {
-  "hash": "41ba080f8029",
+  "hash": "5dc49ef77855",
   "lastmod": "2026-10-01"
  }
 }

@@ -37,15 +37,18 @@ export function sectionOf(urlPath) {
 export function head() {
   return [
     '<!--shell:head-->',
-    '<script data-cfasync="false">(function(){var d=document.documentElement;d.classList.add("js");try{var t=localStorage.getItem("relu-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})()</script>',
-    '<meta name="theme-color" content="#0b1017" media="(prefers-color-scheme: dark)">',
-    '<meta name="theme-color" content="#f4f6fa" media="(prefers-color-scheme: light)">',
+    '<script data-cfasync="false">(function(){var d=document.documentElement;d.classList.add("js");setTimeout(function(){if(!window.__fx)d.classList.add("no-fx")},3500);try{var t=localStorage.getItem("relu-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})()</script>',
+    '<meta name="color-scheme" content="dark light">',
+    '<meta name="theme-color" content="#0d1210" media="(prefers-color-scheme: dark)">',
+    '<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)">',
     '<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">',
     `<link rel="icon" href="${versioned('/assets/logo.png')}" type="image/png" sizes="512x512">`,
     `<link rel="apple-touch-icon" href="${versioned('/assets/logo.png')}">`,
-    '<link rel="preload" href="/assets/fonts/plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>',
-    `<link rel="stylesheet" href="${versioned('/assets/fonts/plex.css')}">`,
+    '<link rel="preload" href="/assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>',
+    '<link rel="preload" href="/assets/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin>',
+    `<link rel="stylesheet" href="${versioned('/assets/fonts/fonts.css')}">`,
     `<script src="${versioned('/assets/js/shell.js')}" defer data-cfasync="false"></script>`,
+    `<script src="${versioned('/assets/js/fx.js')}" defer data-cfasync="false"></script>`,
     '<!--/shell:head-->',
   ].join('\n');
 }
@@ -59,14 +62,17 @@ export function nav({ section = '', extra = '', cta = true } = {}) {
 <ul class="nav-links" id="nav-links">${links}</ul>
 <div class="nav-tools">${extra}<button class="theme-toggle" type="button" aria-label="Switch color theme">${moon}${sun}</button>${cta ? '<a class="btn btn-primary btn-sm nav-cta" href="/chat/">Start chatting</a>' : ''}<button class="nav-menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button></div>
 </div>
+<span class="nav-progress" aria-hidden="true"></span>
 </nav>
 <!--/shell:nav-->`;
 }
 
 export function footer() {
-  const subjects = Object.values(BOTS).map((b) => `<li><a href="/learn/${b.slug}/">${b.subject}</a></li>`).join('');
+  const subjects = Object.values(BOTS).map((b) => `<li><a href="/learn/${b.slug}/" data-subject="${b.slug}">${b.subject}</a></li>`).join('');
+  const key = Object.values(BOTS).map((b) => `<span style="--k:var(--c-${b.short})"></span>`).join('');
   return `<!--shell:footer-->
 <footer class="site-footer">
+<div class="footer-key" aria-hidden="true">${key}</div>
 <div class="footer-grid">
 <div class="footer-brand"><a href="/" class="nav-logo" aria-label="ReLU.chat home">${markSvg}<span>ReLU.chat</span></a><p>Six free learning assistants, interactive ML tools and worked examples. Questions are answered in your browser.</p></div>
 <nav class="footer-col" aria-label="Learn"><h2 class="footer-h">Learn</h2><ul>${subjects}<li><a href="/learn/">All topics</a></li></ul></nav>

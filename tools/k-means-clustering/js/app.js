@@ -191,12 +191,12 @@
     // grid
     ctx.strokeStyle = `rgba(${C.inkRgb}, 0.08)`;
     ctx.lineWidth = 1;
+    ctx.setLineDash([3, 7]); // horizontal reference lines only: no graph-paper lattice
     for (let i = 0; i <= 5; i++) {
-      const [px] = dataToPx(i * 2, 0);
-      ctx.beginPath(); ctx.moveTo(px, PAD); ctx.lineTo(px, H - PAD); ctx.stroke();
       const [, py] = dataToPx(0, i * 2);
       ctx.beginPath(); ctx.moveTo(PAD, py); ctx.lineTo(W - PAD, py); ctx.stroke();
     }
+    ctx.setLineDash([]);
     ctx.strokeStyle = `rgba(${C.inkRgb}, 0.35)`;
     ctx.strokeRect(PAD, PAD, W - 2 * PAD, H - 2 * PAD);
 

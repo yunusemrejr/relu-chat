@@ -1,81 +1,32 @@
 /* ============================================================
    "How to Remain Valuable When Intelligence Becomes Cheap" — book placements
-   One quiet card component (cover + label + copy + link) used at the end of
-   articles, tools and the blog hub; the homepage has a larger feature block
-   in home.css. The cover's red thread is the same vermilion as the site accent.
+   One component (cover + label + copy + link) used at the end of guides, topic
+   pages, tools and the blog hub; the homepage has a larger feature block in
+   home.css. The cover's red thread is the same vermilion as the site accent.
    ============================================================ */
 
-.rv-note-label,
-.rv-strip-label,
-.rv-eyebrow {
-  display: block;
-  margin-bottom: var(--space-1);
-  color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
+.rv-note-label, .rv-strip-label, .rv-eyebrow { display: block; margin-bottom: var(--space-1); color: var(--accent); font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; }
 
-.rv-note,
-.rv-strip {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-5);
-  margin: var(--space-8) 0 0;
-  padding: var(--space-5);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-}
-
-.rv-note--wide,
-.rv-strip { max-width: 760px; margin-left: auto; margin-right: auto; }
+.rv-note, .rv-strip { display: flex; align-items: flex-start; gap: var(--space-6); margin: var(--space-10) 0 0; padding: var(--space-6); background: var(--bg-elevated); border: 2px solid var(--border); border-radius: var(--radius-lg); }
+.rv-note--wide, .rv-strip { max-width: 800px; margin-left: auto; margin-right: auto; }
 .rv-strip { margin-top: var(--space-12); }
 
 .rv-thumb { flex-shrink: 0; line-height: 0; }
-.rv-thumb img {
-  width: 68px;
-  height: auto;
-  aspect-ratio: 3 / 4;
-  border-radius: 3px;
-  border: 1px solid var(--border-strong);
-}
+.rv-thumb img { width: 76px; height: auto; aspect-ratio: 3 / 4; border-radius: 4px; border: 2px solid var(--ink); box-shadow: 5px 6px 0 var(--c-gt); transform: rotate(-3deg); transition: transform 0.3s var(--ease-spring); }
+.rv-note:hover .rv-thumb img, .rv-strip:hover .rv-thumb img { transform: rotate(0deg) scale(1.04); }
 
 .rv-note-body { min-width: 0; }
+.rv-note-text, .rv-strip-text { margin: 0; max-width: 64ch; color: var(--text-secondary); font-size: 1rem; line-height: 1.65; }
+.rv-note-text em, .rv-strip-text em { color: var(--text-primary); font-style: normal; font-weight: 700; }
 
-.rv-note-text,
-.rv-strip-text {
-  margin: 0;
-  max-width: 64ch;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  line-height: 1.65;
-}
-.rv-note-text em,
-.rv-strip-text em { color: var(--text-primary); font-style: normal; font-weight: 600; }
+.rv-note-link, .rv-strip-link, .rv-note-text a { color: var(--text-primary); font-family: var(--font-display); font-weight: 650; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 3px; text-underline-offset: 4px; white-space: nowrap; }
+.rv-note-link:hover, .rv-strip-link:hover, .rv-note-text a:hover { color: var(--accent); }
 
-.rv-note-link,
-.rv-strip-link,
-.rv-note-text a {
-  color: var(--text-primary);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-  white-space: nowrap;
-}
-.rv-note-link:hover,
-.rv-strip-link:hover,
-.rv-note-text a:hover { color: var(--accent); }
-
-.rv-arrow { display: inline-block; transition: transform 0.15s ease; }
-a:hover > .rv-arrow, a:hover .rv-arrow { transform: translateX(3px); }
+.rv-arrow { display: inline-block; transition: transform 0.25s var(--ease-spring); }
+a:hover > .rv-arrow, a:hover .rv-arrow { transform: translateX(4px); }
 
 @media (max-width: 480px) {
   .rv-note, .rv-strip { gap: var(--space-4); padding: var(--space-4); }
-  .rv-thumb img { width: 56px; }
+  .rv-thumb img { width: 60px; }
 }
-@media (prefers-reduced-motion: reduce) { .rv-arrow { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .rv-arrow, .rv-thumb img { transition: none; } .rv-thumb img { transform: none; } }

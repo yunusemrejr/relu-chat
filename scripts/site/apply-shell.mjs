@@ -5,6 +5,9 @@ import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from '
 import { join, relative } from 'node:path';
 import { applyBook } from './book.mjs';
 import { ROOT, head, nav, footer, sectionOf, versioned } from './shell.mjs';
+import { BOTS } from './config.mjs';
+import { tagBlog } from './blog-shell.mjs';
+import { tagTools } from './tools-shell.mjs';
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', 'dev', '_backups', 'tests', 'docs', 'assets', 'core', 'policy', 'data', 'scripts', 'api', 'content', '.agents', '.codex', '.pi', '.github', '.well-known', '.agent_memory']);
 
@@ -84,7 +87,21 @@ export function transform(file, html) {
       else out = out.replace('</body>', () => `${footer()}\n</body>`);
     }
   }
+  if (isChat) out = tagChat(out, urlPath);
+  out = tagBlog(out, urlPath);
+  out = tagTools(out, urlPath);
   return applyBook(out);
+}
+
+// Chat pages take their subject's colour from <body data-subject>, and carry the
+// subject's plate in the header (filled by build-site.mjs from the gen:chat-plate region).
+function tagChat(html, urlPath) {
+  const id = urlPath.split('/')[2];
+  const cfg = BOTS[id];
+  if (!cfg) return html;
+  let out = html.replace(/<body(?![^>]*data-subject)([^>]*)>/, (m, a) => `<body data-subject="${cfg.slug}"${a}>`);
+  if (!out.includes('<!--gen:chat-plate-->')) out = out.replace(/(<header class="chat-intro">)/, '$1<div class="chat-art plate" aria-hidden="true"><!--gen:chat-plate--><!--/gen:chat-plate--></div>');
+  return out;
 }
 
 export function applyShell({ write = true } = {}) {

@@ -3,6 +3,7 @@
 import { head, nav, footer, versioned } from './shell.mjs';
 import { BOTS } from './config.mjs';
 import { esc } from './render.mjs';
+import { plate } from './home.mjs';
 
 const PAGES = [
   { code: 404, title: 'Page not found', msg: "The page you're looking for doesn't exist or has moved. Try one of these instead." },
@@ -31,11 +32,14 @@ ${head()}
 ${nav({})}
 <main id="main-content" class="error-main">
 <div class="error-card">
+<div class="error-art plate cut" aria-hidden="true">${plate('brand', String(p.code))}</div>
+<div class="error-text">
 <p class="error-code" aria-hidden="true">${p.code}</p>
 <h1>${p.title}</h1>
 <p class="error-msg">${esc(p.msg)}</p>
-<div class="error-actions"><a href="/" class="btn btn-primary">Back to home</a><a href="/learn/" class="btn btn-secondary">Browse topics</a></div>
+<div class="error-actions"><a href="/" class="btn btn-primary">Back to home <span class="arrow" aria-hidden="true">→</span></a><a href="/learn/" class="btn btn-secondary">Browse topics</a></div>
 <ul class="error-links"><li><a href="/chat/">Chat assistants</a></li><li><a href="/tools/">Interactive tools</a></li><li><a href="/blog/">Guides</a></li>${subjects}</ul>
+</div>
 </div>
 </main>
 ${footer()}

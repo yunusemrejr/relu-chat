@@ -145,14 +145,13 @@
     // grid
     ctx.strokeStyle = `rgba(${C.inkRgb}, 0.10)`;
     ctx.lineWidth = 1;
-    for (let gx = Math.ceil(XMIN); gx <= XMAX; gx++) {
-      ctx.beginPath(); ctx.moveTo(xToPx(gx), PAD.t); ctx.lineTo(xToPx(gx), H - PAD.b); ctx.stroke();
-    }
+    ctx.setLineDash([3, 7]); // horizontal reference lines only: read values off the axis, no graph-paper lattice
     const yStep = ymax > 4 ? 1 : (ymax > 2 ? 0.5 : 0.25);
     for (let gy = -Math.ceil(ymax); gy <= Math.ceil(ymax); gy++) {
       const y = gy * yStep;
       ctx.beginPath(); ctx.moveTo(PAD.l, yToPx(y, ymax)); ctx.lineTo(W - PAD.r, yToPx(y, ymax)); ctx.stroke();
     }
+    ctx.setLineDash([]);
 
     // axes
     ctx.strokeStyle = `rgba(${C.inkRgb}, 0.45)`;

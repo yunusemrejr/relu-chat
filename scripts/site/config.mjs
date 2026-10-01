@@ -20,6 +20,7 @@ export const BOTS = {
   'game-theory-chat': {
     featured: ['nash_eq', 'prisoners_dilemma', 'shapley'],
     slug: 'game-theory',
+    short: 'gt',
     subject: 'Game theory',
     kind: 'strategy',
     titleSuffix: 'definition, intuition and example',
@@ -29,6 +30,7 @@ export const BOTS = {
   'golden-age-inquiry': {
     featured: ['al_khwarizmi', 'house_of_wisdom', 'ibn_al_haytham'],
     slug: 'golden-age',
+    short: 'ga',
     subject: 'Islamic Golden Age',
     kind: 'strategy',
     titleSuffix: 'background, contributions and legacy',
@@ -38,6 +40,7 @@ export const BOTS = {
   'data-science-chat': {
     featured: ['train_test_split', 'logistic_regression', 'distributions'],
     slug: 'data-science',
+    short: 'ds',
     subject: 'Data science',
     kind: 'ml',
     titleSuffix: 'explained with an example',
@@ -47,6 +50,7 @@ export const BOTS = {
   'reinforcement-learning-chat': {
     featured: ['q-learning', 'bellman-equation', 'policy-gradient'],
     slug: 'reinforcement-learning',
+    short: 'rl',
     subject: 'Reinforcement learning',
     kind: 'ml',
     titleSuffix: 'explained with an example',
@@ -56,6 +60,7 @@ export const BOTS = {
   'linear-algebra-chat': {
     featured: ['eigenvalues-eigenvectors', 'dot-product', 'least-squares'],
     slug: 'linear-algebra',
+    short: 'la',
     subject: 'Linear algebra',
     kind: 'ml',
     titleSuffix: 'explained with an example',
@@ -65,6 +70,7 @@ export const BOTS = {
   'web-platform-chat': {
     featured: ['service-worker', 'event-loop', 'webassembly'],
     slug: 'web-platform',
+    short: 'wp',
     subject: 'Web platform',
     kind: 'web',
     titleSuffix: 'how it works, with an example',

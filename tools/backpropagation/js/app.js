@@ -305,7 +305,7 @@
     for (let i = 0; i < 2; i++) {
       drawBpNode(ctx, inputPos[i].x, inputPos[i].y, 22, inputVals[i].toFixed(1), false);
       ctx.fillStyle = C.text2;
-      ctx.font = '10px Inter, sans-serif';
+      ctx.font = '10px "Atkinson Hyperlegible Next", sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`x${i+1}`, inputPos[i].x, inputPos[i].y + 36);
     }
@@ -315,7 +315,7 @@
       const val = showForward ? (j === 0 ? state.a1 : state.a2) : null;
       drawBpNode(ctx, hiddenPos[j].x, hiddenPos[j].y, 22, val !== null ? val.toFixed(2) : '—', showForward);
       ctx.fillStyle = C.muted;
-      ctx.font = '9px Inter, sans-serif';
+      ctx.font = '9px "Atkinson Hyperlegible Next", sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`h${j+1}`, hiddenPos[j].x, hiddenPos[j].y + 36);
     }
@@ -324,19 +324,19 @@
     const outVal = showForward ? state.y.toFixed(4) : '—';
     drawBpNode(ctx, outputPos.x, outputPos.y, 26, outVal, showForward);
     ctx.fillStyle = C.text;
-    ctx.font = 'bold 10px Inter, sans-serif';
+    ctx.font = 'bold 10px "Atkinson Hyperlegible Next", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('y', outputPos.x, outputPos.y + 40);
 
     // Draw target
     ctx.fillStyle = C.muted;
-    ctx.font = '9px Inter, sans-serif';
+    ctx.font = '9px "Atkinson Hyperlegible Next", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(`target: ${parseFloat(targetSlider.value).toFixed(1)}`, outputPos.x, outputPos.y + 54);
 
     // Layer labels
     ctx.fillStyle = C.muted;
-    ctx.font = '10px Inter, sans-serif';
+    ctx.font = '10px "Atkinson Hyperlegible Next", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Input (2)', xIn, H_ - 16);
     ctx.fillText('Hidden (2)', xHidden, H_ - 16);
@@ -345,12 +345,12 @@
     // Status indicator
     if (showBackward) {
       ctx.fillStyle = C.accent;
-      ctx.font = '9px Inter, sans-serif';
+      ctx.font = '9px "Atkinson Hyperlegible Next", sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText('✓ Backpropagation complete — gradients shown on edges', 12, 18);
     } else if (showForward) {
       ctx.fillStyle = C.muted;
-      ctx.font = '9px Inter, sans-serif';
+      ctx.font = '9px "Atkinson Hyperlegible Next", sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText('Forward pass complete — click Backward Pass for gradients', 12, 18);
     }
@@ -377,7 +377,7 @@
 
     if (label !== undefined && label !== null) {
       ctx.fillStyle = active ? C.accent : C.muted;
-      ctx.font = `${Math.max(9, r * 0.5)}px Inter, sans-serif`;
+      ctx.font = `${Math.max(9, r * 0.5)}px "Atkinson Hyperlegible Next", sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(String(label), x, y);

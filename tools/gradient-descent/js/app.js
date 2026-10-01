@@ -192,15 +192,10 @@
     }
 
     // Draw grid
+    // (horizontal reference lines only, dashed: no graph-paper lattice)
     ctx.strokeStyle = C.border;
     ctx.lineWidth = 1;
-    for (let gx = Math.ceil(xMin); gx <= xMax; gx++) {
-      const p = toScreen(gx, 0);
-      ctx.beginPath();
-      ctx.moveTo(p.x, pad.top);
-      ctx.lineTo(p.x, H - pad.bottom);
-      ctx.stroke();
-    }
+    ctx.setLineDash([3, 7]);
     for (let gy = Math.ceil(yMin); gy <= yMax; gy++) {
       const p = toScreen(0, gy);
       if (p.y >= pad.top && p.y <= H - pad.bottom) {
@@ -210,6 +205,7 @@
         ctx.stroke();
       }
     }
+    ctx.setLineDash([]);
 
     // Draw function curve
     ctx.beginPath();
@@ -312,7 +308,7 @@
 
     // Axis labels
     ctx.fillStyle = C.muted;
-    ctx.font = '10px Inter, sans-serif';
+    ctx.font = '10px "Atkinson Hyperlegible Next", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('x', W - pad.right + 12, H - pad.bottom + 5);
     ctx.fillText('f(x)', pad.left - 5, pad.top - 5);

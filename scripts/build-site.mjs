@@ -21,6 +21,7 @@ import { loadBots, loadPosts } from './site/data.mjs';
 import { renderAllLearn } from './site/learn.mjs';
 import { renderErrors } from './site/errors.mjs';
 import { warnings, esc, clip, plain } from './site/render.mjs';
+import { postCards, toolTiles, subjectPanels, chatTiles, plate } from './site/home.mjs';
 
 const CHECK = process.argv.includes('--check');
 const abs = (rel) => join(ROOT, rel);
@@ -44,17 +45,24 @@ const gen = {
   assistants: String(bots.length),
   guides: String(posts.length),
   tools: String(TOOLS.length),
-  'latest-posts': posts.slice(0, 3).map((p) => `<li><a href="/blog/${p.slug}/"><span class="post-date">${new Date(p.published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</span><strong>${esc(p.title)}</strong><span>${esc(clip(plain(p.excerpt), 130))}</span></a></li>`).join(''),
+  'latest-posts': postCards(posts, 3),
+  'tool-tiles': toolTiles(),
 };
-const num = (i) => String(i + 1).padStart(2, '0');
 const manifestBots = JSON.parse(read('data/manifest.json')).bots;
-gen['subject-rows'] = manifestBots.map((m, i) => {
-  const b = bots.find((x) => x.id === m.id);
-  const tries = b.cfg.featured.slice(0, 2).map((id) => b.byId.get(id)).map((t) => `<a href="/chat/${b.id}/?q=${encodeURIComponent('Explain ' + t.name).replace(/%20/g, '+')}">${esc(t.name)}</a>`).join('<span aria-hidden="true"> · </span>');
-  return `<li class="subject-row reveal"><span class="row-num" aria-hidden="true">${num(i)}</span><div class="row-main"><h3><a href="/chat/${b.id}/">${esc(m.name)}</a></h3><p>${esc(b.cfg.lead)}</p><p class="row-try"><span>Ask about</span> ${tries}</p></div><div class="row-side"><span class="row-count">${b.topics.length} topics</span><a class="row-browse" href="/learn/${b.cfg.slug}/">Browse topics</a><a class="btn btn-secondary btn-sm" href="/chat/${b.id}/">Open chat</a></div></li>`;
-}).join('');
-gen['tool-rows'] = TOOLS.map((t, i) => `<li class="reveal"><a href="/tools/${t.slug}/"><span class="row-num" aria-hidden="true">${num(i)}</span><strong>${esc(t.name)}</strong><span>${esc(t.blurb)}</span></a></li>`).join('');
-const fillGen = (html) => html.replace(/<!--gen:([\w-]+)-->([\s\S]*?)<!--\/gen:\1-->/g, (m, k) => {
+gen['subject-panels'] = subjectPanels(bots, manifestBots);
+gen['chat-tiles'] = chatTiles(bots, manifestBots);
+gen['plot-key'] = bots.map((b, i) => `<li data-subject="${b.cfg.slug}" data-at="${((i * 4) / 6 + 0.15).toFixed(2)}"><a href="/chat/${b.id}/">${esc(b.cfg.subject)}</a></li>`).join('');
+const assistantsLd = () => JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  '@id': `${SITE}/#assistants`,
+  name: 'ReLU.chat learning assistants',
+  numberOfItems: bots.length,
+  itemListElement: manifestBots.map((m, i) => { const b = bots.find((x) => x.id === m.id); return { '@type': 'ListItem', position: i + 1, name: m.name, description: b.cfg.lead, url: `${SITE}/chat/${b.id}/` }; }),
+});
+const chatBotOf = (rel) => bots.find((b) => rel === `chat/${b.id}/index.html`);
+const fillGen = (html, rel) => html.replace(/<!--gen:([\w-]+)-->([\s\S]*?)<!--\/gen:\1-->/g, (m, k) => {
+  if (k === 'chat-plate') { const b = chatBotOf(rel); return `<!--gen:${k}-->${b ? plate(b.cfg.slug, b.id + 'hero') : ''}<!--/gen:${k}-->`; }
   if (!(k in gen)) throw new Error(`Unknown generated region "${k}"`);
   return `<!--gen:${k}-->${gen[k]}<!--/gen:${k}-->`;
 });
@@ -63,7 +71,7 @@ for (const file of listPages()) {
   if (rel.startsWith('learn/') || (rel.startsWith('errors/') && out.has(rel))) continue;
   const before = readFileSync(file, 'utf8');
   if (!/<nav\b|<!--shell:nav-->/.test(before)) continue;
-  out.set(rel, fillGen(transform(file, before)));
+  out.set(rel, fillGen(transform(file, before), rel).replace(/(<script type="application\/ld\+json" id="ld-assistants">)[\s\S]*?(<\/script>)/, (m, a, z) => `${a}${assistantsLd()}${z}`));
 }
 
 // ---------- 3. sitemap ----------
