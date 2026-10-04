@@ -5,7 +5,7 @@
   <link>https://relu.chat/blog/</link>
   <description>Technical articles about on-device AI, browser-based chatbots, NLP, and privacy-first machine learning.</description>
   <language>en</language>
-  <lastBuildDate>Wed, 09 Sep 2026 14:41:29 GMT</lastBuildDate>
+  <lastBuildDate>Sun, 04 Oct 2026 16:16:08 GMT</lastBuildDate>
   <atom:link href="https://relu.chat/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <image>
     <url>https://relu.chat/assets/logo.png</url>
@@ -13,226 +13,245 @@
     <link>https://relu.chat</link>
   </image>
   <item>
-    <title>Dot Product and Cosine Similarity, Step by Step — ReLU.chat</title>
-    <link>https://relu.chat/blog/dot-product-cosine-worked-example/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/dot-product-cosine-worked-example/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Work through a dot product, vector norms, and cosine similarity, including the zero-vector case that retrieval code must handle.</description>
+    <title>Greedy vs Beam Search Decoding Compared — ReLU.chat</title>
+    <link>https://relu.chat/blog/greedy-vs-beam-search-decoding/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/greedy-vs-beam-search-decoding/</guid>
+    <pubDate>Sun, 04 Oct 2026 10:00:00 GMT</pubDate>
+    <description>Greedy vs beam search decoding: mechanics, cost-quality tradeoffs, sampling alternatives, and how to choose, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>linear-algebra</category>
-    <category>worked-example</category>
-    <category>retrieval</category>
+    <category>language-models</category>
+    <category>algorithms</category>
+    <category>nlp</category>
+    <category>beginners</category>
   </item>
   <item>
-    <title>Data Leakage: Split by Entity Before You Train — ReLU.chat</title>
-    <link>https://relu.chat/blog/grouped-validation-leakage/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/grouped-validation-leakage/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Why random row splits overstate performance on repeated users, devices, or experiments, and how grouped validation changes the question.</description>
+    <title>Dropout &amp; Regularization for Tiny MLPs — ReLU.chat</title>
+    <link>https://relu.chat/blog/dropout-regularization-tiny-mlp/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/dropout-regularization-tiny-mlp/</guid>
+    <pubDate>Sat, 03 Oct 2026 10:00:00 GMT</pubDate>
+    <description>Regularize tiny MLPs: dropout mechanics, weight decay, early stopping, and input noise, with a measured recipe and code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>data-science</category>
+    <category>neural-networks</category>
+    <category>ml</category>
+    <category>training</category>
+    <category>beginners</category>
+  </item>
+  <item>
+    <title>Learning Rate Schedules for Small Networks — ReLU.chat</title>
+    <link>https://relu.chat/blog/learning-rate-schedules-small-networks/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/learning-rate-schedules-small-networks/</guid>
+    <pubDate>Fri, 02 Oct 2026 10:00:00 GMT</pubDate>
+    <description>Learning rate schedules for small networks: step, cosine, warmup, base-rate selection, and tiny CPU budgets, with code.</description>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
+    <category>neural-networks</category>
+    <category>ml</category>
+    <category>training</category>
+    <category>beginners</category>
+  </item>
+  <item>
+    <title>Softmax and Temperature Explained — ReLU.chat</title>
+    <link>https://relu.chat/blog/softmax-temperature-explained/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/softmax-temperature-explained/</guid>
+    <pubDate>Thu, 01 Oct 2026 10:00:00 GMT</pubDate>
+    <description>Softmax and temperature explained: probability conversion, sampling control, calibration, and small-policy uses, with code.</description>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
+    <category>neural-networks</category>
+    <category>ml</category>
+    <category>beginners</category>
+    <category>language-models</category>
+  </item>
+  <item>
+    <title>Feature Normalization for ML Beginners — ReLU.chat</title>
+    <link>https://relu.chat/blog/feature-normalization-ml-beginners/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/feature-normalization-ml-beginners/</guid>
+    <pubDate>Wed, 30 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Feature normalization for ML beginners: standardization, min-max scaling, text norms, and folding scaling into models, with code.</description>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
+    <category>ml</category>
+    <category>beginners</category>
+    <category>preprocessing</category>
+    <category>neural-networks</category>
+  </item>
+  <item>
+    <title>Perplexity Explained: Measuring Language Models — ReLU.chat</title>
+    <link>https://relu.chat/blog/perplexity-language-models-explained/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/perplexity-language-models-explained/</guid>
+    <pubDate>Tue, 29 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Perplexity explained: what the number means, its limits, cross-model comparison, and use for small on-device models, with code.</description>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>evaluation</category>
+    <category>language-models</category>
+    <category>metrics</category>
+    <category>beginners</category>
   </item>
   <item>
-    <title>Least Squares Without Computing an Inverse — ReLU.chat</title>
-    <link>https://relu.chat/blog/least-squares-without-inverse/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/least-squares-without-inverse/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Derive a two-parameter fit, check its residuals, and understand why practical solvers use QR or SVD instead of an explicit inverse.</description>
+    <title>BLEU and ROUGE Text Metrics Explained — ReLU.chat</title>
+    <link>https://relu.chat/blog/bleu-rouge-text-metrics-explained/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/bleu-rouge-text-metrics-explained/</guid>
+    <pubDate>Mon, 28 Sep 2026 10:00:00 GMT</pubDate>
+    <description>BLEU and ROUGE explained: n-gram precision vs recall, interpreting scores, blind spots, and chatbot workflows, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>linear-algebra</category>
-    <category>data-science</category>
-    <category>worked-example</category>
+    <category>evaluation</category>
+    <category>nlp</category>
+    <category>metrics</category>
+    <category>beginners</category>
   </item>
   <item>
-    <title>Local Chat Privacy: What Still Uses the Network? — ReLU.chat</title>
-    <link>https://relu.chat/blog/local-chat-privacy-network/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/local-chat-privacy-network/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Distinguish local question processing from page downloads, browser storage, external links, and offline availability.</description>
+    <title>Cross-Validation for Small ML Datasets — ReLU.chat</title>
+    <link>https://relu.chat/blog/cross-validation-small-ml-datasets/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/cross-validation-small-ml-datasets/</guid>
+    <pubDate>Sun, 27 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Cross-validation for small ML datasets: k-fold mechanics, stratification, grouped folds, and choosing k, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>privacy</category>
-    <category>browser-ai</category>
-    <category>web-platform</category>
+    <category>evaluation</category>
+    <category>ml</category>
+    <category>beginners</category>
+    <category>statistics</category>
   </item>
   <item>
-    <title>Find a Nash Equilibrium with Best Responses — ReLU.chat</title>
-    <link>https://relu.chat/blog/nash-equilibrium-best-response-table/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/nash-equilibrium-best-response-table/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Check a complete 2×2 game, identify two pure equilibria, and distinguish unilateral stability from efficiency.</description>
+    <title>Confusion Matrices for Intent Classification — ReLU.chat</title>
+    <link>https://relu.chat/blog/confusion-matrix-intent-classification/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/confusion-matrix-intent-classification/</guid>
+    <pubDate>Sat, 26 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Use confusion matrices to debug intent classifiers: reading patterns, per-class metrics, and fixes, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>game-theory</category>
-    <category>worked-example</category>
+    <category>evaluation</category>
+    <category>classification</category>
+    <category>nlp</category>
+    <category>beginners</category>
   </item>
   <item>
-    <title>Precision and Recall: A 100-Case Example — ReLU.chat</title>
-    <link>https://relu.chat/blog/precision-recall-small-example/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/precision-recall-small-example/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Compute precision, recall, accuracy, and F1 from the same small confusion matrix, then connect thresholds to the errors you care about.</description>
+    <title>Offline Test Sets for Chatbots: A Guide — ReLU.chat</title>
+    <link>https://relu.chat/blog/chatbot-evaluation-offline-test-sets/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/chatbot-evaluation-offline-test-sets/</guid>
+    <pubDate>Fri, 25 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Build offline chatbot test sets: query collection, automatic grading, leakage prevention, and CI integration, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>data-science</category>
-    <category>worked-example</category>
-  </item>
-  <item>
-    <title>Q-learning vs SARSA: One Update, Worked Through — ReLU.chat</title>
-    <link>https://relu.chat/blog/q-learning-sarsa-worked-example/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/q-learning-sarsa-worked-example/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Calculate Q-learning and SARSA updates on the same transition, and see why their targets differ during exploration.</description>
-    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>reinforcement-learning</category>
-    <category>worked-example</category>
-  </item>
-  <item>
-    <title>Rank, SVD, and Conditioning: Three Different Questions — ReLU.chat</title>
-    <link>https://relu.chat/blog/rank-svd-conditioning/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/rank-svd-conditioning/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Use a diagonal matrix to distinguish exact rank, low-rank approximation, and sensitivity to numerical perturbations.</description>
-    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>linear-algebra</category>
-    <category>numerical-computing</category>
-  </item>
-  <item>
-    <title>How to Read Claims About Medieval Islamic Science — ReLU.chat</title>
-    <link>https://relu.chat/blog/reading-islamic-science-sources/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/reading-islamic-science-sources/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Distinguish a scholar’s work, surviving manuscripts, later biographies, and modern interpretations without reducing history to invention lists.</description>
-    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>history-of-science</category>
-    <category>sources</category>
-  </item>
-  <item>
-    <title>Reward Design for a Small Learning Chatbot — ReLU.chat</title>
-    <link>https://relu.chat/blog/reward-design-small-chatbot/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/reward-design-small-chatbot/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Design routing rewards without confusing longer answers, topic overlap, or training scores with useful explanations.</description>
-    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>reinforcement-learning</category>
     <category>evaluation</category>
     <category>chatbots</category>
+    <category>testing</category>
+    <category>guides</category>
   </item>
   <item>
-    <title>Termination vs Truncation in RL Targets — ReLU.chat</title>
-    <link>https://relu.chat/blog/rl-termination-truncation/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/rl-termination-truncation/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>A small numerical example shows why environment termination and time-limit truncation should not share one done flag.</description>
+    <title>Improving FAQ Chatbot Accuracy Step by Step — ReLU.chat</title>
+    <link>https://relu.chat/blog/faq-chatbot-accuracy-improvement/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/faq-chatbot-accuracy-improvement/</guid>
+    <pubDate>Thu, 24 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Improve FAQ chatbot accuracy: better entries, paraphrases, retrieval tuning, honest fallbacks, and log-driven iteration.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>reinforcement-learning</category>
-    <category>debugging</category>
+    <category>chatbots</category>
+    <category>retrieval</category>
+    <category>faq</category>
+    <category>guides</category>
   </item>
   <item>
-    <title>Service Worker Updates Without Stale Model Weights — ReLU.chat</title>
-    <link>https://relu.chat/blog/service-worker-model-updates/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/service-worker-model-updates/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>Separate stable embedding assets from mutable policies, avoid eager runtime downloads, and test update and offline failure paths.</description>
+    <title>Extractive Summarization for Long Answers — ReLU.chat</title>
+    <link>https://relu.chat/blog/summarization-extractive-browser/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/summarization-extractive-browser/</guid>
+    <pubDate>Wed, 23 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Extractive summarization for chatbots: sentence scoring, redundancy removal, and faithful long-answer compression, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>web-platform</category>
-    <category>performance</category>
-    <category>offline</category>
+    <category>nlp</category>
+    <category>summarization</category>
+    <category>chatbots</category>
+    <category>algorithms</category>
   </item>
   <item>
-    <title>Training a Chatbot Policy on a Laptop — ReLU.chat</title>
-    <link>https://relu.chat/blog/tiny-policy-training-cpu/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/tiny-policy-training-cpu/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>A reproducible CPU training recipe, a real three-second run, and the limits of routing metrics on a small contextual-bandit policy.</description>
+    <title>Keyword Extraction: RAKE and TextRank Basics — ReLU.chat</title>
+    <link>https://relu.chat/blog/keyword-extraction-rake-textrank-basics/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/keyword-extraction-rake-textrank-basics/</guid>
+    <pubDate>Tue, 22 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Extract keywords with RAKE and TextRank: how each algorithm works, which to choose, and browser use cases, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>reinforcement-learning</category>
-    <category>engineering</category>
-    <category>evaluation</category>
+    <category>nlp</category>
+    <category>algorithms</category>
+    <category>search</category>
+    <category>beginners</category>
   </item>
   <item>
-    <title>WASM vs JavaScript: Verify the Same Model First — ReLU.chat</title>
-    <link>https://relu.chat/blog/wasm-javascript-policy-parity/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/wasm-javascript-policy-parity/</guid>
-    <pubDate>Wed, 09 Sep 2026 14:00:00 GMT</pubDate>
-    <description>A small MLP shows why export parity, fixed memory, startup costs, and end-to-end latency matter more than assuming WASM is faster.</description>
+    <title>Sentiment Analysis in the Browser, No Server — ReLU.chat</title>
+    <link>https://relu.chat/blog/sentiment-analysis-browser-no-server/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/sentiment-analysis-browser-no-server/</guid>
+    <pubDate>Mon, 21 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Browser sentiment analysis without servers: lexicon scoring, negation, tiny classifiers, and conversation uses, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>webassembly</category>
-    <category>performance</category>
-    <category>engineering</category>
+    <category>nlp</category>
+    <category>browser</category>
+    <category>chatbots</category>
+    <category>classification</category>
   </item>
   <item>
-    <title>Measuring Retrieval Quality: Precision, Recall, MRR and NDCG — ReLU.chat</title>
-    <link>https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/</guid>
-    <pubDate>Thu, 06 Aug 2026 17:30:00 GMT</pubDate>
-    <description>How to evaluate a knowledge-base retriever with precision, recall, MRR, and NDCG: definitions, worked examples, and a tuning loop for dense/sparse ensembles.</description>
+    <title>Language Detection in the Browser, No Model — ReLU.chat</title>
+    <link>https://relu.chat/blog/language-detection-browser-chat/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/language-detection-browser-chat/</guid>
+    <pubDate>Sun, 20 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Client-side language detection with character n-grams: profiles, short-text handling, mixed input, and pipeline placement with code.</description>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
+    <category>nlp</category>
+    <category>browser</category>
+    <category>chatbots</category>
+    <category>classification</category>
+  </item>
+  <item>
+    <title>Typo Tolerance for Chatbots: Edit Distance — ReLU.chat</title>
+    <link>https://relu.chat/blog/spell-correction-typo-tolerance-chatbots/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/spell-correction-typo-tolerance-chatbots/</guid>
+    <pubDate>Sat, 19 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Add typo tolerance to chatbots with edit distance: correction vocabularies, pipeline placement, and when not to correct, with code.</description>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
+    <category>nlp</category>
+    <category>chatbots</category>
+    <category>search</category>
+    <category>robustness</category>
+  </item>
+  <item>
+    <title>Autocomplete with Tries: Prefix Search in JS — ReLU.chat</title>
+    <link>https://relu.chat/blog/autocomplete-prefix-search-trie/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/autocomplete-prefix-search-trie/</guid>
+    <pubDate>Fri, 18 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Build browser autocomplete with a trie: prefix indexing, suggestion ranking, typo handling, and performance notes with code.</description>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
+    <category>search</category>
+    <category>data-structures</category>
+    <category>browser</category>
+    <category>ux</category>
+  </item>
+  <item>
+    <title>Inverted Indexes: How Browser Search Stays Fast — ReLU.chat</title>
+    <link>https://relu.chat/blog/inverted-index-browser-search/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/inverted-index-browser-search/</guid>
+    <pubDate>Thu, 17 Sep 2026 10:00:00 GMT</pubDate>
+    <description>How inverted indexes make browser search instant: posting lists, index building, and query processing with JavaScript examples.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
     <category>retrieval</category>
-    <category>ndcg</category>
-    <category>mrr</category>
-    <category>evaluation</category>
+    <category>search</category>
+    <category>data-structures</category>
+    <category>browser</category>
   </item>
   <item>
-    <title>Chunking Strategies for Knowledge Bases: A Practical Guide — ReLU.chat</title>
-    <link>https://relu.chat/blog/chunking-strategies-knowledge-base/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/chunking-strategies-knowledge-base/</guid>
-    <pubDate>Thu, 06 Aug 2026 16:45:00 GMT</pubDate>
-    <description>How chunk size, boundaries, and overlap decide what a knowledge base retriever can find — fixed, overlapping, and structure-aware chunking compared.</description>
+    <title>Stop Words &amp; Stemming for Small Search Indexes — ReLU.chat</title>
+    <link>https://relu.chat/blog/stop-words-stemming-small-retrieval/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/stop-words-stemming-small-retrieval/</guid>
+    <pubDate>Wed, 16 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Stop words and stemming normalize text for small search indexes. Learn the tradeoffs and a minimal browser pipeline with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>chunking</category>
     <category>retrieval</category>
-    <category>knowledge-base</category>
-    <category>embeddings</category>
-    <category>bm25</category>
+    <category>nlp</category>
+    <category>search</category>
+    <category>beginners</category>
   </item>
   <item>
-    <title>Query Expansion Without an LLM: Synonyms, Spelling, Boosting — ReLU.chat</title>
-    <link>https://relu.chat/blog/query-expansion-without-llm/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/query-expansion-without-llm/</guid>
-    <pubDate>Thu, 06 Aug 2026 15:30:00 GMT</pubDate>
-    <description>Improve retrieval without an LLM: index-time alias weighting, query-side synonym expansion, edit-distance spelling correction, and boosting before re-ranking.</description>
+    <title>TF-IDF Explained: Keyword Ranking for Search — ReLU.chat</title>
+    <link>https://relu.chat/blog/tf-idf-explained-search-beginners/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/tf-idf-explained-search-beginners/</guid>
+    <pubDate>Tue, 15 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Learn how TF-IDF scores documents for search: term frequency, inverse document frequency, and a worked example you can run in the browser.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>query-expansion</category>
-    <category>bm25</category>
-    <category>spelling-correction</category>
     <category>retrieval</category>
-  </item>
-  <item>
-    <title>How Knowledge Bases Are Structured: Fragments and Metadata — ReLU.chat</title>
-    <link>https://relu.chat/blog/knowledge-base-fragments-fields-metadata/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/knowledge-base-fragments-fields-metadata/</guid>
-    <pubDate>Thu, 06 Aug 2026 14:00:00 GMT</pubDate>
-    <description>Knowledge base entries built from categorized fragments, weighted fields, and confidence metadata — and why structure decides retrieval quality.</description>
-    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>knowledge-base</category>
-    <category>retrieval</category>
-    <category>metadata</category>
-    <category>bm25</category>
-    <category>rag</category>
-  </item>
-  <item>
-    <title>IndexedDB for On-Device AI: Embeddings and Session State — ReLU.chat</title>
-    <link>https://relu.chat/blog/indexeddb-client-storage/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/indexeddb-client-storage/</guid>
-    <pubDate>Thu, 06 Aug 2026 13:00:00 GMT</pubDate>
-    <description>Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.</description>
-    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>indexeddb</category>
-    <category>storage</category>
-    <category>embeddings</category>
-    <category>local-first</category>
-    <category>privacy</category>
-  </item>
-  <item>
-    <title>Float32 vs Float64 for In-Browser ML: Precision Trade-Offs — ReLU.chat</title>
-    <link>https://relu.chat/blog/float32-vs-float64-precision/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/float32-vs-float64-precision/</guid>
-    <pubDate>Thu, 06 Aug 2026 12:30:00 GMT</pubDate>
-    <description>When to use float32 versus float64 in browser ML: tensors stay float32, accumulators like EMA summaries deserve float64, and int8 quantization shrinks weights.</description>
-    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
-    <category>float32</category>
-    <category>float64</category>
-    <category>precision</category>
-    <category>quantization</category>
+    <category>tf-idf</category>
+    <category>search</category>
+    <category>nlp</category>
+    <category>beginners</category>
   </item>
 </channel>
 </rss>

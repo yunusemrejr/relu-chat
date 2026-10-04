@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Autocomplete with Tries: Prefix Search in JS — ReLU.chat</title>
+<meta name="description" content="Build browser autocomplete with a trie: prefix indexing, suggestion ranking, typo handling, and performance notes with code.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/autocomplete-prefix-search-trie/">
+
+<meta property="og:title" content="Autocomplete with Tries: Prefix Search in JS">
+<meta property="og:description" content="Build browser autocomplete with a trie: prefix indexing, suggestion ranking, typo handling, and performance notes with code.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/autocomplete-prefix-search-trie/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-18T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-18T10:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="search">
+<meta property="article:tag" content="data-structures">
+<meta property="article:tag" content="browser">
+<meta property="article:tag" content="ux">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Autocomplete with Tries: Prefix Search in JS">
+<meta name="twitter:description" content="Build browser autocomplete with a trie: prefix indexing, suggestion ranking, typo handling, and performance notes with code.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<link rel="stylesheet" href="/assets/shared-design.css?v=d5592e7f">
+<link rel="stylesheet" href="/assets/css/article.css?v=b9c8510f">
+<link rel="stylesheet" href="/assets/css/remain-valuable.css?v=15b499dd">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/autocomplete-prefix-search-trie/#webpage",
+      "url": "https://relu.chat/blog/autocomplete-prefix-search-trie/",
+      "name": "Autocomplete with Tries: Prefix Search in JS",
+      "description": "Build browser autocomplete with a trie: prefix indexing, suggestion ranking, typo handling, and performance notes with code.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-18T10:00:00.000Z",
+      "dateModified": "2026-09-18T10:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/autocomplete-prefix-search-trie/#article",
+      "headline": "Autocomplete with Tries: Prefix Search in the Browser",
+      "description": "Build browser autocomplete with a trie: prefix indexing, suggestion ranking, typo handling, and performance notes with code.",
+      "datePublished": "2026-09-18T10:00:00.000Z",
+      "dateModified": "2026-09-18T10:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/autocomplete-prefix-search-trie/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "search, data-structures, browser, ux"
+    }
+  ]
+}
+</script>
+
+
+<!--shell:head-->
+<script data-cfasync="false">(function(){var d=document.documentElement;d.classList.add("js");setTimeout(function(){if(!window.__fx)d.classList.add("no-fx")},3500);try{var t=localStorage.getItem("relu-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})()</script>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1210" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/logo.png?v=77cfb49b" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/logo.png?v=77cfb49b">
+<link rel="preload" href="/assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css?v=455d1a60">
+<script src="/assets/js/shell.js?v=802b8197" defer data-cfasync="false"></script>
+<script src="/assets/js/fx.js?v=1859fa55" defer data-cfasync="false"></script>
+<!--/shell:head-->
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!--shell:nav-->
+<nav class="site-nav" id="navbar" aria-label="Primary">
+<div class="nav-container">
+<a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a>
+<ul class="nav-links" id="nav-links"><li><a href="/chat/">Chat</a></li><li><a href="/learn/">Learn</a></li><li><a href="/tools/">Tools</a></li><li><a href="/blog/" aria-current="page">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li></ul>
+<div class="nav-tools"><button class="theme-toggle" type="button" aria-label="Switch color theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><a class="btn btn-primary btn-sm nav-cta" href="/chat/">Start chatting</a><button class="nav-menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</div>
+<span class="nav-progress" aria-hidden="true"></span>
+</nav>
+<!--/shell:nav-->
+
+<main id="main-content">
+<article class="article-container" data-subject="web-platform">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Autocomplete with Tries: Prefix Search in the Browser</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">search</span><span class="article-tag">data-structures</span><span class="article-tag">browser</span><span class="article-tag">ux</span></div>
+
+  <h1 class="article-hero-title">Autocomplete with Tries: Prefix Search in the Browser</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-18T10:00:00.000Z">September 18, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+    
+  </div>
+
+  <!--cover--><figure class="article-plate plate"><img src="/assets/blog/autocomplete-prefix-search-trie.svg" alt="" width="1200" height="630" decoding="async" fetchpriority="high"></figure><!--/cover-->
+<div class="article-divider"></div>
+
+  
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-how-a-trie-works">How a trie works</a></li><li><a href="#section-what-to-index-for-suggestions">What to index for suggestions</a></li><li><a href="#section-ranking-suggestions">Ranking suggestions</a></li><li><a href="#section-tries-versus-full-search">Tries versus full search</a></li><li><a href="#section-handling-typos-in-prefixes">Handling typos in prefixes</a></li><li><a href="#section-performance-notes">Performance notes</a></li></ol></nav><div class="article-body">
+    <p>Autocomplete turns a half-typed query into a finished thought. Behind the suggestion dropdown is usually a trie: a tree-shaped index that finds every stored string sharing a prefix in time proportional to the prefix length, not the collection size.</p>
+
+<h2 id="section-how-a-trie-works">How a trie works</h2>
+
+<p>Each node in a trie represents one character, and each path from the root spells a stored string. To find completions for 'neur', you walk four edges down from the root, then collect everything in the subtree: 'neural', 'neural network', 'neuron', and so on. No scanning, no scoring — just pointer chasing.</p>
+
+<pre><code class="lang-javascript">function insert(root, phrase) {
+  let node = root;
+  for (const ch of phrase) {
+    node.children = node.children || {};
+    node.children[ch] = node.children[ch] || { count: 0 };
+    node = node.children[ch];
+    node.count += 1;
+  }
+  node.phrase = phrase;
+}
+</code></pre>
+
+<p>Store a popularity count at each node so suggestions can be ranked by frequency rather than alphabetically.</p>
+
+<h2 id="section-what-to-index-for-suggestions">What to index for suggestions</h2>
+
+<p>Good autocomplete indexes phrases users actually want, not raw vocabulary:</p>
+
+<ul>
+<li>Past questions and popular queries from your own logs.</li>
+<li>Topic titles from the knowledge base.</li>
+<li>Canonical entity names recognized by <a href="/blog/named-entity-recognition-no-llm/" rel="noopener">entity matching</a>.</li>
+</ul>
+
+<p>Cap the collection at a few thousand phrases. Beyond that, suggestion quality depends more on ranking than coverage, and the trie stays small enough to build at load time.</p>
+
+<h2 id="section-ranking-suggestions">Ranking suggestions</h2>
+
+<p>Collect up to a few dozen subtree matches, then rank them:</p>
+
+<ol>
+<li>Exact-prefix frequency: phrases users picked before rank first.</li>
+<li>Shorter completions before longer ones at equal frequency.</li>
+<li>Recency boost for the current session's topics.</li>
+</ol>
+
+<p>Return the top five to eight. Long dropdowns slow users down instead of speeding them up, and every extra row costs <a href="/blog/latency-budgets-conversational-ui/" rel="noopener">rendering latency</a> on low-end devices.</p>
+
+<h2 id="section-tries-versus-full-search">Tries versus full search</h2>
+
+<p>Autocomplete and document search solve different problems. A trie answers 'which known phrases start with this prefix?' while an <a href="/blog/inverted-index-browser-search/" rel="noopener">inverted index</a> answers 'which documents contain these terms?' Use the trie for the live dropdown as the user types, then run full <a href="/blog/bm25-math-worked-example/" rel="noopener">BM25 retrieval</a> when they submit. The two structures complement each other.</p>
+
+<h2 id="section-handling-typos-in-prefixes">Handling typos in prefixes</h2>
+
+<p>Strict tries fail on the first mistyped character. For typo-tolerant suggestions, combine the trie with <a href="/blog/spell-correction-typo-tolerance-chatbots/" rel="noopener">edit-distance matching</a>: if a prefix has no subtree, retry with one-character edits before giving up. One level of fuzziness catches most slips without noticeably slowing the dropdown.</p>
+
+<h2 id="section-performance-notes">Performance notes</h2>
+
+<p>A trie of 5,000 phrases uses well under a megabyte and answers prefix lookups in microseconds. Build it once from a JSON phrase list, or persist it in <a href="/blog/indexeddb-client-storage/" rel="noopener">IndexedDB</a> alongside your search index. Debounce input by 100 to 150 milliseconds so fast typists trigger one lookup per pause instead of one per keystroke.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><ul><li><a href="/blog/inverted-index-browser-search/">How Inverted Indexes Power Browser Search</a></li><li><a href="/blog/bm25-browser-field-weighted-retrieval/">BM25 in the Browser: Field-Weighted Sparse Retrieval Without a Server</a></li><li><a href="/blog/keyword-extraction-rake-textrank-basics/">Keyword Extraction Basics: RAKE and TextRank</a></li></ul></aside>
+<aside class="rv-note" aria-label="Recommended book"><a class="rv-thumb" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/assets/remain-valuable-cover-sm.webp" alt="" width="68" height="91" loading="lazy" decoding="async"></a><div class="rv-note-body"><span class="rv-note-label">Going further</span><p class="rv-note-text">Fundamentals like these compound for decades. <em>How to Remain Valuable When Intelligence Becomes Cheap</em> applies the same long-view thinking to your career: a 224-page practical guide to the advantages that stay valuable when intelligence gets cheap. <a class="rv-note-link" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Get the book <span class="rv-arrow" aria-hidden="true">&rarr;</span></a></p></div></aside>
+<div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Autocomplete%20with%20Tries%3A%20Prefix%20Search%20in%20the%20Browser&url=https%3A%2F%2Frelu.chat%2Fblog%2Fautocomplete-prefix-search-trie%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fautocomplete-prefix-search-trie%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<!--shell:footer-->
+<footer class="site-footer">
+<div class="footer-key" aria-hidden="true"><span style="--k:var(--c-gt)"></span><span style="--k:var(--c-ga)"></span><span style="--k:var(--c-ds)"></span><span style="--k:var(--c-rl)"></span><span style="--k:var(--c-la)"></span><span style="--k:var(--c-wp)"></span></div>
+<div class="footer-grid">
+<div class="footer-brand"><a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a><p>Six free learning assistants, interactive ML tools and worked examples. Questions are answered in your browser.</p></div>
+<nav class="footer-col" aria-label="Learn"><h2 class="footer-h">Learn</h2><ul><li><a href="/learn/game-theory/" data-subject="game-theory">Game theory</a></li><li><a href="/learn/golden-age/" data-subject="golden-age">Islamic Golden Age</a></li><li><a href="/learn/data-science/" data-subject="data-science">Data science</a></li><li><a href="/learn/reinforcement-learning/" data-subject="reinforcement-learning">Reinforcement learning</a></li><li><a href="/learn/linear-algebra/" data-subject="linear-algebra">Linear algebra</a></li><li><a href="/learn/web-platform/" data-subject="web-platform">Web platform</a></li><li><a href="/learn/">All topics</a></li></ul></nav>
+<nav class="footer-col" aria-label="Explore"><h2 class="footer-h">Explore</h2><ul><li><a href="/chat/">Chat assistants</a></li><li><a href="/tools/">Interactive tools</a></li><li><a href="/blog/">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li><li><a href="/blog/feed.xml">RSS feed</a></li></ul></nav>
+<nav class="footer-col" aria-label="More from the makers"><h2 class="footer-h">From the makers</h2><ul><li><a href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Remain Valuable (book) <span aria-hidden="true">↗</span></a></li><li><a href="https://theknowledgeproject.gumroad.com/l/ekuidr" target="_blank" rel="noopener noreferrer">Chatbot builder toolkit <span aria-hidden="true">↗</span></a></li><li><a href="https://github.com/yunusemrejr/relu-chat" target="_blank" rel="noopener noreferrer">Source on GitHub <span aria-hidden="true">↗</span></a></li><li><a href="/llms.txt">llms.txt</a></li></ul></nav>
+</div>
+<div class="footer-base"><p>© 2026 ReLU.chat · MIT-licensed open source</p><p>Chat questions are processed in your browser.</p></div>
+</footer>
+<!--/shell:footer-->
+
+
+</body>
+</html>

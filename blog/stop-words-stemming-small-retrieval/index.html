@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Stop Words &amp; Stemming for Small Search Indexes — ReLU.chat</title>
+<meta name="description" content="Stop words and stemming normalize text for small search indexes. Learn the tradeoffs and a minimal browser pipeline with code.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/stop-words-stemming-small-retrieval/">
+
+<meta property="og:title" content="Stop Words &amp; Stemming for Small Search Indexes">
+<meta property="og:description" content="Stop words and stemming normalize text for small search indexes. Learn the tradeoffs and a minimal browser pipeline with code.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/stop-words-stemming-small-retrieval/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-16T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-16T10:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="retrieval">
+<meta property="article:tag" content="nlp">
+<meta property="article:tag" content="search">
+<meta property="article:tag" content="beginners">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Stop Words &amp; Stemming for Small Search Indexes">
+<meta name="twitter:description" content="Stop words and stemming normalize text for small search indexes. Learn the tradeoffs and a minimal browser pipeline with code.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<link rel="stylesheet" href="/assets/shared-design.css?v=d5592e7f">
+<link rel="stylesheet" href="/assets/css/article.css?v=b9c8510f">
+<link rel="stylesheet" href="/assets/css/remain-valuable.css?v=15b499dd">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/stop-words-stemming-small-retrieval/#webpage",
+      "url": "https://relu.chat/blog/stop-words-stemming-small-retrieval/",
+      "name": "Stop Words & Stemming for Small Search Indexes",
+      "description": "Stop words and stemming normalize text for small search indexes. Learn the tradeoffs and a minimal browser pipeline with code.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-16T10:00:00.000Z",
+      "dateModified": "2026-09-16T10:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/stop-words-stemming-small-retrieval/#article",
+      "headline": "Stop Words and Stemming for Small Retrieval Indexes",
+      "description": "Stop words and stemming normalize text for small search indexes. Learn the tradeoffs and a minimal browser pipeline with code.",
+      "datePublished": "2026-09-16T10:00:00.000Z",
+      "dateModified": "2026-09-16T10:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/stop-words-stemming-small-retrieval/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "retrieval, nlp, search, beginners"
+    }
+  ]
+}
+</script>
+
+
+<!--shell:head-->
+<script data-cfasync="false">(function(){var d=document.documentElement;d.classList.add("js");setTimeout(function(){if(!window.__fx)d.classList.add("no-fx")},3500);try{var t=localStorage.getItem("relu-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})()</script>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1210" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/logo.png?v=77cfb49b" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/logo.png?v=77cfb49b">
+<link rel="preload" href="/assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css?v=455d1a60">
+<script src="/assets/js/shell.js?v=802b8197" defer data-cfasync="false"></script>
+<script src="/assets/js/fx.js?v=1859fa55" defer data-cfasync="false"></script>
+<!--/shell:head-->
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!--shell:nav-->
+<nav class="site-nav" id="navbar" aria-label="Primary">
+<div class="nav-container">
+<a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a>
+<ul class="nav-links" id="nav-links"><li><a href="/chat/">Chat</a></li><li><a href="/learn/">Learn</a></li><li><a href="/tools/">Tools</a></li><li><a href="/blog/" aria-current="page">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li></ul>
+<div class="nav-tools"><button class="theme-toggle" type="button" aria-label="Switch color theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><a class="btn btn-primary btn-sm nav-cta" href="/chat/">Start chatting</a><button class="nav-menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</div>
+<span class="nav-progress" aria-hidden="true"></span>
+</nav>
+<!--/shell:nav-->
+
+<main id="main-content">
+<article class="article-container" data-subject="data-science">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Stop Words and Stemming for Small Retrieval Indexes</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">retrieval</span><span class="article-tag">nlp</span><span class="article-tag">search</span><span class="article-tag">beginners</span></div>
+
+  <h1 class="article-hero-title">Stop Words and Stemming for Small Retrieval Indexes</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-16T10:00:00.000Z">September 16, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+    
+  </div>
+
+  <!--cover--><figure class="article-plate plate"><img src="/assets/blog/stop-words-stemming-small-retrieval.svg" alt="" width="1200" height="630" decoding="async" fetchpriority="high"></figure><!--/cover-->
+<div class="article-divider"></div>
+
+  
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-what-stop-words-are">What stop words are</a></li><li><a href="#section-what-stemming-does">What stemming does</a></li><li><a href="#section-stemming-versus-lemmatization">Stemming versus lemmatization</a></li><li><a href="#section-when-normalization-hurts">When normalization hurts</a></li><li><a href="#section-a-minimal-normalization-pipeline">A minimal normalization pipeline</a></li><li><a href="#section-measure-before-and-after">Measure before and after</a></li></ol></nav><div class="article-body">
+    <p>Before a search engine scores documents, it normalizes their text. Two of the oldest normalization steps are stop-word removal and stemming: dropping filler words and reducing inflected forms to a common root. On small indexes they cut index size, speed up queries, and improve matches — if you apply them carefully.</p>
+
+<h2 id="section-what-stop-words-are">What stop words are</h2>
+
+<p>Stop words are high-frequency terms that carry little meaning on their own: 'the', 'is', 'and', 'of', 'to'. In a <a href="/blog/tf-idf-explained-search-beginners/" rel="noopener">TF-IDF</a> pipeline they earn near-zero weights anyway, so removing them up front mostly saves index space and query time rather than changing rankings.</p>
+
+<p>A typical English stop list has 100 to 200 entries. Keep the list short for small knowledge bases: every removed word is a word users can never search for. If your content includes phrases like 'to be or not to be', aggressive stop-word removal destroys the query.</p>
+
+<h2 id="section-what-stemming-does">What stemming does</h2>
+
+<p>Stemming reduces related word forms to a shared stem so that 'running', 'runs', and 'ran' all match. The Porter stemmer is the classic choice: a sequence of suffix-stripping rules with no dictionary. It is fast, dependency-free, and good enough for retrieval in most cases.</p>
+
+<pre><code class="lang-javascript">// Porter-style suffix rules (simplified excerpt)
+function stem(word) {
+  if (word.endsWith('ies') && word.length &gt; 4) return word.slice(0, -3) + 'i';
+  if (word.endsWith('es') && word.length &gt; 3) return word.slice(0, -2);
+  if (word.endsWith('s') && word.length &gt; 3) return word.slice(0, -1);
+  if (word.endsWith('ing') && word.length &gt; 5) return word.slice(0, -3);
+  if (word.endsWith('ed') && word.length &gt; 4) return word.slice(0, -2);
+  return word;
+}
+</code></pre>
+
+<p>Apply the identical function to documents at index time and to queries at search time. A stemmer applied on only one side silently breaks matching.</p>
+
+<h2 id="section-stemming-versus-lemmatization">Stemming versus lemmatization</h2>
+
+<p>Lemmatization maps words to dictionary forms ('better' becomes 'good') using a vocabulary and part-of-speech tags. It is more accurate but needs language data and more code. For browser search over a few hundred documents, stemming wins: a Porter implementation is roughly a hundred lines with zero data files, while lemmatization ships a lexicon.</p>
+
+<h2 id="section-when-normalization-hurts">When normalization hurts</h2>
+
+<p>Normalization is lossy, and the losses matter in specific cases:</p>
+
+<ul>
+<li><strong>Negation:</strong> removing 'not' and 'no' as stop words turns 'not working' into 'working'.</li>
+<li><strong>Code and identifiers:</strong> stemming 'classes' to 'class' is fine, but mangling API names breaks exact lookup.</li>
+<li><strong>Short queries:</strong> with one or two meaningful words, each dropped stop word removes a large share of the signal.</li>
+</ul>
+
+<p>A pragmatic rule: keep 'not', 'no', and 'never' out of your stop list, and skip stemming for fields that hold identifiers or titles matched with <a href="/blog/bm25-browser-field-weighted-retrieval/" rel="noopener">field-weighted BM25</a>.</p>
+
+<h2 id="section-a-minimal-normalization-pipeline">A minimal normalization pipeline</h2>
+
+<p>For small on-device indexes, this order works well:</p>
+
+<ol>
+<li>Lowercase and strip punctuation.</li>
+<li>Split on whitespace (<a href="/blog/tokenization-subword-bpe-on-device/" rel="noopener">subword tokenization</a> is overkill here).</li>
+<li>Drop stop words, except negation terms.</li>
+<li>Stem the survivors.</li>
+</ol>
+
+<p>The whole pipeline is a few dozen lines and runs in microseconds per query. Combined with an <a href="/blog/inverted-index-browser-search/" rel="noopener">inverted index</a>, it gives you a complete keyword search stack with no network calls and no model weights.</p>
+
+<h2 id="section-measure-before-and-after">Measure before and after</h2>
+
+<p>Normalization changes rankings, so evaluate with <a href="/blog/precision-recall-small-example/" rel="noopener">precision and recall</a> on a small set of real queries before shipping. If stemming helps long-tail queries but hurts exact-phrase ones, index both the stemmed and unstemmed forms and weight exact matches higher — the best of both worlds for a few kilobytes of index.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><ul><li><a href="/blog/tf-idf-explained-search-beginners/">TF-IDF Explained: The Search Formula Behind Keyword Ranking</a></li><li><a href="/blog/keyword-extraction-rake-textrank-basics/">Keyword Extraction Basics: RAKE and TextRank</a></li><li><a href="/blog/bm25-browser-field-weighted-retrieval/">BM25 in the Browser: Field-Weighted Sparse Retrieval Without a Server</a></li></ul></aside>
+<aside class="rv-note" aria-label="Recommended book"><a class="rv-thumb" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/assets/remain-valuable-cover-sm.webp" alt="" width="68" height="91" loading="lazy" decoding="async"></a><div class="rv-note-body"><span class="rv-note-label">Going further</span><p class="rv-note-text">This guide covered one corner of machine intelligence. <em>How to Remain Valuable When Intelligence Becomes Cheap</em> zooms out: a 224-page practical guide to the human strengths and strategic advantages that stay valuable as AI takes on more cognitive work. <a class="rv-note-link" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Get the book <span class="rv-arrow" aria-hidden="true">&rarr;</span></a></p></div></aside>
+<div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Stop%20Words%20and%20Stemming%20for%20Small%20Retrieval%20Indexes&url=https%3A%2F%2Frelu.chat%2Fblog%2Fstop-words-stemming-small-retrieval%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fstop-words-stemming-small-retrieval%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<!--shell:footer-->
+<footer class="site-footer">
+<div class="footer-key" aria-hidden="true"><span style="--k:var(--c-gt)"></span><span style="--k:var(--c-ga)"></span><span style="--k:var(--c-ds)"></span><span style="--k:var(--c-rl)"></span><span style="--k:var(--c-la)"></span><span style="--k:var(--c-wp)"></span></div>
+<div class="footer-grid">
+<div class="footer-brand"><a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a><p>Six free learning assistants, interactive ML tools and worked examples. Questions are answered in your browser.</p></div>
+<nav class="footer-col" aria-label="Learn"><h2 class="footer-h">Learn</h2><ul><li><a href="/learn/game-theory/" data-subject="game-theory">Game theory</a></li><li><a href="/learn/golden-age/" data-subject="golden-age">Islamic Golden Age</a></li><li><a href="/learn/data-science/" data-subject="data-science">Data science</a></li><li><a href="/learn/reinforcement-learning/" data-subject="reinforcement-learning">Reinforcement learning</a></li><li><a href="/learn/linear-algebra/" data-subject="linear-algebra">Linear algebra</a></li><li><a href="/learn/web-platform/" data-subject="web-platform">Web platform</a></li><li><a href="/learn/">All topics</a></li></ul></nav>
+<nav class="footer-col" aria-label="Explore"><h2 class="footer-h">Explore</h2><ul><li><a href="/chat/">Chat assistants</a></li><li><a href="/tools/">Interactive tools</a></li><li><a href="/blog/">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li><li><a href="/blog/feed.xml">RSS feed</a></li></ul></nav>
+<nav class="footer-col" aria-label="More from the makers"><h2 class="footer-h">From the makers</h2><ul><li><a href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Remain Valuable (book) <span aria-hidden="true">↗</span></a></li><li><a href="https://theknowledgeproject.gumroad.com/l/ekuidr" target="_blank" rel="noopener noreferrer">Chatbot builder toolkit <span aria-hidden="true">↗</span></a></li><li><a href="https://github.com/yunusemrejr/relu-chat" target="_blank" rel="noopener noreferrer">Source on GitHub <span aria-hidden="true">↗</span></a></li><li><a href="/llms.txt">llms.txt</a></li></ul></nav>
+</div>
+<div class="footer-base"><p>© 2026 ReLU.chat · MIT-licensed open source</p><p>Chat questions are processed in your browser.</p></div>
+</footer>
+<!--/shell:footer-->
+
+
+</body>
+</html>

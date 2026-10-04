@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Cross-Validation for Small ML Datasets — ReLU.chat</title>
+<meta name="description" content="Cross-validation for small ML datasets: k-fold mechanics, stratification, grouped folds, and choosing k, with code.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/cross-validation-small-ml-datasets/">
+
+<meta property="og:title" content="Cross-Validation for Small ML Datasets">
+<meta property="og:description" content="Cross-validation for small ML datasets: k-fold mechanics, stratification, grouped folds, and choosing k, with code.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/cross-validation-small-ml-datasets/">
+<meta property="og:image" content="https://relu.chat/assets/logo.png">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-09-27T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-27T10:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="evaluation">
+<meta property="article:tag" content="ml">
+<meta property="article:tag" content="beginners">
+<meta property="article:tag" content="statistics">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Validation for Small ML Datasets">
+<meta name="twitter:description" content="Cross-validation for small ML datasets: k-fold mechanics, stratification, grouped folds, and choosing k, with code.">
+<meta name="twitter:image" content="https://relu.chat/assets/logo.png">
+
+<link rel="stylesheet" href="/assets/shared-design.css?v=d5592e7f">
+<link rel="stylesheet" href="/assets/css/article.css?v=b9c8510f">
+<link rel="stylesheet" href="/assets/css/remain-valuable.css?v=15b499dd">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/cross-validation-small-ml-datasets/#webpage",
+      "url": "https://relu.chat/blog/cross-validation-small-ml-datasets/",
+      "name": "Cross-Validation for Small ML Datasets",
+      "description": "Cross-validation for small ML datasets: k-fold mechanics, stratification, grouped folds, and choosing k, with code.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-09-27T10:00:00.000Z",
+      "dateModified": "2026-09-27T10:00:00.000Z"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/cross-validation-small-ml-datasets/#article",
+      "headline": "Cross-Validation for Small ML Datasets",
+      "description": "Cross-validation for small ML datasets: k-fold mechanics, stratification, grouped folds, and choosing k, with code.",
+      "datePublished": "2026-09-27T10:00:00.000Z",
+      "dateModified": "2026-09-27T10:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/cross-validation-small-ml-datasets/#webpage"
+      },
+      "image": "https://relu.chat/assets/logo.png",
+      "keywords": "evaluation, ml, beginners, statistics"
+    }
+  ]
+}
+</script>
+
+
+<!--shell:head-->
+<script data-cfasync="false">(function(){var d=document.documentElement;d.classList.add("js");setTimeout(function(){if(!window.__fx)d.classList.add("no-fx")},3500);try{var t=localStorage.getItem("relu-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})()</script>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1210" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/logo.png?v=77cfb49b" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/logo.png?v=77cfb49b">
+<link rel="preload" href="/assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css?v=455d1a60">
+<script src="/assets/js/shell.js?v=802b8197" defer data-cfasync="false"></script>
+<script src="/assets/js/fx.js?v=1859fa55" defer data-cfasync="false"></script>
+<!--/shell:head-->
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!--shell:nav-->
+<nav class="site-nav" id="navbar" aria-label="Primary">
+<div class="nav-container">
+<a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a>
+<ul class="nav-links" id="nav-links"><li><a href="/chat/">Chat</a></li><li><a href="/learn/">Learn</a></li><li><a href="/tools/">Tools</a></li><li><a href="/blog/" aria-current="page">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li></ul>
+<div class="nav-tools"><button class="theme-toggle" type="button" aria-label="Switch color theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><a class="btn btn-primary btn-sm nav-cta" href="/chat/">Start chatting</a><button class="nav-menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</div>
+<span class="nav-progress" aria-hidden="true"></span>
+</nav>
+<!--/shell:nav-->
+
+<main id="main-content">
+<article class="article-container" data-subject="data-science">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Cross-Validation for Small ML Datasets</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">evaluation</span><span class="article-tag">ml</span><span class="article-tag">beginners</span><span class="article-tag">statistics</span></div>
+
+  <h1 class="article-hero-title">Cross-Validation for Small ML Datasets</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-09-27T10:00:00.000Z">September 27, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>2 min read</span>
+    </div>
+    
+  </div>
+
+  <!--cover--><figure class="article-plate plate"><img src="/assets/blog/cross-validation-small-ml-datasets.svg" alt="" width="1200" height="630" decoding="async" fetchpriority="high"></figure><!--/cover-->
+<div class="article-divider"></div>
+
+  
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-how-k-fold-validation-works">How k-fold validation works</a></li><li><a href="#section-stratification-matters">Stratification matters</a></li><li><a href="#section-grouped-folds-prevent-leakage">Grouped folds prevent leakage</a></li><li><a href="#section-choosing-k">Choosing k</a></li><li><a href="#section-validation-versus-test">Validation versus test</a></li></ol></nav><div class="article-body">
+    <p>With thousands of examples you can spare a fixed test split. With a few hundred — typical for chatbot routing labels, intent examples, or fragment quality ratings — a single split wastes data and yields noisy estimates. Cross-validation spends every example on both training and testing.</p>
+
+<h2 id="section-how-k-fold-validation-works">How k-fold validation works</h2>
+
+<p>Split the data into k equal folds. Train on k-1 folds, test on the remaining one, and repeat until each fold has served as the test set. Average the k scores. With k=5, every example trains four models and tests one, and the averaged score varies far less than any single split.</p>
+
+<pre><code class="lang-javascript">function kFoldIndices(n, k) {
+  const folds = Array.from({ length: k }, () =&gt; []);
+  for (let i = 0; i &lt; n; i++) folds[i % k].push(i);
+  return folds.map((test, f) =&gt; ({
+    test,
+    train: folds.flatMap((fold, g) =&gt; (g === f ? [] : fold)),
+  }));
+}
+</code></pre>
+
+<p>Shuffle before assigning folds so that ordering artifacts (all of one class first) do not pile into a single fold.</p>
+
+<h2 id="section-stratification-matters">Stratification matters</h2>
+
+<p>With imbalanced classes, plain random folds can starve a fold of a rare class. Stratified folds preserve each class's overall proportion in every fold. Implement it by dealing each class's indices round-robin across folds instead of dealing the whole dataset at once. For small datasets this one detail often changes results more than the choice of k.</p>
+
+<h2 id="section-grouped-folds-prevent-leakage">Grouped folds prevent leakage</h2>
+
+<p>When examples come in groups — multiple queries per topic, multiple messages per session — random folds leak: near-duplicates land on both sides of the split and inflate scores. Assign whole groups to folds, never splitting a group. This is the <a href="/blog/grouped-validation-leakage/" rel="noopener">grouped validation</a> discipline, and cross-validation without it overstates real accuracy.</p>
+
+<h2 id="section-choosing-k">Choosing k</h2>
+
+<ul>
+<li><strong>k=5</strong> is the default: each model trains on 80% of the data, and five training runs stay cheap for small models.</li>
+<li><strong>k=10</strong> reduces bias slightly (90% training data) at double the compute.</li>
+<li><strong>Leave-one-out (k=n)</strong> is unbiased but expensive and high-variance; reserve it for tiny datasets under a hundred examples.</li>
+</ul>
+
+<p>Report the mean and standard deviation across folds. A mean of 91% with a standard deviation of 6% tells a different story than the same mean with 1% — the first model is gambling on the split.</p>
+
+<h2 id="section-validation-versus-test">Validation versus test</h2>
+
+<p>Cross-validation tunes decisions: which features, which threshold, which k. Once those decisions are made, evaluate once on a held-out test set that never influenced any choice. Tuning on the test set — even informally, by stopping when test scores look good — leaks information and inflates the final number. Keep a <a href="/blog/chatbot-evaluation-offline-test-sets/" rel="noopener">frozen offline set</a> for that final check.</p>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><ul><li><a href="/blog/dropout-regularization-tiny-mlp/">Dropout and Regularization for Tiny MLPs</a></li><li><a href="/blog/learning-rate-schedules-small-networks/">Learning Rate Schedules for Small Networks</a></li><li><a href="/blog/softmax-temperature-explained/">Softmax and Temperature Explained</a></li></ul></aside>
+<aside class="rv-note" aria-label="Recommended book"><a class="rv-thumb" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/assets/remain-valuable-cover-sm.webp" alt="" width="68" height="91" loading="lazy" decoding="async"></a><div class="rv-note-body"><span class="rv-note-label">Going further</span><p class="rv-note-text">This guide covered one corner of machine intelligence. <em>How to Remain Valuable When Intelligence Becomes Cheap</em> zooms out: a 224-page practical guide to the human strengths and strategic advantages that stay valuable as AI takes on more cognitive work. <a class="rv-note-link" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Get the book <span class="rv-arrow" aria-hidden="true">&rarr;</span></a></p></div></aside>
+<div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Cross-Validation%20for%20Small%20ML%20Datasets&url=https%3A%2F%2Frelu.chat%2Fblog%2Fcross-validation-small-ml-datasets%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fcross-validation-small-ml-datasets%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<!--shell:footer-->
+<footer class="site-footer">
+<div class="footer-key" aria-hidden="true"><span style="--k:var(--c-gt)"></span><span style="--k:var(--c-ga)"></span><span style="--k:var(--c-ds)"></span><span style="--k:var(--c-rl)"></span><span style="--k:var(--c-la)"></span><span style="--k:var(--c-wp)"></span></div>
+<div class="footer-grid">
+<div class="footer-brand"><a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a><p>Six free learning assistants, interactive ML tools and worked examples. Questions are answered in your browser.</p></div>
+<nav class="footer-col" aria-label="Learn"><h2 class="footer-h">Learn</h2><ul><li><a href="/learn/game-theory/" data-subject="game-theory">Game theory</a></li><li><a href="/learn/golden-age/" data-subject="golden-age">Islamic Golden Age</a></li><li><a href="/learn/data-science/" data-subject="data-science">Data science</a></li><li><a href="/learn/reinforcement-learning/" data-subject="reinforcement-learning">Reinforcement learning</a></li><li><a href="/learn/linear-algebra/" data-subject="linear-algebra">Linear algebra</a></li><li><a href="/learn/web-platform/" data-subject="web-platform">Web platform</a></li><li><a href="/learn/">All topics</a></li></ul></nav>
+<nav class="footer-col" aria-label="Explore"><h2 class="footer-h">Explore</h2><ul><li><a href="/chat/">Chat assistants</a></li><li><a href="/tools/">Interactive tools</a></li><li><a href="/blog/">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li><li><a href="/blog/feed.xml">RSS feed</a></li></ul></nav>
+<nav class="footer-col" aria-label="More from the makers"><h2 class="footer-h">From the makers</h2><ul><li><a href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Remain Valuable (book) <span aria-hidden="true">↗</span></a></li><li><a href="https://theknowledgeproject.gumroad.com/l/ekuidr" target="_blank" rel="noopener noreferrer">Chatbot builder toolkit <span aria-hidden="true">↗</span></a></li><li><a href="https://github.com/yunusemrejr/relu-chat" target="_blank" rel="noopener noreferrer">Source on GitHub <span aria-hidden="true">↗</span></a></li><li><a href="/llms.txt">llms.txt</a></li></ul></nav>
+</div>
+<div class="footer-base"><p>© 2026 ReLU.chat · MIT-licensed open source</p><p>Chat questions are processed in your browser.</p></div>
+</footer>
+<!--/shell:footer-->
+
+
+</body>
+</html>

@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://relu.chat/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-04</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/blog/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-04</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/chat/</loc>
@@ -33,11 +33,27 @@
     </image:image>
   </url>
   <url>
+    <loc>https://relu.chat/blog/autocomplete-prefix-search-trie/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Autocomplete with Tries: Prefix Search in JS</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://relu.chat/blog/bias-in-retrieval-chatbots/</loc>
     <lastmod>2026-10-01</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/bias-in-retrieval-chatbots.png</image:loc>
       <image:caption>Bias in Retrieval Chatbots: Sources and Audits</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/bleu-rouge-text-metrics-explained/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>BLEU and ROUGE Text Metrics Explained</image:caption>
     </image:image>
   </url>
   <url>
@@ -73,11 +89,27 @@
     </image:image>
   </url>
   <url>
+    <loc>https://relu.chat/blog/chatbot-evaluation-offline-test-sets/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Offline Test Sets for Chatbots: A Guide</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://relu.chat/blog/chunking-strategies-knowledge-base/</loc>
     <lastmod>2026-10-01</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/chunking-strategies-knowledge-base.png</image:loc>
       <image:caption>Chunking Strategies for Knowledge Bases: A Practical Guide</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/confusion-matrix-intent-classification/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Confusion Matrices for Intent Classification</image:caption>
     </image:image>
   </url>
   <url>
@@ -94,6 +126,14 @@
     <image:image>
       <image:loc>https://relu.chat/assets/blog/cosine-similarity-vector-search.png</image:loc>
       <image:caption>Cosine Similarity and Vector Search: The Math Explained</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/cross-validation-small-ml-datasets/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Cross-Validation for Small ML Datasets</image:caption>
     </image:image>
   </url>
   <url>
@@ -121,6 +161,30 @@
     </image:image>
   </url>
   <url>
+    <loc>https://relu.chat/blog/dropout-regularization-tiny-mlp/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Dropout &amp; Regularization for Tiny MLPs</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/faq-chatbot-accuracy-improvement/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Improving FAQ Chatbot Accuracy Step by Step</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/feature-normalization-ml-beginners/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Feature Normalization for ML Beginners</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://relu.chat/blog/float32-vs-float64-precision/</loc>
     <lastmod>2026-10-01</lastmod>
     <image:image>
@@ -134,6 +198,14 @@
     <image:image>
       <image:loc>https://relu.chat/assets/blog/follow-up-detection-20-patterns.png</image:loc>
       <image:caption>Follow-Up Detection: 20 Patterns That Make Chatbots Conversa</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/greedy-vs-beam-search-decoding/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Greedy vs Beam Search Decoding Compared</image:caption>
     </image:image>
   </url>
   <url>
@@ -185,11 +257,27 @@
     </image:image>
   </url>
   <url>
+    <loc>https://relu.chat/blog/inverted-index-browser-search/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Inverted Indexes: How Browser Search Stays Fast</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://relu.chat/blog/katex-vs-mathjax-math-rendering/</loc>
     <lastmod>2026-10-01</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/katex-vs-mathjax-math-rendering.png</image:loc>
       <image:caption>KaTeX vs MathJax: Rendering Math in the Browser</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/keyword-extraction-rake-textrank-basics/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Keyword Extraction: RAKE and TextRank Basics</image:caption>
     </image:image>
   </url>
   <url>
@@ -209,11 +297,27 @@
     </image:image>
   </url>
   <url>
+    <loc>https://relu.chat/blog/language-detection-browser-chat/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Language Detection in the Browser, No Model</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://relu.chat/blog/latency-budgets-conversational-ui/</loc>
     <lastmod>2026-10-01</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/latency-budgets-conversational-ui.png</image:loc>
       <image:caption>The 400ms Response Rule for Chat UI — ReLU.chat</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/learning-rate-schedules-small-networks/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Learning Rate Schedules for Small Networks</image:caption>
     </image:image>
   </url>
   <url>
@@ -286,6 +390,14 @@
     <image:image>
       <image:loc>https://relu.chat/assets/blog/onnx-quantization.png</image:loc>
       <image:caption>ONNX Runtime Web + INT8 Quantization — ReLU.chat</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/perplexity-language-models-explained/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Perplexity Explained: Measuring Language Models</image:caption>
     </image:image>
   </url>
   <url>
@@ -425,6 +537,14 @@
     </image:image>
   </url>
   <url>
+    <loc>https://relu.chat/blog/sentiment-analysis-browser-no-server/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Sentiment Analysis in the Browser, No Server</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://relu.chat/blog/service-worker-caching-strategies/</loc>
     <lastmod>2026-10-01</lastmod>
     <image:image>
@@ -462,6 +582,46 @@
     <image:image>
       <image:loc>https://relu.chat/assets/blog/session-memory-architecture-30-turns.png</image:loc>
       <image:caption>Session Memory Architecture: 30 Turns of Context Without a S</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/softmax-temperature-explained/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Softmax and Temperature Explained</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/spell-correction-typo-tolerance-chatbots/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Typo Tolerance for Chatbots: Edit Distance</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/stop-words-stemming-small-retrieval/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Stop Words &amp; Stemming for Small Search Indexes</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/summarization-extractive-browser/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>Extractive Summarization for Long Answers</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/tf-idf-explained-search-beginners/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat/assets/logo.png</image:loc>
+      <image:caption>TF-IDF Explained: Keyword Ranking for Search</image:caption>
     </image:image>
   </url>
   <url>

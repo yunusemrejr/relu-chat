@@ -1,6 +1,6 @@
 # ReLU.chat
 
-> 6 free learning assistants, 219 explained topics, 6 interactive ML tools and 62 worked-example guides. Chat questions are processed locally in the browser; page and optional model downloads use the network.
+> 6 free learning assistants, 219 explained topics, 6 interactive ML tools and 82 worked-example guides. Chat questions are processed locally in the browser; page and optional model downloads use the network.
 
 ## Learn (one page per concept: definition, intuition, example, math)
 - [Game theory](https://relu.chat/learn/game-theory/): 80 topics. Strategy, equilibrium and incentives, from the prisoner’s dilemma to mechanism design.
@@ -28,7 +28,7 @@
 - [Decision Tree Explorer](https://relu.chat/tools/decision-tree/)
 
 ## Guides and architecture
-- [Learning guides](https://relu.chat/blog/) (62 articles, RSS: https://relu.chat/blog/feed.xml)
+- [Learning guides](https://relu.chat/blog/) (82 articles, RSS: https://relu.chat/blog/feed.xml)
 - [How it works: architecture and limits](https://relu.chat/how-it-works.html)
 - [Policy evaluation](https://relu.chat/data/policy-evaluation.json)
 - [Full text for LLMs](https://relu.chat/llms-full.txt)
