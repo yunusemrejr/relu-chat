@@ -47,8 +47,10 @@ export function head() {
     '<link rel="preload" href="/assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>',
     '<link rel="preload" href="/assets/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin>',
     `<link rel="stylesheet" href="${versioned('/assets/fonts/fonts.css')}">`,
+    `<link rel="stylesheet" href="${versioned('/assets/css/illustrations.css')}">`,
     `<script src="${versioned('/assets/js/shell.js')}" defer data-cfasync="false"></script>`,
     `<script src="${versioned('/assets/js/fx.js')}" defer data-cfasync="false"></script>`,
+    `<script src="${versioned('/assets/js/figures.js')}" defer data-cfasync="false"></script>`,
     '<!--/shell:head-->',
   ].join('\n');
 }
@@ -60,7 +62,7 @@ export function nav({ section = '', extra = '', cta = true } = {}) {
 <div class="nav-container">
 <a href="/" class="nav-logo" aria-label="ReLU.chat home">${markSvg}<span>ReLU.chat</span></a>
 <ul class="nav-links" id="nav-links">${links}</ul>
-<div class="nav-tools">${extra}<button class="theme-toggle" type="button" aria-label="Switch color theme">${moon}${sun}</button>${cta ? '<a class="btn btn-primary btn-sm nav-cta" href="/chat/">Start chatting</a>' : ''}<button class="nav-menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button></div>
+<div class="nav-tools">${extra}<button class="motion-toggle" data-motion-toggle type="button" aria-label="Pause illustration motion" aria-pressed="false" title="Pause illustration motion"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="motion-pause" d="M6 4v12M14 4v12" fill="none" stroke="currentColor" stroke-width="2"/><path class="motion-play" d="M6 3l11 7-11 7Z" fill="currentColor"/></svg></button><button class="theme-toggle" type="button" aria-label="Switch color theme">${moon}${sun}</button>${cta ? '<a class="btn btn-primary btn-sm nav-cta" href="/chat/">Start chatting</a>' : ''}<button class="nav-menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button></div>
 </div>
 <span class="nav-progress" aria-hidden="true"></span>
 </nav>

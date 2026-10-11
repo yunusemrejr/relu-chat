@@ -22,6 +22,10 @@ import { renderAllLearn } from './site/learn.mjs';
 import { renderErrors } from './site/errors.mjs';
 import { warnings, esc, clip, plain } from './site/render.mjs';
 import { postCards, toolTiles, subjectPanels, chatTiles, plate } from './site/home.mjs';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const { activationSvg, pipelineFigure } = require('./site/figures.cjs');
+const { coverSvg, subjectOfPost } = require('./site/art.cjs');
 
 const CHECK = process.argv.includes('--check');
 const abs = (rel) => join(ROOT, rel);
@@ -47,7 +51,11 @@ const gen = {
   tools: String(TOOLS.length),
   'latest-posts': postCards(posts, 3),
   'tool-tiles': toolTiles(),
+  'activation-plot': activationSvg(),
+  'answer-pipeline': pipelineFigure(),
 };
+// Covers share the instruments without regenerating hand-maintained articles.
+for (const post of posts) out.set(`assets/blog/${post.slug}.svg`, coverSvg(subjectOfPost(post), post.slug));
 const manifestBots = JSON.parse(read('data/manifest.json')).bots;
 gen['subject-panels'] = subjectPanels(bots, manifestBots);
 gen['chat-tiles'] = chatTiles(bots, manifestBots);
@@ -74,6 +82,16 @@ for (const file of listPages()) {
   out.set(rel, fillGen(transform(file, before), rel).replace(/(<script type="application\/ld\+json" id="ld-assistants">)[\s\S]*?(<\/script>)/, (m, a, z) => `${a}${assistantsLd()}${z}`));
 }
 
+// Apache treats images as immutable. Hash the new SVG content held in this
+// build, not yesterday's file on disk, so first deploy and --check agree.
+for (const [rel, html] of out) {
+  if (!rel.endsWith('.html')) continue;
+  out.set(rel, html.replace(/(src=")(\/assets\/blog\/[^"?]+\.svg)(?:\?v=[^"]*)?(")/g, (all, start, path, end) => {
+    const svg = out.get(path.slice(1));
+    return svg ? `${start}${path}?v=${createHash('sha1').update(svg).digest('hex').slice(0, 8)}${end}` : all;
+  }));
+}
+
 // ---------- 3. sitemap ----------
 const stateFile = 'scripts/site/sitemap-state.json';
 const state = existsSync(abs(stateFile)) ? JSON.parse(read(stateFile)) : {};
@@ -94,7 +112,7 @@ const urls = [];
 const pageUrl = (rel) => '/' + (rel.endsWith('index.html') ? rel.slice(0, -'index.html'.length) : rel);
 const isIndexable = (html) => !/<meta name="robots" content="[^"]*noindex/.test(html);
 for (const [rel, html] of [...out.entries()].sort(([a], [b]) => a.localeCompare(b))) {
-  if (rel.startsWith('errors/')) continue;
+  if (!rel.endsWith('.html') || rel.startsWith('errors/')) continue;
   if (!isIndexable(html)) continue;
   const u = pageUrl(rel);
   let fixed = null;

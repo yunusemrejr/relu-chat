@@ -13,7 +13,7 @@ Six free learning assistants that retrieve and explain curated knowledge in your
 | [Linear Algebra](https://relu.chat/chat/linear-algebra-chat/) | 16 |
 | [Web Platform](https://relu.chat/chat/web-platform-chat/) | 16 |
 
-There are also six interactive ML tools, 62 learning guides and a crawlable page for every assistant topic under `/learn/`. The assistants can misunderstand questions. They assemble curated fragments, do not execute code, and cannot solve arbitrary exercises.
+There are also six interactive ML tools, 82 learning guides and a crawlable page for every assistant topic under `/learn/`. The assistants can misunderstand questions. They assemble curated fragments, do not execute code, and cannot solve arbitrary exercises.
 
 ## Runtime
 
@@ -29,7 +29,7 @@ Use Node.js 22.13 or newer and Python 3.11 or newer locally. `npm run dev` serve
 npm test
 ```
 
-This runs every unit suite, six-bot conversation checks, committed model/WASM parity fixtures, deployment safety tests, blog validation, and the 79-page static site audit. Results go to ignored `dev/exports/`. GitHub Actions runs the same command on pushes and pull requests with a ten-minute job timeout. It does not install PyTorch, run nightly training, or publish models.
+This runs every unit suite, six-bot conversation checks, committed model/WASM parity fixtures, deployment safety tests, blog validation, and the 319-page static site audit. Results go to ignored `dev/exports/`. GitHub Actions runs the same command on pushes and pull requests with a ten-minute job timeout. It does not install PyTorch, run nightly training, or publish models.
 
 ## Fast laptop policy training
 
@@ -62,7 +62,13 @@ Before promotion, inspect the validation gate, compare against the prior model, 
 
 Social images in `assets/og/` are rendered with `npm run build:og` (needs Chrome) and committed. After a deploy that changes the sitemap, `.github/workflows/indexnow.yml` waits for production to serve it and submits only the new or changed URLs to IndexNow. The `blog` generator (`scripts/blog/generate.js`) finishes by running this build.
 
-Design tokens (ink and paper themes, one vermilion accent) live in `assets/shared-design.css`; the type pairing is self-hosted IBM Plex Sans and Mono.
+Design tokens (ink and paper themes, one vermilion accent) live in `assets/shared-design.css`; the type pairing is self-hosted Bricolage Grotesque and Atkinson Hyperlegible Next, with the system monospace stack for instrument labels.
+
+## Learning instruments
+
+`scripts/site/instruments.cjs` builds original subject instruments and content-aware guide motifs as native SVG. `scripts/site/figures.cjs` supplies the interactive ReLU plot, answer pipeline and mathematical tool previews. Guide covers regenerate with the site build and use content-hashed URLs; article bodies remain hand edited.
+
+`assets/js/figures.js` plays one finite Web Animations sequence when a figure is at least 15% visible. It pauses offscreen, on hidden pages and through the navigation's pause control; reduced-motion preferences leave complete static figures. Replay controls appear only when the script loads. No animation dependency or decorative render loop is required. Mathematical invariants and motion lifecycle regressions are covered by `tests/test-illustrations.mjs` and `tests/test-figure-motion.mjs`. Visual direction and browser verification are recorded in `dev/audits/illustration-direction.md`.
 
 ## Content
 
