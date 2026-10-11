@@ -1,16 +1,38 @@
 #!/usr/bin/env python3
-import argparse,json,hashlib,re,time,concurrent.futures,urllib.request,urllib.error,xml.etree.ElementTree as ET
+import argparse,json,hashlib,re,time,concurrent.futures,urllib.request,urllib.error,xml.etree.ElementTree as ET,http.client,threading
 from pathlib import Path
 root=Path(__file__).resolve().parents[2]
 parser=argparse.ArgumentParser();parser.add_argument('--manifest',type=Path,required=True);args=parser.parse_args()
 manifest=json.loads(args.manifest.read_text());errors=[];checks=[]
 files=manifest['files']
+connections=threading.local()
 def fetch(path):
  request=urllib.request.Request('https://relu.chat'+path,headers={'User-Agent':'ReLU-release-verification/2026-09-09','Cache-Control':'no-cache'})
- with urllib.request.urlopen(request,timeout=25) as response:return response.status,response.read(),dict(response.headers),response.url
+ # Reuse one TLS connection per worker. Retry one dropped connection; each
+ # attempt has a 12-second socket timeout so stalled requests remain bounded.
+ for attempt in range(2):
+  connection=getattr(connections,'current',None)
+  if connection is None:
+   connection=connections.current=http.client.HTTPSConnection('relu.chat',timeout=12)
+  try:
+   connection.request('GET',path,headers=dict(request.header_items()))
+   response=connection.getresponse();data=response.read();headers=dict(response.getheaders());status=response.status
+   if response.will_close:connection.close();connections.current=None
+   # Keep urllib's existing redirect handling for canonical URL checks.
+   if 300<=status<400:
+    with urllib.request.urlopen(request,timeout=12) as redirected:return redirected.status,redirected.read(),dict(redirected.headers),redirected.url
+   if status!=200:raise RuntimeError('HTTP '+str(status))
+   return status,data,headers,request.full_url
+  except (OSError,http.client.HTTPException):
+   connection.close();connections.current=None
+   if attempt:raise
 def verify(name):
  route='/'+name
  if name.endswith('index.html'):route=route[:-10]
+ # Immutable image URLs can retain the prior release in a CDN. Verify a
+ # deterministic version of the expected bytes, as the generated pages do.
+ if name.startswith('assets/') and name.endswith(('.svg','.png','.jpg','.jpeg','.webp','.gif')):
+  route+='?v='+files[name]['sha256'][:12]
  try:
   status,data,headers,url=fetch(route)
   result={'path':route,'status':status,'bytes':len(data),'url':url,'cache_control':headers.get('Cache-Control',headers.get('cache-control',''))}
@@ -27,7 +49,7 @@ def verify(name):
   return result
  except Exception as exc:return {'path':route,'error':str(exc)}
 start=time.monotonic()
-with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
  for result in pool.map(verify,[p for p in files if p not in ['.htaccess','.well-known/llms.txt'] and not p.endswith('.php') and files[p]['bytes']<=2_000_000]):
   checks.append(result)
   if 'error'in result:errors.append(result);print('FAIL',result,flush=True)

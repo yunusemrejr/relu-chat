@@ -113,3 +113,11 @@ safety and the 319-page site audit. The build is idempotent. A baseline comparis
 of all 328 changed HTML pages preserved document titles, H1s, canonical URLs,
 meta descriptions and robots directives. All 92 standalone guide SVGs parse as
 XML. The two new shared runtime assets total 4,439 bytes gzipped.
+
+Live verification exposed a cached October 4 cover at an unversioned Cloudflare
+URL. Its new versioned URL matches the release bytes. The production verifier
+now checks immutable images through release-specific URLs, reuses one TLS
+connection per worker and retries a dropped connection once. Eight workers keep
+the whole-site HTTP sweep bounded; byte hashes, canonical redirects, mutable
+asset revalidation and WASM MIME checks remain required. Final release receipts
+and HTTP results stay under ignored `dev/exports/`.
