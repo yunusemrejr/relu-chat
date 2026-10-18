@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://relu.chat/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/blog/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/chat/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/how-it-works.html</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/learn/</loc>
@@ -22,11 +22,11 @@
   </url>
   <url>
     <loc>https://relu.chat/tools/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/blog/accessibility-ai-chatbots-wcag/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/accessibility-ai-chatbots-wcag.png</image:loc>
       <image:caption>Accessibility in AI Chatbots: WCAG Compliance for Conversati</image:caption>
@@ -34,7 +34,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/autocomplete-prefix-search-trie/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Autocomplete with Tries: Prefix Search in JS</image:caption>
@@ -42,7 +42,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/bias-in-retrieval-chatbots/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/bias-in-retrieval-chatbots.png</image:loc>
       <image:caption>Bias in Retrieval Chatbots: Sources and Audits</image:caption>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/bleu-rouge-text-metrics-explained/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>BLEU and ROUGE Text Metrics Explained</image:caption>
@@ -58,7 +58,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/bm25-browser-field-weighted-retrieval/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/bm25-browser-field-weighted-retrieval.png</image:loc>
       <image:caption>BM25 in the Browser: Field-Weighted Sparse Retrieval Without</image:caption>
@@ -66,7 +66,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/bm25-math-worked-example/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/bm25-math-worked-example.png</image:loc>
       <image:caption>The Math of BM25: A Worked Example</image:caption>
@@ -74,7 +74,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/bm25-vs-dense-retrieval/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/bm25-vs-dense.png</image:loc>
       <image:caption>BM25 vs Dense Retrieval — ReLU.chat</image:caption>
@@ -82,7 +82,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/browser-vector-math-optimization/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/browser-vector-math-optimization.png</image:loc>
       <image:caption>The Real Cost of Cosine Similarity in JavaScript</image:caption>
@@ -90,7 +90,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/chatbot-evaluation-offline-test-sets/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Offline Test Sets for Chatbots: A Guide</image:caption>
@@ -98,7 +98,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/chunking-strategies-knowledge-base/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/chunking-strategies-knowledge-base.png</image:loc>
       <image:caption>Chunking Strategies for Knowledge Bases: A Practical Guide</image:caption>
@@ -106,7 +106,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/confusion-matrix-intent-classification/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Confusion Matrices for Intent Classification</image:caption>
@@ -114,7 +114,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/conversation-state-machines/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/conversation-state-machines.png</image:loc>
       <image:caption>Conversation State Machines: Modes, Intents, Routing</image:caption>
@@ -122,7 +122,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/cosine-similarity-vector-search/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/cosine-similarity-vector-search.png</image:loc>
       <image:caption>Cosine Similarity and Vector Search: The Math Explained</image:caption>
@@ -130,7 +130,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/cross-validation-small-ml-datasets/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Cross-Validation for Small ML Datasets</image:caption>
@@ -138,7 +138,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/debugging-browser-ml/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/debugging-browser-ml.png</image:loc>
       <image:caption>Debugging In-Browser ML: Profiling, Logging &amp; Fallbacks</image:caption>
@@ -146,7 +146,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/dense-sparse-ensemble-ranking/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/dense-sparse-ensemble-ranking.png</image:loc>
       <image:caption>Dense-Sparse Ensemble Ranking: Combining BM25 and Embeddings</image:caption>
@@ -154,7 +154,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/dot-product-cosine-worked-example/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Dot Product and Cosine Similarity, Step by Step</image:caption>
@@ -162,7 +162,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/dropout-regularization-tiny-mlp/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Dropout &amp; Regularization for Tiny MLPs</image:caption>
@@ -170,7 +170,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/faq-chatbot-accuracy-improvement/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Improving FAQ Chatbot Accuracy Step by Step</image:caption>
@@ -178,7 +178,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/feature-normalization-ml-beginners/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Feature Normalization for ML Beginners</image:caption>
@@ -186,7 +186,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/float32-vs-float64-precision/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/float32-vs-float64-precision.png</image:loc>
       <image:caption>Float32 vs Float64 for In-Browser ML: Precision Trade-Offs</image:caption>
@@ -194,7 +194,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/follow-up-detection-20-patterns/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/follow-up-detection-20-patterns.png</image:loc>
       <image:caption>Follow-Up Detection: 20 Patterns That Make Chatbots Conversa</image:caption>
@@ -202,7 +202,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/greedy-vs-beam-search-decoding/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Greedy vs Beam Search Decoding Compared</image:caption>
@@ -210,7 +210,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/grouped-validation-leakage/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Data Leakage: Split by Entity Before You Train</image:caption>
@@ -218,7 +218,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/heuristic-fallback-cold-start/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/heuristic-fallback.png</image:loc>
       <image:caption>Heuristic Fallback for Cold-Start AI — ReLU.chat</image:caption>
@@ -226,7 +226,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/how-browser-based-chatbots-work/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/browser-chatbots.png</image:loc>
       <image:caption>How Browser-Based Chatbots Work — On-Device NLP</image:caption>
@@ -234,7 +234,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/indexeddb-client-storage/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/indexeddb-client-storage.png</image:loc>
       <image:caption>IndexedDB for On-Device AI: Embeddings and Session State</image:caption>
@@ -242,7 +242,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/int8-quantization-browser-mlp/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/int8-quantization-browser-mlp.png</image:loc>
       <image:caption>Int8 Quantization: 4x Faster MLP in the Browser</image:caption>
@@ -250,7 +250,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/int8-quantization-explained/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/int8-quantization-explained.png</image:loc>
       <image:caption>INT8 Quantization Explained: FP32 to 8-Bit Model Weights</image:caption>
@@ -258,7 +258,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/inverted-index-browser-search/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Inverted Indexes: How Browser Search Stays Fast</image:caption>
@@ -266,7 +266,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/katex-vs-mathjax-math-rendering/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/katex-vs-mathjax-math-rendering.png</image:loc>
       <image:caption>KaTeX vs MathJax: Rendering Math in the Browser</image:caption>
@@ -274,7 +274,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/keyword-extraction-rake-textrank-basics/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Keyword Extraction: RAKE and TextRank Basics</image:caption>
@@ -282,7 +282,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/knowledge-base-fragments-fields-metadata/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/knowledge-base-fragments-fields-metadata.png</image:loc>
       <image:caption>How Knowledge Bases Are Structured: Fragments and Metadata</image:caption>
@@ -290,7 +290,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/knowledge-fragment-composition/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/fragment-composition.png</image:loc>
       <image:caption>Fragment Composition vs LLM Generation — ReLU.chat</image:caption>
@@ -298,7 +298,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/language-detection-browser-chat/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Language Detection in the Browser, No Model</image:caption>
@@ -306,7 +306,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/latency-budgets-conversational-ui/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/latency-budgets-conversational-ui.png</image:loc>
       <image:caption>The 400ms Response Rule for Chat UI — ReLU.chat</image:caption>
@@ -314,7 +314,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/learning-rate-schedules-small-networks/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Learning Rate Schedules for Small Networks</image:caption>
@@ -322,7 +322,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/least-squares-without-inverse/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Least Squares Without Computing an Inverse</image:caption>
@@ -330,7 +330,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/linguistic-connectors-naturalness/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/linguistic-connectors.png</image:loc>
       <image:caption>Linguistic Connectors for Chatbots — ReLU.chat</image:caption>
@@ -338,7 +338,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/local-chat-privacy-network/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Local Chat Privacy: What Still Uses the Network?</image:caption>
@@ -346,7 +346,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/memory-leaks-long-chat-sessions/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/memory-leaks-long-chat-sessions.png</image:loc>
       <image:caption>Memory Management in Long Browser Chat Sessions</image:caption>
@@ -354,7 +354,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/model-size-vs-quality/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/model-size-vs-quality.png</image:loc>
       <image:caption>Small Distilled Models Beat Big Ones on Edge</image:caption>
@@ -362,7 +362,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/named-entity-recognition-no-llm/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/named-entity-recognition-no-llm.png</image:loc>
       <image:caption>NER Without an LLM: Regex + Fuzzy Matching</image:caption>
@@ -370,7 +370,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/nash-equilibrium-best-response-table/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Find a Nash Equilibrium with Best Responses</image:caption>
@@ -378,7 +378,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/offline-first-chat-architecture/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/offline-first-chat-architecture.png</image:loc>
       <image:caption>Offline-First Chat Architecture: Queues, Retries, Sync-Free</image:caption>
@@ -386,7 +386,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/onnx-runtime-web-quantization/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/onnx-quantization.png</image:loc>
       <image:caption>ONNX Runtime Web + INT8 Quantization — ReLU.chat</image:caption>
@@ -394,7 +394,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/perplexity-language-models-explained/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Perplexity Explained: Measuring Language Models</image:caption>
@@ -402,7 +402,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/ppo-reward-design-policy-network/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/ppo-reward-design.png</image:loc>
       <image:caption>PPO Reward Design for Chatbots — ReLU.chat</image:caption>
@@ -410,7 +410,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/precision-recall-small-example/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Precision and Recall: A 100-Case Example</image:caption>
@@ -418,7 +418,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/privacy-checklist-browser-ai/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/privacy-checklist-browser-ai.png</image:loc>
       <image:caption>Privacy Checklist for Browser-Based AI</image:caption>
@@ -426,7 +426,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/privacy-first-ai-browsers/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/privacy-ai.jpg</image:loc>
       <image:caption>Privacy-First AI in the Browser — ReLU.chat</image:caption>
@@ -434,7 +434,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/progressive-loading-bow-mlp-transformer/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/progressive-loading-bow-mlp-transformer.png</image:loc>
       <image:caption>Progressive Loading: BOW to MLP to Transformer in 3 Stages</image:caption>
@@ -442,7 +442,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/progressive-streaming-rendering-chatbots/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/progressive-streaming-rendering-chatbots.png</image:loc>
       <image:caption>Progressive Streaming Rendering: Making Chatbots Feel Native</image:caption>
@@ -450,7 +450,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/prototype-intent-classification/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/prototype-intent-classification.png</image:loc>
       <image:caption>Intent Classification with Prototype Embeddings</image:caption>
@@ -458,7 +458,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/q-learning-sarsa-worked-example/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Q-learning vs SARSA: One Update, Worked Through</image:caption>
@@ -466,7 +466,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/query-expansion-without-llm/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/query-expansion-without-llm.png</image:loc>
       <image:caption>Query Expansion Without an LLM: Synonyms, Spelling, Boosting</image:caption>
@@ -474,7 +474,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/rank-svd-conditioning/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Rank, SVD, and Conditioning: Three Different Questions</image:caption>
@@ -482,7 +482,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/reading-islamic-science-sources/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>How to Read Claims About Medieval Islamic Science</image:caption>
@@ -490,7 +490,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/reinforcement-learning-for-chatbots/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/rl-chatbots.png</image:loc>
       <image:caption>RL-Trained Chatbots — ReLU.chat</image:caption>
@@ -498,7 +498,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/retrieval-metrics-precision-recall-mrr.png</image:loc>
       <image:caption>Measuring Retrieval Quality: Precision, Recall, MRR and NDCG</image:caption>
@@ -506,7 +506,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/reward-design-small-chatbot/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Reward Design for a Small Learning Chatbot</image:caption>
@@ -514,7 +514,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/rl-termination-truncation/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Termination vs Truncation in RL Targets</image:caption>
@@ -522,7 +522,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/sentence-embeddings-384-dim-minilm/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/sentence-embeddings.png</image:loc>
       <image:caption>384-dim Sentence Embeddings — ReLU.chat</image:caption>
@@ -530,7 +530,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/sentence-vs-word-embeddings/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/sentence-vs-word.png</image:loc>
       <image:caption>Sentence vs Word Embeddings — ReLU.chat</image:caption>
@@ -538,7 +538,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/sentiment-analysis-browser-no-server/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Sentiment Analysis in the Browser, No Server</image:caption>
@@ -546,7 +546,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/service-worker-caching-strategies/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/service-worker-caching-strategies.png</image:loc>
       <image:caption>Service Worker Caching for ML Assets — ReLU.chat</image:caption>
@@ -554,7 +554,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/service-worker-model-pre-caching/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/service-worker-model-pre-caching.png</image:loc>
       <image:caption>Service Worker Model Pre-Caching: Zero-Wait Chatbot Loading</image:caption>
@@ -562,7 +562,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/service-worker-model-updates/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Service Worker Updates Without Stale Model Weights</image:caption>
@@ -570,7 +570,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/service-workers-offline-ai/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/service-worker-pwa.png</image:loc>
       <image:caption>Service Workers + PWA for Offline AI — ReLU.chat</image:caption>
@@ -578,7 +578,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/session-memory-architecture-30-turns/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/session-memory-architecture-30-turns.png</image:loc>
       <image:caption>Session Memory Architecture: 30 Turns of Context Without a S</image:caption>
@@ -586,7 +586,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/softmax-temperature-explained/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Softmax and Temperature Explained</image:caption>
@@ -594,7 +594,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/spell-correction-typo-tolerance-chatbots/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Typo Tolerance for Chatbots: Edit Distance</image:caption>
@@ -602,7 +602,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/stop-words-stemming-small-retrieval/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Stop Words &amp; Stemming for Small Search Indexes</image:caption>
@@ -610,7 +610,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/summarization-extractive-browser/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Extractive Summarization for Long Answers</image:caption>
@@ -618,7 +618,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/tf-idf-explained-search-beginners/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>TF-IDF Explained: Keyword Ranking for Search</image:caption>
@@ -626,7 +626,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/tiny-policy-training-cpu/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Training a Chatbot Policy on a Laptop</image:caption>
@@ -634,7 +634,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/tokenization-subword-bpe-on-device/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/tokenization-subword-bpe-on-device.png</image:loc>
       <image:caption>Subword Tokenization for On-Device NLP: How BPE Works</image:caption>
@@ -642,7 +642,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/topic-correction-when-users-redirect/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/topic-correction-when-users-redirect.png</image:loc>
       <image:caption>Topic Correction: When Users Say &#39;No, I Meant X&#39;</image:caption>
@@ -650,7 +650,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/wasm-javascript-policy-parity/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>WASM vs JavaScript: Verify the Same Model First</image:caption>
@@ -658,7 +658,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/web-workers-ui-thread/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/web-workers-ui-thread.png</image:loc>
       <image:caption>Web Workers for Browser Inference — ReLU.chat</image:caption>
@@ -666,7 +666,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/webassembly-browser-ml/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/webassembly-browser-ml.png</image:loc>
       <image:caption>WebAssembly and On-Device ML: Why WASM Makes Browser AI Fast</image:caption>
@@ -674,7 +674,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/webgpu-future-browser-inference/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/webgpu-inference.png</image:loc>
       <image:caption>WebGPU for Browser AI — ReLU.chat</image:caption>
@@ -682,27 +682,27 @@
   </url>
   <url>
     <loc>https://relu.chat/chat/data-science-chat/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/chat/game-theory-chat/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/chat/golden-age-inquiry/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/chat/linear-algebra-chat/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/chat/reinforcement-learning-chat/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/chat/web-platform-chat/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/learn/data-science/</loc>
@@ -1582,26 +1582,26 @@
   </url>
   <url>
     <loc>https://relu.chat/tools/activation-functions/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/tools/backpropagation/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/tools/decision-tree/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/tools/gradient-descent/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/tools/k-means-clustering/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/tools/neural-network/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
 </urlset>
