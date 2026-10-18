@@ -172,7 +172,7 @@
     <loc>https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/</loc>
     <lastmod>2026-10-18</lastmod>
     <image:image>
-      <image:loc>https://relu.chat//assets/blog/chladni-plate-nodal-lines.webp</image:loc>
+      <image:loc>https://relu.chat/assets/blog/chladni-plate-nodal-lines.webp</image:loc>
       <image:caption>Eigenvalues and Eigenvectors Explained</image:caption>
     </image:image>
   </url>
@@ -428,7 +428,7 @@
     <loc>https://relu.chat/blog/principal-component-analysis-explained/</loc>
     <lastmod>2026-10-18</lastmod>
     <image:image>
-      <image:loc>https://relu.chat//assets/blog/karl-pearson-1910.webp</image:loc>
+      <image:loc>https://relu.chat/assets/blog/karl-pearson-1910.webp</image:loc>
       <image:caption>Principal Component Analysis (PCA) Explained</image:caption>
     </image:image>
   </url>
