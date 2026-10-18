@@ -6,7 +6,7 @@ import { BOOK } from './config.mjs';
 export const THUMB = `<a class="rv-thumb" href="${BOOK.url}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/assets/remain-valuable-cover-sm.webp" alt="" width="68" height="91" loading="lazy" decoding="async"></a>`;
 
 export function applyBook(html) {
-  let out = html;
+  let out = html.replace(/Get the book(?=\s*(?:<|&))/g, 'View book on Gumroad');
 
   // Article end-notes: <aside class="rv-note"><span label/><p/></aside>
   out = out.replace(/<aside class="rv-note" aria-label="Recommended book">(?!<a class="rv-thumb")([\s\S]*?)<\/aside>/g,
@@ -24,5 +24,5 @@ export function applyBook(html) {
 
 /** Book card for generated pages (same component the codemod produces elsewhere). */
 export function bookCard(copyHtml) {
-  return `<aside class="rv-note rv-note--wide" aria-label="Recommended book">${THUMB}<div class="rv-note-body"><span class="rv-note-label">Going further</span><p class="rv-note-text">${copyHtml} <a class="rv-note-link" href="${BOOK.url}" target="_blank" rel="noopener noreferrer">Get the book <span class="rv-arrow" aria-hidden="true">&rarr;</span></a></p></div></aside>`;
+  return `<aside class="rv-note rv-note--wide" aria-label="Recommended book">${THUMB}<div class="rv-note-body"><span class="rv-note-label">Going further</span><p class="rv-note-text">${copyHtml} <a class="rv-note-link" href="${BOOK.url}" target="_blank" rel="noopener noreferrer">View book on Gumroad <span class="rv-arrow" aria-hidden="true">&rarr;</span></a></p></div></aside>`;
 }

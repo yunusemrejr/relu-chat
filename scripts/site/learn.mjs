@@ -177,7 +177,7 @@ export function renderLearnHub(bots) {
 <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Learn</li></ol></nav>
 <header class="hub-head"><p class="kicker">Free · No account</p><h1 class="split-words">Learn the concept, then ask about it</h1><p class="topic-lead">${total} short explanations, each with a definition, intuition, a worked example and the math. Every topic links to a chat assistant you can ask follow-ups.</p></header>
 <ul class="tile-grid">${cards}</ul>
-<section class="index" aria-labelledby="index-h"><div class="index-top"><h2 id="index-h">Every topic</h2><label class="index-search"><span class="sr-only">Filter topics</span><input type="search" id="topic-filter" placeholder="Filter ${total} topics…" autocomplete="off"></label></div><p class="index-empty" id="index-empty" hidden>No topic matches that filter.</p>
+<section class="index" aria-labelledby="index-h"><div class="index-top"><h2 id="index-h">Every topic</h2><label class="index-search"><span class="sr-only">Filter topics</span><input type="search" id="topic-filter" placeholder="Filter ${total} topics…" autocomplete="off"></label></div><p class="index-empty" id="index-empty" hidden>No topic matches that filter. Try a shorter term or clear the search.</p>
 ${index}</section>
 ${bookCard(BOOK_COPY.ml)}
 </div>`;
