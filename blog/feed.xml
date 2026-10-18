@@ -5,13 +5,39 @@
   <link>https://relu.chat/blog/</link>
   <description>Technical articles about on-device AI, browser-based chatbots, NLP, and privacy-first machine learning.</description>
   <language>en</language>
-  <lastBuildDate>Sun, 04 Oct 2026 16:16:08 GMT</lastBuildDate>
+  <lastBuildDate>Sun, 18 Oct 2026 10:00:00 GMT</lastBuildDate>
   <atom:link href="https://relu.chat/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <image>
     <url>https://relu.chat/assets/logo.png</url>
     <title>ReLU.chat</title>
     <link>https://relu.chat</link>
   </image>
+  <item>
+    <title>Principal Component Analysis (PCA) Explained — ReLU.chat</title>
+    <link>https://relu.chat/blog/principal-component-analysis-explained/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/principal-component-analysis-explained/</guid>
+    <pubDate>Sun, 18 Oct 2026 10:00:00 GMT</pubDate>
+    <description>PCA explained: how principal components find the directions of greatest variance, how to compute them from a covariance matrix, and when to standardize.</description>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
+    <category>data-science</category>
+    <category>pca</category>
+    <category>dimensionality-reduction</category>
+    <category>statistics</category>
+    <category>beginners</category>
+  </item>
+  <item>
+    <title>Eigenvalues and Eigenvectors Explained — ReLU.chat</title>
+    <link>https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/</link>
+    <guid isPermaLink="true">https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/</guid>
+    <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
+    <description>Eigenvalues and eigenvectors explained with a 2x2 matrix worked by hand: the Av = λv idea, how to find both, and where they appear in data science.</description>
+    <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
+    <category>linear-algebra</category>
+    <category>eigenvalues</category>
+    <category>matrices</category>
+    <category>worked-example</category>
+    <category>beginners</category>
+  </item>
   <item>
     <title>Greedy vs Beam Search Decoding Compared — ReLU.chat</title>
     <link>https://relu.chat/blog/greedy-vs-beam-search-decoding/</link>

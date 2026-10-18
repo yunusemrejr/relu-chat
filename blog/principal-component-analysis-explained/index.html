@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Principal Component Analysis (PCA) Explained — ReLU.chat</title>
+<meta name="description" content="PCA explained: how principal components find the directions of greatest variance, how to compute them from a covariance matrix, and when to standardize.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/principal-component-analysis-explained/">
+
+<meta property="og:title" content="Principal Component Analysis (PCA) Explained">
+<meta property="og:description" content="PCA explained: how principal components find the directions of greatest variance, how to compute them from a covariance matrix, and when to standardize.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/principal-component-analysis-explained/">
+<meta property="og:image" content="https://relu.chat//assets/blog/karl-pearson-1910.webp">
+<meta property="og:image:width" content="1177">
+<meta property="og:image:height" content="856">
+<meta property="og:image:alt" content="Black-and-white portrait of Karl Pearson seated at a desk with papers and framed pictures on the wall.">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-10-18T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-18T10:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="data-science">
+<meta property="article:tag" content="pca">
+<meta property="article:tag" content="dimensionality-reduction">
+<meta property="article:tag" content="statistics">
+<meta property="article:tag" content="beginners">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Principal Component Analysis (PCA) Explained">
+<meta name="twitter:description" content="PCA explained: how principal components find the directions of greatest variance, how to compute them from a covariance matrix, and when to standardize.">
+<meta name="twitter:image" content="https://relu.chat//assets/blog/karl-pearson-1910.webp">
+<meta name="twitter:image:alt" content="Black-and-white portrait of Karl Pearson seated at a desk with papers and framed pictures on the wall.">
+
+<link rel="stylesheet" href="/assets/shared-design.css?v=d5592e7f">
+<link rel="stylesheet" href="/assets/css/article.css?v=b9c8510f">
+<link rel="stylesheet" href="/assets/css/remain-valuable.css?v=15b499dd">
+<link rel="stylesheet" href="/assets/css/article-figures.css?v=4b510c74">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/principal-component-analysis-explained/#webpage",
+      "url": "https://relu.chat/blog/principal-component-analysis-explained/",
+      "name": "Principal Component Analysis (PCA) Explained",
+      "description": "PCA explained: how principal components find the directions of greatest variance, how to compute them from a covariance matrix, and when to standardize.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-10-18T10:00:00.000Z",
+      "dateModified": "2026-10-18T10:00:00.000Z",
+      "breadcrumb": {
+        "@id": "https://relu.chat/blog/principal-component-analysis-explained/#breadcrumb"
+      }
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/principal-component-analysis-explained/#article",
+      "headline": "Principal Component Analysis Explained: Finding Directions of Most Variance",
+      "description": "PCA explained: how principal components find the directions of greatest variance, how to compute them from a covariance matrix, and when to standardize.",
+      "datePublished": "2026-10-18T10:00:00.000Z",
+      "dateModified": "2026-10-18T10:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/principal-component-analysis-explained/#webpage"
+      },
+      "image": "https://relu.chat//assets/blog/karl-pearson-1910.webp",
+      "keywords": "data-science, pca, dimensionality-reduction, statistics, beginners"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://relu.chat/blog/principal-component-analysis-explained/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://relu.chat/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://relu.chat/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Principal Component Analysis Explained: Finding Directions of Most Variance",
+          "item": "https://relu.chat/blog/principal-component-analysis-explained/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://relu.chat/blog/principal-component-analysis-explained/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does PCA do in one sentence?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PCA rotates data onto new perpendicular axes, ordered by variance, so that a few components capture most of the information and the rest can be dropped."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is PCA the same as linear regression?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Linear regression predicts a target variable by minimizing vertical errors. PCA treats all features symmetrically and minimizes perpendicular distances to the component line. It uses no target, so by itself it does not predict anything."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I always need to standardize before PCA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, but you should when features use different units or scales. Without standardization, the feature with the largest numeric spread dominates the first component. If all features share one meaningful unit, raw variance may be the right basis."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How many principal components should I keep?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "There is no universal rule. Check the share of variance each component explains, look for a clear elbow in the scree plot, and, if PCA feeds a model, choose the number that performs best on validation data."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can PCA be used on images or text?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, as long as the data is numeric. Pixel values and term-count matrices are common inputs. For very sparse text matrices, a truncated SVD is often used instead, because centering the data would destroy its sparsity."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does PCA remove noise?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It can help when the noise is spread across many low-variance directions and the signal is concentrated in a few. It does not guarantee that. If noise and signal share the high-variance directions, dropping the low-variance components will not remove the noise."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+
+<!--shell:head-->
+<script data-cfasync="false">(function(){var d=document.documentElement;d.classList.add("js");setTimeout(function(){if(!window.__fx)d.classList.add("no-fx")},3500);try{var t=localStorage.getItem("relu-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})()</script>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1210" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/logo.png?v=77cfb49b" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/logo.png?v=77cfb49b">
+<link rel="preload" href="/assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css?v=455d1a60">
+<link rel="stylesheet" href="/assets/css/illustrations.css?v=feb68611">
+<script src="/assets/js/shell.js?v=802b8197" defer data-cfasync="false"></script>
+<script src="/assets/js/fx.js?v=1859fa55" defer data-cfasync="false"></script>
+<script src="/assets/js/figures.js?v=63f4922a" defer data-cfasync="false"></script>
+<!--/shell:head-->
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!--shell:nav-->
+<nav class="site-nav" id="navbar" aria-label="Primary">
+<div class="nav-container">
+<a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a>
+<ul class="nav-links" id="nav-links"><li><a href="/chat/">Chat</a></li><li><a href="/learn/">Learn</a></li><li><a href="/tools/">Tools</a></li><li><a href="/blog/" aria-current="page">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li></ul>
+<div class="nav-tools"><button class="motion-toggle" data-motion-toggle type="button" aria-label="Pause illustration motion" aria-pressed="false" title="Pause illustration motion"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="motion-pause" d="M6 4v12M14 4v12" fill="none" stroke="currentColor" stroke-width="2"/><path class="motion-play" d="M6 3l11 7-11 7Z" fill="currentColor"/></svg></button><button class="theme-toggle" type="button" aria-label="Switch color theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><a class="btn btn-primary btn-sm nav-cta" href="/chat/">Start chatting</a><button class="nav-menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</div>
+<span class="nav-progress" aria-hidden="true"></span>
+</nav>
+<!--/shell:nav-->
+
+<main id="main-content">
+<article class="article-container" data-subject="data-science">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Principal Component Analysis Explained: Finding Directions of Most Variance</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">data-science</span><span class="article-tag">pca</span><span class="article-tag">dimensionality-reduction</span><span class="article-tag">statistics</span><span class="article-tag">beginners</span></div>
+
+  <h1 class="article-hero-title">Principal Component Analysis Explained: Finding Directions of Most Variance</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-10-18T10:00:00.000Z">October 18, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>6 min read</span>
+    </div>
+  </div>
+
+  <!--cover--><figure class="article-hero"><div class="article-plate plate article-photo"><img src="/assets/blog/karl-pearson-1910.webp" alt="Black-and-white portrait of Karl Pearson seated at a desk with papers and framed pictures on the wall." width="1177" height="856" decoding="async" fetchpriority="high"></div><figcaption class="article-hero-caption">Karl Pearson in a 1910 photogravure. He introduced principal component analysis in 1901. <span class="article-credit">Photo: Unknown author, National Portrait Gallery, London. Licence: Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File%3AKarl_Pearson%2C_1910.jpg" rel="noopener">Wikimedia Commons</a>.</span></figcaption></figure><!--/cover-->
+<div class="article-divider"></div>
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-the-problem-pca-solves">The problem PCA solves</a></li><li><a href="#section-the-idea-directions-of-spread">The idea: directions of spread</a></li><li><a href="#section-a-little-history">A little history</a></li><li><a href="#section-computing-principal-components">Computing principal components</a></li><li><a href="#section-a-two-feature-example">A two-feature example</a></li><li><a href="#section-scale-matters">Scale matters</a></li><li><a href="#section-choosing-how-many-components-to-keep">Choosing how many components to keep</a></li><li><a href="#section-computing-pca-with-svd">Computing PCA with SVD</a></li><li><a href="#section-where-pca-helps-and-where-it-does-not">Where PCA helps, and where it does not</a></li><li><a href="#section-try-it-yourself">Try it yourself</a></li><li><a href="#section-frequently-asked-questions">Frequently asked questions</a></li></ol></nav>
+  <div class="article-body">
+<p>Principal component analysis (PCA) rotates a dataset onto new axes, called principal components, ordered by how much variance each one captures. The first component points along the direction in which the data spreads the most, and each later component is perpendicular to the ones before it. In practice you center the data, compute its covariance matrix, and take the eigenvectors. Keeping only the first few components reduces the number of features while preserving most of the variation.</p>
+<p>This guide explains the idea, works a small example by hand, and covers the choices that change the result, especially scaling.</p>
+<aside class="article-takeaways" aria-labelledby="takeaways-title"><h2 id="takeaways-title">Key takeaways</h2><ul><li>PCA finds perpendicular directions, ordered from the one with the most variance to the one with the least.</li><li>Center the data first. Standardize each feature when the features use different units or scales.</li><li>The principal components are eigenvectors of the covariance matrix, and each eigenvalue is the variance along its component.</li><li>The share of variance kept by the first k components is the sum of the top k eigenvalues divided by the sum of all eigenvalues.</li><li>PCA is unsupervised. It ignores labels, so the top components can miss the structure you care about.</li></ul></aside>
+<h2 id="section-the-problem-pca-solves">The problem PCA solves</h2>
+<p>Real datasets often have many features that move together. Height and weight are correlated, and so are many sensor readings and survey answers. When features are correlated, the cloud of points stretches along a few directions and stays flat along others. Describing every point with all of the original coordinates repeats much of the same information.</p>
+<p>PCA gives you a new coordinate system aligned with that stretch. Once the data is expressed in those coordinates, you can keep the directions with large spread and set aside the flat ones. That makes visualization easier, reduces storage and computation, and sometimes filters out noise.</p>
+<h2 id="section-the-idea-directions-of-spread">The idea: directions of spread</h2>
+<p>A principal component is a unit vector. Projecting each data point onto it produces a score. The first principal component is the direction that makes those scores vary the most. Equivalently, it is the line that fits the data best in the sense of minimizing the average squared perpendicular distance from the points to the line. The <a href="https://en.wikipedia.org/wiki/Principal_component_analysis" rel="noopener">Wikipedia article on principal component analysis</a> gives this definition and notes that each later component is chosen to be orthogonal to the earlier ones.</p>
+<h2 id="section-a-little-history">A little history</h2>
+<p>Karl Pearson introduced the method in 1901, as an analogue of the principal axis theorem in mechanics. Harold Hotelling later developed it independently and gave it its name in the 1930s.</p>
+<h2 id="section-computing-principal-components">Computing principal components</h2>
+<ol><li>Center each feature by subtracting its mean.</li><li>If the features use different units, standardize them so that each has unit variance.</li><li>Form the covariance matrix C of the centered data. For a centered data matrix X with n rows, C = XᵀX / (n − 1).</li><li>Compute the eigenvalues and eigenvectors of C.</li><li>Sort the eigenvectors by eigenvalue, largest first. The first eigenvector is the first principal component.</li><li>Project the data onto the top k eigenvectors to get the reduced representation.</li></ol>
+<p>Steps 3 and 4 use the eigen ideas from the <a href="/blog/eigenvalues-and-eigenvectors-explained/" rel="noopener">companion guide on eigenvalues and eigenvectors</a>. Because C is symmetric, its eigenvectors are perpendicular, and its eigenvalues are the variances along those directions.</p>
+<h2 id="section-a-two-feature-example">A two-feature example</h2>
+<p>Suppose two features have been standardized, so each has variance 1, and their correlation is 0.8. The covariance matrix is then</p>
+<pre><code>C = | 1.0  0.8 |
+    | 0.8  1.0 |</code></pre>
+<p>Its eigenvalues solve (1 − λ)² − 0.8² = 0, so 1 − λ = ±0.8, giving λ = 1.8 and λ = 0.2. Their sum is 2, which is the total variance of the two standardized features.</p>
+<p>For λ = 1.8, the eigenvector is proportional to (1, 1), so the first principal component is (1, 1)/√2. For λ = 0.2, the second component is (1, −1)/√2.</p>
+<p>The first component carries 1.8 / 2 = 90% of the total variance. A two-feature dataset can therefore be reduced to one number per row while keeping 90% of the variance. The second component holds the small leftover variation perpendicular to the first.</p>
+<figure class="article-figure article-figure--diagram"><svg viewBox="0 0 400 320" role="img" aria-labelledby="pca-svg-title pca-svg-desc" class="article-diagram pca-diagram"><title id="pca-svg-title">Synthetic scatter of two correlated features with principal directions</title><desc id="pca-svg-desc">Forty points stretched along a diagonal. The first principal direction follows the diagonal and the second is perpendicular to it.</desc><defs><marker id="pca-m-acc" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="pca-fill-acc"/></marker><marker id="pca-m-blue" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="pca-fill-blue"/></marker></defs><line x1="30" y1="160" x2="370" y2="160" class="pca-axis"/><line x1="200" y1="14" x2="200" y2="306" class="pca-axis"/><circle cx="286.8" cy="84.3" r="3.2" class="pca-dot"/><circle cx="331.7" cy="35.1" r="3.2" class="pca-dot"/><circle cx="174.2" cy="161.5" r="3.2" class="pca-dot"/><circle cx="181.4" cy="173.8" r="3.2" class="pca-dot"/><circle cx="101.3" cy="192.4" r="3.2" class="pca-dot"/><circle cx="121.2" cy="248.6" r="3.2" class="pca-dot"/><circle cx="296.8" cy="109.4" r="3.2" class="pca-dot"/><circle cx="224.1" cy="143.9" r="3.2" class="pca-dot"/><circle cx="247.6" cy="142.6" r="3.2" class="pca-dot"/><circle cx="257.1" cy="121.1" r="3.2" class="pca-dot"/><circle cx="253.2" cy="170.9" r="3.2" class="pca-dot"/><circle cx="172.1" cy="168.8" r="3.2" class="pca-dot"/><circle cx="243.0" cy="59.3" r="3.2" class="pca-dot"/><circle cx="262.9" cy="160.2" r="3.2" class="pca-dot"/><circle cx="184.9" cy="197.7" r="3.2" class="pca-dot"/><circle cx="287.5" cy="66.6" r="3.2" class="pca-dot"/><circle cx="394.1" cy="16.0" r="3.2" class="pca-dot"/><circle cx="99.5" cy="196.4" r="3.2" class="pca-dot"/><circle cx="179.7" cy="180.6" r="3.2" class="pca-dot"/><circle cx="121.6" cy="210.7" r="3.2" class="pca-dot"/><circle cx="136.1" cy="230.7" r="3.2" class="pca-dot"/><circle cx="191.9" cy="142.2" r="3.2" class="pca-dot"/><circle cx="76.8" cy="188.1" r="3.2" class="pca-dot"/><circle cx="189.4" cy="182.0" r="3.2" class="pca-dot"/><circle cx="283.3" cy="157.3" r="3.2" class="pca-dot"/><circle cx="150.2" cy="162.7" r="3.2" class="pca-dot"/><circle cx="158.3" cy="178.6" r="3.2" class="pca-dot"/><circle cx="116.8" cy="203.2" r="3.2" class="pca-dot"/><circle cx="52.6" cy="279.2" r="3.2" class="pca-dot"/><circle cx="196.2" cy="203.9" r="3.2" class="pca-dot"/><circle cx="182.7" cy="199.5" r="3.2" class="pca-dot"/><circle cx="156.1" cy="180.5" r="3.2" class="pca-dot"/><circle cx="220.4" cy="139.5" r="3.2" class="pca-dot"/><circle cx="127.0" cy="220.7" r="3.2" class="pca-dot"/><circle cx="326.2" cy="43.9" r="3.2" class="pca-dot"/><circle cx="250.5" cy="141.8" r="3.2" class="pca-dot"/><circle cx="91.1" cy="284.1" r="3.2" class="pca-dot"/><circle cx="207.9" cy="145.5" r="3.2" class="pca-dot"/><circle cx="258.5" cy="124.0" r="3.2" class="pca-dot"/><circle cx="207.3" cy="152.8" r="3.2" class="pca-dot"/><line x1="49.0" y1="275.0" x2="200" y2="160" class="pca-stroke-acc" stroke-width="1.6" opacity="0.35"/><line x1="200" y1="160" x2="351.0" y2="45.0" class="pca-stroke-acc" stroke-width="2.4" marker-end="url(#pca-m-acc)"/><text x="357.0" y="39.0" class="pca-label pca-stroke-acc">PC1</text><line x1="171.6" y1="122.7" x2="200" y2="160" class="pca-stroke-blue" stroke-width="1.6" opacity="0.35"/><line x1="200" y1="160" x2="228.4" y2="197.3" class="pca-stroke-blue" stroke-width="2.4" marker-end="url(#pca-m-blue)"/><text x="234.4" y="191.3" class="pca-label pca-stroke-blue">PC2</text></svg><figcaption>Illustrative: 40 synthetic points generated for this guide with a true correlation of 0.8. In this sample the first component explains about 94% of the variance; the two-feature example above gives 90% for the population. Arrows mark the first two principal directions. <span class="article-credit">Diagram: original, drawn for this guide from computed values.</span></figcaption></figure>
+<h2 id="section-scale-matters">Scale matters</h2>
+<p>PCA reads variance literally. A feature measured in millimeters has numbers about a thousand times larger than the same length in meters, so it dominates the first component unless the features are on comparable scales. Standardizing each feature, by subtracting its mean and dividing by its standard deviation, gives every feature the same weight. For standardized data, the covariance matrix becomes the correlation matrix.</p>
+<p>Whether to standardize is a modeling decision. If every feature shares one meaningful unit, raw variance may be exactly what you want. The guide on <a href="/blog/feature-normalization-ml-beginners/" rel="noopener">feature normalization for machine learning beginners</a> covers standardization and related scaling choices.</p>
+<h2 id="section-choosing-how-many-components-to-keep">Choosing how many components to keep</h2>
+<p>Compute the share of variance each component explains: its eigenvalue divided by the sum of all eigenvalues. Plot these shares, often as a scree plot, and look for the point where additional components add little. Many people keep enough components to reach a target share such as 90% or 95%. That threshold is a convention, not a law.</p>
+<p>If PCA is a preprocessing step for a model, check the downstream result as well. Keep the number of components that performs best on validation data.</p>
+<h2 id="section-computing-pca-with-svd">Computing PCA with SVD</h2>
+<p>The same components can be computed without forming the covariance matrix, by taking the singular value decomposition of the centered data matrix. Many libraries do this, because forming XᵀX squares the condition number of the problem, and the SVD avoids that loss of precision. The guide on <a href="/blog/rank-svd-conditioning/" rel="noopener">rank, SVD, and conditioning</a> explains the stability side of this choice.</p>
+<h2 id="section-where-pca-helps-and-where-it-does-not">Where PCA helps, and where it does not</h2>
+<p>PCA is useful for visualizing high-dimensional data in two or three dimensions, for removing redundant correlated features, and as a preprocessing step before clustering. Reducing dimensions before running the <a href="/tools/k-means-clustering/" rel="noopener">k-means clustering tool</a> can make groups easier to see.</p>
+<figure class="article-figure"><img src="/assets/blog/iris-bloom-photo.webp" alt="Close-up of a purple iris flower in bloom against a blurred green background." width="1200" height="801" loading="lazy" decoding="async"><figcaption>A purple iris bloom. This is not a specimen from the dataset, which records four measurements for 150 flowers of three species. The dataset, made famous by Fisher's 1936 paper, is a standard test case for multivariate methods. <span class="article-credit">Photo: Youngrhang Jo. Licence: <a href="https://creativecommons.org/publicdomain/zero/1.0/" rel="noopener">CC0 (public domain dedication)</a>. Source: <a href="https://commons.wikimedia.org/wiki/File%3AIris_setosa_%28152693475%29.jpg" rel="noopener">Wikimedia Commons</a>.</span></figcaption></figure>
+<p>Its limits matter as much:</p>
+<ul><li>PCA is linear. If the structure is curved, a straight-line projection can miss it. The Wikipedia article warns that a nonlinear pattern can lead PCA in the wrong direction, and nonlinear methods exist for that case.</li><li>PCA is unsupervised. Its directions depend only on the features, not on the labels you want to predict. A high-variance direction may have nothing to do with the target.</li><li>Outliers have a large influence on the covariance matrix and can pull the components toward them.</li><li>The new axes are mixtures of the original features, which can make them harder to interpret.</li></ul>
+<h2 id="section-try-it-yourself">Try it yourself</h2>
+<p>The Data Science assistant covers principal component analysis along with dimensionality reduction, feature scaling, and related evaluation topics. Start with the <a href="/learn/data-science/principal-component-analysis/" rel="noopener">PCA topic page</a>, then read the pages on <a href="/learn/data-science/dimensionality-reduction/" rel="noopener">dimensionality reduction</a> and <a href="/learn/data-science/feature-scaling/" rel="noopener">feature scaling</a>. To ask follow-up questions, open the <a href="/chat/data-science-chat/" rel="noopener">Data Science chat</a>. Questions are processed in your browser, and <a href="/how-it-works.html" rel="noopener">How it works</a> explains which steps run on your device and which downloads the site still makes.</p>
+<h2 id="section-frequently-asked-questions">Frequently asked questions</h2>
+<div class="article-faq">
+<h3 id="faq-what-does-pca-do-in-one-sentence">What does PCA do in one sentence?</h3>
+<p>PCA rotates data onto new perpendicular axes, ordered by variance, so that a few components capture most of the information and the rest can be dropped.</p>
+<h3 id="faq-is-pca-the-same-as-linear-regression">Is PCA the same as linear regression?</h3>
+<p>No. Linear regression predicts a target variable by minimizing vertical errors. PCA treats all features symmetrically and minimizes perpendicular distances to the component line. It uses no target, so by itself it does not predict anything.</p>
+<h3 id="faq-do-i-always-need-to-standardize-before-pca">Do I always need to standardize before PCA?</h3>
+<p>No, but you should when features use different units or scales. Without standardization, the feature with the largest numeric spread dominates the first component. If all features share one meaningful unit, raw variance may be the right basis.</p>
+<h3 id="faq-how-many-principal-components-should-i-keep">How many principal components should I keep?</h3>
+<p>There is no universal rule. Check the share of variance each component explains, look for a clear elbow in the scree plot, and, if PCA feeds a model, choose the number that performs best on validation data.</p>
+<h3 id="faq-can-pca-be-used-on-images-or-text">Can PCA be used on images or text?</h3>
+<p>Yes, as long as the data is numeric. Pixel values and term-count matrices are common inputs. For very sparse text matrices, a truncated SVD is often used instead, because centering the data would destroy its sparsity.</p>
+<h3 id="faq-does-pca-remove-noise">Does PCA remove noise?</h3>
+<p>It can help when the noise is spread across many low-variance directions and the signal is concentrated in a few. It does not guarantee that. If noise and signal share the high-variance directions, dropping the low-variance components will not remove the noise.</p>
+</div>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><ul><li><a href="/blog/eigenvalues-and-eigenvectors-explained/">Eigenvalues and Eigenvectors Explained: Directions a Matrix Only Stretches</a></li><li><a href="/blog/feature-normalization-ml-beginners/">Feature Normalization for Machine Learning Beginners</a></li><li><a href="/blog/rank-svd-conditioning/">Rank, SVD, and Conditioning: Three Different Questions</a></li></ul></aside>
+<aside class="rv-note" aria-label="Recommended book"><a class="rv-thumb" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/assets/remain-valuable-cover-sm.webp" alt="" width="68" height="91" loading="lazy" decoding="async"></a><div class="rv-note-body"><span class="rv-note-label">Going further</span><p class="rv-note-text">This guide covered one corner of machine intelligence. <em>How to Remain Valuable When Intelligence Becomes Cheap</em> zooms out: a 224-page practical guide to the human strengths and strategic advantages that stay valuable as AI takes on more cognitive work. <a class="rv-note-link" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Get the book <span class="rv-arrow" aria-hidden="true">&rarr;</span></a></p></div></aside>
+  <div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Principal%20Component%20Analysis%20Explained%3A%20Finding%20Directions%20of%20Most%20Variance&url=https%3A%2F%2Frelu.chat%2Fblog%2Fprincipal-component-analysis-explained%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fprincipal-component-analysis-explained%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<!--shell:footer-->
+<footer class="site-footer">
+<div class="footer-key" aria-hidden="true"><span style="--k:var(--c-gt)"></span><span style="--k:var(--c-ga)"></span><span style="--k:var(--c-ds)"></span><span style="--k:var(--c-rl)"></span><span style="--k:var(--c-la)"></span><span style="--k:var(--c-wp)"></span></div>
+<div class="footer-grid">
+<div class="footer-brand"><a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a><p>Six free learning assistants, interactive ML tools and worked examples. Questions are answered in your browser.</p></div>
+<nav class="footer-col" aria-label="Learn"><h2 class="footer-h">Learn</h2><ul><li><a href="/learn/game-theory/" data-subject="game-theory">Game theory</a></li><li><a href="/learn/golden-age/" data-subject="golden-age">Islamic Golden Age</a></li><li><a href="/learn/data-science/" data-subject="data-science">Data science</a></li><li><a href="/learn/reinforcement-learning/" data-subject="reinforcement-learning">Reinforcement learning</a></li><li><a href="/learn/linear-algebra/" data-subject="linear-algebra">Linear algebra</a></li><li><a href="/learn/web-platform/" data-subject="web-platform">Web platform</a></li><li><a href="/learn/">All topics</a></li></ul></nav>
+<nav class="footer-col" aria-label="Explore"><h2 class="footer-h">Explore</h2><ul><li><a href="/chat/">Chat assistants</a></li><li><a href="/tools/">Interactive tools</a></li><li><a href="/blog/">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li><li><a href="/blog/feed.xml">RSS feed</a></li></ul></nav>
+<nav class="footer-col" aria-label="More from the makers"><h2 class="footer-h">From the makers</h2><ul><li><a href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Remain Valuable (book) <span aria-hidden="true">↗</span></a></li><li><a href="https://theknowledgeproject.gumroad.com/l/ekuidr" target="_blank" rel="noopener noreferrer">Chatbot builder toolkit <span aria-hidden="true">↗</span></a></li><li><a href="https://github.com/yunusemrejr/relu-chat" target="_blank" rel="noopener noreferrer">Source on GitHub <span aria-hidden="true">↗</span></a></li><li><a href="/llms.txt">llms.txt</a></li></ul></nav>
+</div>
+<div class="footer-base"><p>© 2026 ReLU.chat · MIT-licensed open source</p><p>Chat questions are processed in your browser.</p></div>
+</footer>
+<!--/shell:footer-->
+
+
+</body>
+</html>

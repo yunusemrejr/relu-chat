@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://relu.chat/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/blog/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-18</lastmod>
   </url>
   <url>
     <loc>https://relu.chat/chat/</loc>
@@ -166,6 +166,14 @@
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Dropout &amp; Regularization for Tiny MLPs</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/</loc>
+    <lastmod>2026-10-18</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat//assets/blog/chladni-plate-nodal-lines.webp</image:loc>
+      <image:caption>Eigenvalues and Eigenvectors Explained</image:caption>
     </image:image>
   </url>
   <url>
@@ -414,6 +422,14 @@
     <image:image>
       <image:loc>https://relu.chat/assets/logo.png</image:loc>
       <image:caption>Precision and Recall: A 100-Case Example</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://relu.chat/blog/principal-component-analysis-explained/</loc>
+    <lastmod>2026-10-18</lastmod>
+    <image:image>
+      <image:loc>https://relu.chat//assets/blog/karl-pearson-1910.webp</image:loc>
+      <image:caption>Principal Component Analysis (PCA) Explained</image:caption>
     </image:image>
   </url>
   <url>

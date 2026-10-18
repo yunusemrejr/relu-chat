@@ -41,8 +41,10 @@ Chat questions are not sent to a language-generation API. The host receives norm
 
 ## Learning guides
 
-82 original technical articles at https://relu.chat/blog/ (RSS: https://relu.chat/blog/feed.xml):
+84 original technical articles at https://relu.chat/blog/ (RSS: https://relu.chat/blog/feed.xml):
 
+- 2026-10-18 — [Principal Component Analysis Explained: Finding Directions of Most Variance](https://relu.chat/blog/principal-component-analysis-explained/) — Principal component analysis rotates data onto perpendicular axes ordered by variance. Learn how the components are found, the role of scaling, and how many to keep.
+- 2026-10-18 — [Eigenvalues and Eigenvectors Explained: Directions a Matrix Only Stretches](https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/) — An eigenvector keeps its direction when a matrix acts on it, and the eigenvalue is the scaling factor. Learn the idea, find both for a 2x2 matrix by hand, and see where they matter.
 - 2026-10-04 — [Greedy vs Beam Search Decoding](https://relu.chat/blog/greedy-vs-beam-search-decoding/) — Greedy decoding is fast but myopic; beam search explores alternatives at k times the cost. Learn both, plus sampling, with selection guidance and code.
 - 2026-10-03 — [Dropout and Regularization for Tiny MLPs](https://relu.chat/blog/dropout-regularization-tiny-mlp/) — Tiny MLPs memorize small datasets fast. Learn dropout mechanics, when it hurts small layers, weight decay, early stopping, and a full recipe.
 - 2026-10-02 — [Learning Rate Schedules for Small Networks](https://relu.chat/blog/learning-rate-schedules-small-networks/) — Learning rate schedules start bold and finish careful. Learn step, cosine, and warmup schedules, base-rate selection, and tiny-budget practice.

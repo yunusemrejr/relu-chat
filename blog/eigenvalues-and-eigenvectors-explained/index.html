@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Eigenvalues and Eigenvectors Explained — ReLU.chat</title>
+<meta name="description" content="Eigenvalues and eigenvectors explained with a 2x2 matrix worked by hand: the Av = λv idea, how to find both, and where they appear in data science.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/">
+
+<meta property="og:title" content="Eigenvalues and Eigenvectors Explained">
+<meta property="og:description" content="Eigenvalues and eigenvectors explained with a 2x2 matrix worked by hand: the Av = λv idea, how to find both, and where they appear in data science.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/">
+<meta property="og:image" content="https://relu.chat//assets/blog/chladni-plate-nodal-lines.webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="800">
+<meta property="og:image:alt" content="Triangular plate with reddish sand lines tracing the still nodal lines of a vibrating plate, with a round disk at its center.">
+<meta property="og:site_name" content="ReLU.chat">
+<meta property="article:published_time" content="2026-10-18T09:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-18T09:00:00.000Z">
+<meta property="article:author" content="ReLU.chat">
+<meta property="article:tag" content="linear-algebra">
+<meta property="article:tag" content="eigenvalues">
+<meta property="article:tag" content="matrices">
+<meta property="article:tag" content="worked-example">
+<meta property="article:tag" content="beginners">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Eigenvalues and Eigenvectors Explained">
+<meta name="twitter:description" content="Eigenvalues and eigenvectors explained with a 2x2 matrix worked by hand: the Av = λv idea, how to find both, and where they appear in data science.">
+<meta name="twitter:image" content="https://relu.chat//assets/blog/chladni-plate-nodal-lines.webp">
+<meta name="twitter:image:alt" content="Triangular plate with reddish sand lines tracing the still nodal lines of a vibrating plate, with a round disk at its center.">
+
+<link rel="stylesheet" href="/assets/shared-design.css?v=d5592e7f">
+<link rel="stylesheet" href="/assets/css/article.css?v=b9c8510f">
+<link rel="stylesheet" href="/assets/css/remain-valuable.css?v=15b499dd">
+<link rel="stylesheet" href="/assets/css/article-figures.css?v=4b510c74">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://relu.chat/#website",
+      "url": "https://relu.chat",
+      "name": "ReLU.chat",
+      "description": "Free, browser-based, privacy-first open-source chatbots"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/#webpage",
+      "url": "https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/",
+      "name": "Eigenvalues and Eigenvectors Explained",
+      "description": "Eigenvalues and eigenvectors explained with a 2x2 matrix worked by hand: the Av = λv idea, how to find both, and where they appear in data science.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://relu.chat/#website"
+      },
+      "datePublished": "2026-10-18T09:00:00.000Z",
+      "dateModified": "2026-10-18T09:00:00.000Z",
+      "breadcrumb": {
+        "@id": "https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/#breadcrumb"
+      }
+    },
+    {
+      "@type": "Article",
+      "@id": "https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/#article",
+      "headline": "Eigenvalues and Eigenvectors Explained: Directions a Matrix Only Stretches",
+      "description": "Eigenvalues and eigenvectors explained with a 2x2 matrix worked by hand: the Av = λv idea, how to find both, and where they appear in data science.",
+      "datePublished": "2026-10-18T09:00:00.000Z",
+      "dateModified": "2026-10-18T09:00:00.000Z",
+      "author": {
+        "@type": "Person",
+        "name": "ReLU.chat"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReLU.chat",
+        "url": "https://relu.chat",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://relu.chat/assets/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@id": "https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/#webpage"
+      },
+      "image": "https://relu.chat//assets/blog/chladni-plate-nodal-lines.webp",
+      "keywords": "linear-algebra, eigenvalues, matrices, worked-example, beginners"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://relu.chat/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://relu.chat/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Eigenvalues and Eigenvectors Explained: Directions a Matrix Only Stretches",
+          "item": "https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is an eigenvector in one sentence?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "An eigenvector is a nonzero vector whose direction does not change when a square matrix is applied to it. The matrix only scales it, by the eigenvalue."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can an eigenvalue be zero or negative?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. A zero eigenvalue means the matrix collapses that eigenvector to the zero vector, which happens exactly when the matrix is singular, meaning its determinant is zero. A negative eigenvalue flips the vector to the opposite side of the origin while keeping it on the same line."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are eigenvalues always real numbers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. A 90-degree rotation has the complex eigenvalues i and −i. Real symmetric matrices, however, always have real eigenvalues."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is an eigenvector unique?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not in scale. Any nonzero multiple of an eigenvector is also an eigenvector with the same eigenvalue, and software usually returns unit-length vectors. If an eigenvalue is repeated, its eigenvectors can form a whole subspace rather than a single line."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to compute eigenvalues by hand?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Only to build intuition. The 2×2 procedure above is practical for small matrices. Beyond a few dimensions, use a numerical library. NumPy's eigh is the usual choice for symmetric matrices."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do eigenvalues relate to PCA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PCA finds the eigenvectors of a data covariance matrix. Each eigenvalue measures the variance along its eigenvector, so the largest eigenvalues mark the directions that carry the most information. The PCA guide walks through the full method."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+
+<!--shell:head-->
+<script data-cfasync="false">(function(){var d=document.documentElement;d.classList.add("js");setTimeout(function(){if(!window.__fx)d.classList.add("no-fx")},3500);try{var t=localStorage.getItem("relu-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})()</script>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1210" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/logo.png?v=77cfb49b" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/logo.png?v=77cfb49b">
+<link rel="preload" href="/assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css?v=455d1a60">
+<link rel="stylesheet" href="/assets/css/illustrations.css?v=feb68611">
+<script src="/assets/js/shell.js?v=802b8197" defer data-cfasync="false"></script>
+<script src="/assets/js/fx.js?v=1859fa55" defer data-cfasync="false"></script>
+<script src="/assets/js/figures.js?v=63f4922a" defer data-cfasync="false"></script>
+<!--/shell:head-->
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!--shell:nav-->
+<nav class="site-nav" id="navbar" aria-label="Primary">
+<div class="nav-container">
+<a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a>
+<ul class="nav-links" id="nav-links"><li><a href="/chat/">Chat</a></li><li><a href="/learn/">Learn</a></li><li><a href="/tools/">Tools</a></li><li><a href="/blog/" aria-current="page">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li></ul>
+<div class="nav-tools"><button class="motion-toggle" data-motion-toggle type="button" aria-label="Pause illustration motion" aria-pressed="false" title="Pause illustration motion"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="motion-pause" d="M6 4v12M14 4v12" fill="none" stroke="currentColor" stroke-width="2"/><path class="motion-play" d="M6 3l11 7-11 7Z" fill="currentColor"/></svg></button><button class="theme-toggle" type="button" aria-label="Switch color theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><a class="btn btn-primary btn-sm nav-cta" href="/chat/">Start chatting</a><button class="nav-menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</div>
+<span class="nav-progress" aria-hidden="true"></span>
+</nav>
+<!--/shell:nav-->
+
+<main id="main-content">
+<article class="article-container" data-subject="linear-algebra">
+  <div class="article-breadcrumb">
+    <a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>Eigenvalues and Eigenvectors Explained: Directions a Matrix Only Stretches</span>
+  </div>
+
+  <div class="article-tags"><span class="article-tag">linear-algebra</span><span class="article-tag">eigenvalues</span><span class="article-tag">matrices</span><span class="article-tag">worked-example</span><span class="article-tag">beginners</span></div>
+
+  <h1 class="article-hero-title">Eigenvalues and Eigenvectors Explained: Directions a Matrix Only Stretches</h1>
+
+  <div class="article-meta-bar">
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ReLU.chat</span>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <time datetime="2026-10-18T09:00:00.000Z">October 18, 2026</time>
+    </div>
+    <div class="article-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>7 min read</span>
+    </div>
+  </div>
+
+  <!--cover--><figure class="article-hero"><div class="article-plate plate article-photo"><img src="/assets/blog/chladni-plate-nodal-lines.webp" alt="Triangular plate with reddish sand lines tracing the still nodal lines of a vibrating plate, with a round disk at its center." width="1200" height="800" decoding="async" fetchpriority="high"></div><figcaption class="article-hero-caption">Sand gathers along the nodal lines of a vibrating plate: the still lines where the surface does not move. Eigenvector analysis describes the shapes of such vibration modes. <span class="article-credit">Photo: Rodrigo Tetsuo Argenton (exhibit by Estes Objethos Atelier). Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener">CC BY-SA 4.0</a>. Source: <a href="https://commons.wikimedia.org/wiki/File%3AChladni_plate_14.jpg" rel="noopener">Wikimedia Commons</a>.</span></figcaption></figure><!--/cover-->
+<div class="article-divider"></div>
+
+  <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><ol><li><a href="#section-what-the-equation-says">What the equation says</a></li><li><a href="#section-a-picture-of-the-idea">A picture of the idea</a></li><li><a href="#section-worked-example-a-2-2-matrix-by-hand">Worked example: a 2×2 matrix by hand</a></li><li><a href="#section-finding-eigenvalues-the-characteristic-equation">Finding eigenvalues: the characteristic equation</a></li><li><a href="#section-how-many-eigenvalues-does-a-matrix-have">How many eigenvalues does a matrix have?</a></li><li><a href="#section-why-the-idea-keeps-showing-up">Why the idea keeps showing up</a></li><li><a href="#section-numerical-caution">Numerical caution</a></li><li><a href="#section-try-it-yourself">Try it yourself</a></li><li><a href="#section-frequently-asked-questions">Frequently asked questions</a></li></ol></nav>
+  <div class="article-body">
+<p>Most vectors change direction when a matrix acts on them. An <strong>eigenvector</strong> is one of the rare exceptions: the matrix only scales it, so it stays on the same line through the origin. The scaling factor is the <strong>eigenvalue</strong>. In symbols, A v = λ v, where A is a square matrix, v is a nonzero vector, and λ is a number. To find them, solve det(A − λI) = 0 for λ, then solve (A − λI) v = 0 for each λ.</p>
+<p>This guide works one 2×2 example by hand, explains what the numbers mean, and shows where the idea appears in data science.</p>
+<aside class="article-takeaways" aria-labelledby="takeaways-title"><h2 id="takeaways-title">Key takeaways</h2><ul><li>An eigenvector v of a square matrix A satisfies A v = λ v with v ≠ 0. Its direction is preserved; only its length, and sometimes its sign, changes.</li><li>The eigenvalue λ is the scaling factor. A negative λ reverses the vector, and λ = 0 collapses it to the zero vector.</li><li>Eigenvalues are the roots of the characteristic equation det(A − λI) = 0. They can be complex even when the matrix contains only real numbers.</li><li>Eigenvectors are defined only up to a nonzero scale. If v is an eigenvector, so is 2v.</li><li>Principal component analysis uses eigenvectors of a covariance matrix to find the directions of greatest variance.</li></ul></aside>
+<h2 id="section-what-the-equation-says">What the equation says</h2>
+<p>Apply a matrix to a random vector and the result usually points somewhere new. The equation A v = λ v describes a special case: for one particular vector v, applying A gives the same result as multiplying v by a number. The output lies on the same line through the origin as the input. If λ = 2, the vector doubles in length. If λ = 0.5, it halves. If λ = −1, it flips to the opposite side of the origin but stays on its line.</p>
+<p>Two conditions matter. The vector must be nonzero, because A·0 = λ·0 holds for every λ and tells you nothing. The matrix must be square, so that v and A v live in the same space and can be compared.</p>
+<h2 id="section-a-picture-of-the-idea">A picture of the idea</h2>
+<figure class="article-figure article-figure--small"><img src="/assets/blog/eigen-grid-still.webp" alt="Grid of dots transformed by a 2×2 matrix, with two red lines marking the eigenvector directions." width="480" height="486" loading="lazy" decoding="async"><figcaption>A still frame from an animation of a 2×2 matrix acting on a grid of points. The red lines are eigenvector directions, and points on them stay on those lines as the grid moves. <span class="article-credit">Animation: Jacopo Bertolotti. Licence: <a href="https://creativecommons.org/publicdomain/zero/1.0/" rel="noopener">CC0 (public domain dedication)</a>. Source: <a href="https://commons.wikimedia.org/wiki/File%3AEigenvectors_of_a_linear_operator.gif" rel="noopener">Wikimedia Commons</a>. The animation itself is on Wikimedia Commons.</span></figcaption></figure>
+<p>Under a 2×2 matrix, a grid of points is stretched and sheared. Most lines through the origin tilt. The two red lines in the picture are different: points that start on them stay on them, which makes those directions eigenvectors. How far a point moves along its line is set by the eigenvalue.</p>
+<h2 id="section-worked-example-a-2-2-matrix-by-hand">Worked example: a 2×2 matrix by hand</h2>
+<p>Let</p>
+<pre><code>A = | 2  1 |
+    | 1  2 |</code></pre>
+<p>Test the vector v = (1, 1). Multiplying gives A v = (2·1 + 1·1, 1·1 + 2·1) = (3, 3), which is 3 times v. So (1, 1) is an eigenvector with eigenvalue 3.</p>
+<p>Test the vector w = (1, −1). Then A w = (2·1 + 1·(−1), 1·1 + 2·(−1)) = (1, −1), which is 1 times w. So (1, −1) is an eigenvector with eigenvalue 1.</p>
+<p>Guessing worked here because the example was chosen carefully. Real problems need a procedure.</p>
+<figure class="article-figure article-figure--diagram"><svg viewBox="0 0 400 340" role="img" aria-labelledby="eig-svg-title eig-svg-desc" class="article-diagram eig-diagram"><title id="eig-svg-title">Worked example: eigenvectors of a 2 by 2 matrix</title><desc id="eig-svg-desc">Axes with two lines through the origin. The vector (1, 1) is stretched to (3, 3) on its own line. The vector (1, 0) maps to (2, 1). The vector (1, -1) is unchanged.</desc><defs><marker id="eig-m-acc" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="eig-fill-acc"/></marker><marker id="eig-m-blue" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="eig-fill-blue"/></marker><marker id="eig-m-ink" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="eig-fill-ink"/></marker></defs><line x1="60" y1="200" x2="384" y2="200" class="eig-axis"/><line x1="200" y1="24" x2="200" y2="330" class="eig-axis"/><text x="386" y="216" class="eig-text">x</text><text x="206" y="30" class="eig-text">y</text><line x1="120.0" y1="280.0" x2="350.0" y2="50.0" class="eig-line"/><line x1="80.0" y1="80.0" x2="320.0" y2="320.0" class="eig-line"/><line x1="200" y1="200" x2="250.0" y2="150.0" class="eig-stroke-acc" stroke-width="2.2" opacity="1" marker-end="url(#eig-m-acc)"/><line x1="200" y1="200" x2="350.0" y2="50.0" class="eig-stroke-acc" stroke-width="2.2" opacity="1" marker-end="url(#eig-m-acc)"/><line x1="200" y1="200" x2="250.0" y2="200.0" class="eig-stroke-blue" stroke-width="1.6" opacity="0.5" marker-end="url(#eig-m-blue)"/><line x1="200" y1="200" x2="300.0" y2="150.0" class="eig-stroke-blue" stroke-width="2.2" opacity="1" marker-end="url(#eig-m-blue)"/><line x1="200" y1="200" x2="250.0" y2="250.0" class="eig-stroke-ink" stroke-width="2.0" opacity="1" marker-end="url(#eig-m-ink)"/><text x="240" y="140" text-anchor="end" class="eig-text">v</text><text x="276" y="44" class="eig-text">Av = 3v</text><text x="252" y="192" class="eig-text">e₁</text><text x="306" y="144" class="eig-text">Ae₁ = (2, 1)</text><text x="258" y="244" class="eig-text">w, Aw = w</text><text x="356" y="30" class="eig-text">λ = 3</text><text x="326" y="326" class="eig-text">λ = 1</text></svg><figcaption>Original diagram, not a photograph. The blue vector (1, 0) becomes (2, 1) under A. The orange vector (1, 1) is stretched to (3, 3) along its own line, while (1, −1) is unchanged. <span class="article-credit">Diagram: original, drawn for this guide from the values in the worked example.</span></figcaption></figure>
+<h2 id="section-finding-eigenvalues-the-characteristic-equation">Finding eigenvalues: the characteristic equation</h2>
+<p>Rewrite A v = λ v as (A − λI) v = 0, where I is the identity matrix. This homogeneous system has a nonzero solution v only when A − λI is singular, meaning its determinant is zero:</p>
+<p><code>det(A − λI) = 0</code></p>
+<p>For a 2×2 matrix with entries a, b, c, d, the <a href="/learn/linear-algebra/determinant/" rel="noopener">determinant</a> of A − λI is (a − λ)(d − λ) − bc. For our matrix:</p>
+<p><code>(2 − λ)² − 1 = λ² − 4λ + 3 = (λ − 3)(λ − 1)</code></p>
+<p>The roots are λ = 3 and λ = 1, the same eigenvalues found by testing. The expression on the left is the characteristic polynomial, and setting it to zero gives the characteristic equation.</p>
+<p>For each eigenvalue, solve the system for the eigenvector:</p>
+<ul><li>For λ = 3, A − 3I = [[−1, 1], [1, −1]]. The first row gives −x + y = 0, so y = x. The eigenvectors are every nonzero multiple of (1, 1).</li><li>For λ = 1, A − I = [[1, 1], [1, 1]]. The first row gives x + y = 0, so y = −x. The eigenvectors are every nonzero multiple of (1, −1).</li></ul>
+<p>Each eigenvalue therefore gives a whole line of eigenvectors, not a single vector. The vector (2, 2) is just as valid as (1, 1) for λ = 3.</p>
+<p>There is a useful check. The eigenvalues add up to the trace, the sum of the diagonal entries: 3 + 1 = 4 = 2 + 2. Their product equals the determinant: 3 × 1 = 3 = 2·2 − 1·1. These identities hold for every square matrix, so they catch many arithmetic slips.</p>
+<h2 id="section-how-many-eigenvalues-does-a-matrix-have">How many eigenvalues does a matrix have?</h2>
+<p>An n×n matrix has exactly n eigenvalues over the complex numbers, counted with multiplicity, because its characteristic polynomial has degree n. Some may repeat. Some may be complex, even when every entry of the matrix is real.</p>
+<p>Rotations are the standard example. The matrix R = [[0, −1], [1, 0]] rotates the plane by 90 degrees. Its characteristic equation is λ² + 1 = 0, so λ = i or λ = −i. No real vector keeps its direction under that rotation, so its eigenvalues are not real.</p>
+<p>Two special cases are worth knowing. If the determinant is zero, λ = 0 is an eigenvalue, and its eigenvectors are the nonzero vectors the matrix sends to zero. And a real symmetric matrix always has real eigenvalues, with eigenvectors that can be chosen perpendicular to one another. That property is one reason covariance matrices are so convenient, as the next sections show.</p>
+<h2 id="section-why-the-idea-keeps-showing-up">Why the idea keeps showing up</h2>
+<p>Repeated multiplication is one reason. If you apply A again and again, the component of a vector along an eigenvector with eigenvalue λ is multiplied by λ each time. The eigenvalue with the largest absolute value tends to dominate, which is the basis of the power method for finding a dominant eigenvector.</p>
+<p>Our example makes this concrete. The vector e = (1, 0) can be written as ½(1, 1) + ½(1, −1). Applying A once gives ½·3·(1, 1) + ½·1·(1, −1) = (2, 1), which matches the direct product A e = (2, 1). After k applications the (1, 1) part grows like 3ᵏ while the (1, −1) part keeps its size, so the direction turns toward (1, 1).</p>
+<p>The same structure appears in several fields:</p>
+<ul><li><strong>Principal component analysis.</strong> The covariance matrix of a dataset is symmetric. Its eigenvectors give the principal directions, and its eigenvalues give the variance along each one. The companion guide, <a href="/blog/principal-component-analysis-explained/" rel="noopener">Principal Component Analysis Explained</a>, builds on this.</li><li><strong>Vibration.</strong> In vibration analysis, eigenvalues correspond to natural frequencies and eigenvectors describe the shapes of the vibration modes, as the <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors" rel="noopener">Wikipedia article on eigenvalues and eigenvectors</a> explains. The hero photograph shows the same idea in a physical plate: sand gathers along the lines that do not move.</li><li><strong>Stability.</strong> Eigenvalues show whether repeated application of a linear system shrinks or grows each component, which is why they appear in stability analysis.</li></ul>
+<h2 id="section-numerical-caution">Numerical caution</h2>
+<p>Libraries compute eigenvalues numerically rather than solving the polynomial by hand. For symmetric matrices, use a routine built for that case. NumPy provides <code>numpy.linalg.eigh</code>, which assumes a symmetric input and returns real eigenvalues in ascending order. The general <code>numpy.linalg.eig</code> can return complex values.</p>
+<p>Sensitivity also matters. When two eigenvalues are close together, or the matrix is nearly singular, small rounding errors can change the computed eigenvectors noticeably. The guide on <a href="/blog/rank-svd-conditioning/" rel="noopener">rank, SVD, and conditioning</a> covers the related stability questions.</p>
+<h2 id="section-try-it-yourself">Try it yourself</h2>
+<p>ReLU.chat's Linear Algebra assistant covers eigenvalues alongside vectors, <a href="/learn/linear-algebra/matrix-rank/" rel="noopener">matrix rank</a>, and the <a href="/learn/linear-algebra/singular-value-decomposition/" rel="noopener">singular value decomposition</a>. The <a href="/learn/linear-algebra/eigenvalues-and-eigenvectors/" rel="noopener">eigenvalues and eigenvectors topic page</a> gives a short definition and example, and the <a href="/chat/linear-algebra-chat/" rel="noopener">Linear Algebra chat</a> answers questions from that curated material. Your questions are processed in your browser. <a href="/how-it-works.html" rel="noopener">How it works</a> explains which steps run on your device and which downloads the site still makes.</p>
+<h2 id="section-frequently-asked-questions">Frequently asked questions</h2>
+<div class="article-faq">
+<h3 id="faq-what-is-an-eigenvector-in-one-sentence">What is an eigenvector in one sentence?</h3>
+<p>An eigenvector is a nonzero vector whose direction does not change when a square matrix is applied to it. The matrix only scales it, by the eigenvalue.</p>
+<h3 id="faq-can-an-eigenvalue-be-zero-or-negative">Can an eigenvalue be zero or negative?</h3>
+<p>Yes. A zero eigenvalue means the matrix collapses that eigenvector to the zero vector, which happens exactly when the matrix is singular, meaning its determinant is zero. A negative eigenvalue flips the vector to the opposite side of the origin while keeping it on the same line.</p>
+<h3 id="faq-are-eigenvalues-always-real-numbers">Are eigenvalues always real numbers?</h3>
+<p>No. A 90-degree rotation has the complex eigenvalues i and −i. Real symmetric matrices, however, always have real eigenvalues.</p>
+<h3 id="faq-is-an-eigenvector-unique">Is an eigenvector unique?</h3>
+<p>Not in scale. Any nonzero multiple of an eigenvector is also an eigenvector with the same eigenvalue, and software usually returns unit-length vectors. If an eigenvalue is repeated, its eigenvectors can form a whole subspace rather than a single line.</p>
+<h3 id="faq-do-i-need-to-compute-eigenvalues-by-hand">Do I need to compute eigenvalues by hand?</h3>
+<p>Only to build intuition. The 2×2 procedure above is practical for small matrices. Beyond a few dimensions, use a numerical library. NumPy's <code>eigh</code> is the usual choice for symmetric matrices.</p>
+<h3 id="faq-how-do-eigenvalues-relate-to-pca">How do eigenvalues relate to PCA?</h3>
+<p>PCA finds the eigenvectors of a data covariance matrix. Each eigenvalue measures the variance along its eigenvector, so the largest eigenvalues mark the directions that carry the most information. The <a href="/blog/principal-component-analysis-explained/" rel="noopener">PCA guide</a> walks through the full method.</p>
+</div>
+  </div>
+
+  <aside class="related-reading" aria-label="Keep learning"><h2>Keep learning</h2><ul><li><a href="/blog/principal-component-analysis-explained/">Principal Component Analysis (PCA) Explained: Finding Directions of Most Variance</a></li><li><a href="/blog/rank-svd-conditioning/">Rank, SVD, and Conditioning: Three Different Questions</a></li><li><a href="/blog/dot-product-cosine-worked-example/">Dot Product and Cosine Similarity, Step by Step</a></li></ul></aside>
+<aside class="rv-note" aria-label="Recommended book"><a class="rv-thumb" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/assets/remain-valuable-cover-sm.webp" alt="" width="68" height="91" loading="lazy" decoding="async"></a><div class="rv-note-body"><span class="rv-note-label">Going further</span><p class="rv-note-text">Fundamentals like these compound for decades. <em>How to Remain Valuable When Intelligence Becomes Cheap</em> applies the same long-view thinking to your career: a 224-page practical guide to the advantages that stay valuable when intelligence gets cheap. <a class="rv-note-link" href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Get the book <span class="rv-arrow" aria-hidden="true">&rarr;</span></a></p></div></aside>
+  <div class="article-footer">
+    <a href="/blog/" class="back-link">&larr; Back to Blog</a>
+    <div class="share-links">
+      <a href="https://twitter.com/intent/tweet?text=Eigenvalues%20and%20Eigenvectors%20Explained%3A%20Directions%20a%20Matrix%20Only%20Stretches&url=https%3A%2F%2Frelu.chat%2Fblog%2Feigenvalues-and-eigenvectors-explained%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Feigenvalues-and-eigenvectors-explained%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<!--shell:footer-->
+<footer class="site-footer">
+<div class="footer-key" aria-hidden="true"><span style="--k:var(--c-gt)"></span><span style="--k:var(--c-ga)"></span><span style="--k:var(--c-ds)"></span><span style="--k:var(--c-rl)"></span><span style="--k:var(--c-la)"></span><span style="--k:var(--c-wp)"></span></div>
+<div class="footer-grid">
+<div class="footer-brand"><a href="/" class="nav-logo" aria-label="ReLU.chat home"><svg class="nav-mark" viewBox="64 120 380 260" aria-hidden="true" focusable="false" fill="none" stroke-width="44" stroke-linecap="round"><path class="mark-flat" d="M92 344 H232"/><path class="mark-live" d="M232 344 L404 164"/><circle class="mark-dot" cx="232" cy="344" r="22" stroke="none"/></svg><span>ReLU.chat</span></a><p>Six free learning assistants, interactive ML tools and worked examples. Questions are answered in your browser.</p></div>
+<nav class="footer-col" aria-label="Learn"><h2 class="footer-h">Learn</h2><ul><li><a href="/learn/game-theory/" data-subject="game-theory">Game theory</a></li><li><a href="/learn/golden-age/" data-subject="golden-age">Islamic Golden Age</a></li><li><a href="/learn/data-science/" data-subject="data-science">Data science</a></li><li><a href="/learn/reinforcement-learning/" data-subject="reinforcement-learning">Reinforcement learning</a></li><li><a href="/learn/linear-algebra/" data-subject="linear-algebra">Linear algebra</a></li><li><a href="/learn/web-platform/" data-subject="web-platform">Web platform</a></li><li><a href="/learn/">All topics</a></li></ul></nav>
+<nav class="footer-col" aria-label="Explore"><h2 class="footer-h">Explore</h2><ul><li><a href="/chat/">Chat assistants</a></li><li><a href="/tools/">Interactive tools</a></li><li><a href="/blog/">Blog</a></li><li><a href="/how-it-works.html">How it works</a></li><li><a href="/blog/feed.xml">RSS feed</a></li></ul></nav>
+<nav class="footer-col" aria-label="More from the makers"><h2 class="footer-h">From the makers</h2><ul><li><a href="https://theknowledgeproject.gumroad.com/l/remainvaluable" target="_blank" rel="noopener noreferrer">Remain Valuable (book) <span aria-hidden="true">↗</span></a></li><li><a href="https://theknowledgeproject.gumroad.com/l/ekuidr" target="_blank" rel="noopener noreferrer">Chatbot builder toolkit <span aria-hidden="true">↗</span></a></li><li><a href="https://github.com/yunusemrejr/relu-chat" target="_blank" rel="noopener noreferrer">Source on GitHub <span aria-hidden="true">↗</span></a></li><li><a href="/llms.txt">llms.txt</a></li></ul></nav>
+</div>
+<div class="footer-base"><p>© 2026 ReLU.chat · MIT-licensed open source</p><p>Chat questions are processed in your browser.</p></div>
+</footer>
+<!--/shell:footer-->
+
+
+</body>
+</html>

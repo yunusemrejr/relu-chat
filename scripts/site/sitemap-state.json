@@ -1,11 +1,11 @@
 {
  "/": {
-  "hash": "fa391dca8400",
-  "lastmod": "2026-10-11"
+  "hash": "cc1434859e01",
+  "lastmod": "2026-10-18"
  },
  "/blog/": {
-  "hash": "91fee86e9e94",
-  "lastmod": "2026-10-04"
+  "hash": "58eef197fa93",
+  "lastmod": "2026-10-18"
  },
  "/blog/accessibility-ai-chatbots-wcag/": {
   "hash": "8b61581b0801",
@@ -78,6 +78,10 @@
  "/blog/dropout-regularization-tiny-mlp/": {
   "hash": "333c382666c7",
   "lastmod": "2026-10-04"
+ },
+ "/blog/eigenvalues-and-eigenvectors-explained/": {
+  "hash": "0422c6857e70",
+  "lastmod": "2026-10-18"
  },
  "/blog/faq-chatbot-accuracy-improvement/": {
   "hash": "0bda5420adf4",
@@ -202,6 +206,10 @@
  "/blog/precision-recall-small-example/": {
   "hash": "1a69c251f282",
   "lastmod": "2026-10-01"
+ },
+ "/blog/principal-component-analysis-explained/": {
+  "hash": "7c556c082e84",
+  "lastmod": "2026-10-18"
  },
  "/blog/privacy-checklist-browser-ai/": {
   "hash": "cf6260ef7b50",
@@ -380,7 +388,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/bias-variance-tradeoff/": {
-  "hash": "ae137be9aec4",
+  "hash": "f5d4edb178ee",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/browser-and-local-ml/": {
@@ -400,7 +408,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/data-cleaning/": {
-  "hash": "7ff78d097846",
+  "hash": "9a02eae5e458",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/data-leakage/": {
@@ -408,7 +416,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/data-visualization/": {
-  "hash": "8d28ccae7940",
+  "hash": "85c22611865f",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/dataset-shift/": {
@@ -420,11 +428,11 @@
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/descriptive-statistics/": {
-  "hash": "e71dbe6affbe",
+  "hash": "c3973d51c810",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/dimensionality-reduction/": {
-  "hash": "bd1b2a2e2424",
+  "hash": "362b7ce7a8f6",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/ensemble-methods/": {
@@ -432,7 +440,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/exploratory-data-analysis/": {
-  "hash": "7537ccdf2c98",
+  "hash": "dccc190363c1",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/f1-score/": {
@@ -456,7 +464,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/linear-regression/": {
-  "hash": "06eae2fe37f2",
+  "hash": "e0f06a8c6619",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/logistic-regression/": {
@@ -464,7 +472,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/missing-values/": {
-  "hash": "a2992e939ffd",
+  "hash": "156ac4e8300d",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/model-deployment/": {
@@ -496,7 +504,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/principal-component-analysis/": {
-  "hash": "cf4cbb969053",
+  "hash": "daedfd7d3ee6",
   "lastmod": "2026-09-09"
  },
  "/learn/data-science/probability-basics/": {
@@ -796,7 +804,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/shapley-value/": {
-  "hash": "6870414763e2",
+  "hash": "814b0c4e5497",
   "lastmod": "2026-09-09"
  },
  "/learn/game-theory/signaling-games/": {
@@ -932,7 +940,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/algebra/": {
-  "hash": "65ff6d77e84b",
+  "hash": "38e1d421bf26",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/astrolabe/": {
@@ -952,7 +960,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/development-of-algebra/": {
-  "hash": "5b6822c67adf",
+  "hash": "8311aa22d63e",
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/fatima-al-fihri/": {
@@ -1064,7 +1072,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/golden-age/ulugh-beg/": {
-  "hash": "76bf68d7b72d",
+  "hash": "fa0fcc6fb997",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/": {
@@ -1084,7 +1092,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/eigenvalues-and-eigenvectors/": {
-  "hash": "a7222b772be3",
+  "hash": "7f5e6dcff937",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/least-squares/": {
@@ -1092,11 +1100,11 @@
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/linear-system/": {
-  "hash": "24521b300be2",
+  "hash": "9f44aa4c91e0",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/matrix-multiplication/": {
-  "hash": "8970139d7c3e",
+  "hash": "f71a4211baf3",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/matrix-rank/": {
@@ -1104,11 +1112,11 @@
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/singular-value-decomposition/": {
-  "hash": "fa2fc3528fbc",
+  "hash": "919c8092ec0d",
   "lastmod": "2026-09-09"
  },
  "/learn/linear-algebra/vector/": {
-  "hash": "32e1bc96a4fa",
+  "hash": "9a7761b97006",
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/": {
@@ -1176,7 +1184,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/reinforcement-learning/value-function/": {
-  "hash": "7574a14d34b9",
+  "hash": "56f2ce321706",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/": {
@@ -1188,7 +1196,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/accessible-form/": {
-  "hash": "1324b2d8fd96",
+  "hash": "1576b19becf4",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/cache-strategies/": {
@@ -1216,7 +1224,7 @@
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/linear-memory/": {
-  "hash": "d1b2e571cd46",
+  "hash": "d30acaba7195",
   "lastmod": "2026-09-09"
  },
  "/learn/web-platform/performance-measurement/": {
