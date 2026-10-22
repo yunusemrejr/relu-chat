@@ -300,7 +300,9 @@ export class Grounder {
     const sharesName = i => specific.some(t => this.lexicon.entryNameStems[i].has(t.explained) && this.lexicon.idf(t.explained) >= 2);
     if (current != null && specific.some(t => this.lexicon.entryStems[current].has(t.explained))) out.push(current);
     for (const c of candidates) if (out.length < 2 && c.semantic && !out.includes(c.i)) out.push(c.i);
-    for (const c of candidates) if (out.length < 3 && !out.includes(c.i) && sharesName(c.i)) out.push(c.i);
+    // One shared name word is coincidence when the asked phrase contains a word the notes never use ("jordan normal form").
+    const unknownConcept = evidence.some(t => t.oov && !t.generic);
+    if (!unknownConcept) for (const c of candidates) if (out.length < 3 && !out.includes(c.i) && sharesName(c.i)) out.push(c.i);
     // A described situation: the topics whose text shares most of its words.
     if (described && !out.length) for (const c of [...candidates].sort((a, b) => (b.body || 0) - (a.body || 0))) if (out.length < 2 && (c.body || 0) >= 0.15) out.push(c.i);
     return { topics: out, hubs: out.length ? [] : this.hubs.filter(i => !out.includes(i)).slice(0, 3) };
