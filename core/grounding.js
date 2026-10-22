@@ -47,6 +47,8 @@ const ASPECT_WORDS = new Set(['formula', 'formulas', 'formulae', 'equation', 'eq
 const NOUN_QTYPES = new Set(['define', 'other', 'example', 'formula', 'list']);
 // Small words allowed inside a noun phrase; any other function word ends it.
 const NP_GLUE = new Set(['the', 'a', 'an', 'my', 'your', 'its', 'their', 'this', 'that', 'these', 'those']);
+// MiniLM similarity at which a description is matched to its closest topic (see assess()).
+const SEMANTIC_ACCEPT = 0.55;
 // Numbers, sizes and units ("100", "3x3", "10th", "50ms") carry no topic; names like "f1" or "float32" do.
 const NUMBERISH = /^\d+(?:x\d+)?$|^\d+(?:st|nd|rd|th|s|d|k|m|px|ms|mb|gb|kb)$/;
 const PREPOSITIONS = new Set(['of', 'for', 'in', 'on', 'with', 'to', 'from', 'by', 'about', 'under', 'between', 'within', 'during', 'without', 'via']);
@@ -533,6 +535,24 @@ export class Grounder {
       result.topics = [best.i];
       result.decision = 'weak';
       return result;
+    }
+    // Neural matching: a description the words alone could not place, whose
+    // meaning is clearly closest to one topic (MiniLM cosine ≥ 0.55 with a margin;
+    // measured on the development sets: 54% of covered questions, 1.9% of others).
+    // Unknown names, new terms and concept questions with unknown words veto it,
+    // and the reply is framed as the closest match.
+    const vetoed = novel || unknownName || (conceptual && oovShare >= cal.oovShare) || ['live', 'action', 'personal'].includes(clause.task);
+    if (ctx.semantic && !vetoed) {
+      const dense = (ctx.candidates || []).filter(c => Number.isFinite(c.dense)).sort((a, b) => b.dense - a.dense);
+      const [top, runner] = dense;
+      if (top && top.dense >= SEMANTIC_ACCEPT && (!runner || top.dense - runner.dense >= 0.03)) {
+        const cv = this.coverage(evidence, [top.i]);
+        result.best = { i: top.i, core: cv.core, body: cv.body, cv };
+        result.topics = [top.i];
+        result.decision = 'weak';
+        result.semantic = true;
+        return result;
+      }
     }
     if (routable) { result.decision = 'otherbot'; result.otherBot = other; return result; }
     if (head && (headMissed || head.novel)) result.phrase = head.text;

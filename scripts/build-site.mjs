@@ -144,7 +144,7 @@ out.set(stateFile, JSON.stringify(Object.fromEntries(Object.entries(nextState).s
 const manifest = JSON.parse(read('data/manifest.json'));
 const llms = `# ReLU.chat
 
-> ${bots.length} free learning assistants, ${topicTotal} explained topics, ${TOOLS.length} interactive ML tools and ${posts.length} worked-example guides. Chat questions are processed locally in the browser; page and optional model downloads use the network.
+> ${bots.length} free learning assistants, ${topicTotal} explained topics, ${TOOLS.length} interactive ML tools and ${posts.length} worked-example guides. Chat questions are processed locally in the browser; page and neural model downloads use the network.
 
 ## Learn (one page per concept: definition, intuition, example, math)
 ${bots.map((b) => `- [${b.cfg.subject}](${SITE}/learn/${b.cfg.slug}/): ${b.topics.length} topics. ${b.cfg.lead}`).join('\n')}

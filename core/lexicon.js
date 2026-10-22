@@ -414,9 +414,11 @@ export class Lexicon {
     const next = toks[k + 1], prev = toks[k - 1];
     if (next && this.surface.has(t.w + next.w)) return this.surface.get(t.w + next.w);
     if (prev && this.surface.has(prev.w + t.w)) return this.surface.get(prev.w + t.w);
-    for (let cut = 3; cut <= t.w.length - 3; cut++) {
+    // A joined word counts only if the notes use its parts as a phrase
+    // ("eigen vector"), not merely both words somewhere ("localStorage").
+    for (let cut = 4; cut <= t.w.length - 4; cut++) {
       const a = t.w.slice(0, cut), b = t.w.slice(cut);
-      if (this.surface.has(a) && this.surface.has(b) && a.length >= 4 && b.length >= 4) return stem(b);
+      if (this.surface.has(a) && this.surface.has(b) && this.adjacent(stem(a), stem(b))) return stem(b);
     }
     const fixed = t.w.length >= 6 ? this.correct(t.w) : null;
     return fixed && fixed.distance === 1 ? fixed.stem : null;

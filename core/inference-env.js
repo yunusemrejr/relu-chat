@@ -37,8 +37,12 @@ export function createInferenceEnv(deps) {
     add(dense, semantic ? 1 : 0.5);
     const denseScore = new Map(dense.map(d => [d.i, d.s]));
     // With sentence embeddings, a close neighbour is a fair "closest topic" to offer.
-    const candidates = [...fused.entries()].map(([i, s]) => ({ i, s, dense: semantic ? denseScore.get(i) || 0 : null, semantic: semantic && (denseScore.get(i) || 0) >= 0.4 }))
-      .sort((a, b) => b.s - a.s || a.i - b.i).slice(0, 12);
+    // Each ranker's top five always stay candidates, so a strong word match is
+    // never pushed out when the two rankers disagree; the rest fill by fused score.
+    const keep = new Set([...sparse.filter(d => d.s > 0).slice(0, 5), ...dense.slice(0, 5)].map(d => d.i));
+    const ordered = [...fused.entries()].map(([i, s]) => ({ i, s, dense: semantic ? denseScore.get(i) || 0 : null, semantic: semantic && (denseScore.get(i) || 0) >= 0.4 }))
+      .sort((a, b) => b.s - a.s || a.i - b.i);
+    const candidates = [...ordered.filter(c => keep.has(c.i)), ...ordered.filter(c => !keep.has(c.i))].slice(0, 12).sort((a, b) => b.s - a.s || a.i - b.i);
     const denseTop = semantic && dense[0] && (!dense[1] || dense[0].s - dense[1].s >= 0.04) ? dense[0] : null;
     return { candidates, denseTop, qEmb, semantic };
   }

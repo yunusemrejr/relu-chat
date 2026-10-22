@@ -1,6 +1,6 @@
 # ReLU.chat — Architecture and Learning Resources
 
-> Six free, open-source learning assistants. Questions are processed locally; page and optional model downloads use the network.
+> Six free, open-source learning assistants. Questions are processed locally; page and neural model downloads use the network.
 
 ## Chatbots
 
@@ -17,7 +17,7 @@
 2. Explicit entity and intent cues guide retrieval. Follow-ups retain the last topic, while a newly named topic takes precedence.
 3. A 13,079-parameter policy has 25 inputs, 128 and 64 ReLU hidden units, and six action heads. It runs in verified WebAssembly or JavaScript, with a heuristic fallback. Float32 weights are used by default; int8 is optional.
 4. Complete answers are assembled from curated fragments and rendered with math and available source links. These assistants do not generate arbitrary text, execute code, or solve arbitrary exercises.
-5. Enhanced matching is optional: a button downloads the approximately 22 MB quantized MiniLM model plus runtime assets. The browser prepares the complete embedding set before switching, clears incompatible query vectors, and can cache public knowledge vectors in IndexedDB.
+5. Neural matching is on by default: each chat loads the approximately 22 MB quantized MiniLM model plus runtime assets in the background and caches them. The browser prepares the complete embedding set before switching, clears incompatible query vectors, and can cache public knowledge vectors in IndexedDB.
 6. Conversations stay in memory unless the user saves a text file. Cached pages and assets support offline reuse; an unvisited page needs a connection. The service worker does not prefetch the large model.
 
 ## Evaluation and limits
@@ -33,7 +33,7 @@ The fixed-memory WASM module uses 128 KiB and matches JavaScript outputs on 40 e
 
 ## Privacy and network use
 
-Chat questions are not sent to a language-generation API. The host receives normal page and asset requests. Optional model downloads use the site origin. Following external links, purchasing an ebook, or submitting a separate signup form involves the respective service. Browser storage contains public assets and knowledge embeddings, not saved chat transcripts.
+Chat questions are not sent to a language-generation API. The host receives normal page and asset requests. Neural model downloads use the site origin. Following external links, purchasing an ebook, or submitting a separate signup form involves the respective service. Browser storage contains public assets and knowledge embeddings, not saved chat transcripts.
 
 ## Book
 

@@ -133,20 +133,20 @@ export async function createChatbot(config) {
     fragEmbCache.clear();
     pendingUpgrade = null;
     bar.style.width = '100%';
-    setStatus('Ready · enhanced matching', true);
+    setStatus('Ready · neural matching', true);
     _setLoadState('ready');
     const enhance = document.getElementById('enhance');
-    if (enhance) { enhance.textContent = 'Enhanced matching on'; enhance.disabled = true; }
+    if (enhance) { enhance.textContent = 'Neural matching on'; enhance.disabled = true; }
   }
 
   async function enhanceMatching() {
     if (upgradePromise) return upgradePromise;
     const button = document.getElementById('enhance');
-    if (button) { button.disabled = true; button.textContent = 'Preparing enhanced matching…'; }
+    if (button) { button.disabled = true; button.textContent = 'Loading neural matching…'; }
     upgradePromise = (async () => {
       try {
         _setLoadState('loading_transformer');
-        setStatus('Ready · enhancing matching', true);
+        setStatus('Ready · loading neural matching', true);
         const { pipeline, env } = await import('/assets/transformers/transformers.js');
         env.allowLocalModels = true;
         env.allowRemoteModels = false;
@@ -179,11 +179,12 @@ export async function createChatbot(config) {
         for (const text of botProfile?.domainPrototypes || []) domain.push(await encode(text));
         commitUpgrade({ extractor: nextExtractor, ...vectors, domain });
       } catch (error) {
-        console.warn('[chat] Enhanced matching unavailable:', error.message);
-        setStatus('Ready · keyword matching', true);
+        console.warn('[chat] Neural matching unavailable:', error.message);
+        // Answers keep working with the policy network and lexical retrieval.
+        setStatus('Ready · fast matching', true);
         _setLoadState('partially_ready');
         upgradePromise = null;
-        if (button) { button.disabled = false; button.textContent = 'Retry enhanced matching'; }
+        if (button) { button.disabled = false; button.textContent = 'Retry neural matching'; }
       }
     })();
     return upgradePromise;
@@ -201,8 +202,13 @@ export async function createChatbot(config) {
     ready = true;
     sendBtn.disabled = false;
     _setLoadState('partially_ready');
-    setStatus('Ready · keyword matching', true);
+    setStatus('Ready · loading neural matching', true);
     document.getElementById('enhance')?.addEventListener('click', enhanceMatching);
+    // Neural matching (MiniLM sentence embeddings) is on by default. It loads in
+    // the background; questions asked meanwhile are answered and the switch
+    // happens between answers. Model bytes and embeddings are cached after the
+    // first visit.
+    setTimeout(enhanceMatching, 0);
     loadPolicyRuntime({ botProfile }).catch(error => console.warn('[chat] Using built-in policy:', error.message));
     // Other assistants' topics, so their questions can be routed there.
     directoryReady = fetch('/data/topic-directory.json').then(r => (r.ok ? r.json() : null)).then(d => { if (d) responder.setDirectory(d); }).catch(() => {});

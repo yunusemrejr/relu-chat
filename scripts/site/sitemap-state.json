@@ -1,7 +1,7 @@
 {
  "/": {
-  "hash": "6cac4a8a8446",
-  "lastmod": "2026-10-18"
+  "hash": "77f558adc62c",
+  "lastmod": "2026-10-22"
  },
  "/blog/": {
   "hash": "4ef4f765b525",
@@ -344,35 +344,35 @@
   "lastmod": "2026-10-18"
  },
  "/chat/": {
-  "hash": "ee1150291bee",
-  "lastmod": "2026-10-18"
+  "hash": "eef26e496778",
+  "lastmod": "2026-10-22"
  },
  "/chat/data-science-chat/": {
-  "hash": "763497a00ef1",
-  "lastmod": "2026-10-18"
+  "hash": "947ca51317b4",
+  "lastmod": "2026-10-22"
  },
  "/chat/game-theory-chat/": {
-  "hash": "a783cfb91e58",
-  "lastmod": "2026-10-18"
+  "hash": "ea414cfbb1b3",
+  "lastmod": "2026-10-22"
  },
  "/chat/golden-age-inquiry/": {
-  "hash": "bb2e1d494441",
-  "lastmod": "2026-10-18"
+  "hash": "d5d57d469e2d",
+  "lastmod": "2026-10-22"
  },
  "/chat/linear-algebra-chat/": {
-  "hash": "7579d335d0b8",
-  "lastmod": "2026-10-18"
+  "hash": "bc5a18a26c30",
+  "lastmod": "2026-10-22"
  },
  "/chat/reinforcement-learning-chat/": {
-  "hash": "9d1af38f301a",
-  "lastmod": "2026-10-18"
+  "hash": "3612b8704200",
+  "lastmod": "2026-10-22"
  },
  "/chat/web-platform-chat/": {
-  "hash": "4fcd7edc2d05",
-  "lastmod": "2026-10-18"
+  "hash": "ec4fc7795813",
+  "lastmod": "2026-10-22"
  },
  "/how-it-works.html": {
-  "hash": "08188d5ab296",
+  "hash": "12d5a73ee993",
   "lastmod": "2026-10-22"
  },
  "/learn/": {

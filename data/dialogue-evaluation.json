@@ -2,7 +2,7 @@
   "description": "Dialogue evaluation of the ReLU.chat inference layer in keyword-matching mode (no MiniLM download). Questions were written by separate models from topic lists, not taken from the knowledge text. The figures measure topic routing, honesty about coverage, cross-assistant routing and reference resolution; they do not measure the factual accuracy of the curated text. \"previous\" is the pipeline this layer replaced, run on the same questions.",
   "metrics": {
     "known": "Covered topic answered (first topic correct)",
-    "knownFalseAbstain": "Covered topic refused (\"I don't have notes…\") — lower is better",
+    "knownFalseAbstain": "Covered topic refused (\"I don't have notes\u2026\") \u2014 lower is better",
     "unknown": "Uncovered concept handled honestly",
     "offTopic": "Everyday question given no topic answer",
     "crossBot": "Routed to the assistant that covers it",
@@ -2386,6 +2386,45 @@
             }
           }
         }
+      }
+    }
+  },
+  "neuralMatching": {
+    "note": "Same question sets with neural matching loaded (MiniLM sentence embeddings, the default since 2026-10-22), measured in Chrome with dev/eval/neural.html (percentages). The figures under \"sets\" are the fast mode used before the model loads or if it cannot load.",
+    "semanticAcceptThreshold": 0.55,
+    "sets": {
+      "dialogue-eval": {
+        "known": 96.7,
+        "knownFalseAbstain": 0.0,
+        "unknown": 99.2,
+        "offTopic": 100.0,
+        "crossBot": 97.9,
+        "crossBotHonest": 100.0,
+        "wh": 80.0,
+        "multiPart": 97.9,
+        "turns": 93.2
+      },
+      "dialogue-test": {
+        "known": 92.2,
+        "knownFalseAbstain": 1.1,
+        "unknown": 95.8,
+        "offTopic": 94.4,
+        "crossBot": 83.3,
+        "crossBotHonest": 94.4,
+        "wh": 69.4,
+        "multiPart": 86.1,
+        "turns": 79.7
+      },
+      "dialogue-final": {
+        "known": 86.1,
+        "knownFalseAbstain": 0.0,
+        "unknown": 87.5,
+        "offTopic": 100.0,
+        "crossBot": 91.7,
+        "crossBotHonest": 95.8,
+        "wh": 83.3,
+        "multiPart": 91.7,
+        "turns": 75.6
       }
     }
   }
