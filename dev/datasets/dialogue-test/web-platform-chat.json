@@ -1,0 +1,419 @@
+{
+  "bot": "web-platform-chat",
+  "unknownConcepts": [
+    {
+      "query": "how does requestanimationframe decide when to run my callback, is it tied to the screen refresh",
+      "concept": "requestAnimationFrame",
+      "mentionedIn": []
+    },
+    {
+      "query": "websocket vs long polling for a live chat, which one do i pick",
+      "concept": "WebSocket",
+      "mentionedIn": []
+    },
+    {
+      "query": "whats intersection observer good for, like lazy loading images when they scroll in",
+      "concept": "Intersection Observer",
+      "mentionedIn": []
+    },
+    {
+      "query": "shadow dom, does it stop my css from leaking into the rest of the page",
+      "concept": "Shadow DOM",
+      "mentionedIn": []
+    },
+    {
+      "query": "is localstorage ok for saving a user's chat history or is it too small",
+      "concept": "localStorage",
+      "mentionedIn": []
+    },
+    {
+      "query": "does http/2 multiplexing make bundling my js files pointless now",
+      "concept": "HTTP/2",
+      "mentionedIn": []
+    },
+    {
+      "query": "what are core web vitals, lcp inp cls, which one matters most",
+      "concept": "Core Web Vitals",
+      "mentionedIn": []
+    },
+    {
+      "query": "when should i use css grid instead of flexbox for the page layout",
+      "concept": "CSS Grid",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is subresource integrity, the integrity attribute on script tags",
+      "concept": "Subresource Integrity",
+      "mentionedIn": []
+    },
+    {
+      "query": "how do cors headers work when my api is on a different domain",
+      "concept": "CORS",
+      "mentionedIn": [
+        "cross-origin-isolation"
+      ]
+    },
+    {
+      "query": "is cache storage the same thing as the browser http cache",
+      "concept": "Cache Storage",
+      "mentionedIn": [
+        "service-worker",
+        "http-caching"
+      ]
+    },
+    {
+      "query": "what's the same-origin policy, why does my fetch to another site fail",
+      "concept": "Same-origin policy",
+      "mentionedIn": [
+        "cross-origin-isolation"
+      ]
+    }
+  ],
+  "offTopic": [
+    "whats a good stretch before running a 10k",
+    "recommend a podcast about ancient rome",
+    "how many calories are in a banana",
+    "help me plan a 3 day trip to lisbon",
+    "whats the best way to cook salmon",
+    "can u write a short poem about my cat"
+  ],
+  "crossBot": [
+    {
+      "query": "can you explain q learning like an agent in a maze game",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "q-learning"
+    },
+    {
+      "query": "what does the determinant of a 2x2 matrix tell me about area scaling",
+      "bot": "linear-algebra-chat",
+      "topicId": "determinant"
+    },
+    {
+      "query": "nash equilibrium in a two player game, how do i find one",
+      "bot": "game-theory-chat",
+      "topicId": "nash_eq"
+    },
+    {
+      "query": "who was al khwarizmi and why is algorithm named after him",
+      "bot": "golden-age-inquiry",
+      "topicId": "al_khwarizmi"
+    },
+    {
+      "query": "how does k means choose where the cluster centers start",
+      "bot": "data-science-chat",
+      "topicId": "kmeans"
+    },
+    {
+      "query": "my model is great on train but bad on test, is that overfitting",
+      "bot": "data-science-chat",
+      "topicId": "overfitting"
+    }
+  ],
+  "known": [
+    {
+      "query": "is wasm actually faster than js for number crunching or is that a myth",
+      "topicId": "webassembly"
+    },
+    {
+      "query": "typed array views on wasm memory, do i need to recreate them after it grows",
+      "topicId": "linear-memory"
+    },
+    {
+      "query": "how do i move heavy work to a background thread so the ui stays snappy, whats the usual tool",
+      "topicId": "web-worker"
+    },
+    {
+      "query": "postmessage with a big arraybuffer copies it right? how do i avoid that",
+      "topicId": "transferable-objects"
+    },
+    {
+      "query": "how do i make a site still load when the wifi drops",
+      "topicId": "service-worker"
+    },
+    {
+      "query": "cache first or network first, which one for a versioned model file",
+      "topicId": "cache-strategies"
+    },
+    {
+      "query": "what's the etag thing and the 304s, my server keeps sending full files",
+      "topicId": "http-caching"
+    },
+    {
+      "query": "i need structured data that survives reloads in the browser, like indexeddb",
+      "topicId": "indexeddb"
+    },
+    {
+      "query": "promise vs async await, whats the diff",
+      "topicId": "promises-async-functions"
+    },
+    {
+      "query": "why does my page freeze when a loop runs, microtasks vs tasks",
+      "topicId": "event-loop"
+    },
+    {
+      "query": "how do i cancel a fetch when the user types something new",
+      "topicId": "abortcontroller"
+    },
+    {
+      "query": "what does csp do for script injection, like a script-src example",
+      "topicId": "content-security-policy"
+    },
+    {
+      "query": "coop and coep, what do they unlock, sharedarraybuffer stuff",
+      "topicId": "cross-origin-isolation"
+    },
+    {
+      "query": "make my chat form usable with keyboard and screen readers, labels and all that",
+      "topicId": "accessible-form"
+    },
+    {
+      "query": "my layout breaks on phones, what viewport stuff should i check",
+      "topicId": "responsive-layout"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "where does a previously visited lesson load from when the user is offline",
+      "topicId": "service-worker",
+      "answerable": true,
+      "evidence": "A previously visited lesson can load from Cache Storage while offline"
+    },
+    {
+      "query": "what percentile should i report for query time",
+      "topicId": "performance-measurement",
+      "answerable": true,
+      "evidence": "include p95 query time across varied inputs"
+    },
+    {
+      "query": "who wrote the webassembly spec originally",
+      "topicId": "webassembly",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "when did indexeddb first ship in browsers",
+      "topicId": "indexeddb",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "where does a web worker actually run its code",
+      "topicId": "web-worker",
+      "answerable": true,
+      "evidence": "A Web Worker runs JavaScript in a separate execution context"
+    },
+    {
+      "query": "what's the default timeout abortcontroller uses if i don't set one",
+      "topicId": "abortcontroller",
+      "answerable": false,
+      "evidence": ""
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "how does wasm talk to js memory? and is the wasm module itself the same thing as the runtime",
+      "topicIds": [
+        "linear-memory",
+        "webassembly"
+      ]
+    },
+    {
+      "query": "service worker cache vs browser http cache, plus which one looks at etag headers",
+      "topicIds": [
+        "service-worker",
+        "http-caching"
+      ]
+    },
+    {
+      "query": "does async await unblock the main thread, and also does moving stuff to a web worker fix a frozen page",
+      "topicIds": [
+        "promises-async-functions",
+        "web-worker",
+        "event-loop"
+      ]
+    },
+    {
+      "query": "cancelling a fetch with an abort controller, and also stale while revalidate, which one for api calls",
+      "topicIds": [
+        "abortcontroller",
+        "cache-strategies"
+      ]
+    },
+    {
+      "query": "coop and coep plus csp script-src, do they conflict or are they separate headers",
+      "topicIds": [
+        "cross-origin-isolation",
+        "content-security-policy"
+      ]
+    },
+    {
+      "query": "labels and keyboard for my chat composer, and also how it should reflow on a small phone screen",
+      "topicIds": [
+        "accessible-form",
+        "responsive-layout"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "hi :) what's a service worker",
+          "expect": {
+            "topicId": "service-worker"
+          }
+        },
+        {
+          "user": "does it keep working when i'm offline",
+          "expect": {
+            "topicId": "service-worker"
+          }
+        },
+        {
+          "user": "and how do i pick a cache strategy for each file",
+          "expect": {
+            "topicId": "cache-strategies"
+          }
+        },
+        {
+          "user": "ok that makes sense, thanks!",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what about a websocket for live updates, would a service worker help there",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "back to the first thing, can it intercept fetches for api calls",
+          "expect": {
+            "topicId": "service-worker"
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hey, quick question about webassembly",
+          "expect": {
+            "topicId": "webassembly"
+          }
+        },
+        {
+          "user": "does it have its own memory",
+          "expect": {
+            "topicId": "linear-memory"
+          }
+        },
+        {
+          "user": "and typed arrays on that, do i need to recreate them after it grows",
+          "expect": {
+            "topicId": "linear-memory"
+          }
+        },
+        {
+          "user": "is wasm faster than js for a chatbot's matmul",
+          "expect": {
+            "topicId": "webassembly"
+          }
+        },
+        {
+          "user": "cool thanks",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "last one, what's requestAnimationFrame for, is it only for animations",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "yo, is indexeddb the same as localstorage",
+          "expect": {
+            "topicId": "indexeddb"
+          }
+        },
+        {
+          "user": "which one handles big records",
+          "expect": {
+            "topicId": "indexeddb"
+          }
+        },
+        {
+          "user": "can i await those db calls or is that weird",
+          "expect": {
+            "topicId": "promises-async-functions"
+          }
+        },
+        {
+          "user": "gotcha, thx",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "and the event loop, will long db work freeze the page",
+          "expect": {
+            "topicId": "event-loop"
+          }
+        },
+        {
+          "user": "hmm what's a shadow dom then, does that isolate styles",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hello!! hope ur well :)",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "i'm building a chat app with a local model, should i run the model in a web worker",
+          "expect": {
+            "topicId": "web-worker"
+          }
+        },
+        {
+          "user": "and how do i send the big weights without copying them",
+          "expect": {
+            "topicId": "transferable-objects"
+          }
+        },
+        {
+          "user": "what about the form for typing messages, accessible labels and stuff",
+          "expect": {
+            "topicId": "accessible-form"
+          }
+        },
+        {
+          "user": "does a tiny change in the layout break on mobile, like the viewport",
+          "expect": {
+            "topicId": "responsive-layout"
+          }
+        },
+        {
+          "user": "and the web crypto api, can it encrypt the chat history",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    }
+  ]
+}

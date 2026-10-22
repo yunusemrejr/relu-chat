@@ -1,0 +1,596 @@
+{
+  "bot": "game-theory-chat",
+  "unknownConcepts": [
+    {
+      "query": "What is the Gibbard-Satterthwaite theorem?",
+      "concept": "Gibbard-Satterthwaite theorem",
+      "mentionedIn": [
+        "voting_theory",
+        "social_choice"
+      ]
+    },
+    {
+      "query": "explain the Lemke-Howson algorithm",
+      "concept": "Lemke-Howson algorithm",
+      "mentionedIn": [
+        "normal_form"
+      ]
+    },
+    {
+      "query": "tell me about the nucleolus",
+      "concept": "nucleolus",
+      "mentionedIn": [
+        "coop_game"
+      ]
+    },
+    {
+      "query": "how does the Myerson-Satterthwaite impossibility work?",
+      "concept": "Myerson-Satterthwaite impossibility",
+      "mentionedIn": [
+        "mech_design"
+      ]
+    },
+    {
+      "query": "what is a VCG mechanism",
+      "concept": "VCG mechanism",
+      "mentionedIn": [
+        "dom_strat",
+        "vickrey",
+        "mech_design",
+        "algo_mech_design"
+      ]
+    },
+    {
+      "query": "what is the Hotelling model",
+      "concept": "Hotelling model",
+      "mentionedIn": []
+    },
+    {
+      "query": "explain the Kalai-Smorodinsky bargaining solution",
+      "concept": "Kalai-Smorodinsky bargaining solution",
+      "mentionedIn": []
+    },
+    {
+      "query": "how does a Colonel Blotto game work?",
+      "concept": "Colonel Blotto game",
+      "mentionedIn": []
+    },
+    {
+      "query": "tell me about the dictator game",
+      "concept": "dictator game",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is the trust game",
+      "concept": "trust game",
+      "mentionedIn": []
+    },
+    {
+      "query": "explain the Moran process",
+      "concept": "Moran process",
+      "mentionedIn": []
+    },
+    {
+      "query": "how does kin selection work?",
+      "concept": "kin selection",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is a Schelling point",
+      "concept": "Schelling point",
+      "mentionedIn": []
+    },
+    {
+      "query": "grim trigger strategy, what is it",
+      "concept": "grim trigger strategy",
+      "mentionedIn": []
+    },
+    {
+      "query": "explain the Pavlov strategy",
+      "concept": "Pavlov strategy",
+      "mentionedIn": []
+    },
+    {
+      "query": "how does Walrasian equilibrium work?",
+      "concept": "Walrasian equilibrium",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is a Dutch auction",
+      "concept": "Dutch auction",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is the winner's curse",
+      "concept": "winner's curse",
+      "mentionedIn": []
+    },
+    {
+      "query": "Bayesian persuasion, tell me about it",
+      "concept": "Bayesian persuasion",
+      "mentionedIn": []
+    },
+    {
+      "query": "tell me about the Tullock contest",
+      "concept": "Tullock contest",
+      "mentionedIn": []
+    }
+  ],
+  "offTopic": [
+    "What's the weather like in Paris today?",
+    "Can you give me a recipe for lasagna?",
+    "Who won the cricket match yesterday?",
+    "Book a table for four at a sushi place on Saturday.",
+    "What's the best way to clean a cast iron pan?",
+    "Which celebrity just launched a clothing line?",
+    "Can you code me a portfolio website for my photography studio?",
+    "How many steps should I walk each day?",
+    "What time does the museum open on Sundays?",
+    "Suggest a podcast about true crime."
+  ],
+  "crossBot": [
+    {
+      "query": "How does Q-learning update its action values?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "q-learning"
+    },
+    {
+      "query": "What is the Bellman equation used for?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "bellman-equation"
+    },
+    {
+      "query": "What does an eigenvalue tell me about a matrix?",
+      "bot": "linear-algebra-chat",
+      "topicId": "eigenvalues-eigenvectors"
+    },
+    {
+      "query": "When should I care about the null space of a matrix?",
+      "bot": "linear-algebra-chat",
+      "topicId": "null-space"
+    },
+    {
+      "query": "How does IndexedDB store data in the browser?",
+      "bot": "web-platform-chat",
+      "topicId": "indexeddb"
+    },
+    {
+      "query": "What's a service worker good for when a site is offline?",
+      "bot": "web-platform-chat",
+      "topicId": "service-worker"
+    },
+    {
+      "query": "What is principal component analysis good for?",
+      "bot": "data-science-chat",
+      "topicId": "pca"
+    },
+    {
+      "query": "Who was Al-Khwarizmi?",
+      "bot": "golden-age-inquiry",
+      "topicId": "al_khwarizmi"
+    }
+  ],
+  "known": [
+    {
+      "query": "what is nash eqilibrium",
+      "topicId": "nash_eq"
+    },
+    {
+      "query": "vickery auction, why do bidders bid their true value",
+      "topicId": "vickrey"
+    },
+    {
+      "query": "explain the prisoners dilema",
+      "topicId": "prisoners_dilemma"
+    },
+    {
+      "query": "two partners each choose to cooperate or betray, both do better if both cooperate, but each is tempted to betray",
+      "topicId": "prisoners_dilemma"
+    },
+    {
+      "query": "give me an example of a dominant strategy",
+      "topicId": "dom_strat"
+    },
+    {
+      "query": "whats a mixed strat",
+      "topicId": "mixed_strat"
+    },
+    {
+      "query": "zero sum games examples",
+      "topicId": "zero_sum"
+    },
+    {
+      "query": "what does the minimax theorem say",
+      "topicId": "minimax"
+    },
+    {
+      "query": "how do you draw a game tree for sequential moves",
+      "topicId": "extensive_form"
+    },
+    {
+      "query": "how to split a joint payoff fairly among players, the shapley value",
+      "topicId": "shapley"
+    },
+    {
+      "query": "stackelberg leader and follower, output example",
+      "topicId": "stackelberg"
+    },
+    {
+      "query": "cornot quantity competition formula",
+      "topicId": "cournot"
+    },
+    {
+      "query": "tit for tat strategy in iterated games",
+      "topicId": "tft"
+    },
+    {
+      "query": "backward induction on a finite game tree",
+      "topicId": "backward_induction"
+    },
+    {
+      "query": "replicator dynamics equation",
+      "topicId": "replicator"
+    },
+    {
+      "query": "what is the worst case ratio of equilibrium to social optimum",
+      "topicId": "poa"
+    },
+    {
+      "query": "what is a folk theorem",
+      "topicId": "folk"
+    },
+    {
+      "query": "hawk dove game for animal fights",
+      "topicId": "hawk_dove"
+    },
+    {
+      "query": "stag hunt assurance game",
+      "topicId": "stag_hunt"
+    },
+    {
+      "query": "common knowledge definition, everyone knows that everyone knows",
+      "topicId": "common_knowledge"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "Who proved that every finite game has a Nash equilibrium?",
+      "topicId": "nash_eq",
+      "answerable": true,
+      "evidence": "Nash (1950) proved existence in every finite game"
+    },
+    {
+      "query": "Who introduced the concept of subgame perfect equilibrium?",
+      "topicId": "spe",
+      "answerable": true,
+      "evidence": "Selten (1965) introduced SPE"
+    },
+    {
+      "query": "When did Zermelo show that finite perfect-information games have a backward-induction solution?",
+      "topicId": "extensive_form",
+      "answerable": true,
+      "evidence": "Zermelo (1913) showed finite perfect-information games have a pure-strategy backward-induction solution"
+    },
+    {
+      "query": "In what year did Shapley characterize the Shapley value?",
+      "topicId": "shapley",
+      "answerable": true,
+      "evidence": "Shapley (1953) characterized"
+    },
+    {
+      "query": "Who showed that the Shapley value lies in the core for convex games?",
+      "topicId": "shapley",
+      "answerable": true,
+      "evidence": "For convex games, the Shapley value lies in the core (Shapley, 1971)."
+    },
+    {
+      "query": "Who introduced the proper equilibrium concept?",
+      "topicId": "proper_eq",
+      "answerable": true,
+      "evidence": "Myerson (1978) introduced the concept"
+    },
+    {
+      "query": "Who invented the Prisoner's Dilemma?",
+      "topicId": "prisoners_dilemma",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "Who first introduced the Stag Hunt game?",
+      "topicId": "stag_hunt",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "How many subjects continued past the midpoint in the centipede experiment?",
+      "topicId": "centipede",
+      "answerable": true,
+      "evidence": "roughly half of subjects continued past the midpoint"
+    },
+    {
+      "query": "Who ran the tournaments in which Tit-for-Tat performed well?",
+      "topicId": "tft",
+      "answerable": true,
+      "evidence": "Axelrod's 1980 tournaments"
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "What is a Nash equilibrium and how does it differ from a dominant strategy?",
+      "topicIds": [
+        "nash_eq",
+        "dom_strat"
+      ]
+    },
+    {
+      "query": "Explain the prisoner's dilemma and also tell me what a Stackelberg leader does.",
+      "topicIds": [
+        "prisoners_dilemma",
+        "stackelberg"
+      ]
+    },
+    {
+      "query": "Is truthful bidding a dominant strategy in a Vickrey auction? Also, what is the Shapley value?",
+      "topicIds": [
+        "vickrey",
+        "dom_strat",
+        "shapley"
+      ]
+    },
+    {
+      "query": "Compare Cournot and Bertrand competition.",
+      "topicIds": [
+        "cournot",
+        "bertrand"
+      ]
+    },
+    {
+      "query": "How do evolutionarily stable strategies relate to replicator dynamics, as well as the hawk-dove game?",
+      "topicIds": [
+        "ess",
+        "replicator",
+        "hawk_dove"
+      ]
+    },
+    {
+      "query": "What is the difference between a pure strategy and a mixed strategy? Also, what is matching pennies?",
+      "topicIds": [
+        "pure_strat",
+        "mixed_strat",
+        "matching_pennies"
+      ]
+    },
+    {
+      "query": "Explain backward induction, and also tell me what a subgame perfect equilibrium is.",
+      "topicIds": [
+        "backward_induction",
+        "spe"
+      ]
+    },
+    {
+      "query": "Does the stag hunt have a pure equilibrium, and how does it relate to Pareto efficiency?",
+      "topicIds": [
+        "stag_hunt",
+        "pareto"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "hi there!",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what is the prisoner's dilemma?",
+          "expect": {
+            "topicId": "prisoners_dilemma"
+          }
+        },
+        {
+          "user": "why do they defect?",
+          "expect": {
+            "topicId": "prisoners_dilemma"
+          }
+        },
+        {
+          "user": "what about the tit for tat one?",
+          "expect": {
+            "topicId": "tft"
+          }
+        },
+        {
+          "user": "what about the grim trigger strategy?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks, that helped!",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "tell me about the vickrey auction",
+          "expect": {
+            "topicId": "vickrey"
+          }
+        },
+        {
+          "user": "who came up with it?",
+          "expect": {
+            "topicId": "vickrey"
+          }
+        },
+        {
+          "user": "give me an example",
+          "expect": {
+            "topicId": "vickrey"
+          }
+        },
+        {
+          "user": "what about the Dutch auction?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks, bye",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hello",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what is a mixed strategy",
+          "expect": {
+            "topicId": "mixed_strat"
+          }
+        },
+        {
+          "user": "how do I find its probabilities?",
+          "expect": {
+            "topicId": "mixed_equilibrium_worked"
+          }
+        },
+        {
+          "user": "and the matching pennies one?",
+          "expect": {
+            "topicId": "matching_pennies"
+          }
+        },
+        {
+          "user": "what about the Hotelling model, is it a mixed one too?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "great, cheers",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "can you explain the stag hunt?",
+          "expect": {
+            "topicId": "stag_hunt"
+          }
+        },
+        {
+          "user": "is it the same as chicken?",
+          "expect": {
+            "topicId": "chicken"
+          }
+        },
+        {
+          "user": "why would players pick the hare then?",
+          "expect": {
+            "topicId": "stag_hunt"
+          }
+        },
+        {
+          "user": "what is a Schelling point?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "what is the shapley value?",
+          "expect": {
+            "topicId": "shapley"
+          }
+        },
+        {
+          "user": "give me a worked example of it",
+          "expect": {
+            "topicId": "shapley"
+          }
+        },
+        {
+          "user": "what about the Walrasian equilibrium?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks a lot",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "good morning",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "tell me about repeated games",
+          "expect": {
+            "topicId": "repeated_game"
+          }
+        },
+        {
+          "user": "what is the folk theorem about them?",
+          "expect": {
+            "topicId": "folk"
+          }
+        },
+        {
+          "user": "who first developed that idea?",
+          "expect": {
+            "topicId": "folk"
+          }
+        },
+        {
+          "user": "what about the Kalai-Smorodinsky bargaining solution?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "ok thanks",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    }
+  ]
+}

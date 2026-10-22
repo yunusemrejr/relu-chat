@@ -1,0 +1,617 @@
+{
+  "bot": "golden-age-inquiry",
+  "unknownConcepts": [
+    {
+      "query": "who was Harun al-Rashid",
+      "concept": "Harun al-Rashid",
+      "mentionedIn": [
+        "house_of_wisdom"
+      ]
+    },
+    {
+      "query": "how does a camera obscura work",
+      "concept": "camera obscura",
+      "mentionedIn": [
+        "ibn_al_haytham",
+        "optics"
+      ]
+    },
+    {
+      "query": "what is smallpox and how is it different from measles",
+      "concept": "smallpox",
+      "mentionedIn": [
+        "al_razI",
+        "medicine_golden_age"
+      ]
+    },
+    {
+      "query": "explain Hindu-Arabic numerals",
+      "concept": "Hindu-Arabic numerals",
+      "mentionedIn": [
+        "al_khwarizmi"
+      ]
+    },
+    {
+      "query": "what is pulmonary circulation",
+      "concept": "pulmonary circulation",
+      "mentionedIn": [
+        "medicine_golden_age",
+        "ibn_al_nafis"
+      ]
+    },
+    {
+      "query": "who was Ibn Hazm",
+      "concept": "Ibn Hazm",
+      "mentionedIn": []
+    },
+    {
+      "query": "tell me about al-Jahiz",
+      "concept": "al-Jahiz",
+      "mentionedIn": []
+    },
+    {
+      "query": "explain al-Tabari's history",
+      "concept": "al-Tabari",
+      "mentionedIn": []
+    },
+    {
+      "query": "what did Ibn Battuta travel to see",
+      "concept": "Ibn Battuta",
+      "mentionedIn": []
+    },
+    {
+      "query": "who was al-Kashi",
+      "concept": "al-Kashi",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is Ibn al-Nadim's Fihrist",
+      "concept": "Ibn al-Nadim",
+      "mentionedIn": []
+    },
+    {
+      "query": "tell me about al-Khazini and his balance",
+      "concept": "al-Khazini",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is Jabir ibn Hayyan known for",
+      "concept": "Jabir ibn Hayyan",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is Ibn Arabi's philosophy of unity",
+      "concept": "Ibn Arabi",
+      "mentionedIn": []
+    },
+    {
+      "query": "what was the Mu'tazila school",
+      "concept": "Mu'tazila",
+      "mentionedIn": []
+    },
+    {
+      "query": "what was the Fatimid caliphate",
+      "concept": "Fatimid caliphate",
+      "mentionedIn": []
+    },
+    {
+      "query": "who was al-Mawardi",
+      "concept": "al-Mawardi",
+      "mentionedIn": []
+    },
+    {
+      "query": "tell me about al-Muqaddasi",
+      "concept": "al-Muqaddasi",
+      "mentionedIn": []
+    },
+    {
+      "query": "what did Ibn al-Baitar write about medicinal plants",
+      "concept": "Ibn al-Baitar",
+      "mentionedIn": []
+    },
+    {
+      "query": "explain Ibn Yunus's astronomical tables",
+      "concept": "Ibn Yunus",
+      "mentionedIn": []
+    }
+  ],
+  "offTopic": [
+    "What's the forecast for Paris this weekend?",
+    "Give me a recipe for banana bread without eggs.",
+    "Who scored the winning goal in last night's match?",
+    "Book me a table for two at an Italian place tonight.",
+    "How do I get red wine out of a carpet?",
+    "Which actor is starring in the next Marvel movie?",
+    "Can you build a website for my bakery with an online shop?",
+    "How many calories are in a medium avocado?",
+    "When does the next train to Edinburgh leave?",
+    "Recommend a good sci-fi film for a Friday night."
+  ],
+  "crossBot": [
+    {
+      "query": "What is the Bellman equation?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "bellman-equation"
+    },
+    {
+      "query": "What does Q-learning do?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "q-learning"
+    },
+    {
+      "query": "How do I invert a matrix?",
+      "bot": "linear-algebra-chat",
+      "topicId": "matrix-inverse"
+    },
+    {
+      "query": "What is the condition number of a matrix?",
+      "bot": "linear-algebra-chat",
+      "topicId": "condition-number"
+    },
+    {
+      "query": "How does a service worker cache responses?",
+      "bot": "web-platform-chat",
+      "topicId": "service-worker"
+    },
+    {
+      "query": "What is linear memory in WebAssembly?",
+      "bot": "web-platform-chat",
+      "topicId": "linear-memory"
+    },
+    {
+      "query": "How do I use cross-validation for model selection?",
+      "bot": "data-science-chat",
+      "topicId": "cross_validation"
+    },
+    {
+      "query": "What is a decision tree used for?",
+      "bot": "data-science-chat",
+      "topicId": "decision_trees"
+    }
+  ],
+  "known": [
+    {
+      "query": "tell me about the house of wisdom in baghdad",
+      "topicId": "house_of_wisdom"
+    },
+    {
+      "query": "who was al-khwarzimi",
+      "topicId": "al_khwarizmi"
+    },
+    {
+      "query": "avicenna's canon of medicine, what was it?",
+      "topicId": "canon_of_medicine"
+    },
+    {
+      "query": "ibn al haytham optics",
+      "topicId": "ibn_al_haytham"
+    },
+    {
+      "query": "what did ibn sina write about medicine",
+      "topicId": "ibn_sina"
+    },
+    {
+      "query": "what's an astrolabe used for",
+      "topicId": "astrolabe"
+    },
+    {
+      "query": "how did papermaking spread from china to europe",
+      "topicId": "paper_making"
+    },
+    {
+      "query": "averroes commentaries on aristotle",
+      "topicId": "ibn_rushd"
+    },
+    {
+      "query": "al-ghazaly critique of philosophy",
+      "topicId": "al_ghazali"
+    },
+    {
+      "query": "what was the maragha observatory",
+      "topicId": "maragha_school"
+    },
+    {
+      "query": "ulugh beg star catalog in samarkand",
+      "topicId": "ulugh_beg"
+    },
+    {
+      "query": "who made the toledan tables",
+      "topicId": "al_zarqali"
+    },
+    {
+      "query": "translatoin movement in baghdad",
+      "topicId": "translation_movement"
+    },
+    {
+      "query": "al-biruni geography and astronomy",
+      "topicId": "al_biruni"
+    },
+    {
+      "query": "ibn tufayl hayy ibn yaqzan novel",
+      "topicId": "ibn_tufayl"
+    },
+    {
+      "query": "how did knowledge travel between scholars through copying manuscripts and travel",
+      "topicId": "knowledge_networks"
+    },
+    {
+      "query": "omar khayyam cubic equations",
+      "topicId": "omar_khayyam"
+    },
+    {
+      "query": "abbas ibn firnas first flight attempt",
+      "topicId": "abbas_ibn_firnas"
+    },
+    {
+      "query": "female astrolabe maker in the golden age",
+      "topicId": "mariam_al_astrulabi"
+    },
+    {
+      "query": "fatima al-fihri founded which university",
+      "topicId": "fatima_al_fihri"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "Who founded the Maragha Observatory?",
+      "topicId": "maragha_school",
+      "answerable": true,
+      "evidence": "Founded by Nasir al-Din al-Tusi in 1259"
+    },
+    {
+      "query": "Which Timurid sultan ruled Samarkand and compiled a star catalog?",
+      "topicId": "ulugh_beg",
+      "answerable": true,
+      "evidence": "known as Ulugh Beg, was a Timurid sultan and astronomer who ruled Samarkand"
+    },
+    {
+      "query": "When was Ibn Sina born?",
+      "topicId": "ibn_sina",
+      "answerable": true,
+      "evidence": "Abu Ali al-Husayn ibn Abdullah ibn Sina (980–1037)"
+    },
+    {
+      "query": "When was the Canon of Medicine written?",
+      "topicId": "canon_of_medicine",
+      "answerable": true,
+      "evidence": "Written by Ibn Sina (Avicenna) around 1025 CE"
+    },
+    {
+      "query": "Who discovered pulmonary circulation?",
+      "topicId": "ibn_al_nafis",
+      "answerable": true,
+      "evidence": "Arab physician who discovered pulmonary circulation 300 years before William Harvey"
+    },
+    {
+      "query": "Who was the first person to attempt controlled flight?",
+      "topicId": "abbas_ibn_firnas",
+      "answerable": true,
+      "evidence": "making him the first person to attempt controlled flight"
+    },
+    {
+      "query": "How many paper mills operated in Baghdad by 900 CE?",
+      "topicId": "paper_making",
+      "answerable": true,
+      "evidence": "Baghdad had over 100 paper mills by 900 CE."
+    },
+    {
+      "query": "When did Fatima al-Fihri found the al-Qarawiyyin Mosque and Madrasa?",
+      "topicId": "fatima_al_fihri",
+      "answerable": true,
+      "evidence": "founded the al-Qarawiyyin Mosque and Madrasa in 859 CE"
+    },
+    {
+      "query": "Who invented the Hindu-Arabic numeral system?",
+      "topicId": "al_khwarizmi",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "Who founded the Library of Cordoba?",
+      "topicId": "lubana",
+      "answerable": false,
+      "evidence": ""
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "What is the astrolabe, and also what did Ibn al-Haytham do for optics?",
+      "topicIds": [
+        "astrolabe",
+        "ibn_al_haytham"
+      ]
+    },
+    {
+      "query": "Compare Al-Khwarizmi's algebra with Omar Khayyam's cubic equations.",
+      "topicIds": [
+        "al_khwarizmi",
+        "algebra",
+        "omar_khayyam"
+      ]
+    },
+    {
+      "query": "Who was Ibn Rushd, and also what was the House of Wisdom?",
+      "topicIds": [
+        "ibn_rushd",
+        "house_of_wisdom"
+      ]
+    },
+    {
+      "query": "How does Ibn al-Nafis's pulmonary circulation work relate to Ibn Sina's Canon of Medicine?",
+      "topicIds": [
+        "ibn_al_nafis",
+        "canon_of_medicine"
+      ]
+    },
+    {
+      "query": "Tell me about Al-Zarqali's Toledan tables, as well as the Maragha observatory.",
+      "topicIds": [
+        "al_zarqali",
+        "maragha_school"
+      ]
+    },
+    {
+      "query": "What is Ulugh Beg known for, and also who was al-Battani?",
+      "topicIds": [
+        "ulugh_beg",
+        "al_battani"
+      ]
+    },
+    {
+      "query": "What is Ibn Khaldun's Muqaddimah about, and what about the Translation Movement?",
+      "topicIds": [
+        "ibn_khaldun",
+        "translation_movement"
+      ]
+    },
+    {
+      "query": "Did al-Idrisi make maps, and also how did Al-Jazari build machines?",
+      "topicIds": [
+        "al_idrisi",
+        "al_jazari"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "hello!",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "tell me about ibn sina",
+          "expect": {
+            "topicId": "ibn_sina"
+          }
+        },
+        {
+          "user": "what did he write?",
+          "expect": {
+            "topicId": "ibn_sina"
+          }
+        },
+        {
+          "user": "what about the canon, how long was it used?",
+          "expect": {
+            "topicId": "canon_of_medicine"
+          }
+        },
+        {
+          "user": "what about al-Mawardi?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks!",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "who was Al-Khwarizmi",
+          "expect": {
+            "topicId": "al_khwarizmi"
+          }
+        },
+        {
+          "user": "what did he do with algebra?",
+          "expect": {
+            "topicId": "al_khwarizmi"
+          }
+        },
+        {
+          "user": "give me an example of his completing-the-square method",
+          "expect": {
+            "topicId": "algebra"
+          }
+        },
+        {
+          "user": "what about Ibn Tufayl?",
+          "expect": {
+            "topicId": "ibn_tufayl"
+          }
+        },
+        {
+          "user": "what about Ibn Battuta?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "great, cheers",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hey",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what is the astrolabe",
+          "expect": {
+            "topicId": "astrolabe"
+          }
+        },
+        {
+          "user": "how was it made?",
+          "expect": {
+            "topicId": "astrolabe"
+          }
+        },
+        {
+          "user": "and what did Ulugh Beg build?",
+          "expect": {
+            "topicId": "ulugh_beg"
+          }
+        },
+        {
+          "user": "did Jamshid al-Kashi work on this too?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks, I'm done",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hello",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what was the translation movement?",
+          "expect": {
+            "topicId": "translation_movement"
+          }
+        },
+        {
+          "user": "who translated the medical texts there?",
+          "expect": {
+            "topicId": "hunayn_ibn_ishaq"
+          }
+        },
+        {
+          "user": "where did the translators work?",
+          "expect": {
+            "topicId": "house_of_wisdom"
+          }
+        },
+        {
+          "user": "what about Ibn Hazm?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "cool, bye",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "tell me about medicine in the golden age",
+          "expect": {
+            "topicId": "medicine_golden_age"
+          }
+        },
+        {
+          "user": "who was al-razi",
+          "expect": {
+            "topicId": "al_razI"
+          }
+        },
+        {
+          "user": "what did he find out about smallpox?",
+          "expect": {
+            "topicId": "al_razI"
+          }
+        },
+        {
+          "user": "and who wrote the surgical encyclopedia?",
+          "expect": {
+            "topicId": "al_zahrawi"
+          }
+        },
+        {
+          "user": "what about the Mu'tazila and their theology?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "that's all, thanks",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hi",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what was the maragha school",
+          "expect": {
+            "topicId": "maragha_school"
+          }
+        },
+        {
+          "user": "who founded it?",
+          "expect": {
+            "topicId": "nasir_al_din_tusi"
+          }
+        },
+        {
+          "user": "what did he develop?",
+          "expect": {
+            "topicId": "nasir_al_din_tusi"
+          }
+        },
+        {
+          "user": "what about Ibn Yunus's astronomical tables?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "ok, thank you",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "generated": "2026-10-22",
+  "method": "Split conformal prediction on questions generated from each knowledge base (named, typo and descriptive). Thresholds are coverage levels of the best retrieved topic; calibrated values never exceed the defaults.",
+  "alpha": {
+    "weak": 0.02,
+    "answer": 0.2
+  },
+  "defaults": {
+    "answer": 0.58,
+    "weak": 0.34,
+    "mention": 0.8,
+    "oovShare": 0.3
+  },
+  "bots": {
+    "game-theory-chat": {
+      "thresholds": {
+        "weak": 0.34,
+        "answer": 0.58
+      },
+      "conformal": {
+        "weak": 0.873,
+        "answer": 0.883,
+        "n": 171
+      },
+      "calibrationSet": {
+        "named": {
+          "n": 308,
+          "abstained": 0,
+          "topicCorrect": 1
+        },
+        "descriptive": {
+          "n": 225,
+          "abstained": 0,
+          "topicCorrect": 0.773
+        }
+      }
+    },
+    "golden-age-inquiry": {
+      "thresholds": {
+        "weak": 0.34,
+        "answer": 0.58
+      },
+      "conformal": {
+        "weak": 0.884,
+        "answer": 0.886,
+        "n": 114
+      },
+      "calibrationSet": {
+        "named": {
+          "n": 193,
+          "abstained": 0,
+          "topicCorrect": 1
+        },
+        "descriptive": {
+          "n": 150,
+          "abstained": 0,
+          "topicCorrect": 0.76
+        }
+      }
+    },
+    "data-science-chat": {
+      "thresholds": {
+        "weak": 0.34,
+        "answer": 0.58
+      },
+      "conformal": {
+        "weak": 0.875,
+        "answer": 0.886,
+        "n": 81
+      },
+      "calibrationSet": {
+        "named": {
+          "n": 161,
+          "abstained": 0,
+          "topicCorrect": 0.994
+        },
+        "descriptive": {
+          "n": 120,
+          "abstained": 0,
+          "topicCorrect": 0.775
+        }
+      }
+    },
+    "reinforcement-learning-chat": {
+      "thresholds": {
+        "weak": 0.34,
+        "answer": 0.58
+      },
+      "conformal": {
+        "weak": 0.858,
+        "answer": 0.872,
+        "n": 27
+      },
+      "calibrationSet": {
+        "named": {
+          "n": 63,
+          "abstained": 0,
+          "topicCorrect": 1
+        },
+        "descriptive": {
+          "n": 48,
+          "abstained": 0,
+          "topicCorrect": 0.625
+        }
+      }
+    },
+    "linear-algebra-chat": {
+      "thresholds": {
+        "weak": 0.34,
+        "answer": 0.58
+      },
+      "conformal": {
+        "weak": 0.875,
+        "answer": 0.879,
+        "n": 21
+      },
+      "calibrationSet": {
+        "named": {
+          "n": 62,
+          "abstained": 0,
+          "topicCorrect": 1
+        },
+        "descriptive": {
+          "n": 48,
+          "abstained": 0,
+          "topicCorrect": 0.625
+        }
+      }
+    },
+    "web-platform-chat": {
+      "thresholds": {
+        "weak": 0.34,
+        "answer": 0.58
+      },
+      "conformal": {
+        "weak": 0.882,
+        "answer": 0.886,
+        "n": 42
+      },
+      "calibrationSet": {
+        "named": {
+          "n": 63,
+          "abstained": 0,
+          "topicCorrect": 1
+        },
+        "descriptive": {
+          "n": 48,
+          "abstained": 0,
+          "topicCorrect": 0.875
+        }
+      }
+    }
+  }
+}

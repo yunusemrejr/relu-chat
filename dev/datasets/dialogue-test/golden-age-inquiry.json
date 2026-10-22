@@ -1,0 +1,107 @@
+{
+  "bot": "golden-age-inquiry",
+  "unknownConcepts": [
+    { "query": "jamshid al kashi and his pi calculation, how precise was it", "concept": "Jamshid al-Kashi", "mentionedIn": [] },
+    { "query": "what was the mutazila school about, free will and gods justice stuff", "concept": "Mu'tazila", "mentionedIn": [] },
+    { "query": "ibn yunus and his eclipse tables, did he use them for predictions", "concept": "Ibn Yunus", "mentionedIn": [] },
+    { "query": "abul wafa trig work on the moon, what did he do", "concept": "Abu al-Wafa", "mentionedIn": [] },
+    { "query": "al masudi the historian, what did he write about the world", "concept": "Al-Mas'udi", "mentionedIn": [] },
+    { "query": "ibn al baytar's pharmacy book about plants and drugs", "concept": "Ibn al-Baytar", "mentionedIn": [] },
+    { "query": "ibn hazm and the zahiri school, literalism in law", "concept": "Ibn Hazm", "mentionedIn": [] },
+    { "query": "ibn battuta, did he ever go to china", "concept": "Ibn Battuta", "mentionedIn": [] },
+    { "query": "al sijzi and his work on the sphere?", "concept": "Al-Sijzi", "mentionedIn": [] },
+    { "query": "alchemy in the golden age, did al razi actually believe in turning metals into gold", "concept": "Alchemy", "mentionedIn": ["al_razI"] },
+    { "query": "trig in the golden age, sine tables and all that, who did it", "concept": "Trigonometry", "mentionedIn": ["al_battani", "astrolabe", "nasir_al_din_tusi", "ulugh_beg"] },
+    { "query": "camera obscura, was that used by ibn al haytham for his eye experiments", "concept": "Camera obscura", "mentionedIn": ["ibn_al_haytham", "optics"] }
+  ],
+  "offTopic": [
+    "what's a good beginner workout routine, 3 days a week?",
+    "write me a short poem about the ocean pls",
+    "how do i reset my wifi router",
+    "who won the champions league last year",
+    "can u help me debug my react useeffect loop? it keeps re-rendering",
+    "what's the best way to memorize a speech lol"
+  ],
+  "crossBot": [
+    { "query": "whats precision vs recall, which one is about false alarms", "bot": "data-science-chat", "topicId": "precision_recall" },
+    { "query": "what is a markov decision process, states actions rewards", "bot": "reinforcement-learning-chat", "topicId": "markov-decision-process" },
+    { "query": "how does a web worker keep the ui from freezing", "bot": "web-platform-chat", "topicId": "web-worker" },
+    { "query": "how do i compute a determinant of a 3x3 matrix", "bot": "linear-algebra-chat", "topicId": "determinant" },
+    { "query": "what is a nash equilibrium in a 2x2 game", "bot": "game-theory-chat", "topicId": "nash_eq" },
+    { "query": "what does k-means do with centroids", "bot": "data-science-chat", "topicId": "kmeans" }
+  ],
+  "known": [
+    { "query": "avicenna?? whos that", "topicId": "ibn_sina" },
+    { "query": "where did the word algebra come from, like the arabic origin", "topicId": "algebra" },
+    { "query": "the house of wisdom in baghdad, what was it actually", "topicId": "house_of_wisdom" },
+    { "query": "ibn al haytham, the guy who did optics, what did he change", "topicId": "ibn_al_haytham" },
+    { "query": "how did paper get from china to europe through the muslim world", "topicId": "paper_making" },
+    { "query": "greek stuff getting translated into arabic, the translation thing", "topicId": "translation_movement" },
+    { "query": "abulcasis and his surgery book", "topicId": "al_zahrawi" },
+    { "query": "ibn al nafis and blood going through the lungs, did he figure that out", "topicId": "ibn_al_nafis" },
+    { "query": "the elephant clock guy, al-jazari machines", "topicId": "al_jazari" },
+    { "query": "ulugh beg's observatory in samarkand", "topicId": "ulugh_beg" },
+    { "query": "what did omar khayyam do with cubic equations", "topicId": "omar_khayyam" },
+    { "query": "maragha observatory and the tusi couple, what was that about", "topicId": "maragha_school" },
+    { "query": "ibn khaldun muqaddimah, history stuff, whats the big idea", "topicId": "ibn_khaldun" },
+    { "query": "al kindi, the first philosopher of the arabs right?", "topicId": "al_kindi" },
+    { "query": "how was the astrolabe used for finding time", "topicId": "astrolabe" }
+  ],
+  "whQuestions": [
+    { "query": "who discovered pulmonary circulation before harvey did", "topicId": "ibn_al_nafis", "answerable": true, "evidence": "pulmonary circulation 300 years before William Harvey" },
+    { "query": "who founded the university of al-qarawiyyin", "topicId": "fatima_al_fihri", "answerable": true, "evidence": "Arab woman who founded the University of al-Qarawiyyin" },
+    { "query": "how many years was al zahrawi's surgery text the standard in europe", "topicId": "al_zahrawi", "answerable": true, "evidence": "standard surgical text in Europe for 500 years" },
+    { "query": "what century was mariam al astrulabi active in", "topicId": "mariam_al_astrulabi", "answerable": true, "evidence": "10th-century Syrian female astronomer" },
+    { "query": "what was ibn sina's wife called", "topicId": "ibn_sina", "answerable": false, "evidence": "" },
+    { "query": "where did al-khwarizmi die", "topicId": "al_khwarizmi", "answerable": false, "evidence": "" }
+  ],
+  "multiPart": [
+    { "query": "al razi and the medicine golden age stuff, how does his part fit in", "topicIds": ["al_razI", "medicine_golden_age"] },
+    { "query": "al biruni plus al battani, who was more into observations", "topicIds": ["al_biruni", "al_battani"] },
+    { "query": "ibn sina and also the canon, which came first in the story", "topicIds": ["ibn_sina", "canon_of_medicine"] },
+    { "query": "algebra, and also al khwarizmi, is algebra named after his name or what", "topicIds": ["algebra", "al_khwarizmi"] },
+    { "query": "astrolabe vs al zarqali's universal one, what was the difference", "topicIds": ["astrolabe", "al_zarqali"] },
+    { "query": "paper making plus the translation movement, were they connected?", "topicIds": ["paper_making", "translation_movement"] }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        { "user": "hey! quick q: what was the house of wisdom", "expect": { "topicId": "house_of_wisdom" } },
+        { "user": "who were the main translators there", "expect": { "topicId": "translation_movement" } },
+        { "user": "ok and hunayn, did he do the greek medical stuff?", "expect": { "topicId": "hunayn_ibn_ishaq" } },
+        { "user": "and the nizamiyya in baghdad, what was that place?", "expect": { "unknown": true } },
+        { "user": "thanks, that helps", "expect": { "social": true } }
+      ]
+    },
+    {
+      "turns": [
+        { "user": "yo does the astrolabe work for finding time too", "expect": { "topicId": "astrolabe" } },
+        { "user": "who built the big one in samarkand?", "expect": { "topicId": "ulugh_beg" } },
+        { "user": "and the maragha one, the tusi couple, whats that", "expect": { "topicId": "maragha_school" } },
+        { "user": "what about the other tusi, the one who founded maragha?", "expect": { "topicId": "nasir_al_din_tusi" } },
+        { "user": "and ibn al-shatir, the damascene one, did he copy that couple?", "expect": { "topicId": "ibn_al_shatir" } },
+        { "user": "cheers", "expect": { "social": true } }
+      ]
+    },
+    {
+      "turns": [
+        { "user": "hi!! is this the golden age bot", "expect": { "social": true } },
+        { "user": "tell me about avicenna", "expect": { "topicId": "ibn_sina" } },
+        { "user": "what was his big medical book called", "expect": { "topicId": "canon_of_medicine" } },
+        { "user": "and al-razi, how did he differ from him?", "expect": { "topicId": "al_razI" } },
+        { "user": "did al-khazini also write about the balance of wisdom?", "expect": { "unknown": true } },
+        { "user": "ok thats all, thx", "expect": { "social": true } }
+      ]
+    },
+    {
+      "turns": [
+        { "user": "ok so paper making, how did it spread?", "expect": { "topicId": "paper_making" } },
+        { "user": "and the translation movement, same era?", "expect": { "topicId": "translation_movement" } },
+        { "user": "is the golden age label even accurate or is it a bad term", "expect": { "topicId": "periodization" } },
+        { "user": "fair. and ibn khaldun, does he say anything about why empires rise", "expect": { "topicId": "ibn_khaldun" } },
+        { "user": "what about jabir ibn hayyan, the alchemist, was he real", "expect": { "unknown": true } },
+        { "user": "thx bye", "expect": { "social": true } }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,287 @@
+{
+  "bot": "web-platform-chat",
+  "unknownConcepts": [
+    {
+      "query": "How does a WebSocket keep a connection open to the server?",
+      "concept": "WebSocket",
+      "mentionedIn": []
+    },
+    {
+      "query": "When should I schedule my drawing with requestAnimationFrame?",
+      "concept": "requestAnimationFrame",
+      "mentionedIn": []
+    },
+    {
+      "query": "Does Shadow DOM stop my CSS from leaking into the rest of the page? Prove it.",
+      "concept": "Shadow DOM",
+      "mentionedIn": []
+    },
+    {
+      "query": "Is localStorage a good place to keep a 50 MB model file?",
+      "concept": "localStorage",
+      "mentionedIn": []
+    },
+    {
+      "query": "How does Subresource Integrity stop a tampered CDN script?",
+      "concept": "Subresource Integrity",
+      "mentionedIn": []
+    },
+    {
+      "query": "What is the Streams API for reading a large fetch response?",
+      "concept": "Streams API",
+      "mentionedIn": []
+    },
+    {
+      "query": "What does CORS have to do with loading a model from another origin?",
+      "concept": "CORS",
+      "mentionedIn": [
+        "cross-origin-isolation"
+      ]
+    },
+    {
+      "query": "What are dynamic viewport units and why do they matter on phones?",
+      "concept": "dynamic viewport units",
+      "mentionedIn": [
+        "responsive-layout"
+      ]
+    }
+  ],
+  "offTopic": [
+    "What should I cook for dinner with chickpeas and spinach?",
+    "Summarize the plot of Hamlet in three sentences.",
+    "Can you help me plan a budget for my holiday trip?",
+    "How do I fix a leaky kitchen faucet?"
+  ],
+  "crossBot": [
+    {
+      "query": "Compute the determinant of a 2 by 2 matrix for me, step by step.",
+      "bot": "linear-algebra-chat",
+      "topicId": "determinant"
+    },
+    {
+      "query": "What does Q-learning update when the agent takes an action?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "q-learning"
+    },
+    {
+      "query": "Is AUC actually the same thing as accuracy? Prove it.",
+      "bot": "data-science-chat",
+      "topicId": "roc_auc"
+    },
+    {
+      "query": "What is a Nash equilibrium in a two-player game?",
+      "bot": "game-theory-chat",
+      "topicId": "nash_eq"
+    }
+  ],
+  "known": [
+    {
+      "query": "Is WebAssembly a replacement for JavaScript in the browser? Convince me.",
+      "topicId": "webassembly"
+    },
+    {
+      "query": "How do typed array views access WebAssembly linear memory?",
+      "topicId": "linear-memory"
+    },
+    {
+      "query": "Why can't a Web Worker modify the DOM directly?",
+      "topicId": "web-worker"
+    },
+    {
+      "query": "What happens to my ArrayBuffer after I send it to a worker with postMessage?",
+      "topicId": "transferable-objects"
+    },
+    {
+      "query": "Does a service worker run on the main page thread?",
+      "topicId": "service-worker"
+    },
+    {
+      "query": "When should I use stale while revalidate instead of network first? Justify it.",
+      "topicId": "cache-strategies"
+    },
+    {
+      "query": "Prove it: how does a 304 response come from an ETag?",
+      "topicId": "http-caching"
+    },
+    {
+      "query": "Does await make my heavy computation run on another thread?",
+      "topicId": "promises-async-functions"
+    },
+    {
+      "query": "Why does a long loop block input even though the click event already arrived?",
+      "topicId": "event-loop"
+    },
+    {
+      "query": "How do I cancel an old search request when a new one starts?",
+      "topicId": "abortcontroller"
+    },
+    {
+      "query": "Why should I check crossOriginIsolated before enabling threaded WASM?",
+      "topicId": "cross-origin-isolation"
+    },
+    {
+      "query": "Should I use a placeholder as the label for my input field?",
+      "topicId": "accessible-form"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "What does the transfer list do in postMessage?",
+      "topicId": "transferable-objects",
+      "answerable": true,
+      "evidence": "The transfer list names resources to transfer, but the message must also expose those resources to the receiver."
+    },
+    {
+      "query": "Under what conditions does ETag with If-None-Match produce a 304?",
+      "topicId": "http-caching",
+      "answerable": true,
+      "evidence": "ETag and If-None-Match can produce 304 Not Modified responses when the stored representation is still current."
+    },
+    {
+      "query": "How long does a service worker take to install in Chrome 120?",
+      "topicId": "service-worker",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "Which year did the W3C first publish the WebAssembly specification?",
+      "topicId": "webassembly",
+      "answerable": false,
+      "evidence": ""
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "How do a service worker cache and the browser HTTP cache each decide whether to reuse a response?",
+      "topicIds": [
+        "service-worker",
+        "http-caching"
+      ]
+    },
+    {
+      "query": "How do AbortController and the event loop interact when a long fetch is still running?",
+      "topicIds": [
+        "abortcontroller",
+        "event-loop"
+      ]
+    },
+    {
+      "query": "How does linear memory relate to transferring an ArrayBuffer to a worker?",
+      "topicIds": [
+        "linear-memory",
+        "transferable-objects"
+      ]
+    },
+    {
+      "query": "Does awaiting a fetch count toward my p95 latency measurement?",
+      "topicIds": [
+        "promises-async-functions",
+        "performance-measurement"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "What is a service worker?",
+          "expect": {
+            "topicId": "service-worker"
+          }
+        },
+        {
+          "user": "Does it keep running after the page closes?",
+          "expect": {
+            "topicId": "service-worker"
+          }
+        },
+        {
+          "user": "Makes sense, thanks.",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "Is there a Shadow DOM trick to isolate its styles?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Then which caching strategy suits a versioned model file?",
+          "expect": {
+            "topicId": "cache-strategies"
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "What is WebAssembly?",
+          "expect": {
+            "topicId": "webassembly"
+          }
+        },
+        {
+          "user": "And how does its memory get shared with JavaScript?",
+          "expect": {
+            "topicId": "linear-memory"
+          }
+        },
+        {
+          "user": "Would a Web Worker help if the kernel is slow?",
+          "expect": {
+            "topicId": "web-worker"
+          }
+        },
+        {
+          "user": "Could I stream the results over a WebSocket instead?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Okay, that's clear, thank you.",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "Why is my page freezing when I run a big loop?",
+          "expect": {
+            "topicId": "event-loop"
+          }
+        },
+        {
+          "user": "Is a promise the fix for that, or does it still block?",
+          "expect": {
+            "topicId": "promises-async-functions"
+          }
+        },
+        {
+          "user": "Got it. So how do I stop an old search request when a new one starts?",
+          "expect": {
+            "topicId": "abortcontroller"
+          }
+        },
+        {
+          "user": "What about a requestAnimationFrame callback for the animation?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Lovely, that's helpful.",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    }
+  ]
+}

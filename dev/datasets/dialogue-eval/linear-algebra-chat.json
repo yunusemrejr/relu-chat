@@ -1,0 +1,140 @@
+{
+  "bot": "linear-algebra-chat",
+  "unknownConcepts": [
+    { "query": "what is the QR decomposition used for", "concept": "QR decomposition", "mentionedIn": ["least-squares"] },
+    { "query": "explain the pseudoinverse", "concept": "Pseudoinverse", "mentionedIn": ["singular-value-decomposition"] },
+    { "query": "tell me about the Frobenius norm", "concept": "Frobenius norm", "mentionedIn": ["singular-value-decomposition"] },
+    { "query": "rank-nullity theorem, how does it work?", "concept": "Rank-nullity theorem", "mentionedIn": ["null-space"] },
+    { "query": "how do symmetric matrices behave", "concept": "Symmetric matrices", "mentionedIn": ["eigenvalues-eigenvectors"] },
+    { "query": "Jordan normal form, explain", "concept": "Jordan normal form", "mentionedIn": [] },
+    { "query": "how does Gaussian elimination work", "concept": "Gaussian elimination", "mentionedIn": [] },
+    { "query": "what is an LU decomposition", "concept": "LU decomposition", "mentionedIn": [] },
+    { "query": "Cholesky decomposition, when is it used", "concept": "Cholesky decomposition", "mentionedIn": [] },
+    { "query": "explain the Gram-Schmidt process", "concept": "Gram-Schmidt process", "mentionedIn": [] },
+    { "query": "what is the trace of a matrix", "concept": "Trace of a matrix", "mentionedIn": [] },
+    { "query": "diagonalization of a matrix, how is it done", "concept": "Diagonalization", "mentionedIn": [] },
+    { "query": "Cramer's rule for solving systems", "concept": "Cramer's rule", "mentionedIn": [] },
+    { "query": "identity matrix: what is it?", "concept": "Identity matrix", "mentionedIn": [] },
+    { "query": "tell me about the Kronecker product", "concept": "Kronecker product", "mentionedIn": [] },
+    { "query": "cross product of two 3D vectors", "concept": "Cross product", "mentionedIn": [] },
+    { "query": "matrix exponential, what does it do", "concept": "Matrix exponential", "mentionedIn": [] },
+    { "query": "power iteration for finding the dominant eigen direction", "concept": "Power iteration", "mentionedIn": [] },
+    { "query": "Rayleigh quotient, explain", "concept": "Rayleigh quotient", "mentionedIn": [] },
+    { "query": "row echelon form, how do you get it", "concept": "Row echelon form", "mentionedIn": [] }
+  ],
+  "offTopic": [
+    "What's the forecast for Istanbul this weekend?",
+    "How do I make a sourdough starter from scratch?",
+    "Who is going to win the basketball final?",
+    "Can you find me a cheap hotel in Rome for Friday?",
+    "What did the pop star say in her latest interview?",
+    "My partner forgot my birthday again, how should I bring it up?",
+    "What's a good stretching routine before bed?",
+    "Which bike is best for commuting in the city?",
+    "Suggest a funny board game for six people.",
+    "How do I remove red wine from a carpet?"
+  ],
+  "crossBot": [
+    { "query": "Explain the prisoner's dilemma in simple terms.", "bot": "game-theory-chat", "topicId": "prisoners_dilemma" },
+    { "query": "What is a Stackelberg competition?", "bot": "game-theory-chat", "topicId": "stackelberg" },
+    { "query": "What is a service worker?", "bot": "web-platform-chat", "topicId": "service-worker" },
+    { "query": "How does WebAssembly linear memory work?", "bot": "web-platform-chat", "topicId": "linear-memory" },
+    { "query": "Explain Q-learning to me.", "bot": "reinforcement-learning-chat", "topicId": "q-learning" },
+    { "query": "What is a Markov decision process?", "bot": "reinforcement-learning-chat", "topicId": "markov-decision-process" },
+    { "query": "Explain the bias-variance tradeoff.", "bot": "data-science-chat", "topicId": "bias_variance" },
+    { "query": "Who was Ibn al-Haytham?", "bot": "golden-age-inquiry", "topicId": "ibn_al_haytham" }
+  ],
+  "known": [
+    { "query": "what is the dot prodct of (1, 2) and (3, 4)", "topicId": "dot-product" },
+    { "query": "scalar product of two vectors, what is the formula", "topicId": "dot-product" },
+    { "query": "what's the length of a vector", "topicId": "vector-norm" },
+    { "query": "l2 norm of (3, 4)", "topicId": "vector-norm" },
+    { "query": "matric multiplication, how do I multiply a 2 by 3 with a 3 by 4", "topicId": "matrix-multiplication" },
+    { "query": "is a set of vectors linearly independant if one is a sum of the others", "topicId": "linear-independence" },
+    { "query": "what does it mean for vectors to span a plane", "topicId": "basis-span" },
+    { "query": "rank of a matrix with rows (1, 2) and (2, 4)", "topicId": "matrix-rank" },
+    { "query": "kernel of a matrix, what is it", "topicId": "null-space" },
+    { "query": "how do I solve x + y = 3 and x − y = 1 with a matrix", "topicId": "linear-system" },
+    { "query": "when is a matrix invertable", "topicId": "matrix-inverse" },
+    { "query": "inverse of diag(2, 4)", "topicId": "matrix-inverse" },
+    { "query": "formula for the determinant of a 2 by 2 matrix", "topicId": "determinant" },
+    { "query": "what's an eigen vector of diag(2, 3)", "topicId": "eigenvalues-eigenvectors" },
+    { "query": "eigen values, explain them", "topicId": "eigenvalues-eigenvectors" },
+    { "query": "project (3, 4) onto the horizontal axis, what's left over", "topicId": "orthogonal-projection" },
+    { "query": "least squares fit to observations 1, 2 and 6", "topicId": "least-squares" },
+    { "query": "low rank approximation using svd of diag(3, 1)", "topicId": "singular-value-decomposition" },
+    { "query": "how much do small input errors get amplified in a matrix problem", "topicId": "condition-number" },
+    { "query": "what's a coordinate vector in a basis", "topicId": "vector" }
+  ],
+  "whQuestions": [
+    { "query": "Who discovered the singular value decomposition?", "topicId": "singular-value-decomposition", "answerable": false, "evidence": "" },
+    { "query": "When was the determinant first defined?", "topicId": "determinant", "answerable": false, "evidence": "" },
+    { "query": "How many solutions can a linear system have?", "topicId": "linear-system", "answerable": true, "evidence": "It can have no solution, one solution, or infinitely many." },
+    { "query": "How large is the 2-norm condition number of diag(1, 0.001)?", "topicId": "condition-number", "answerable": true, "evidence": "diag(1, 0.001) has 2-norm condition number 1000" },
+    { "query": "Who first proposed least squares?", "topicId": "least-squares", "answerable": false, "evidence": "" },
+    { "query": "Who proved that a square matrix is invertible exactly when it has full rank?", "topicId": "matrix-inverse", "answerable": false, "evidence": "" },
+    { "query": "How many rows does the product AB have when A is 2 by 3 and B is 3 by 4?", "topicId": "matrix-multiplication", "answerable": true, "evidence": "If A is 2 by 3 and B is 3 by 4, AB is 2 by 4." },
+    { "query": "When does a solution to Ax = b exist?", "topicId": "linear-system", "answerable": true, "evidence": "A solution exists exactly when b lies in the column space of A." },
+    { "query": "Where do the vectors that A = [1 1] send to zero lie?", "topicId": "null-space", "answerable": true, "evidence": "For A = [1 1], every vector (t, −t) maps to zero, so the null space is a line." },
+    { "query": "Who first studied the eigenvalues of symmetric matrices?", "topicId": "eigenvalues-eigenvectors", "answerable": false, "evidence": "" }
+  ],
+  "multiPart": [
+    { "query": "What is a determinant and what does it tell me about an inverse?", "topicIds": ["determinant", "matrix-inverse"] },
+    { "query": "How is the null space related to the rank of a matrix?", "topicIds": ["null-space", "matrix-rank"] },
+    { "query": "Explain orthogonal projection and least squares, and how they connect.", "topicIds": ["orthogonal-projection", "least-squares"] },
+    { "query": "What is a basis? Also, is a set of vectors independent if one is a combination of the others?", "topicIds": ["basis-span", "linear-independence"] },
+    { "query": "Does the dot product relate to the vector norm? Also, how is matrix multiplication defined?", "topicIds": ["dot-product", "vector-norm", "matrix-multiplication"] },
+    { "query": "Compare the SVD with the eigenvalue decomposition.", "topicIds": ["singular-value-decomposition", "eigenvalues-eigenvectors"] },
+    { "query": "Is a condition number relevant when I solve a linear system?", "topicIds": ["condition-number", "linear-system"] },
+    { "query": "How does the dot product relate to projections as well as the vector norm?", "topicIds": ["dot-product", "orthogonal-projection", "vector-norm"] }
+  ],
+  "conversations": [
+    { "turns": [
+      { "user": "hi", "expect": { "social": true } },
+      { "user": "what is a dot product?", "expect": { "topicId": "dot-product" } },
+      { "user": "how is it related to the norm?", "expect": { "topicId": "dot-product" } },
+      { "user": "give me an example", "expect": { "topicId": "dot-product" } },
+      { "user": "what about the Gram-Schmidt process?", "expect": { "unknown": true } },
+      { "user": "thanks", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "hey, can you help", "expect": { "social": true } },
+      { "user": "explain matrix rank", "expect": { "topicId": "matrix-rank" } },
+      { "user": "what is its null space?", "expect": { "topicId": "null-space" } },
+      { "user": "does that mean a linear system always has a solution?", "expect": { "topicId": "linear-system" } },
+      { "user": "how does the Jordan normal form relate to all this?", "expect": { "unknown": true } },
+      { "user": "bye", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "what's a determinant?", "expect": { "topicId": "determinant" } },
+      { "user": "and does a zero one mean it's not invertible?", "expect": { "topicId": "matrix-inverse" } },
+      { "user": "what about the volume it measures?", "expect": { "topicId": "determinant" } },
+      { "user": "what is the Cholesky decomposition used for?", "expect": { "unknown": true } },
+      { "user": "ok, back to inverses: how do I compute one for diag(2, 4)?", "expect": { "topicId": "matrix-inverse" } }
+    ] },
+    { "turns": [
+      { "user": "eigenvectors", "expect": { "topicId": "eigenvalues-eigenvectors" } },
+      { "user": "give me the example with diag(2, 3)", "expect": { "topicId": "eigenvalues-eigenvectors" } },
+      { "user": "switch topics: how do I project a vector onto an axis?", "expect": { "topicId": "orthogonal-projection" } },
+      { "user": "and what's the residual?", "expect": { "topicId": "orthogonal-projection" } },
+      { "user": "tell me about power iteration", "expect": { "unknown": true } },
+      { "user": "thanks!", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "hello again", "expect": { "social": true } },
+      { "user": "what's the SVD?", "expect": { "topicId": "singular-value-decomposition" } },
+      { "user": "why is it useful for low rank approximation?", "expect": { "topicId": "singular-value-decomposition" } },
+      { "user": "how about condition numbers, is it the same idea?", "expect": { "topicId": "condition-number" } },
+      { "user": "what about the Kronecker product?", "expect": { "unknown": true } },
+      { "user": "great, bye", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "good morning", "expect": { "social": true } },
+      { "user": "least squares: what does it minimize?", "expect": { "topicId": "least-squares" } },
+      { "user": "and how does that connect to projection?", "expect": { "topicId": "orthogonal-projection" } },
+      { "user": "what about the normal equation?", "expect": { "topicId": "least-squares" } },
+      { "user": "how about the trace of a matrix?", "expect": { "unknown": true } },
+      { "user": "thank you, that helps", "expect": { "social": true } }
+    ] }
+  ]
+}

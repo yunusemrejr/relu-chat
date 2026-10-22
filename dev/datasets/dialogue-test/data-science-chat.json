@@ -1,0 +1,106 @@
+{
+  "bot": "data-science-chat",
+  "unknownConcepts": [
+    { "query": "smote for oversampling the minority class, does it actually help", "concept": "SMOTE", "mentionedIn": [] },
+    { "query": "naive bayes classifier, how does the independence assumption work", "concept": "Naive Bayes", "mentionedIn": [] },
+    { "query": "knn with k=5, how does it vote on the label", "concept": "k-nearest neighbors", "mentionedIn": [] },
+    { "query": "isolation forest for finding weird rows, how does it isolate points", "concept": "Isolation forest", "mentionedIn": [] },
+    { "query": "kernel trick in svms, how does it avoid computing the mapping", "concept": "Kernel trick", "mentionedIn": [] },
+    { "query": "95 percent confidence interval for my accuracy, how do i compute it", "concept": "Confidence interval", "mentionedIn": [] },
+    { "query": "batch norm, does it help training neural nets", "concept": "Batch normalization", "mentionedIn": [] },
+    { "query": "how do i plot a learning curve to see if more data would help", "concept": "Learning curve", "mentionedIn": [] },
+    { "query": "gaussian mixture model vs kmeans, soft assignments", "concept": "Gaussian mixture model", "mentionedIn": [] },
+    { "query": "gradient descent, how does it find the minimum of the loss", "concept": "Gradient descent", "mentionedIn": ["logistic_regression"] },
+    { "query": "confusion matrix, whats in the four cells again", "concept": "Confusion matrix", "mentionedIn": ["accuracy", "model_evaluation"] },
+    { "query": "dbscan, does it need k like kmeans does", "concept": "DBSCAN", "mentionedIn": ["clustering", "outliers"] }
+  ],
+  "offTopic": [
+    "how do i make sourdough starter from scratch",
+    "write me a haiku about rain",
+    "whats the weather going to be in paris this weekend",
+    "explain the causes of world war one for my history essay",
+    "my check engine light is on, what does that usually mean for my car",
+    "translate where is the train station into japanese"
+  ],
+  "crossBot": [
+    { "query": "what does a dominant strategy mean in a payoff matrix", "bot": "game-theory-chat", "topicId": "dom_strat" },
+    { "query": "who was al khwarizmi and why is he famous", "bot": "golden-age-inquiry", "topicId": "al_khwarizmi" },
+    { "query": "what does the discount factor gamma do in reinforcement learning", "bot": "reinforcement-learning-chat", "topicId": "reward-return" },
+    { "query": "what is the rank of a matrix and how do i find it", "bot": "linear-algebra-chat", "topicId": "matrix-rank" },
+    { "query": "what is indexeddb good for in the browser", "bot": "web-platform-chat", "topicId": "indexeddb" },
+    { "query": "how do i design an auction so bidders reveal their true values", "bot": "game-theory-chat", "topicId": "mech_design" }
+  ],
+  "known": [
+    { "query": "precision vs recall again, which one is the one about false alarms", "topicId": "precision_recall" },
+    { "query": "f1, is it the average of precision and recall", "topicId": "f1_score" },
+    { "query": "roc curve, what does it actually plot", "topicId": "roc_auc" },
+    { "query": "how do i deal with NaNs in a dataframe before i model anything", "topicId": "missing_values" },
+    { "query": "whats a pandas dataframe basically", "topicId": "pandas" },
+    { "query": "why are numpy arrays so much faster than python lists for math", "topicId": "numpy" },
+    { "query": "bias variance tradeoff, underfit vs overfit, how do they trade off", "topicId": "bias_variance" },
+    { "query": "k fold cv, what does the k even do", "topicId": "cross_validation" },
+    { "query": "logit model with sigmoid for yes/no outcomes", "topicId": "logistic_regression" },
+    { "query": "i have 100 columns, how do i squash them down to a few with pca", "topicId": "pca" },
+    { "query": "data leakage, when test info sneaks into training", "topicId": "leakage" },
+    { "query": "ridge and lasso penalties, whats the point of them", "topicId": "regularization" },
+    { "query": "new csv just landed, what should i do first, eda?", "topicId": "eda" },
+    { "query": "scaling features so big ranges dont dominate knn-style distances", "topicId": "standardization" },
+    { "query": "boosting vs bagging, which one mainly reduces bias", "topicId": "ensemble" }
+  ],
+  "whQuestions": [
+    { "query": "what kind of mean is the f1 score", "topicId": "f1_score", "answerable": true, "evidence": "The F1 score is the harmonic mean of precision and recall" },
+    { "query": "what does calibration actually check for my probabilities", "topicId": "calibration", "answerable": true, "evidence": "Calibration asks whether predicted probabilities agree with observed frequencies" },
+    { "query": "how many clusters does k means need up front", "topicId": "kmeans", "answerable": true, "evidence": "K-means partitions $n$ points into $k$ clusters" },
+    { "query": "what split ratio is common for train and test", "topicId": "train_test_split", "answerable": true, "evidence": "A common split is 80/20 or 70/30" },
+    { "query": "who created pandas and what year", "topicId": "pandas", "answerable": false, "evidence": "" },
+    { "query": "what learning rate does xgboost use by default", "topicId": "ensemble", "answerable": false, "evidence": "" }
+  ],
+  "multiPart": [
+    { "query": "precision and f1, and also how they relate to recall, is f1 the mean of the two?", "topicIds": ["precision_recall", "f1_score"] },
+    { "query": "bias variance and overfitting, same thing or different? also which way is underfitting", "topicIds": ["bias_variance", "overfitting"] },
+    { "query": "pca, and also dimensionality reduction in general, is pca the only way?", "topicIds": ["pca", "dimensionality_reduction"] },
+    { "query": "scaling before kmeans, does that matter, and also what about standardization in general", "topicIds": ["standardization", "kmeans"] },
+    { "query": "k fold cross validation plus grouped cv for patient data, when do i need the grouped one", "topicIds": ["cross_validation", "grouped_validation"] },
+    { "query": "roc auc and also calibration, a model can rank well but still be off on probs right?", "topicIds": ["roc_auc", "calibration"] }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        { "user": "hi, is accuracy enough to judge a classifier?", "expect": { "topicId": "accuracy" } },
+        { "user": "and when most rows are negatives, which metric do i look at then", "expect": { "topicId": "precision_recall" } },
+        { "user": "does it need a threshold? how does roc deal with that", "expect": { "topicId": "roc_auc" } },
+        { "user": "what about bayesian optimization for tuning, is it better than grid search", "expect": { "unknown": true } },
+        { "user": "thanks! back to the roc, whats the diagonal line mean", "expect": { "topicId": "roc_auc" } }
+      ]
+    },
+    {
+      "turns": [
+        { "user": "yo what is k-means", "expect": { "topicId": "kmeans" } },
+        { "user": "how many iterations does it usually need", "expect": { "topicId": "kmeans" } },
+        { "user": "and spectral clustering, does that one need k too?", "expect": { "unknown": true } },
+        { "user": "fair, what's plain clustering even for", "expect": { "topicId": "clustering" } },
+        { "user": "hm ok, got it", "expect": { "social": true } }
+      ]
+    },
+    {
+      "turns": [
+        { "user": "hello there", "expect": { "social": true } },
+        { "user": "how does a random forest differ from a single decision tree", "expect": { "topicId": "ensemble" } },
+        { "user": "and the bagging part, is that what makes it stable", "expect": { "topicId": "ensemble" } },
+        { "user": "is random search any better than a grid, for tuning", "expect": { "unknown": true } },
+        { "user": "ok back to the forest, how many trees usually", "expect": { "topicId": "ensemble" } },
+        { "user": "cheers", "expect": { "social": true } }
+      ]
+    },
+    {
+      "turns": [
+        { "user": "start with eda on a new dataset, what do i do", "expect": { "topicId": "eda" } },
+        { "user": "and the outliers it finds, do i just drop them?", "expect": { "topicId": "outliers" } },
+        { "user": "what about missing values in those rows, is that the same thing", "expect": { "topicId": "missing_values" } },
+        { "user": "mean or median for imputing, which is more robust to outliers", "expect": { "topicId": "statistics" } },
+        { "user": "and k-fold for the cv part of the pipeline", "expect": { "topicId": "cross_validation" } },
+        { "user": "is a t-test on the cv scores enough to say model a beats model b", "expect": { "unknown": true } }
+      ]
+    }
+  ]
+}

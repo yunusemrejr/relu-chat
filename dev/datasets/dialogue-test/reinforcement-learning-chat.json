@@ -1,0 +1,419 @@
+{
+  "bot": "reinforcement-learning-chat",
+  "unknownConcepts": [
+    {
+      "query": "so monte carlo methods, do they wait till the whole run is finished before they update anything?",
+      "concept": "Monte Carlo methods",
+      "mentionedIn": []
+    },
+    {
+      "query": "how does policy iteration work, like the alternate eval and improve steps?",
+      "concept": "Policy iteration",
+      "mentionedIn": []
+    },
+    {
+      "query": "value iteration - is it just repeating the update over all cells until the numbers stop moving?",
+      "concept": "Value iteration",
+      "mentionedIn": []
+    },
+    {
+      "query": "whats ppo and why is everyone using it for llm stuff",
+      "concept": "Proximal policy optimization (PPO)",
+      "mentionedIn": []
+    },
+    {
+      "query": "thompson sampling for ad picking, how does it choose which ad to show",
+      "concept": "Thompson sampling",
+      "mentionedIn": []
+    },
+    {
+      "query": "how does UCB pick arms, is it optimism in the face of uncertainty",
+      "concept": "Upper confidence bound (UCB)",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is generalized advantage estimation, the lambda thing",
+      "concept": "Generalized advantage estimation (GAE)",
+      "mentionedIn": []
+    },
+    {
+      "query": "why do people add an entropy bonus to the policy loss, does it keep it from collapsing",
+      "concept": "Entropy bonus",
+      "mentionedIn": []
+    },
+    {
+      "query": "is model based planning better when real samples are expensive",
+      "concept": "Model-based reinforcement learning",
+      "mentionedIn": []
+    },
+    {
+      "query": "dqn, what's the deal with putting a neural net on the action values",
+      "concept": "Deep Q-network (DQN)",
+      "mentionedIn": [
+        "experience-replay"
+      ]
+    },
+    {
+      "query": "what does bootstrapping actually mean, is it the same as using the td target",
+      "concept": "Bootstrapping",
+      "mentionedIn": [
+        "termination-truncation"
+      ]
+    },
+    {
+      "query": "how big should a minibatch be when sampling from the buffer",
+      "concept": "Minibatch",
+      "mentionedIn": [
+        "experience-replay"
+      ]
+    }
+  ],
+  "offTopic": [
+    "whats a good banana bread recipe without eggs",
+    "can u help me write a cover letter for a barista job",
+    "who won the champions league last year",
+    "how do i stop my bike chain from squeaking",
+    "give me 3 tips for sleeping better when im stressed",
+    "translate where is the train station into spanish"
+  ],
+  "crossBot": [
+    {
+      "query": "wait what's a nash equilibrium, like when nobody wants to switch their move",
+      "bot": "game-theory-chat",
+      "topicId": "nash_eq"
+    },
+    {
+      "query": "why do two prisoners both snitch even though staying quiet would be better for both",
+      "bot": "game-theory-chat",
+      "topicId": "prisoners_dilemma"
+    },
+    {
+      "query": "who was al khwarizmi and why is the word algorithm tied to his name",
+      "bot": "golden-age-inquiry",
+      "topicId": "al_khwarizmi"
+    },
+    {
+      "query": "how does k means decide where the cluster centers start",
+      "bot": "data-science-chat",
+      "topicId": "kmeans"
+    },
+    {
+      "query": "what does a determinant of a 2x2 matrix tell me about area",
+      "bot": "linear-algebra-chat",
+      "topicId": "determinant"
+    },
+    {
+      "query": "my service worker isnt caching the offline page, should i store stuff in indexeddb instead",
+      "bot": "web-platform-chat",
+      "topicId": "indexeddb"
+    }
+  ],
+  "known": [
+    {
+      "query": "wat is reinforcement learning anyway, is it just supervised learning with rewards",
+      "topicId": "reinforcement-learning"
+    },
+    {
+      "query": "so what does the markov property actually mean, when is a state enough info",
+      "topicId": "markov-decision-process"
+    },
+    {
+      "query": "whats the difference between reward and return, i keep mixing them up",
+      "topicId": "reward-return"
+    },
+    {
+      "query": "epsilon greedy with 2 actions, whats the chance it picks the greedy one",
+      "topicId": "exploration-exploitation"
+    },
+    {
+      "query": "when is a bandit enough instead of a full sequential setup, like picking which answer format to show",
+      "topicId": "contextual-bandit"
+    },
+    {
+      "query": "value estimate of a cell near the goal, why isnt it always high?",
+      "topicId": "value-function"
+    },
+    {
+      "query": "bellman equation example with numbers? reward 2, next value 5, discount 0.9",
+      "topicId": "bellman-equation"
+    },
+    {
+      "query": "q learning update formula??",
+      "topicId": "q-learning"
+    },
+    {
+      "query": "cliff walking example, which one stays away from the edge while training, sarsa?",
+      "topicId": "sarsa"
+    },
+    {
+      "query": "how do u nudge action probabilities up from sampled outcomes, like the reinforce thing",
+      "topicId": "policy-gradient"
+    },
+    {
+      "query": "what is the critic actually doing in actor critic",
+      "topicId": "actor-critic"
+    },
+    {
+      "query": "why do people store old transitions in a buffer and sample them randomly",
+      "topicId": "experience-replay"
+    },
+    {
+      "query": "reward hacking example, like an agent gaming a proxy",
+      "topicId": "reward-shaping"
+    },
+    {
+      "query": "how do i evaluate my policy so the result isnt just the training reward",
+      "topicId": "rl-evaluation"
+    },
+    {
+      "query": "my sim stops at a time limit but the robot could keep going, is that termination or truncation",
+      "topicId": "termination-truncation"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "how many steps does the simulator run before it stops in the truncation example",
+      "topicId": "termination-truncation",
+      "answerable": true,
+      "evidence": "A simulator stops after 200 steps while the robot is moving: truncation."
+    },
+    {
+      "query": "how many rewards are in the return example and what discount did they use",
+      "topicId": "reward-return",
+      "answerable": true,
+      "evidence": "For rewards 1, 2, 3 and discount 0.5, the return is 1 + 0.5 × 2 + 0.25 × 3 = 2.75."
+    },
+    {
+      "query": "who came up with q learning originally",
+      "topicId": "q-learning",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "when was sarsa first published",
+      "topicId": "sarsa",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "how many seeds should i run before i trust the number",
+      "topicId": "rl-evaluation",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "what does a dqn buffer actually store for each transition",
+      "topicId": "experience-replay",
+      "answerable": true,
+      "evidence": "A DQN buffer stores state, action, reward, next state, and terminal status, then samples a minibatch."
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "ok so how do the mdp pieces (states, actions, transitions) connect to the discounted return? like what plugs into what",
+      "topicIds": [
+        "markov-decision-process",
+        "reward-return"
+      ]
+    },
+    {
+      "query": "compare q learning and sarsa, and also what does the bellman equation have to do with them",
+      "topicIds": [
+        "q-learning",
+        "sarsa",
+        "bellman-equation"
+      ]
+    },
+    {
+      "query": "is epsilon greedy basically the same as a contextual bandit? plus what does exploring even buy a bandit",
+      "topicIds": [
+        "exploration-exploitation",
+        "contextual-bandit"
+      ]
+    },
+    {
+      "query": "whats the difference between reinforce and actor critic, and why would the critic reduce variance",
+      "topicIds": [
+        "policy-gradient",
+        "actor-critic"
+      ]
+    },
+    {
+      "query": "does replay break on policy stuff? also how should i test a policy i trained with replay, on held out tasks",
+      "topicIds": [
+        "experience-replay",
+        "rl-evaluation"
+      ]
+    },
+    {
+      "query": "my agent gamed the shaped reward, and also im not sure if the time limit should count as terminal, plus what would the value function say about that",
+      "topicIds": [
+        "reward-shaping",
+        "termination-truncation",
+        "value-function"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "hey! quick q: whats policy gradient",
+          "expect": {
+            "topicId": "policy-gradient"
+          }
+        },
+        {
+          "user": "ok but does it need a baseline or can it work without one",
+          "expect": {
+            "topicId": "policy-gradient"
+          }
+        },
+        {
+          "user": "and does a trust region thing fix the collapse onto one action, like keeping updates small",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks, that helps!",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "switching gears. how does the bellman equation link value now to value later",
+          "expect": {
+            "topicId": "bellman-equation"
+          }
+        },
+        {
+          "user": "and that one, can u do the 0.9 example with numbers",
+          "expect": {
+            "topicId": "bellman-equation"
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hi there, what is an mdp",
+          "expect": {
+            "topicId": "markov-decision-process"
+          }
+        },
+        {
+          "user": "and what are its parts? like whats in the tuple",
+          "expect": {
+            "topicId": "markov-decision-process"
+          }
+        },
+        {
+          "user": "wait so how is that different from a bandit problem",
+          "expect": {
+            "topicId": "contextual-bandit"
+          }
+        },
+        {
+          "user": "and how does the bandit decide between trying new arms and sticking with the best one",
+          "expect": {
+            "topicId": "exploration-exploitation"
+          }
+        },
+        {
+          "user": "thx, that clears it up",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "ok last thing, how does multi agent rl work when the agents compete",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "yo rl noob question, is q-learning on policy?",
+          "expect": {
+            "topicId": "q-learning"
+          }
+        },
+        {
+          "user": "and sarsa? is that the one that's on policy",
+          "expect": {
+            "topicId": "sarsa"
+          }
+        },
+        {
+          "user": "ok so what about the replay buffer thing, does that break on policy",
+          "expect": {
+            "topicId": "experience-replay"
+          }
+        },
+        {
+          "user": "what about n-step td targets, are those the middle ground",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks!",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "and the last one, is reward shaping safe to use with replay",
+          "expect": {
+            "topicId": "reward-shaping"
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hey :)",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what's the difference between reinforcement learning and just supervised learning",
+          "expect": {
+            "topicId": "reinforcement-learning"
+          }
+        },
+        {
+          "user": "how do i check my agent isn't just overfitting to the training seeds",
+          "expect": {
+            "topicId": "rl-evaluation"
+          }
+        },
+        {
+          "user": "and that one, whats the usual way to report the spread across them",
+          "expect": {
+            "topicId": "rl-evaluation"
+          }
+        },
+        {
+          "user": "btw is a time limit the same as a terminal state",
+          "expect": {
+            "topicId": "termination-truncation"
+          }
+        },
+        {
+          "user": "and intrinsic motivation, like curiosity bonuses for the agent, is that a thing here",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    }
+  ]
+}

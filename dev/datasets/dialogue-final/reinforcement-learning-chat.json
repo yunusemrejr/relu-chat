@@ -1,0 +1,289 @@
+{
+  "bot": "reinforcement-learning-chat",
+  "unknownConcepts": [
+    {
+      "query": "How do Monte Carlo methods estimate values without a model of the environment?",
+      "concept": "Monte Carlo methods",
+      "mentionedIn": []
+    },
+    {
+      "query": "Is value iteration just repeated Bellman backups until the values stop changing?",
+      "concept": "value iteration",
+      "mentionedIn": []
+    },
+    {
+      "query": "What does Proximal Policy Optimization do differently from vanilla policy gradient?",
+      "concept": "Proximal Policy Optimization",
+      "mentionedIn": []
+    },
+    {
+      "query": "Is Thompson sampling actually better than epsilon-greedy for a bandit? Prove it.",
+      "concept": "Thompson sampling",
+      "mentionedIn": []
+    },
+    {
+      "query": "What are eligibility traces, and how do they speed up TD learning?",
+      "concept": "eligibility traces",
+      "mentionedIn": []
+    },
+    {
+      "query": "If I learn a model of the environment and plan with it, is that still reinforcement learning?",
+      "concept": "model-based reinforcement learning",
+      "mentionedIn": []
+    },
+    {
+      "query": "What is a DQN and how does it use its memory?",
+      "concept": "DQN",
+      "mentionedIn": [
+        "experience-replay"
+      ]
+    },
+    {
+      "query": "What exactly is bootstrapping in an update target?",
+      "concept": "bootstrapping",
+      "mentionedIn": [
+        "contextual-bandit",
+        "q-learning",
+        "termination-truncation"
+      ]
+    }
+  ],
+  "offTopic": [
+    "Can you book me a table for two at an Italian restaurant tonight?",
+    "What's the forecast for Istanbul this weekend?",
+    "Write a haiku about autumn rain.",
+    "Help me draft a polite email asking my landlord to fix the heater."
+  ],
+  "crossBot": [
+    {
+      "query": "What does the F1 score balance, and why is it a harmonic mean?",
+      "bot": "data-science-chat",
+      "topicId": "f1_score"
+    },
+    {
+      "query": "Is it actually true that rational players always defect in the prisoner's dilemma? Prove it.",
+      "bot": "game-theory-chat",
+      "topicId": "prisoners_dilemma"
+    },
+    {
+      "query": "Why not just use eigendecomposition instead of the SVD for a rectangular matrix?",
+      "bot": "linear-algebra-chat",
+      "topicId": "singular-value-decomposition"
+    },
+    {
+      "query": "I have a slow loop on my web page. Would a worker help keep the UI responsive?",
+      "bot": "web-platform-chat",
+      "topicId": "web-worker"
+    }
+  ],
+  "known": [
+    {
+      "query": "So reinforcement learning is basically learning from trying things and getting rewards, right?",
+      "topicId": "reinforcement-learning"
+    },
+    {
+      "query": "Define a Markov decision process and list its components.",
+      "topicId": "markov-decision-process"
+    },
+    {
+      "query": "Is a single step's reward the same thing as the return? Convince me.",
+      "topicId": "reward-return"
+    },
+    {
+      "query": "Why would an agent ever pick an action it thinks is worse, instead of always taking the best one it knows?",
+      "topicId": "exploration-exploitation"
+    },
+    {
+      "query": "How does a contextual bandit differ from a full RL problem where the states keep changing?",
+      "topicId": "contextual-bandit"
+    },
+    {
+      "query": "Is the state value function just the expected reward of the next step?",
+      "topicId": "value-function"
+    },
+    {
+      "query": "State the Bellman equation for a policy and explain each term.",
+      "topicId": "bellman-equation"
+    },
+    {
+      "query": "Why does Q-learning take the max over next actions? Why not the one I actually took?",
+      "topicId": "q-learning"
+    },
+    {
+      "query": "Can you explain REINFORCE in a simple way? I keep getting lost in the log-probability part.",
+      "topicId": "policy-gradient"
+    },
+    {
+      "query": "Why do we need a critic in actor-critic when REINFORCE already works?",
+      "topicId": "actor-critic"
+    },
+    {
+      "query": "What is an experience replay buffer for?",
+      "topicId": "experience-replay"
+    },
+    {
+      "query": "What is reward shaping, and why can it backfire?",
+      "topicId": "reward-shaping"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "What does a policy map in reinforcement learning?",
+      "topicId": "reinforcement-learning",
+      "answerable": true,
+      "evidence": "A policy maps a state to an action distribution"
+    },
+    {
+      "query": "Do the discounted return sums keep going forever in an episodic task?",
+      "topicId": "reward-return",
+      "answerable": true,
+      "evidence": "Finite episodic sums stop at termination."
+    },
+    {
+      "query": "Who first proposed Q-learning, and in which year was the original paper published?",
+      "topicId": "q-learning",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "What learning rate do people usually type in for SARSA? Just give me the number.",
+      "topicId": "sarsa",
+      "answerable": false,
+      "evidence": ""
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "How is SARSA different from Q-learning, and which one is on-policy?",
+      "topicIds": [
+        "sarsa",
+        "q-learning"
+      ]
+    },
+    {
+      "query": "How does the Bellman equation relate to the state value function?",
+      "topicIds": [
+        "bellman-equation",
+        "value-function"
+      ]
+    },
+    {
+      "query": "What happens to the return when an episode is truncated by a time limit rather than terminated?",
+      "topicIds": [
+        "reward-return",
+        "termination-truncation"
+      ]
+    },
+    {
+      "query": "Does the actor in actor-critic use the policy gradient, and what does the critic add?",
+      "topicIds": [
+        "policy-gradient",
+        "actor-critic"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "What is a Markov decision process?",
+          "expect": {
+            "topicId": "markov-decision-process"
+          }
+        },
+        {
+          "user": "Does it still work if the state leaves out the velocity?",
+          "expect": {
+            "topicId": "markov-decision-process"
+          }
+        },
+        {
+          "user": "Thanks, that makes sense.",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "And how is the discount applied to the rewards in those same steps?",
+          "expect": {
+            "topicId": "reward-return"
+          }
+        },
+        {
+          "user": "What about multi-agent setups where other learners also change the environment?",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "Could you explain Q-learning to me?",
+          "expect": {
+            "topicId": "q-learning"
+          }
+        },
+        {
+          "user": "Why does it use the max over the next action?",
+          "expect": {
+            "topicId": "q-learning"
+          }
+        },
+        {
+          "user": "Is SARSA the same thing with a different target?",
+          "expect": {
+            "topicId": "sarsa"
+          }
+        },
+        {
+          "user": "Is that the same as Monte Carlo control?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Okay, got it, thanks.",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "Why do we care about training reward versus test performance?",
+          "expect": {
+            "topicId": "rl-evaluation"
+          }
+        },
+        {
+          "user": "What does that mean for the held out tasks?",
+          "expect": {
+            "topicId": "rl-evaluation"
+          }
+        },
+        {
+          "user": "Then how do replay buffers fit into that picture?",
+          "expect": {
+            "topicId": "experience-replay"
+          }
+        },
+        {
+          "user": "Haha, that's a fun thought.",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "Would the same evaluation work for proximal policy optimization?",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    }
+  ]
+}

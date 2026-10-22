@@ -1,0 +1,139 @@
+{
+  "bot": "reinforcement-learning-chat",
+  "unknownConcepts": [
+    { "query": "what does bootstrapping mean in q-learning", "concept": "Bootstrapping", "mentionedIn": ["contextual-bandit", "q-learning", "termination-truncation"] },
+    { "query": "Explain DQN and how its replay works", "concept": "Deep Q-network (DQN)", "mentionedIn": ["experience-replay"] },
+    { "query": "tabular methods, how do they store values", "concept": "Tabular methods", "mentionedIn": ["q-learning"] },
+    { "query": "tell me about minibatch sampling", "concept": "Minibatch sampling", "mentionedIn": ["experience-replay"] },
+    { "query": "what is policy invariance for potential-based shaping", "concept": "Policy invariance", "mentionedIn": ["reward-shaping"] },
+    { "query": "Monte Carlo methods, how do they work?", "concept": "Monte Carlo methods", "mentionedIn": [] },
+    { "query": "explain value iteration", "concept": "Value iteration", "mentionedIn": [] },
+    { "query": "what is policy iteration", "concept": "Policy iteration", "mentionedIn": [] },
+    { "query": "how does proximal policy optimization (PPO) work", "concept": "Proximal policy optimization (PPO)", "mentionedIn": [] },
+    { "query": "tell me about upper confidence bound (UCB) action selection", "concept": "Upper confidence bound (UCB)", "mentionedIn": [] },
+    { "query": "Thompson sampling: how does it pick arms", "concept": "Thompson sampling", "mentionedIn": [] },
+    { "query": "what is importance sampling in RL", "concept": "Importance sampling", "mentionedIn": [] },
+    { "query": "partially observable MDPs, explain", "concept": "Partially observable MDPs (POMDPs)", "mentionedIn": [] },
+    { "query": "explain eligibility traces", "concept": "Eligibility traces", "mentionedIn": [] },
+    { "query": "how does inverse reinforcement learning work", "concept": "Inverse reinforcement learning", "mentionedIn": [] },
+    { "query": "imitation learning versus reinforcement learning", "concept": "Imitation learning", "mentionedIn": [] },
+    { "query": "multi-agent reinforcement learning, tell me about it", "concept": "Multi-agent reinforcement learning", "mentionedIn": [] },
+    { "query": "model-based RL, what's the idea", "concept": "Model-based reinforcement learning", "mentionedIn": [] },
+    { "query": "what is function approximation in RL", "concept": "Function approximation", "mentionedIn": [] },
+    { "query": "entropy regularization, why use it", "concept": "Entropy regularization", "mentionedIn": [] }
+  ],
+  "offTopic": [
+    "What's the weather like in Paris today?",
+    "Can you give me a recipe for banana bread?",
+    "Who won the football match last night?",
+    "Book me a table for two at an Italian restaurant tonight.",
+    "What's the latest gossip about that actor's divorce?",
+    "My girlfriend isn't texting me back, what should I do about our relationship?",
+    "What's a good workout routine to lose belly fat?",
+    "Which running shoes are best for flat feet?",
+    "Recommend a good sci-fi movie for the weekend.",
+    "How do I get a stain out of a white wool sweater?"
+  ],
+  "crossBot": [
+    { "query": "What is a Nash equilibrium?", "bot": "game-theory-chat", "topicId": "nash_eq" },
+    { "query": "Can you explain the prisoner's dilemma?", "bot": "game-theory-chat", "topicId": "prisoners_dilemma" },
+    { "query": "What is the Shapley value in cooperative games?", "bot": "game-theory-chat", "topicId": "shapley" },
+    { "query": "How does k-means clustering choose its centroids?", "bot": "data-science-chat", "topicId": "kmeans" },
+    { "query": "What is overfitting and how do I notice it?", "bot": "data-science-chat", "topicId": "overfitting" },
+    { "query": "What is an eigenvalue?", "bot": "linear-algebra-chat", "topicId": "eigenvalues-eigenvectors" },
+    { "query": "What is a service worker and why does it matter offline?", "bot": "web-platform-chat", "topicId": "service-worker" },
+    { "query": "Who was al-Khwarizmi?", "bot": "golden-age-inquiry", "topicId": "al_khwarizmi" }
+  ],
+  "known": [
+    { "query": "what is the bellman equaton", "topicId": "bellman-equation" },
+    { "query": "explain reinforcment learning in simple terms", "topicId": "reinforcement-learning" },
+    { "query": "how does q learning update its estimates", "topicId": "q-learning" },
+    { "query": "markov decsion process example with a grid world", "topicId": "markov-decision-process" },
+    { "query": "what's the formula for the discounted return", "topicId": "reward-return" },
+    { "query": "give me an example of reward and return with discount 0.5", "topicId": "reward-return" },
+    { "query": "epsilon greedy example with two actions", "topicId": "exploration-exploitation" },
+    { "query": "if my agent always picks the best known option, is it missing something", "topicId": "exploration-exploitation" },
+    { "query": "contextual bandt vs full rl, when do I use which", "topicId": "contextual-bandit" },
+    { "query": "what does a state value function estimate", "topicId": "value-function" },
+    { "query": "sarsa, the on policy td method", "topicId": "sarsa" },
+    { "query": "how does the reinforce update use sampled returns", "topicId": "policy-gradient" },
+    { "query": "actor critic advantage example with reward 1 and discount 0.9", "topicId": "actor-critic" },
+    { "query": "what's a replay buffer for", "topicId": "experience-replay" },
+    { "query": "why would my agent exploit a reward proxy and fail the real task", "topicId": "reward-shaping" },
+    { "query": "how should I test my rl policy on tasks it never trained on", "topicId": "rl-evaluation" },
+    { "query": "can I train an rl agent on a cpu in ten minutes", "topicId": "efficient-rl-on-a-laptop" },
+    { "query": "when the time limit cuts an episode short, is that the same as reaching the goal", "topicId": "termination-truncation" },
+    { "query": "what does the log probability term in the policy gradient do", "topicId": "policy-gradient" },
+    { "query": "Q value update formula with a learning rate", "topicId": "q-learning" }
+  ],
+  "whQuestions": [
+    { "query": "Who introduced Q-learning?", "topicId": "q-learning", "answerable": false, "evidence": "" },
+    { "query": "When was the Bellman equation first published?", "topicId": "bellman-equation", "answerable": false, "evidence": "" },
+    { "query": "Where does the robot go before attempting a delivery?", "topicId": "reinforcement-learning", "answerable": true, "evidence": "A robot may take a longer route now to reach a charging station before attempting a delivery." },
+    { "query": "How many rewards are used in the discounted return example?", "topicId": "reward-return", "answerable": true, "evidence": "For rewards 1, 2, 3 and discount 0.5, the return is 1 + 0.5 × 2 + 0.25 × 3 = 2.75." },
+    { "query": "When is a state considered Markov?", "topicId": "markov-decision-process", "answerable": true, "evidence": "A state is Markov when it contains the information needed to predict the next transition given the action." },
+    { "query": "Who proved that Q-learning converges?", "topicId": "q-learning", "answerable": false, "evidence": "" },
+    { "query": "How many actions does the epsilon-greedy example use?", "topicId": "exploration-exploitation", "answerable": true, "evidence": "With epsilon = 0.1 and two actions" },
+    { "query": "When does Q-learning leave out the bootstrap term?", "topicId": "q-learning", "answerable": true, "evidence": "At a true terminal state, omit the bootstrap term." },
+    { "query": "Who first used an experience replay buffer in a game?", "topicId": "experience-replay", "answerable": false, "evidence": "" },
+    { "query": "When should a bandit be preferred for small routing decisions?", "topicId": "contextual-bandit", "answerable": true, "evidence": "Use a bandit for small routing decisions and compare it against rules and supervised learning before adding complexity." }
+  ],
+  "multiPart": [
+    { "query": "What is a Markov decision process, and how does the discount factor fit in?", "topicIds": ["markov-decision-process", "reward-return"] },
+    { "query": "Can you explain SARSA and also Q-learning?", "topicIds": ["sarsa", "q-learning"] },
+    { "query": "Is actor-critic a kind of policy gradient, and what is a replay buffer for?", "topicIds": ["actor-critic", "policy-gradient", "experience-replay"] },
+    { "query": "What is a value function? Also, what does a Bellman equation say?", "topicIds": ["value-function", "bellman-equation"] },
+    { "query": "Compare exploration and exploitation with a contextual bandit.", "topicIds": ["exploration-exploitation", "contextual-bandit"] },
+    { "query": "How is termination different from truncation? Also, what is the return?", "topicIds": ["termination-truncation", "reward-return"] },
+    { "query": "What is reward shaping, as well as RL evaluation on held out tasks?", "topicIds": ["reward-shaping", "rl-evaluation"] },
+    { "query": "Give me a laptop-friendly RL setup, and also explain experience replay.", "topicIds": ["efficient-rl-on-a-laptop", "experience-replay"] }
+  ],
+  "conversations": [
+    { "turns": [
+      { "user": "hi there", "expect": { "social": true } },
+      { "user": "What is a Markov decision process?", "expect": { "topicId": "markov-decision-process" } },
+      { "user": "how does the discount factor fit into it?", "expect": { "topicId": "reward-return" } },
+      { "user": "give me an example of that", "expect": { "topicId": "reward-return" } },
+      { "user": "what about value iteration?", "expect": { "unknown": true } },
+      { "user": "thanks, that's all", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "hey", "expect": { "social": true } },
+      { "user": "explain epsilon greedy", "expect": { "topicId": "exploration-exploitation" } },
+      { "user": "why do we need it?", "expect": { "topicId": "exploration-exploitation" } },
+      { "user": "and how is that different from a bandit?", "expect": { "topicId": "contextual-bandit" } },
+      { "user": "what about thompson sampling?", "expect": { "unknown": true } },
+      { "user": "ok, back to the bandit: does it change future states?", "expect": { "topicId": "contextual-bandit" } }
+    ] },
+    { "turns": [
+      { "user": "q learning", "expect": { "topicId": "q-learning" } },
+      { "user": "is it on-policy?", "expect": { "topicId": "q-learning" } },
+      { "user": "and sarsa?", "expect": { "topicId": "sarsa" } },
+      { "user": "what does the cliff example show about it?", "expect": { "topicId": "sarsa" } },
+      { "user": "thank you", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "what is policy gradient", "expect": { "topicId": "policy-gradient" } },
+      { "user": "how does reinforce fit in?", "expect": { "topicId": "policy-gradient" } },
+      { "user": "what does the actor do there?", "expect": { "topicId": "actor-critic" } },
+      { "user": "what about deep Q-networks with a target network?", "expect": { "unknown": true } },
+      { "user": "bye", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "hello", "expect": { "social": true } },
+      { "user": "how do I evaluate my agent on held out tasks", "expect": { "topicId": "rl-evaluation" } },
+      { "user": "what about reward hacking", "expect": { "topicId": "reward-shaping" } },
+      { "user": "so is training reward alone enough?", "expect": { "topicId": "rl-evaluation" } },
+      { "user": "what is imitation learning?", "expect": { "unknown": true } },
+      { "user": "cool, thanks", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "good morning", "expect": { "social": true } },
+      { "user": "what's a reward versus a return?", "expect": { "topicId": "reward-return" } },
+      { "user": "and the formula for it?", "expect": { "topicId": "reward-return" } },
+      { "user": "how does a time limit change the target?", "expect": { "topicId": "termination-truncation" } },
+      { "user": "can you explain multi-agent reinforcement learning?", "expect": { "unknown": true } },
+      { "user": "great, see you", "expect": { "social": true } }
+    ] }
+  ]
+}

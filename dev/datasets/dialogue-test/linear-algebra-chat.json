@@ -1,0 +1,418 @@
+{
+  "bot": "linear-algebra-chat",
+  "unknownConcepts": [
+    {
+      "query": "how do i do gaussian elimination by hand, step by step",
+      "concept": "Gaussian elimination",
+      "mentionedIn": []
+    },
+    {
+      "query": "gram schmidt process, how does it make a set of directions orthonormal step by step",
+      "concept": "Gram-Schmidt process",
+      "mentionedIn": []
+    },
+    {
+      "query": "how do i compute the cross product of two 3d arrows",
+      "concept": "Cross product",
+      "mentionedIn": []
+    },
+    {
+      "query": "what's the trace of a square grid of numbers and why does anyone care",
+      "concept": "Trace",
+      "mentionedIn": []
+    },
+    {
+      "query": "what's jordan normal form for when a matrix won't diagonalize",
+      "concept": "Jordan normal form",
+      "mentionedIn": []
+    },
+    {
+      "query": "what does positive definite actually mean, is there a quick test for it",
+      "concept": "Positive definite",
+      "mentionedIn": []
+    },
+    {
+      "query": "cholesky decomposition, why is it faster than lu for solving stuff",
+      "concept": "Cholesky decomposition",
+      "mentionedIn": []
+    },
+    {
+      "query": "when is something diagonalizable, is it always possible",
+      "concept": "Diagonalization",
+      "mentionedIn": []
+    },
+    {
+      "query": "spectral theorem, what does it say about symmetric operators",
+      "concept": "Spectral theorem",
+      "mentionedIn": []
+    },
+    {
+      "query": "QR decomposition, why is it more stable than forming things directly",
+      "concept": "QR decomposition",
+      "mentionedIn": [
+        "least-squares"
+      ]
+    },
+    {
+      "query": "whats a pseudoinverse for a wide system, how do you even compute one",
+      "concept": "Pseudoinverse",
+      "mentionedIn": [
+        "singular-value-decomposition"
+      ]
+    },
+    {
+      "query": "whats the frobenius norm of a grid of numbers, is it the sum of squares",
+      "concept": "Frobenius norm",
+      "mentionedIn": [
+        "singular-value-decomposition"
+      ]
+    }
+  ],
+  "offTopic": [
+    "whats a good stretch routine for lower back pain",
+    "can u recommend a scifi book for a long flight",
+    "which budget espresso machine is worth it",
+    "write me a haiku about rain",
+    "how do i reset my router password",
+    "whats the capital of australia again"
+  ],
+  "crossBot": [
+    {
+      "query": "how does q learning let a robot learn to find its way through a maze",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "q-learning"
+    },
+    {
+      "query": "is there a nash equilibrium in rock paper scissors, like where nobody wants to switch",
+      "bot": "game-theory-chat",
+      "topicId": "nash_eq"
+    },
+    {
+      "query": "what was an astrolabe actually used for back in medieval times",
+      "bot": "golden-age-inquiry",
+      "topicId": "astrolabe"
+    },
+    {
+      "query": "how do decision trees pick the split for a node",
+      "bot": "data-science-chat",
+      "topicId": "decision_trees"
+    },
+    {
+      "query": "why does my page freeze when a loop runs, microtasks vs tasks",
+      "bot": "web-platform-chat",
+      "topicId": "event-loop"
+    },
+    {
+      "query": "why do two prisoners both snitch when staying quiet is better for both",
+      "bot": "game-theory-chat",
+      "topicId": "prisoners_dilemma"
+    }
+  ],
+  "known": [
+    {
+      "query": "what even is a vector, like beyond arrows",
+      "topicId": "vector"
+    },
+    {
+      "query": "dot product of (1,2) and (3,4)?",
+      "topicId": "dot-product"
+    },
+    {
+      "query": "does order matter when multiplying matrices? AB vs BA",
+      "topicId": "matrix-multiplication"
+    },
+    {
+      "query": "when are vectors redundant, like one is just a combo of the others",
+      "topicId": "linear-independence"
+    },
+    {
+      "query": "whats a basis, is it the same as a span",
+      "topicId": "basis-span"
+    },
+    {
+      "query": "rank of [[1,2],[2,4]]?",
+      "topicId": "matrix-rank"
+    },
+    {
+      "query": "what's the kernel of a matrix, the stuff that gets squashed to zero",
+      "topicId": "null-space"
+    },
+    {
+      "query": "solve x+y=3 and x-y=1 for me, how",
+      "topicId": "linear-system"
+    },
+    {
+      "query": "when is a matrix not invertible",
+      "topicId": "matrix-inverse"
+    },
+    {
+      "query": "determinant = signed area scaling, what does that mean for a 2x2",
+      "topicId": "determinant"
+    },
+    {
+      "query": "which directions does a matrix only stretch and not rotate, eigenvector stuff",
+      "topicId": "eigenvalues-eigenvectors"
+    },
+    {
+      "query": "project (3,4) onto the x axis, whats left over",
+      "topicId": "orthogonal-projection"
+    },
+    {
+      "query": "best fit line when the points dont all sit on one line, the usual method",
+      "topicId": "least-squares"
+    },
+    {
+      "query": "keep only the biggest singular value, what's the rank one approx",
+      "topicId": "singular-value-decomposition"
+    },
+    {
+      "query": "why does my solver give garbage even though the algebra is right, is it conditioning",
+      "topicId": "condition-number"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "how many solutions can ax = b have, is it always exactly one",
+      "topicId": "linear-system",
+      "answerable": true,
+      "evidence": "It can have no solution, one solution, or infinitely many."
+    },
+    {
+      "query": "which singular values do i keep for a best rank k approximation",
+      "topicId": "singular-value-decomposition",
+      "answerable": true,
+      "evidence": "Truncating to the largest k singular values gives a best rank-k approximation in spectral and Frobenius norms."
+    },
+    {
+      "query": "who invented least squares, was it gauss",
+      "topicId": "least-squares",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "when was the determinant first defined",
+      "topicId": "determinant",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "who proved the rank nullity theorem",
+      "topicId": "null-space",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "what's the 2 norm condition number of diag(1, 0.001)",
+      "topicId": "condition-number",
+      "answerable": true,
+      "evidence": "diag(1, 0.001) has 2-norm condition number 1000, so some small perturbations can be strongly amplified."
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "so if ax = b has infinitely many answers is that the null space showing up, and also when does a solution even exist",
+      "topicIds": [
+        "linear-system",
+        "null-space"
+      ]
+    },
+    {
+      "query": "dot product of (3,4) with itself vs the length of (3,4), are those related? and also the l1 norm of it",
+      "topicIds": [
+        "dot-product",
+        "vector-norm"
+      ]
+    },
+    {
+      "query": "how is the svd different from an eigendecomposition, and also do eigenvalues have to be real",
+      "topicIds": [
+        "singular-value-decomposition",
+        "eigenvalues-eigenvectors"
+      ]
+    },
+    {
+      "query": "projection onto a subspace vs least squares, theyre basically the same right? whats the residual in each",
+      "topicIds": [
+        "orthogonal-projection",
+        "least-squares"
+      ]
+    },
+    {
+      "query": "is a zero determinant the same as not invertible, and does a big condition number mean its close to singular",
+      "topicIds": [
+        "determinant",
+        "matrix-inverse",
+        "condition-number"
+      ]
+    },
+    {
+      "query": "a basis is independent and spans, right? what about a set of 4 vectors in R2, does that count",
+      "topicIds": [
+        "basis-span",
+        "linear-independence"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "hey! what's a dot product",
+          "expect": {
+            "topicId": "dot-product"
+          }
+        },
+        {
+          "user": "so if i scale one of them by 10 does the dot product go up too",
+          "expect": {
+            "topicId": "dot-product"
+          }
+        },
+        {
+          "user": "ok and what about the length of the vector, how's that computed",
+          "expect": {
+            "topicId": "vector-norm"
+          }
+        },
+        {
+          "user": "thanks, makes sense",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "is there a name for dividing a vector by its length so it's just direction?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "and that one, does it keep the direction the same",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hi, quick question on basis",
+          "expect": {
+            "topicId": "basis-span"
+          }
+        },
+        {
+          "user": "and does it have to be unique, like one way to write each vector?",
+          "expect": {
+            "topicId": "basis-span"
+          }
+        },
+        {
+          "user": "what about linear independence then, how is that different",
+          "expect": {
+            "topicId": "linear-independence"
+          }
+        },
+        {
+          "user": "lol ok. thx!",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "so is row echelon form how i find a basis from a messy set?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "and then whats the rank of those 4 vectors",
+          "expect": {
+            "topicId": "matrix-rank"
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "yo whats an svd",
+          "expect": {
+            "topicId": "singular-value-decomposition"
+          }
+        },
+        {
+          "user": "what does it do for low rank stuff",
+          "expect": {
+            "topicId": "singular-value-decomposition"
+          }
+        },
+        {
+          "user": "and how's that connected to least squares?",
+          "expect": {
+            "topicId": "least-squares"
+          }
+        },
+        {
+          "user": "does a kronecker product show up anywhere in svd stuff",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks, thats useful",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "and the condition number of that, is it just the ratio of the biggest to smallest singular value",
+          "expect": {
+            "topicId": "condition-number"
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hi! linear algebra newbie here",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what's a vector, like in the abstract sense",
+          "expect": {
+            "topicId": "vector"
+          }
+        },
+        {
+          "user": "and how does multiplying a matrix by a vector work",
+          "expect": {
+            "topicId": "matrix-multiplication"
+          }
+        },
+        {
+          "user": "and what's the eigenvector of that, if it's a 2x2 that just stretches",
+          "expect": {
+            "topicId": "eigenvalues-eigenvectors"
+          }
+        },
+        {
+          "user": "gotcha, thanks",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "is the hessian of that a thing for least squares",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    }
+  ]
+}

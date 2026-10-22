@@ -1,0 +1,600 @@
+{
+  "bot": "data-science-chat",
+  "unknownConcepts": [
+    {
+      "query": "what is gradient descent",
+      "concept": "gradient descent",
+      "mentionedIn": [
+        "logistic_regression"
+      ]
+    },
+    {
+      "query": "explain DBSCAN clustering",
+      "concept": "DBSCAN",
+      "mentionedIn": [
+        "clustering",
+        "outliers"
+      ]
+    },
+    {
+      "query": "what is a confusion matrix?",
+      "concept": "confusion matrix",
+      "mentionedIn": [
+        "model_evaluation",
+        "accuracy"
+      ]
+    },
+    {
+      "query": "tell me about elastic net",
+      "concept": "elastic net",
+      "mentionedIn": [
+        "regularization"
+      ]
+    },
+    {
+      "query": "how do autoencoders work",
+      "concept": "autoencoder",
+      "mentionedIn": [
+        "dimensionality_reduction"
+      ]
+    },
+    {
+      "query": "what is naive bayes classification",
+      "concept": "Naive Bayes",
+      "mentionedIn": []
+    },
+    {
+      "query": "how do Gaussian mixture models work?",
+      "concept": "Gaussian mixture models",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is log loss",
+      "concept": "log loss",
+      "mentionedIn": []
+    },
+    {
+      "query": "what does SMOTE do",
+      "concept": "SMOTE",
+      "mentionedIn": []
+    },
+    {
+      "query": "how is a confidence interval computed",
+      "concept": "confidence interval",
+      "mentionedIn": []
+    },
+    {
+      "query": "kernel density estimation example",
+      "concept": "kernel density estimation",
+      "mentionedIn": []
+    },
+    {
+      "query": "explain the law of large numbers",
+      "concept": "law of large numbers",
+      "mentionedIn": []
+    },
+    {
+      "query": "how does a chi-square test work?",
+      "concept": "chi-square test",
+      "mentionedIn": []
+    },
+    {
+      "query": "when do I use a t-test",
+      "concept": "t-test",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is an isolation forest",
+      "concept": "isolation forest",
+      "mentionedIn": []
+    },
+    {
+      "query": "how do I compute feature importance",
+      "concept": "feature importance",
+      "mentionedIn": []
+    },
+    {
+      "query": "what do class weights do?",
+      "concept": "class weights",
+      "mentionedIn": []
+    },
+    {
+      "query": "what does learning rate do?",
+      "concept": "learning rate",
+      "mentionedIn": []
+    },
+    {
+      "query": "what is random search for tuning",
+      "concept": "random search",
+      "mentionedIn": []
+    },
+    {
+      "query": "how do I interpret R-squared",
+      "concept": "R-squared",
+      "mentionedIn": []
+    }
+  ],
+  "offTopic": [
+    "Is it going to rain in London tomorrow?",
+    "What's a good workout routine for beginners?",
+    "Who won the tennis final in Melbourne this year?",
+    "Reserve a hotel room in Lisbon for next Thursday.",
+    "What's the best way to bake sourdough bread?",
+    "What did the singer announce at her concert last week?",
+    "Make me a landing page for my bakery with a contact form.",
+    "How long should I boil an egg for a soft yolk?",
+    "Where can I buy cheap flights to Tokyo?",
+    "What are some fun things to do on a rainy afternoon?"
+  ],
+  "crossBot": [
+    {
+      "query": "What is the Bellman equation?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "bellman-equation"
+    },
+    {
+      "query": "How is SARSA different from an off-policy method?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "sarsa"
+    },
+    {
+      "query": "What is a Markov decision process?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "markov-decision-process"
+    },
+    {
+      "query": "How do I compute the determinant of a 3x3 matrix?",
+      "bot": "linear-algebra-chat",
+      "topicId": "determinant"
+    },
+    {
+      "query": "What is singular value decomposition used for?",
+      "bot": "linear-algebra-chat",
+      "topicId": "singular-value-decomposition"
+    },
+    {
+      "query": "How does IndexedDB store data in the browser?",
+      "bot": "web-platform-chat",
+      "topicId": "indexeddb"
+    },
+    {
+      "query": "What is the event loop in JavaScript?",
+      "bot": "web-platform-chat",
+      "topicId": "event-loop"
+    },
+    {
+      "query": "What is Ibn al-Haytham known for?",
+      "bot": "golden-age-inquiry",
+      "topicId": "ibn_al_haytham"
+    }
+  ],
+  "known": [
+    {
+      "query": "whats a datafram in pandas",
+      "topicId": "pandas"
+    },
+    {
+      "query": "ndarray in numpy, what's it for",
+      "topicId": "numpy"
+    },
+    {
+      "query": "how do I handle NaN values in a column",
+      "topicId": "missing_values"
+    },
+    {
+      "query": "explain bayes theorem with an example",
+      "topicId": "probability"
+    },
+    {
+      "query": "precison and recall, what do they measure",
+      "topicId": "precision_recall"
+    },
+    {
+      "query": "how does k fold cv work",
+      "topicId": "cross_validation"
+    },
+    {
+      "query": "what is overfitting?",
+      "topicId": "overfitting"
+    },
+    {
+      "query": "a model too simple to capture the pattern, what's that called",
+      "topicId": "underfitting"
+    },
+    {
+      "query": "random forests and boosting, what are ensembles",
+      "topicId": "ensemble"
+    },
+    {
+      "query": "logit model for yes or no outcomes",
+      "topicId": "logistic_regression"
+    },
+    {
+      "query": "how does OLS fit a line",
+      "topicId": "linear_regression"
+    },
+    {
+      "query": "k means clustering centroids example",
+      "topicId": "kmeans"
+    },
+    {
+      "query": "principal component analysis for reducing dimensions",
+      "topicId": "pca"
+    },
+    {
+      "query": "example of data leakage in a pipeline",
+      "topicId": "leakage"
+    },
+    {
+      "query": "bais variance tradeoff explained",
+      "topicId": "bias_variance"
+    },
+    {
+      "query": "regularisation with L1 and L2 penalties",
+      "topicId": "regularization"
+    },
+    {
+      "query": "what are the mean, median and std used for in descriptive stats",
+      "topicId": "statistics"
+    },
+    {
+      "query": "z-score scaling vs min max, which one",
+      "topicId": "standardization"
+    },
+    {
+      "query": "how do I deploy a model to production",
+      "topicId": "deployment"
+    },
+    {
+      "query": "run a model in the browser with onnx",
+      "topicId": "browser_ml"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "How many parameters define a normal distribution?",
+      "topicId": "distributions",
+      "answerable": true,
+      "evidence": "defined by mean $\\mu$ and std $\\sigma$"
+    },
+    {
+      "query": "How many assumptions does OLS rely on under the Gauss-Markov setting?",
+      "topicId": "linear_regression",
+      "answerable": true,
+      "evidence": "linearity, exogeneity, homoscedasticity, no perfect multicollinearity"
+    },
+    {
+      "query": "Where is the F1 score widely used?",
+      "topicId": "f1_score",
+      "answerable": true,
+      "evidence": "F1 is widely used in Kaggle competitions and academic benchmarks for classification"
+    },
+    {
+      "query": "Where is Bayes' theorem used in practice?",
+      "topicId": "probability",
+      "answerable": true,
+      "evidence": "Powers Bayes' theorem for spam filtering, medical diagnosis, and A/B testing"
+    },
+    {
+      "query": "When should a log transform be applied before scaling?",
+      "topicId": "standardization",
+      "answerable": true,
+      "evidence": "For highly skewed data, log transform or Box-Cox transform can make distributions more symmetric before scaling"
+    },
+    {
+      "query": "Who invented the decision tree?",
+      "topicId": "decision_trees",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "Who first proposed the F1 score?",
+      "topicId": "f1_score",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "Who proved the central limit theorem?",
+      "topicId": "distributions",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "When did Pearson introduce the correlation coefficient?",
+      "topicId": "statistics",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "Who created the Box-Cox transform?",
+      "topicId": "standardization",
+      "answerable": false,
+      "evidence": ""
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "What is a random forest and how is it different from a decision tree?",
+      "topicIds": [
+        "ensemble",
+        "decision_trees"
+      ]
+    },
+    {
+      "query": "Explain precision and recall, and also what the F1 score does with them.",
+      "topicIds": [
+        "precision_recall",
+        "f1_score"
+      ]
+    },
+    {
+      "query": "What is k-means clustering, and how does PCA differ from it?",
+      "topicIds": [
+        "kmeans",
+        "pca"
+      ]
+    },
+    {
+      "query": "Compare overfitting and underfitting as well as the bias-variance tradeoff.",
+      "topicIds": [
+        "overfitting",
+        "underfitting",
+        "bias_variance"
+      ]
+    },
+    {
+      "query": "Does cross-validation help with data leakage, or is it the same as a train/test split?",
+      "topicIds": [
+        "cross_validation",
+        "leakage",
+        "train_test_split"
+      ]
+    },
+    {
+      "query": "Explain logistic regression and also tell me about regularization.",
+      "topicIds": [
+        "logistic_regression",
+        "regularization"
+      ]
+    },
+    {
+      "query": "How do outliers affect linear regression? Also explain feature scaling.",
+      "topicIds": [
+        "outliers",
+        "linear_regression",
+        "standardization"
+      ]
+    },
+    {
+      "query": "What is calibration, and how does dataset shift relate to it?",
+      "topicIds": [
+        "calibration",
+        "dataset_shift"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "hey",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what is model evaluation?",
+          "expect": {
+            "topicId": "model_evaluation"
+          }
+        },
+        {
+          "user": "give me an example of it",
+          "expect": {
+            "topicId": "model_evaluation"
+          }
+        },
+        {
+          "user": "what about log loss?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "cool, thanks",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hi",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "i need help with pandas",
+          "expect": {
+            "topicId": "pandas"
+          }
+        },
+        {
+          "user": "how do i select rows with a condition",
+          "expect": {
+            "topicId": "pandas"
+          }
+        },
+        {
+          "user": "and what's the difference with a numpy array",
+          "expect": {
+            "topicId": "numpy"
+          }
+        },
+        {
+          "user": "and is naive bayes any good for text?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "and what does logistic regression output?",
+          "expect": {
+            "topicId": "logistic_regression"
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "tell me about the bias variance tradeoff",
+          "expect": {
+            "topicId": "bias_variance"
+          }
+        },
+        {
+          "user": "what causes the variance part?",
+          "expect": {
+            "topicId": "bias_variance"
+          }
+        },
+        {
+          "user": "how does regularization help with that?",
+          "expect": {
+            "topicId": "regularization"
+          }
+        },
+        {
+          "user": "is there a random search option for tuning it?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "got it, thanks",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hello there",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what is pca",
+          "expect": {
+            "topicId": "pca"
+          }
+        },
+        {
+          "user": "how many components should I keep?",
+          "expect": {
+            "topicId": "pca"
+          }
+        },
+        {
+          "user": "what about manifold learning?",
+          "expect": {
+            "topicId": "dimensionality_reduction"
+          }
+        },
+        {
+          "user": "and what about kernel PCA?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "great, bye",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "how do I put a model into production?",
+          "expect": {
+            "topicId": "deployment"
+          }
+        },
+        {
+          "user": "is it possible to run it in the browser?",
+          "expect": {
+            "topicId": "browser_ml"
+          }
+        },
+        {
+          "user": "what about onnx",
+          "expect": {
+            "topicId": "browser_ml"
+          }
+        },
+        {
+          "user": "what about a Kubernetes cluster for serving?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "okay thanks, see ya",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "hey! quick question",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "what is the ROC curve?",
+          "expect": {
+            "topicId": "roc_auc"
+          }
+        },
+        {
+          "user": "and what does the AUC number mean?",
+          "expect": {
+            "topicId": "roc_auc"
+          }
+        },
+        {
+          "user": "what about the Brier score?",
+          "expect": {
+            "topicId": "calibration"
+          }
+        },
+        {
+          "user": "what does SMOTE do for imbalanced data?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "thanks a lot",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    }
+  ]
+}

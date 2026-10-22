@@ -1,0 +1,2392 @@
+{
+  "description": "Dialogue evaluation of the ReLU.chat inference layer in keyword-matching mode (no MiniLM download). Questions were written by separate models from topic lists, not taken from the knowledge text. The figures measure topic routing, honesty about coverage, cross-assistant routing and reference resolution; they do not measure the factual accuracy of the curated text. \"previous\" is the pipeline this layer replaced, run on the same questions.",
+  "metrics": {
+    "known": "Covered topic answered (first topic correct)",
+    "knownFalseAbstain": "Covered topic refused (\"I don't have notes…\") — lower is better",
+    "unknown": "Uncovered concept handled honestly",
+    "offTopic": "Everyday question given no topic answer",
+    "crossBot": "Routed to the assistant that covers it",
+    "crossBotHonest": "Other-assistant question not answered as if covered",
+    "wh": "Who/when/where/how-many: evidence shown, or absence stated",
+    "multiPart": "Every asked-about topic answered",
+    "turns": "Multi-turn expectations met (pronouns, ellipsis, social turns, unknowns)"
+  },
+  "generated": "2026-10-22",
+  "sets": {
+    "dialogue-eval": {
+      "about": "Development set: written by a separate model from the topic lists before the layer was built, then used to find and fix failures.",
+      "overall": {
+        "known": {
+          "current": {
+            "correct": 117,
+            "total": 120,
+            "rate": 0.975
+          },
+          "previous": {
+            "correct": 74,
+            "total": 120,
+            "rate": 0.6167
+          }
+        },
+        "knownFalseAbstain": {
+          "current": {
+            "correct": 0,
+            "total": 120,
+            "rate": 0
+          },
+          "previous": {
+            "correct": 28,
+            "total": 120,
+            "rate": 0.2333
+          }
+        },
+        "unknown": {
+          "current": {
+            "correct": 119,
+            "total": 120,
+            "rate": 0.9917
+          },
+          "previous": {
+            "correct": 66,
+            "total": 120,
+            "rate": 0.55
+          }
+        },
+        "offTopic": {
+          "current": {
+            "correct": 60,
+            "total": 60,
+            "rate": 1
+          },
+          "previous": {
+            "correct": 44,
+            "total": 60,
+            "rate": 0.7333
+          }
+        },
+        "crossBot": {
+          "current": {
+            "correct": 47,
+            "total": 48,
+            "rate": 0.9792
+          },
+          "previous": {
+            "correct": 0,
+            "total": 48,
+            "rate": 0
+          }
+        },
+        "crossBotHonest": {
+          "current": {
+            "correct": 48,
+            "total": 48,
+            "rate": 1
+          },
+          "previous": {
+            "correct": 15,
+            "total": 48,
+            "rate": 0.3125
+          }
+        },
+        "wh": {
+          "current": {
+            "correct": 49,
+            "total": 60,
+            "rate": 0.8167
+          },
+          "previous": {
+            "correct": 8,
+            "total": 60,
+            "rate": 0.1333
+          }
+        },
+        "multiPart": {
+          "current": {
+            "correct": 47,
+            "total": 48,
+            "rate": 0.9792
+          },
+          "previous": {
+            "correct": 8,
+            "total": 48,
+            "rate": 0.1667
+          }
+        },
+        "turns": {
+          "current": {
+            "correct": 192,
+            "total": 206,
+            "rate": 0.932
+          },
+          "previous": {
+            "correct": 130,
+            "total": 206,
+            "rate": 0.6311
+          }
+        }
+      },
+      "bots": {
+        "data-science-chat": {
+          "known": {
+            "current": {
+              "correct": 20,
+              "total": 20,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 13,
+              "total": 20,
+              "rate": 0.65
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 20,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 5,
+              "total": 20,
+              "rate": 0.25
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 20,
+              "total": 20,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 12,
+              "total": 20,
+              "rate": 0.6
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 10,
+              "total": 10,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 7,
+              "total": 10,
+              "rate": 0.7
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 8,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 8,
+              "rate": 0.375
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 7,
+              "total": 10,
+              "rate": 0.7
+            },
+            "previous": {
+              "correct": 2,
+              "total": 10,
+              "rate": 0.2
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 8,
+              "rate": 0
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 32,
+              "total": 33,
+              "rate": 0.9697
+            },
+            "previous": {
+              "correct": 22,
+              "total": 33,
+              "rate": 0.6667
+            }
+          }
+        },
+        "game-theory-chat": {
+          "known": {
+            "current": {
+              "correct": 19,
+              "total": 20,
+              "rate": 0.95
+            },
+            "previous": {
+              "correct": 14,
+              "total": 20,
+              "rate": 0.7
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 20,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 4,
+              "total": 20,
+              "rate": 0.2
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 19,
+              "total": 20,
+              "rate": 0.95
+            },
+            "previous": {
+              "correct": 9,
+              "total": 20,
+              "rate": 0.45
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 10,
+              "total": 10,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 8,
+              "total": 10,
+              "rate": 0.8
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 8,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 8,
+              "rate": 0.375
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 7,
+              "total": 10,
+              "rate": 0.7
+            },
+            "previous": {
+              "correct": 1,
+              "total": 10,
+              "rate": 0.1
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 8,
+              "rate": 0.25
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 29,
+              "total": 32,
+              "rate": 0.9063
+            },
+            "previous": {
+              "correct": 20,
+              "total": 32,
+              "rate": 0.625
+            }
+          }
+        },
+        "golden-age-inquiry": {
+          "known": {
+            "current": {
+              "correct": 20,
+              "total": 20,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 13,
+              "total": 20,
+              "rate": 0.65
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 20,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 6,
+              "total": 20,
+              "rate": 0.3
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 20,
+              "total": 20,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 11,
+              "total": 20,
+              "rate": 0.55
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 10,
+              "total": 10,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 9,
+              "total": 10,
+              "rate": 0.9
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 7,
+              "total": 8,
+              "rate": 0.875
+            },
+            "previous": {
+              "correct": 0,
+              "total": 8,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 8,
+              "rate": 0.375
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 8,
+              "total": 10,
+              "rate": 0.8
+            },
+            "previous": {
+              "correct": 0,
+              "total": 10,
+              "rate": 0
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 8,
+              "rate": 0.25
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 33,
+              "total": 36,
+              "rate": 0.9167
+            },
+            "previous": {
+              "correct": 22,
+              "total": 36,
+              "rate": 0.6111
+            }
+          }
+        },
+        "linear-algebra-chat": {
+          "known": {
+            "current": {
+              "correct": 20,
+              "total": 20,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 10,
+              "total": 20,
+              "rate": 0.5
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 20,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 1,
+              "total": 20,
+              "rate": 0.05
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 20,
+              "total": 20,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 7,
+              "total": 20,
+              "rate": 0.35
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 10,
+              "total": 10,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 7,
+              "total": 10,
+              "rate": 0.7
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 8,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 8,
+              "rate": 0.25
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 8,
+              "total": 10,
+              "rate": 0.8
+            },
+            "previous": {
+              "correct": 1,
+              "total": 10,
+              "rate": 0.1
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 8,
+              "rate": 0.25
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 32,
+              "total": 35,
+              "rate": 0.9143
+            },
+            "previous": {
+              "correct": 23,
+              "total": 35,
+              "rate": 0.6571
+            }
+          }
+        },
+        "reinforcement-learning-chat": {
+          "known": {
+            "current": {
+              "correct": 18,
+              "total": 20,
+              "rate": 0.9
+            },
+            "previous": {
+              "correct": 13,
+              "total": 20,
+              "rate": 0.65
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 20,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 3,
+              "total": 20,
+              "rate": 0.15
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 20,
+              "total": 20,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 10,
+              "total": 20,
+              "rate": 0.5
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 10,
+              "total": 10,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 5,
+              "total": 10,
+              "rate": 0.5
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 8,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 8,
+              "rate": 0.25
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 10,
+              "total": 10,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 10,
+              "rate": 0.3
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 7,
+              "total": 8,
+              "rate": 0.875
+            },
+            "previous": {
+              "correct": 1,
+              "total": 8,
+              "rate": 0.125
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 34,
+              "total": 34,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 19,
+              "total": 34,
+              "rate": 0.5588
+            }
+          }
+        },
+        "web-platform-chat": {
+          "known": {
+            "current": {
+              "correct": 20,
+              "total": 20,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 11,
+              "total": 20,
+              "rate": 0.55
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 20,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 9,
+              "total": 20,
+              "rate": 0.45
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 20,
+              "total": 20,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 17,
+              "total": 20,
+              "rate": 0.85
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 10,
+              "total": 10,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 8,
+              "total": 10,
+              "rate": 0.8
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 8,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 8,
+              "rate": 0.25
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 9,
+              "total": 10,
+              "rate": 0.9
+            },
+            "previous": {
+              "correct": 1,
+              "total": 10,
+              "rate": 0.1
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 1,
+              "total": 8,
+              "rate": 0.125
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 32,
+              "total": 36,
+              "rate": 0.8889
+            },
+            "previous": {
+              "correct": 24,
+              "total": 36,
+              "rate": 0.6667
+            }
+          }
+        }
+      }
+    },
+    "dialogue-test": {
+      "firstRun": {
+        "note": "Blind first run on 2026-10-22, before any change prompted by this set (percentages).",
+        "current": {
+          "known": 86.7,
+          "knownFalseAbstain": 11.1,
+          "unknown": 94.4,
+          "offTopic": 91.7,
+          "crossBot": 80.6,
+          "crossBotHonest": 97.2,
+          "wh": 69.4,
+          "multiPart": 69.4,
+          "turns": 79.7
+        },
+        "previous": {
+          "known": 67.8,
+          "knownFalseAbstain": 27.8,
+          "unknown": 79.2,
+          "offTopic": 69.4,
+          "crossBot": 0,
+          "crossBotHonest": 61.1,
+          "wh": 13.9,
+          "multiPart": 47.2,
+          "turns": 59.4
+        }
+      },
+      "about": "Held-out set in casual chat style (typos, slang). Its first run was recorded before any change; afterwards it was used to diagnose general failure causes, so the current figures are no longer blind.",
+      "overall": {
+        "known": {
+          "current": {
+            "correct": 82,
+            "total": 90,
+            "rate": 0.9111
+          },
+          "previous": {
+            "correct": 61,
+            "total": 90,
+            "rate": 0.6778
+          }
+        },
+        "knownFalseAbstain": {
+          "current": {
+            "correct": 1,
+            "total": 90,
+            "rate": 0.0111
+          },
+          "previous": {
+            "correct": 25,
+            "total": 90,
+            "rate": 0.2778
+          }
+        },
+        "unknown": {
+          "current": {
+            "correct": 69,
+            "total": 72,
+            "rate": 0.9583
+          },
+          "previous": {
+            "correct": 57,
+            "total": 72,
+            "rate": 0.7917
+          }
+        },
+        "offTopic": {
+          "current": {
+            "correct": 34,
+            "total": 36,
+            "rate": 0.9444
+          },
+          "previous": {
+            "correct": 25,
+            "total": 36,
+            "rate": 0.6944
+          }
+        },
+        "crossBot": {
+          "current": {
+            "correct": 30,
+            "total": 36,
+            "rate": 0.8333
+          },
+          "previous": {
+            "correct": 0,
+            "total": 36,
+            "rate": 0
+          }
+        },
+        "crossBotHonest": {
+          "current": {
+            "correct": 34,
+            "total": 36,
+            "rate": 0.9444
+          },
+          "previous": {
+            "correct": 22,
+            "total": 36,
+            "rate": 0.6111
+          }
+        },
+        "wh": {
+          "current": {
+            "correct": 25,
+            "total": 36,
+            "rate": 0.6944
+          },
+          "previous": {
+            "correct": 5,
+            "total": 36,
+            "rate": 0.1389
+          }
+        },
+        "multiPart": {
+          "current": {
+            "correct": 31,
+            "total": 36,
+            "rate": 0.8611
+          },
+          "previous": {
+            "correct": 17,
+            "total": 36,
+            "rate": 0.4722
+          }
+        },
+        "turns": {
+          "current": {
+            "correct": 110,
+            "total": 138,
+            "rate": 0.7971
+          },
+          "previous": {
+            "correct": 82,
+            "total": 138,
+            "rate": 0.5942
+          }
+        }
+      },
+      "bots": {
+        "data-science-chat": {
+          "known": {
+            "current": {
+              "correct": 15,
+              "total": 15,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 11,
+              "total": 15,
+              "rate": 0.7333
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 15,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 3,
+              "total": 15,
+              "rate": 0.2
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 11,
+              "total": 12,
+              "rate": 0.9167
+            },
+            "previous": {
+              "correct": 10,
+              "total": 12,
+              "rate": 0.8333
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 6,
+              "rate": 0.5
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 3,
+              "total": 6,
+              "rate": 0.5
+            },
+            "previous": {
+              "correct": 0,
+              "total": 6,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 1,
+              "total": 6,
+              "rate": 0.1667
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 4,
+              "total": 6,
+              "rate": 0.6667
+            },
+            "previous": {
+              "correct": 2,
+              "total": 6,
+              "rate": 0.3333
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 6,
+              "rate": 0.5
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 18,
+              "total": 22,
+              "rate": 0.8182
+            },
+            "previous": {
+              "correct": 11,
+              "total": 22,
+              "rate": 0.5
+            }
+          }
+        },
+        "game-theory-chat": {
+          "known": {
+            "current": {
+              "correct": 10,
+              "total": 15,
+              "rate": 0.6667
+            },
+            "previous": {
+              "correct": 5,
+              "total": 15,
+              "rate": 0.3333
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 15,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 10,
+              "total": 15,
+              "rate": 0.6667
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 10,
+              "total": 12,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 9,
+              "total": 12,
+              "rate": 0.75
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 3,
+              "total": 6,
+              "rate": 0.5
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 6,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 4,
+              "total": 6,
+              "rate": 0.6667
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 4,
+              "total": 6,
+              "rate": 0.6667
+            },
+            "previous": {
+              "correct": 0,
+              "total": 6,
+              "rate": 0
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 6,
+              "rate": 0.3333
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 18,
+              "total": 21,
+              "rate": 0.8571
+            },
+            "previous": {
+              "correct": 16,
+              "total": 21,
+              "rate": 0.7619
+            }
+          }
+        },
+        "golden-age-inquiry": {
+          "known": {
+            "current": {
+              "correct": 15,
+              "total": 15,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 12,
+              "total": 15,
+              "rate": 0.8
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 15,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 3,
+              "total": 15,
+              "rate": 0.2
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 12,
+              "total": 12,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 9,
+              "total": 12,
+              "rate": 0.75
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 4,
+              "total": 6,
+              "rate": 0.6667
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 0,
+              "total": 6,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 3,
+              "total": 6,
+              "rate": 0.5
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 4,
+              "total": 6,
+              "rate": 0.6667
+            },
+            "previous": {
+              "correct": 0,
+              "total": 6,
+              "rate": 0
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 17,
+              "total": 23,
+              "rate": 0.7391
+            },
+            "previous": {
+              "correct": 13,
+              "total": 23,
+              "rate": 0.5652
+            }
+          }
+        },
+        "linear-algebra-chat": {
+          "known": {
+            "current": {
+              "correct": 13,
+              "total": 15,
+              "rate": 0.8667
+            },
+            "previous": {
+              "correct": 11,
+              "total": 15,
+              "rate": 0.7333
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 1,
+              "total": 15,
+              "rate": 0.0667
+            },
+            "previous": {
+              "correct": 1,
+              "total": 15,
+              "rate": 0.0667
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 12,
+              "total": 12,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 8,
+              "total": 12,
+              "rate": 0.6667
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 0,
+              "total": 6,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 4,
+              "total": 6,
+              "rate": 0.6667
+            },
+            "previous": {
+              "correct": 0,
+              "total": 6,
+              "rate": 0
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 3,
+              "total": 6,
+              "rate": 0.5
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 18,
+              "total": 24,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 14,
+              "total": 24,
+              "rate": 0.5833
+            }
+          }
+        },
+        "reinforcement-learning-chat": {
+          "known": {
+            "current": {
+              "correct": 15,
+              "total": 15,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 11,
+              "total": 15,
+              "rate": 0.7333
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 15,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 4,
+              "total": 15,
+              "rate": 0.2667
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 12,
+              "total": 12,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 10,
+              "total": 12,
+              "rate": 0.8333
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 0,
+              "total": 6,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 6,
+              "rate": 0.3333
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 5,
+              "total": 6,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 2,
+              "total": 6,
+              "rate": 0.3333
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 19,
+              "total": 24,
+              "rate": 0.7917
+            },
+            "previous": {
+              "correct": 14,
+              "total": 24,
+              "rate": 0.5833
+            }
+          }
+        },
+        "web-platform-chat": {
+          "known": {
+            "current": {
+              "correct": 14,
+              "total": 15,
+              "rate": 0.9333
+            },
+            "previous": {
+              "correct": 11,
+              "total": 15,
+              "rate": 0.7333
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 15,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 4,
+              "total": 15,
+              "rate": 0.2667
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 12,
+              "total": 12,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 11,
+              "total": 12,
+              "rate": 0.9167
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 4,
+              "total": 6,
+              "rate": 0.6667
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 6,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 6,
+              "total": 6,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 4,
+              "total": 6,
+              "rate": 0.6667
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 3,
+              "total": 6,
+              "rate": 0.5
+            },
+            "previous": {
+              "correct": 1,
+              "total": 6,
+              "rate": 0.1667
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 4,
+              "total": 6,
+              "rate": 0.6667
+            },
+            "previous": {
+              "correct": 2,
+              "total": 6,
+              "rate": 0.3333
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 20,
+              "total": 24,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 14,
+              "total": 24,
+              "rate": 0.5833
+            }
+          }
+        }
+      }
+    },
+    "dialogue-final": {
+      "firstRun": {
+        "note": "Blind single scoring on 2026-10-22 after the layer was frozen (percentages). Its three refusals all came from short follow-up requests in the same message (\"Convince me.\") being judged as separate questions; that defect was then fixed, so the overall figures below are a re-run and no longer blind.",
+        "current": {
+          "known": 86.1,
+          "knownFalseAbstain": 4.2,
+          "unknown": 87.5,
+          "offTopic": 95.8,
+          "crossBot": 91.7,
+          "crossBotHonest": 95.8,
+          "wh": 83.3,
+          "multiPart": 91.7,
+          "turns": 74.4
+        },
+        "previous": {
+          "known": 52.8,
+          "knownFalseAbstain": 29.2,
+          "unknown": 52.1,
+          "offTopic": 70.8,
+          "crossBot": 0,
+          "crossBotHonest": 58.3,
+          "wh": 33.3,
+          "multiPart": 16.7,
+          "turns": 61.1
+        }
+      },
+      "about": "Final set written after the layer was frozen, in three voices (exam student, skeptical expert, beginner). Scored once; never used for tuning.",
+      "overall": {
+        "known": {
+          "current": {
+            "correct": 62,
+            "total": 72,
+            "rate": 0.8611
+          },
+          "previous": {
+            "correct": 38,
+            "total": 72,
+            "rate": 0.5278
+          }
+        },
+        "knownFalseAbstain": {
+          "current": {
+            "correct": 0,
+            "total": 72,
+            "rate": 0
+          },
+          "previous": {
+            "correct": 21,
+            "total": 72,
+            "rate": 0.2917
+          }
+        },
+        "unknown": {
+          "current": {
+            "correct": 42,
+            "total": 48,
+            "rate": 0.875
+          },
+          "previous": {
+            "correct": 25,
+            "total": 48,
+            "rate": 0.5208
+          }
+        },
+        "offTopic": {
+          "current": {
+            "correct": 23,
+            "total": 24,
+            "rate": 0.9583
+          },
+          "previous": {
+            "correct": 17,
+            "total": 24,
+            "rate": 0.7083
+          }
+        },
+        "crossBot": {
+          "current": {
+            "correct": 22,
+            "total": 24,
+            "rate": 0.9167
+          },
+          "previous": {
+            "correct": 0,
+            "total": 24,
+            "rate": 0
+          }
+        },
+        "crossBotHonest": {
+          "current": {
+            "correct": 23,
+            "total": 24,
+            "rate": 0.9583
+          },
+          "previous": {
+            "correct": 14,
+            "total": 24,
+            "rate": 0.5833
+          }
+        },
+        "wh": {
+          "current": {
+            "correct": 20,
+            "total": 24,
+            "rate": 0.8333
+          },
+          "previous": {
+            "correct": 8,
+            "total": 24,
+            "rate": 0.3333
+          }
+        },
+        "multiPart": {
+          "current": {
+            "correct": 22,
+            "total": 24,
+            "rate": 0.9167
+          },
+          "previous": {
+            "correct": 4,
+            "total": 24,
+            "rate": 0.1667
+          }
+        },
+        "turns": {
+          "current": {
+            "correct": 67,
+            "total": 90,
+            "rate": 0.7444
+          },
+          "previous": {
+            "correct": 55,
+            "total": 90,
+            "rate": 0.6111
+          }
+        }
+      },
+      "bots": {
+        "data-science-chat": {
+          "known": {
+            "current": {
+              "correct": 8,
+              "total": 12,
+              "rate": 0.6667
+            },
+            "previous": {
+              "correct": 3,
+              "total": 12,
+              "rate": 0.25
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 12,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 5,
+              "total": 12,
+              "rate": 0.4167
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 7,
+              "total": 8,
+              "rate": 0.875
+            },
+            "previous": {
+              "correct": 3,
+              "total": 8,
+              "rate": 0.375
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 9,
+              "total": 15,
+              "rate": 0.6
+            },
+            "previous": {
+              "correct": 8,
+              "total": 15,
+              "rate": 0.5333
+            }
+          }
+        },
+        "game-theory-chat": {
+          "known": {
+            "current": {
+              "correct": 11,
+              "total": 12,
+              "rate": 0.9167
+            },
+            "previous": {
+              "correct": 8,
+              "total": 12,
+              "rate": 0.6667
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 12,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 3,
+              "total": 12,
+              "rate": 0.25
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 5,
+              "total": 8,
+              "rate": 0.625
+            },
+            "previous": {
+              "correct": 3,
+              "total": 8,
+              "rate": 0.375
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 9,
+              "total": 15,
+              "rate": 0.6
+            },
+            "previous": {
+              "correct": 7,
+              "total": 15,
+              "rate": 0.4667
+            }
+          }
+        },
+        "golden-age-inquiry": {
+          "known": {
+            "current": {
+              "correct": 11,
+              "total": 12,
+              "rate": 0.9167
+            },
+            "previous": {
+              "correct": 6,
+              "total": 12,
+              "rate": 0.5
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 12,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 5,
+              "total": 12,
+              "rate": 0.4167
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 5,
+              "total": 8,
+              "rate": 0.625
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 12,
+              "total": 15,
+              "rate": 0.8
+            },
+            "previous": {
+              "correct": 9,
+              "total": 15,
+              "rate": 0.6
+            }
+          }
+        },
+        "linear-algebra-chat": {
+          "known": {
+            "current": {
+              "correct": 11,
+              "total": 12,
+              "rate": 0.9167
+            },
+            "previous": {
+              "correct": 5,
+              "total": 12,
+              "rate": 0.4167
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 12,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 2,
+              "total": 12,
+              "rate": 0.1667
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 7,
+              "total": 8,
+              "rate": 0.875
+            },
+            "previous": {
+              "correct": 3,
+              "total": 8,
+              "rate": 0.375
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 1,
+              "total": 4,
+              "rate": 0.25
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 11,
+              "total": 15,
+              "rate": 0.7333
+            },
+            "previous": {
+              "correct": 11,
+              "total": 15,
+              "rate": 0.7333
+            }
+          }
+        },
+        "reinforcement-learning-chat": {
+          "known": {
+            "current": {
+              "correct": 11,
+              "total": 12,
+              "rate": 0.9167
+            },
+            "previous": {
+              "correct": 10,
+              "total": 12,
+              "rate": 0.8333
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 12,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 1,
+              "total": 12,
+              "rate": 0.0833
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 7,
+              "total": 8,
+              "rate": 0.875
+            },
+            "previous": {
+              "correct": 4,
+              "total": 8,
+              "rate": 0.5
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 2,
+              "total": 4,
+              "rate": 0.5
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 12,
+              "total": 15,
+              "rate": 0.8
+            },
+            "previous": {
+              "correct": 12,
+              "total": 15,
+              "rate": 0.8
+            }
+          }
+        },
+        "web-platform-chat": {
+          "known": {
+            "current": {
+              "correct": 10,
+              "total": 12,
+              "rate": 0.8333
+            },
+            "previous": {
+              "correct": 6,
+              "total": 12,
+              "rate": 0.5
+            }
+          },
+          "knownFalseAbstain": {
+            "current": {
+              "correct": 0,
+              "total": 12,
+              "rate": 0
+            },
+            "previous": {
+              "correct": 5,
+              "total": 12,
+              "rate": 0.4167
+            }
+          },
+          "unknown": {
+            "current": {
+              "correct": 8,
+              "total": 8,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 7,
+              "total": 8,
+              "rate": 0.875
+            }
+          },
+          "offTopic": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            }
+          },
+          "crossBot": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "crossBotHonest": {
+            "current": {
+              "correct": 4,
+              "total": 4,
+              "rate": 1
+            },
+            "previous": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            }
+          },
+          "wh": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "multiPart": {
+            "current": {
+              "correct": 3,
+              "total": 4,
+              "rate": 0.75
+            },
+            "previous": {
+              "correct": 0,
+              "total": 4,
+              "rate": 0
+            }
+          },
+          "turns": {
+            "current": {
+              "correct": 14,
+              "total": 15,
+              "rate": 0.9333
+            },
+            "previous": {
+              "correct": 8,
+              "total": 15,
+              "rate": 0.5333
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,289 @@
+{
+  "bot": "golden-age-inquiry",
+  "unknownConcepts": [
+    {
+      "query": "Please describe the historical method of al-Tabari and his main contribution to Islamic history writing.",
+      "concept": "Al-Tabari",
+      "mentionedIn": []
+    },
+    {
+      "query": "My teacher said a man named al-Kashi calculated pi super precisely. How did he do that?",
+      "concept": "Al-Kashi",
+      "mentionedIn": []
+    },
+    {
+      "query": "What did Ibn Yunus record in his astronomical tables, and how were they used?",
+      "concept": "Ibn Yunus",
+      "mentionedIn": []
+    },
+    {
+      "query": "Is al-Jahiz zoology actually scientific by modern standards? Show me his method.",
+      "concept": "Al-Jahiz",
+      "mentionedIn": []
+    },
+    {
+      "query": "How did al-Khazini's Balance of Wisdom describe the mechanics of weights?",
+      "concept": "Al-Khazini",
+      "mentionedIn": []
+    },
+    {
+      "query": "What did Ibn al-Baytar write about plants used as medicine?",
+      "concept": "Ibn al-Baytar",
+      "mentionedIn": []
+    },
+    {
+      "query": "Did Ibn al-Haytham really rely on Euclid's Elements, or did he go beyond it?",
+      "concept": "Euclid's Elements",
+      "mentionedIn": [
+        "ibn_al_haytham",
+        "thabit_ibn_qurra"
+      ]
+    },
+    {
+      "query": "How does Ptolemy's Almagest compare with the astronomy of the Maragha tradition?",
+      "concept": "Almagest",
+      "mentionedIn": [
+        "astronomy",
+        "ibn_al_shatir"
+      ]
+    }
+  ],
+  "offTopic": [
+    "Can you help me debug my React component's useEffect that keeps looping?",
+    "What's a good stretching routine for lower back pain?",
+    "Can you set a reminder on my phone for my exam at 9am?",
+    "Please write a limerick about my cat."
+  ],
+  "crossBot": [
+    {
+      "query": "What is a Markov decision process, formally?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "markov-decision-process"
+    },
+    {
+      "query": "Explain eigenvalues and eigenvectors in terms of the directions a matrix stretches.",
+      "bot": "linear-algebra-chat",
+      "topicId": "eigenvalues-eigenvectors"
+    },
+    {
+      "query": "How does a service worker decide which cached response to return?",
+      "bot": "web-platform-chat",
+      "topicId": "cache-strategies"
+    },
+    {
+      "query": "What is the Shapley value and how is it computed for coalition games?",
+      "bot": "game-theory-chat",
+      "topicId": "shapley"
+    }
+  ],
+  "known": [
+    {
+      "query": "Which institution in Abbasid Baghdad housed the large translation project?",
+      "topicId": "house_of_wisdom"
+    },
+    {
+      "query": "Who was Al-Khwarizmi and why is he important to algebra?",
+      "topicId": "al_khwarizmi"
+    },
+    {
+      "query": "Is it true that Alhazen founded experimental optics? Show me how he tested his claims.",
+      "topicId": "ibn_al_haytham"
+    },
+    {
+      "query": "What was the big medical book Avicenna wrote that everyone used?",
+      "topicId": "canon_of_medicine"
+    },
+    {
+      "query": "Who discovered pulmonary circulation, and did William Harvey really get there first?",
+      "topicId": "ibn_al_nafis"
+    },
+    {
+      "query": "How did an astrolabe help people solve problems about time and the position of stars?",
+      "topicId": "astrolabe"
+    },
+    {
+      "query": "What was the translation movement in Abbasid times, and which languages were translated?",
+      "topicId": "translation_movement"
+    },
+    {
+      "query": "What were al-Biruni's main contributions to geography?",
+      "topicId": "al_biruni"
+    },
+    {
+      "query": "Why do historians call Ibn Khaldun the father of historiography?",
+      "topicId": "ibn_khaldun"
+    },
+    {
+      "query": "Did Al-Jazari really build programmable machines? Prove it with a real example.",
+      "topicId": "al_jazari"
+    },
+    {
+      "query": "How did papermaking reach the Islamic world and then Europe?",
+      "topicId": "paper_making"
+    },
+    {
+      "query": "Didn't Snell discover refraction? Why do you credit Ibn Sahl with it?",
+      "topicId": "ibn_sahl"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "Which Persian polymath founded the Maragha Observatory?",
+      "topicId": "nasir_al_din_tusi",
+      "answerable": true,
+      "evidence": "Persian polymath who founded the Maragha Observatory and developed the Tusi couple, influencing Copernican astronomy."
+    },
+    {
+      "query": "What is the Canon of Medicine?",
+      "topicId": "canon_of_medicine",
+      "answerable": true,
+      "evidence": "medical encyclopedia that systematized all known medical knowledge and remained authoritative for six centuries."
+    },
+    {
+      "query": "Did Ibn al-Nafis discover pulmonary circulation before William Harvey?",
+      "topicId": "ibn_al_nafis",
+      "answerable": true,
+      "evidence": "Arab physician who discovered pulmonary circulation 300 years before William Harvey."
+    },
+    {
+      "query": "What was the population of Baghdad around 900 CE?",
+      "topicId": "house_of_wisdom",
+      "answerable": false,
+      "evidence": ""
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "How did al-Karaji and al-Samawal each advance the arithmetization of algebra and polynomial techniques?",
+      "topicIds": [
+        "al_karaji",
+        "al_samawal"
+      ]
+    },
+    {
+      "query": "What did Nasir al-Din al-Tusi contribute to the Maragha school of astronomers?",
+      "topicIds": [
+        "nasir_al_din_tusi",
+        "maragha_school"
+      ]
+    },
+    {
+      "query": "How does Ibn Sina's Canon of Medicine fit into medicine as it was practiced in the Golden Age?",
+      "topicIds": [
+        "canon_of_medicine",
+        "medicine_golden_age"
+      ]
+    },
+    {
+      "query": "How did al-Ghazali's critique of philosophy relate to Ibn Rushd's defense of it?",
+      "topicIds": [
+        "al_ghazali",
+        "ibn_rushd"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "Hello, I have a history of science quiz tomorrow.",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "Who was Al-Khwarizmi and what did he write?",
+          "expect": {
+            "topicId": "al_khwarizmi"
+          }
+        },
+        {
+          "user": "Did his work develop into the field we now call algebra?",
+          "expect": {
+            "topicId": "algebra"
+          }
+        },
+        {
+          "user": "How did al-Karaji change that approach?",
+          "expect": {
+            "topicId": "al_karaji"
+          }
+        },
+        {
+          "user": "What did al-Masudi's historical works say about the Islamic astronomers?",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "Let's discuss Ibn al-Haytham. Did he really found experimental optics?",
+          "expect": {
+            "topicId": "ibn_al_haytham"
+          }
+        },
+        {
+          "user": "Show me the evidence for that claim, not the textbook version.",
+          "expect": {
+            "topicId": "ibn_al_haytham"
+          }
+        },
+        {
+          "user": "Then is optics in that period a separate science, or part of something else?",
+          "expect": {
+            "topicId": "optics"
+          }
+        },
+        {
+          "user": "How do Ibn Yunus's Hakimi tables compare with Ptolemy's?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Thanks, that's enough for today.",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "I keep hearing about paper. How did it get to Europe?",
+          "expect": {
+            "topicId": "paper_making"
+          }
+        },
+        {
+          "user": "So was it from China originally, through the Islamic world?",
+          "expect": {
+            "topicId": "paper_making"
+          }
+        },
+        {
+          "user": "Who had the big library where they copied and translated stuff?",
+          "expect": {
+            "topicId": "house_of_wisdom"
+          }
+        },
+        {
+          "user": "Did Al-Kashi calculate pi very precisely back then?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Ok thanks, bye!",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    }
+  ]
+}

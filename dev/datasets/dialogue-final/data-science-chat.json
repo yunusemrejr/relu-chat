@@ -1,0 +1,289 @@
+{
+  "bot": "data-science-chat",
+  "unknownConcepts": [
+    {
+      "query": "Does a naive Bayes classifier work well when the features are correlated? Prove it.",
+      "concept": "Naive Bayes classifier",
+      "mentionedIn": []
+    },
+    {
+      "query": "How does a k-nearest neighbours classifier pick a label for a new point?",
+      "concept": "k-nearest neighbours",
+      "mentionedIn": []
+    },
+    {
+      "query": "Why do people use support vector machines when logistic regression is simpler? Is the margin idea really better?",
+      "concept": "Support vector machines",
+      "mentionedIn": []
+    },
+    {
+      "query": "My classes are very imbalanced, so should I use SMOTE oversampling before training?",
+      "concept": "SMOTE oversampling",
+      "mentionedIn": []
+    },
+    {
+      "query": "What do Kaplan-Meier survival curves show, and when are they used?",
+      "concept": "Kaplan-Meier survival curves",
+      "mentionedIn": []
+    },
+    {
+      "query": "How do I tell if more data would help my model? Something about learning curves?",
+      "concept": "Learning curves",
+      "mentionedIn": []
+    },
+    {
+      "query": "What is Gini impurity, and how is it different from entropy when a tree chooses a split?",
+      "concept": "Gini impurity",
+      "mentionedIn": [
+        "classification",
+        "decision_trees"
+      ]
+    },
+    {
+      "query": "Is DBSCAN better than k-means because I do not have to choose k? Prove it.",
+      "concept": "DBSCAN",
+      "mentionedIn": [
+        "clustering",
+        "outliers"
+      ]
+    }
+  ],
+  "offTopic": [
+    "What's the best sourdough starter ratio?",
+    "Can you translate 'where is the train station' into Turkish?",
+    "Draft a polite email to my landlord about the broken heater.",
+    "Can you open my budget.xlsx file and sum column B for me?"
+  ],
+  "crossBot": [
+    {
+      "query": "What does an actor-critic method learn, and how does the critic help?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "actor-critic"
+    },
+    {
+      "query": "Why is the determinant zero for a singular matrix?",
+      "bot": "linear-algebra-chat",
+      "topicId": "determinant"
+    },
+    {
+      "query": "What is the Shapley value and why is it called fair?",
+      "bot": "game-theory-chat",
+      "topicId": "shapley"
+    },
+    {
+      "query": "How does a service worker help a web app work offline?",
+      "bot": "web-platform-chat",
+      "topicId": "service-worker"
+    }
+  ],
+  "known": [
+    {
+      "query": "What is a DataFrame in pandas, and how does it differ from a NumPy array?",
+      "topicId": "pandas"
+    },
+    {
+      "query": "How should I handle NaN values before fitting a model?",
+      "topicId": "missing_values"
+    },
+    {
+      "query": "Why do we split data into training and test sets?",
+      "topicId": "train_test_split"
+    },
+    {
+      "query": "How does logistic regression turn a linear score into a probability?",
+      "topicId": "logistic_regression"
+    },
+    {
+      "query": "My tree keeps splitting until every leaf is pure. Is that actually a problem?",
+      "topicId": "decision_trees"
+    },
+    {
+      "query": "So k-means groups points by minimizing within-cluster variance, right?",
+      "topicId": "kmeans"
+    },
+    {
+      "query": "What's the real difference between precision and recall, in plain words?",
+      "topicId": "precision_recall"
+    },
+    {
+      "query": "Does a higher AUC always mean a better classifier? Prove it.",
+      "topicId": "roc_auc"
+    },
+    {
+      "query": "I got 99% training accuracy and 60% test accuracy, so my model is overfitting, yes?",
+      "topicId": "overfitting"
+    },
+    {
+      "query": "If I scale features using the full dataset before splitting, is that leakage?",
+      "topicId": "leakage"
+    },
+    {
+      "query": "A model ranks cases well, so why could its probabilities still be misleading? Isn't a good AUC enough?",
+      "topicId": "calibration"
+    },
+    {
+      "query": "My model worked in testing but fails in production because the data changed. What is that called?",
+      "topicId": "dataset_shift"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "What is a pandas DataFrame?",
+      "topicId": "pandas",
+      "answerable": true,
+      "evidence": "A pandas DataFrame is a two-dimensional labeled data structure resembling a table with named columns and a row index."
+    },
+    {
+      "query": "What is the F1 score?",
+      "topicId": "f1_score",
+      "answerable": true,
+      "evidence": "The F1 score is the harmonic mean of precision and recall, balancing both in a single metric."
+    },
+    {
+      "query": "What is data leakage?",
+      "topicId": "leakage",
+      "answerable": true,
+      "evidence": "Data leakage occurs when information from the test set sneaks into the training process, making evaluation overly optimistic."
+    },
+    {
+      "query": "What default value of n_estimators does scikit-learn's RandomForestClassifier use?",
+      "topicId": "ensemble",
+      "answerable": false,
+      "evidence": ""
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "Why can accuracy look good while precision and recall are poor on an imbalanced dataset?",
+      "topicIds": [
+        "accuracy",
+        "precision_recall"
+      ]
+    },
+    {
+      "query": "How does regularization change the bias-variance tradeoff?",
+      "topicIds": [
+        "regularization",
+        "bias_variance"
+      ]
+    },
+    {
+      "query": "Should I standardize features before running principal component analysis?",
+      "topicIds": [
+        "pca",
+        "standardization"
+      ]
+    },
+    {
+      "query": "How is grouped cross-validation different from ordinary k-fold cross-validation?",
+      "topicIds": [
+        "grouped_validation",
+        "cross_validation"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "Hey, quick question for my data science midterm.",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "What is overfitting in a model?",
+          "expect": {
+            "topicId": "overfitting"
+          }
+        },
+        {
+          "user": "How can I detect that during training?",
+          "expect": {
+            "topicId": "cross_validation"
+          }
+        },
+        {
+          "user": "Does regularization help with it?",
+          "expect": {
+            "topicId": "regularization"
+          }
+        },
+        {
+          "user": "What about naive Bayes, does it overfit less?",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "Let's go over ROC curves. Is a higher AUC always better?",
+          "expect": {
+            "topicId": "roc_auc"
+          }
+        },
+        {
+          "user": "Prove it, or show me a counterexample where AUC misleads.",
+          "expect": {
+            "topicId": "roc_auc"
+          }
+        },
+        {
+          "user": "Why not use the F1 score instead for an imbalanced problem?",
+          "expect": {
+            "topicId": "f1_score"
+          }
+        },
+        {
+          "user": "What does a k-nearest neighbours baseline give us that a tuned model does not?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Thanks, that's all for now.",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "My model is really good on my laptop but bad on new data. Is the data changing?",
+          "expect": {
+            "topicId": "dataset_shift"
+          }
+        },
+        {
+          "user": "How do I tell if that's the case?",
+          "expect": {
+            "topicId": "model_evaluation"
+          }
+        },
+        {
+          "user": "Does the deployment part also matter for this?",
+          "expect": {
+            "topicId": "deployment"
+          }
+        },
+        {
+          "user": "What about kernel density estimation, is it better for finding groups?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Ok, thanks, bye.",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    }
+  ]
+}

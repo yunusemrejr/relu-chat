@@ -1,0 +1,287 @@
+{
+  "bot": "linear-algebra-chat",
+  "unknownConcepts": [
+    {
+      "query": "What does the Gram-Schmidt process do to a set of vectors?",
+      "concept": "Gram-Schmidt process",
+      "mentionedIn": []
+    },
+    {
+      "query": "Is LU decomposition faster than inverting the matrix when I solve a system?",
+      "concept": "LU decomposition",
+      "mentionedIn": []
+    },
+    {
+      "query": "When can I use a Cholesky factorization instead of LU?",
+      "concept": "Cholesky factorization",
+      "mentionedIn": []
+    },
+    {
+      "query": "What is the trace of a matrix, and why does it show up in eigenvalue sums?",
+      "concept": "trace of a matrix",
+      "mentionedIn": []
+    },
+    {
+      "query": "How does Gaussian elimination solve a system step by step?",
+      "concept": "Gaussian elimination",
+      "mentionedIn": []
+    },
+    {
+      "query": "What is the Kronecker product of two matrices?",
+      "concept": "Kronecker product",
+      "mentionedIn": []
+    },
+    {
+      "query": "Is QR decomposition actually more stable than the normal equations? Prove it.",
+      "concept": "QR decomposition",
+      "mentionedIn": [
+        "least-squares"
+      ]
+    },
+    {
+      "query": "How is the Frobenius norm of a matrix defined?",
+      "concept": "Frobenius norm",
+      "mentionedIn": [
+        "singular-value-decomposition"
+      ]
+    }
+  ],
+  "offTopic": [
+    "Set an alarm for 6:30 tomorrow morning.",
+    "Who won the most recent football league title?",
+    "Give me a packing list for a weekend hiking trip.",
+    "Translate 'good morning, how are you' into Spanish."
+  ],
+  "crossBot": [
+    {
+      "query": "Who was al-Khwarizmi and what did he contribute to algebra?",
+      "bot": "golden-age-inquiry",
+      "topicId": "al_khwarizmi"
+    },
+    {
+      "query": "What does a Markov decision process model, in plain words?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "markov-decision-process"
+    },
+    {
+      "query": "Is it actually true that the prisoner's dilemma always ends in mutual defection? Prove it.",
+      "bot": "game-theory-chat",
+      "topicId": "prisoners_dilemma"
+    },
+    {
+      "query": "Could I run my matrix kernel in WebAssembly to make it faster?",
+      "bot": "web-platform-chat",
+      "topicId": "webassembly"
+    }
+  ],
+  "known": [
+    {
+      "query": "So is a vector just an ordered list of numbers?",
+      "topicId": "vector"
+    },
+    {
+      "query": "I want to know how the dot product measures similarity between two vectors.",
+      "topicId": "dot-product"
+    },
+    {
+      "query": "Prove it: is the L1 norm a valid norm for vectors?",
+      "topicId": "vector-norm"
+    },
+    {
+      "query": "Why is matrix multiplication not commutative? Show me the reason.",
+      "topicId": "matrix-multiplication"
+    },
+    {
+      "query": "Under what condition is a set of vectors linearly independent?",
+      "topicId": "linear-independence"
+    },
+    {
+      "query": "Define a basis and explain how it relates to the span of a set of vectors.",
+      "topicId": "basis-span"
+    },
+    {
+      "query": "What does the rank of a matrix actually measure?",
+      "topicId": "matrix-rank"
+    },
+    {
+      "query": "When does the linear system Ax = b have no solution, and when infinitely many?",
+      "topicId": "linear-system"
+    },
+    {
+      "query": "If the determinant is zero, what does that tell me about the transformation?",
+      "topicId": "determinant"
+    },
+    {
+      "query": "Is an eigenvector a vector whose direction the matrix preserves?",
+      "topicId": "eigenvalues-eigenvectors"
+    },
+    {
+      "query": "Why use least squares at all instead of solving exactly? Justify it.",
+      "topicId": "least-squares"
+    },
+    {
+      "query": "Why not just use eigendecomposition instead of SVD for a non-square matrix?",
+      "topicId": "singular-value-decomposition"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "Why does the matrix with rows (1, 2) and (2, 4) have rank 1?",
+      "topicId": "matrix-rank",
+      "answerable": true,
+      "evidence": "The matrix with rows (1, 2) and (2, 4) has rank 1 because one row is twice the other."
+    },
+    {
+      "query": "What are the L2 and L1 norms of the vector (3, 4)?",
+      "topicId": "vector-norm",
+      "answerable": true,
+      "evidence": "For (3, 4), the L2 norm is 5 and the L1 norm is 7."
+    },
+    {
+      "query": "How long does an SVD take on a 10000 by 10000 matrix on my laptop?",
+      "topicId": "singular-value-decomposition",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "Who discovered eigenvalues, and in what year?",
+      "topicId": "eigenvalues-eigenvectors",
+      "answerable": false,
+      "evidence": ""
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "How does the null space of a matrix relate to its rank and its number of columns?",
+      "topicIds": [
+        "null-space",
+        "matrix-rank"
+      ]
+    },
+    {
+      "query": "How are invertibility and the determinant of a square matrix related?",
+      "topicIds": [
+        "matrix-inverse",
+        "determinant"
+      ]
+    },
+    {
+      "query": "How do eigenvalues differ from singular values, and which of the two is always nonnegative?",
+      "topicIds": [
+        "eigenvalues-eigenvectors",
+        "singular-value-decomposition"
+      ]
+    },
+    {
+      "query": "Why does least squares need full column rank for a unique solution?",
+      "topicIds": [
+        "least-squares",
+        "matrix-rank"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "What is a linear system Ax = b?",
+          "expect": {
+            "topicId": "linear-system"
+          }
+        },
+        {
+          "user": "And when does it have infinitely many solutions?",
+          "expect": {
+            "topicId": "linear-system"
+          }
+        },
+        {
+          "user": "Cool, thanks a lot.",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "Can you walk me through the Gram-Schmidt process on those vectors?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "So is the null space the reason for those infinite solutions?",
+          "expect": {
+            "topicId": "null-space"
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "Explain the dot product to me as if I'm new to this.",
+          "expect": {
+            "topicId": "dot-product"
+          }
+        },
+        {
+          "user": "Then how is the norm related to it?",
+          "expect": {
+            "topicId": "vector-norm"
+          }
+        },
+        {
+          "user": "Ah, so that's where the length comes in. Great.",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "What's a Cholesky factorization used for with those vectors?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "And does the order of matrix multiplication matter for them?",
+          "expect": {
+            "topicId": "matrix-multiplication"
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "What is orthogonal projection onto a subspace?",
+          "expect": {
+            "topicId": "orthogonal-projection"
+          }
+        },
+        {
+          "user": "Why is the residual perpendicular to it?",
+          "expect": {
+            "topicId": "orthogonal-projection"
+          }
+        },
+        {
+          "user": "So this is basically what least squares does?",
+          "expect": {
+            "topicId": "least-squares"
+          }
+        },
+        {
+          "user": "Nice, that cleared it up.",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "Would the trace of the projection matrix help me here?",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    }
+  ]
+}

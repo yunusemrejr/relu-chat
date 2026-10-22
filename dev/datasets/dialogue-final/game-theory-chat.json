@@ -1,0 +1,287 @@
+{
+  "bot": "game-theory-chat",
+  "unknownConcepts": [
+    {
+      "query": "Why would I use the Kalai-Smorodinsky solution instead of the Nash bargaining solution? Is it actually more fair?",
+      "concept": "Kalai-Smorodinsky bargaining solution",
+      "mentionedIn": []
+    },
+    {
+      "query": "My econ notes say shops end up next to each other in the middle of a street. Something about Hotelling. Why?",
+      "concept": "Hotelling location model",
+      "mentionedIn": []
+    },
+    {
+      "query": "Please explain the Lindahl equilibrium for a public good with personalized prices.",
+      "concept": "Lindahl equilibrium",
+      "mentionedIn": []
+    },
+    {
+      "query": "In a minority game you win by being in the smaller group. Why does that game settle down, and what is its equilibrium?",
+      "concept": "Minority game",
+      "mentionedIn": []
+    },
+    {
+      "query": "Is the trust game just the centipede game with one extra step, or is it genuinely different?",
+      "concept": "Trust game",
+      "mentionedIn": []
+    },
+    {
+      "query": "How does an English auction differ in equilibrium from a sealed-bid first-price auction?",
+      "concept": "English (ascending) auction",
+      "mentionedIn": []
+    },
+    {
+      "query": "How does the Lemke-Howson algorithm find a Nash equilibrium of a bimatrix game?",
+      "concept": "Lemke-Howson algorithm",
+      "mentionedIn": [
+        "normal_form"
+      ]
+    },
+    {
+      "query": "Is perfect recall really needed in an extensive-form game? Prove why it matters.",
+      "concept": "Perfect recall",
+      "mentionedIn": [
+        "extensive_form"
+      ]
+    }
+  ],
+  "offTopic": [
+    "Can you book me a table for two at an Italian place tonight?",
+    "What's a good stretching routine for lower back pain?",
+    "Could you check my Gmail for unread messages from my professor?",
+    "Write me a haiku about autumn leaves."
+  ],
+  "crossBot": [
+    {
+      "query": "What is the Bellman equation and how does it relate to value iteration?",
+      "bot": "reinforcement-learning-chat",
+      "topicId": "bellman-equation"
+    },
+    {
+      "query": "Why is the determinant zero for a singular matrix?",
+      "bot": "linear-algebra-chat",
+      "topicId": "determinant"
+    },
+    {
+      "query": "How does the event loop schedule promises and timers in a browser?",
+      "bot": "web-platform-chat",
+      "topicId": "event-loop"
+    },
+    {
+      "query": "How does the Gini impurity split work when building a decision tree?",
+      "bot": "data-science-chat",
+      "topicId": "decision_trees"
+    }
+  ],
+  "known": [
+    {
+      "query": "Under what conditions is a strategy profile a Nash equilibrium? Please state the formal definition.",
+      "topicId": "nash_eq"
+    },
+    {
+      "query": "In the prisoner's dilemma, why does mutual defection happen even though both players prefer mutual cooperation?",
+      "topicId": "prisoners_dilemma"
+    },
+    {
+      "query": "What's a dominant strategy? Please give the strict and the weak distinction.",
+      "topicId": "dom_strat"
+    },
+    {
+      "query": "So a mixed strategy is just a probability distribution over pure strategies, right?",
+      "topicId": "mixed_strat"
+    },
+    {
+      "query": "Is a zero-sum game just one where someone has to lose? Do both players always get zero?",
+      "topicId": "zero_sum"
+    },
+    {
+      "query": "Does the minimax theorem actually hold for every two-player zero-sum game? Prove it.",
+      "topicId": "minimax"
+    },
+    {
+      "query": "What's the difference between a game tree and a normal-form matrix?",
+      "topicId": "extensive_form"
+    },
+    {
+      "query": "How does the Shapley value split the gains in a cooperative game?",
+      "topicId": "shapley"
+    },
+    {
+      "query": "Why would a bidder in a second-price sealed-bid auction bid their true value? Is that actually true?",
+      "topicId": "vickrey"
+    },
+    {
+      "query": "How do replicator dynamics describe strategy frequencies changing over time?",
+      "topicId": "replicator"
+    },
+    {
+      "query": "Is tit-for-tat really the best strategy in the iterated prisoner's dilemma? Why not always defect?",
+      "topicId": "tft"
+    },
+    {
+      "query": "My friend says stag hunt is just a coordination problem with a risky option. Isn't that right?",
+      "topicId": "stag_hunt"
+    }
+  ],
+  "whQuestions": [
+    {
+      "query": "What is a Nash equilibrium, in plain terms?",
+      "topicId": "nash_eq",
+      "answerable": true,
+      "evidence": "A profile of strategies where no player can profit by unilateral deviation."
+    },
+    {
+      "query": "What price does the winner of a Vickrey auction pay?",
+      "topicId": "vickrey",
+      "answerable": true,
+      "evidence": "A sealed-bid auction where the highest bidder wins and pays the second-highest bid."
+    },
+    {
+      "query": "What complexity class does computing a Nash equilibrium belong to?",
+      "topicId": "nash_eq",
+      "answerable": false,
+      "evidence": ""
+    },
+    {
+      "query": "Who first wrote down the Prisoner's Dilemma, and in which year?",
+      "topicId": "prisoners_dilemma",
+      "answerable": false,
+      "evidence": ""
+    }
+  ],
+  "multiPart": [
+    {
+      "query": "Does a dominant strategy equilibrium always coincide with a Nash equilibrium, and how are the two concepts related?",
+      "topicIds": [
+        "dom_strat",
+        "nash_eq"
+      ]
+    },
+    {
+      "query": "Compare pure and mixed strategies: when does randomizing actually help a player?",
+      "topicIds": [
+        "pure_strat",
+        "mixed_strat"
+      ]
+    },
+    {
+      "query": "How does Stackelberg competition differ from Cournot competition in who moves first?",
+      "topicIds": [
+        "stackelberg",
+        "cournot"
+      ]
+    },
+    {
+      "query": "Explain how backward induction finds a subgame perfect equilibrium in a finite sequential game.",
+      "topicIds": [
+        "backward_induction",
+        "spe"
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        {
+          "user": "Hi, I'm revising for my game theory exam tomorrow.",
+          "expect": {
+            "social": true
+          }
+        },
+        {
+          "user": "Can you explain the prisoner's dilemma to me?",
+          "expect": {
+            "topicId": "prisoners_dilemma"
+          }
+        },
+        {
+          "user": "Does that change if the same two players meet again and again?",
+          "expect": {
+            "topicId": "repeated_game"
+          }
+        },
+        {
+          "user": "Then how does tit-for-tat fit into that?",
+          "expect": {
+            "topicId": "tft"
+          }
+        },
+        {
+          "user": "What about the Colonel Blotto game? Is it covered here?",
+          "expect": {
+            "unknown": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "Let's talk about Nash equilibrium. Is it actually true that every finite game has one?",
+          "expect": {
+            "topicId": "nash_eq"
+          }
+        },
+        {
+          "user": "Prove it, or at least show me the fixed point argument.",
+          "expect": {
+            "topicId": "nash_eq"
+          }
+        },
+        {
+          "user": "Is the Walrasian equilibrium the same thing as a Nash equilibrium in this setting?",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Why not use Stackelberg competition instead to predict the outcome?",
+          "expect": {
+            "topicId": "stackelberg"
+          }
+        },
+        {
+          "user": "Thanks, that's all for now.",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    },
+    {
+      "turns": [
+        {
+          "user": "So when two people are both trying to win, does someone always lose?",
+          "expect": {
+            "topicId": "zero_sum"
+          }
+        },
+        {
+          "user": "If one of them picks at random, is that still a strategy?",
+          "expect": {
+            "topicId": "mixed_strat"
+          }
+        },
+        {
+          "user": "Is that the same as a pure strategy, or the opposite?",
+          "expect": {
+            "topicId": "pure_strat"
+          }
+        },
+        {
+          "user": "What's the Holmstrom informativeness principle? My teacher mentioned it.",
+          "expect": {
+            "unknown": true
+          }
+        },
+        {
+          "user": "Okay cool, thanks!",
+          "expect": {
+            "social": true
+          }
+        }
+      ]
+    }
+  ]
+}

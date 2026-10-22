@@ -1,5 +1,6 @@
 import { createChatbot } from './chatbot-engine.js';
 import { setStatus } from './ui.js';
+import { botOptions } from './bot-options.js';
 const CONFIG = {
   EMBEDDING: { model: 'all-MiniLM-L6-v2', quantized: true },
   THRESHOLDS: { OFF_TOPIC: 0.15, SECONDARY_ENTRY: 0.38, ENTITY_BOOST: 0.45, CONFIDENCE: { definition: .2, example: .22, formal: .25, application: .22, comparison: .25, greeting: .3, help: .3 } },
@@ -8,10 +9,12 @@ const CONFIG = {
 };
 export async function bootChat(bot) {
   try {
-    const [{ KB, entryText }, { INTENTS }, { overrides }] = await Promise.all([
+    const [{ KB, entryText }, { INTENTS }, { overrides }, calibration] = await Promise.all([
       import(`/data/bots/${bot.id}/knowledge.js`),
       import(`/data/bots/${bot.id}/intents.js`),
       import(`/data/bots/${bot.id}/overrides.js`),
+      // Calibrated knowledge-boundary thresholds; built-in defaults apply without them.
+      fetch('/data/boundary-calibration.json').then(r => (r.ok ? r.json() : null)).catch(() => null),
     ]);
     const topics = document.getElementById('topic-list');
     for (const button of topics.querySelectorAll('button[data-question]')) {
@@ -24,6 +27,8 @@ export async function bootChat(bot) {
       suggestions: bot.suggestions,
       welcomeMessage: 'Choose a question below or ask about a topic. Your conversation stays in this browser. Use “Save chat” to keep a copy.',
       botProfile: { id: bot.id, name: bot.name, allowedIntents: Object.keys(INTENTS), tone: 'neutral', maxTopics: 2, creativityCeiling: .2 },
+      calibration: calibration?.bots?.[bot.id]?.thresholds,
+      responderOptions: botOptions(bot.id),
     });
   } catch (error) {
     console.error('[chat] Unable to start:', error);

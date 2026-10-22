@@ -22,6 +22,7 @@ import { renderAllLearn } from './site/learn.mjs';
 import { renderErrors } from './site/errors.mjs';
 import { warnings, esc, clip, plain } from './site/render.mjs';
 import { postCards, toolTiles, subjectPanels, chatTiles, plate } from './site/home.mjs';
+import { topicDirectory } from './site/directory.mjs';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { activationSvg, pipelineFigure } = require('./site/figures.cjs');
@@ -57,6 +58,8 @@ const gen = {
 // Covers share the instruments without regenerating hand-maintained articles.
 for (const post of posts) out.set(`assets/blog/${post.slug}.svg`, coverSvg(subjectOfPost(post), post.slug));
 const manifestBots = JSON.parse(read('data/manifest.json')).bots;
+// Cross-assistant routing index used by the chat engines.
+out.set('data/topic-directory.json', topicDirectory(bots, manifestBots));
 gen['subject-panels'] = subjectPanels(bots, manifestBots);
 gen['chat-tiles'] = chatTiles(bots, manifestBots);
 gen['plot-key'] = bots.map((b, i) => `<li data-subject="${b.cfg.slug}" data-at="${((i * 4) / 6 + 0.15).toFixed(2)}"><a href="/chat/${b.id}/">${esc(b.cfg.subject)}</a></li>`).join('');

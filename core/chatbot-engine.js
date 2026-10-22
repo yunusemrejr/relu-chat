@@ -6,6 +6,8 @@ import { pushMessage, pushMessageStream, setStatus, escapeHTML, md, renderDiagra
 import { loadPolicyRuntime, planAnswer, isPolicyLoaded } from '../policy/policy-runtime.js';
 import { SignalLayer } from './signal-layer.js';
 import { readEmbeddings, writeEmbeddings, embeddingKey, validEmbeddings } from './embedding-store.js';
+import { Responder } from './responder.js';
+import { createInferenceEnv } from './inference-env.js';
 
 // ---------------------------------------------------------------------------
 // Loading state machine
@@ -68,7 +70,9 @@ export async function createChatbot(config) {
     KB, entryText, CONFIG, INTENTS, overrides,
     suggestions, welcomeMessage,
     onReady,
-    botProfile
+    botProfile,
+    calibration,
+    responderOptions
   } = config;
 
   const bar = document.getElementById('bar');
@@ -85,6 +89,16 @@ export async function createChatbot(config) {
 
   // Query embedding memoization (gap fix): identical/near follow-ups skip re-embed.
   const queryEmbCache = new LRUCache(CONFIG?.CACHE?.QUERY_EMB_MAX || 64);
+  // Inference layer: question analysis, topic tracking, knowledge boundary and answer planning.
+  const responder = new Responder({
+    KB, botProfile, overrides, calibration,
+    compact: typeof window !== 'undefined' && window.innerWidth < 600,
+    ...(responderOptions || {}),
+  });
+  const env = createInferenceEnv({
+    KB, signalLayer, INTENTS, THRESHOLDS: CONFIG.THRESHOLDS, planAnswer, botProfile, embedding: CONFIG.EMBEDDING,
+    vectors: () => ({ embed, entryEmb, intentEmb, semantic: !!extractor }),
+  });
 
   async function embed(text) {
     const key = (text || '').trim().toLowerCase();
@@ -188,10 +202,12 @@ export async function createChatbot(config) {
     setStatus('Ready · keyword matching', true);
     document.getElementById('enhance')?.addEventListener('click', enhanceMatching);
     loadPolicyRuntime({ botProfile }).catch(error => console.warn('[chat] Using built-in policy:', error.message));
+    // Other assistants' topics, so their questions can be routed there. Not needed for the first answer.
+    fetch('/data/topic-directory.json').then(r => (r.ok ? r.json() : null)).then(d => d && responder.setDirectory(d)).catch(() => {});
     if (onReady) onReady();
   }
 
-  function addSources(answerElement, topics) {
+  function addSources(answerElement, topics, next = []) {
     const sources = [...new Map((topics || []).flatMap(i => KB[i]?.sources || []).map(source => [source.url, source])).values()];
     if (sources.length) {
       const references = document.createElement('div');
@@ -204,6 +220,19 @@ export async function createChatbot(config) {
         references.append(link, ' ');
       }
       answerElement.querySelector('.msg-body').append(references);
+    }
+    // Same-site next steps: the assistant that covers the question, or its guide.
+    const internal = (next || []).filter(l => /^\/(?:chat|learn)\/[\w/-]*(?:\?q=[^"<>\s]*)?$/.test(l.url));
+    if (internal.length) {
+      const row = document.createElement('div');
+      row.className = 'answer-sources';
+      row.append('Continue: ');
+      for (const item of internal.slice(0, 2)) {
+        const link = document.createElement('a');
+        link.href = item.url; link.textContent = item.title;
+        row.append(link, ' ');
+      }
+      answerElement.querySelector('.msg-body').append(row);
     }
   }
 
@@ -218,6 +247,18 @@ export async function createChatbot(config) {
     let text, meta;
     const originalQuery = query;
     try {
+      try {
+        const reply = await responder.respond(originalQuery, env);
+        typingEl.remove();
+        const answerElement = pushMessage('bot', md(reply.text), reply.chips.map(name => ({ text: name, type: '' })));
+        addSources(answerElement, reply.topics, reply.links);
+        suggestionsEl?.classList.toggle('has-conversation', reply.topics.length > 0 || responder.discourse.currentTopic != null);
+        session.addTurn(originalQuery, reply.text, [], reply.topics, []);
+        return;
+      } catch (err) {
+        // The previous pipeline stays available if the inference layer ever fails.
+        console.warn('[chat] Inference layer unavailable, using fallback:', err?.message);
+      }
       const message = interpretMessage(query);
       const conversational = conversationalReply(message, session, KB, botProfile);
       if (conversational) {
@@ -363,6 +404,7 @@ export async function createChatbot(config) {
   document.getElementById('clear-chat')?.addEventListener('click', () => {
     if (busy) return;
     session.reset();
+    responder.reset();
     document.getElementById('messages').replaceChildren();
     suggestionsEl?.classList.remove('has-conversation');
     if (welcomeMessage) pushMessage('bot', welcomeMessage);

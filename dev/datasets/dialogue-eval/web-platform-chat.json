@@ -1,0 +1,141 @@
+{
+  "bot": "web-platform-chat",
+  "unknownConcepts": [
+    { "query": "what is the DOM and how does a worker touch it", "concept": "Document Object Model (DOM)", "mentionedIn": ["web-worker", "webassembly"] },
+    { "query": "explain CORS", "concept": "CORS", "mentionedIn": ["cross-origin-isolation"] },
+    { "query": "what is a live region for screen reader announcements", "concept": "Live regions", "mentionedIn": ["accessible-form"] },
+    { "query": "how do I respect reduced motion preferences", "concept": "Reduced-motion preferences", "mentionedIn": ["responsive-layout"] },
+    { "query": "content hashing for static files, how does it work", "concept": "Content hashing", "mentionedIn": ["http-caching", "indexeddb"] },
+    { "query": "shadow DOM, what is it?", "concept": "Shadow DOM", "mentionedIn": [] },
+    { "query": "web components, how do they work", "concept": "Web Components", "mentionedIn": [] },
+    { "query": "lazy loading images, explain", "concept": "Lazy loading", "mentionedIn": [] },
+    { "query": "what is a WebSocket", "concept": "WebSocket", "mentionedIn": [] },
+    { "query": "WebRTC for peer-to-peer video", "concept": "WebRTC", "mentionedIn": [] },
+    { "query": "HTTP/2 multiplexing, tell me about it", "concept": "HTTP/2", "mentionedIn": [] },
+    { "query": "gzip compression for responses", "concept": "Gzip compression", "mentionedIn": [] },
+    { "query": "garbage collection in JavaScript", "concept": "Garbage collection", "mentionedIn": [] },
+    { "query": "structured clone algorithm", "concept": "Structured clone", "mentionedIn": [] },
+    { "query": "Atomics for shared memory", "concept": "Atomics", "mentionedIn": [] },
+    { "query": "WebAssembly SIMD, how fast is it", "concept": "WebAssembly SIMD", "mentionedIn": [] },
+    { "query": "requestAnimationFrame, what's it for", "concept": "requestAnimationFrame", "mentionedIn": [] },
+    { "query": "Core Web Vitals, which metrics count", "concept": "Core Web Vitals", "mentionedIn": [] },
+    { "query": "how does localStorage work", "concept": "Local storage", "mentionedIn": [] },
+    { "query": "cookies, how do they get set", "concept": "Cookies", "mentionedIn": [] }
+  ],
+  "offTopic": [
+    "Will it rain in London tomorrow?",
+    "Give me a quick vegan dinner idea.",
+    "Who scored the most goals in the Premier League last season?",
+    "Book a cab to the airport at 6am.",
+    "Is that famous singer dating anyone right now?",
+    "How do I tell my friend I need some space in our relationship?",
+    "What's a beginner yoga sequence for back pain?",
+    "Which laptop bag fits a 15 inch laptop and looks nice?",
+    "Suggest some podcasts about history.",
+    "How long should I boil an egg for a soft yolk?"
+  ],
+  "crossBot": [
+    { "query": "Explain the tit-for-tat strategy.", "bot": "game-theory-chat", "topicId": "tft" },
+    { "query": "What is a value function in reinforcement learning?", "bot": "reinforcement-learning-chat", "topicId": "value-function" },
+    { "query": "What is singular value decomposition used for?", "bot": "linear-algebra-chat", "topicId": "singular-value-decomposition" },
+    { "query": "What is cross-validation in machine learning?", "bot": "data-science-chat", "topicId": "cross_validation" },
+    { "query": "Who was Avicenna and what did he write?", "bot": "golden-age-inquiry", "topicId": "ibn_sina" },
+    { "query": "What is a Nash bargaining solution?", "bot": "game-theory-chat", "topicId": "nash_bargaining" },
+    { "query": "What is a Bayesian game?", "bot": "game-theory-chat", "topicId": "bayesian_game" },
+    { "query": "How does a decision tree split data?", "bot": "data-science-chat", "topicId": "decision_trees" }
+  ],
+  "known": [
+    { "query": "what is webasembly", "topicId": "webassembly" },
+    { "query": "wasm memory layout, how does it work", "topicId": "linear-memory" },
+    { "query": "web workr for heavy computation", "topicId": "web-worker" },
+    { "query": "how do I hand an arraybuffer to a worker without copying it", "topicId": "transferable-objects" },
+    { "query": "service workers and offline caching", "topicId": "service-worker" },
+    { "query": "cache first vs network first, which should I pick", "topicId": "cache-strategies" },
+    { "query": "etag and 304 responses, how do they work", "topicId": "http-caching" },
+    { "query": "indexed db for storing large records locally", "topicId": "indexeddb" },
+    { "query": "async await: how does it work with promises", "topicId": "promises-async-functions" },
+    { "query": "why does my page freeze during a long loop", "topicId": "event-loop" },
+    { "query": "how do I cancel a fetch request with a timeout", "topicId": "abortcontroller" },
+    { "query": "content security policy script-src example", "topicId": "content-security-policy" },
+    { "query": "COOP and COEP, what do they enable", "topicId": "cross-origin-isolation" },
+    { "query": "accesible form labels best practice", "topicId": "accessible-form" },
+    { "query": "how do I make a layout work on a mobile viewport", "topicId": "responsive-layout" },
+    { "query": "how should I report p95 latency", "topicId": "performance-measurement" },
+    { "query": "cold start vs warm cache timing, what should I report", "topicId": "performance-measurement" },
+    { "query": "microtask vs task, when does each run", "topicId": "event-loop" },
+    { "query": "media query breakpoints for a narrow screen", "topicId": "responsive-layout" },
+    { "query": "keyboard use and aria labels for inputs", "topicId": "accessible-form" }
+  ],
+  "whQuestions": [
+    { "query": "Who wrote the first WebAssembly specification?", "topicId": "webassembly", "answerable": false, "evidence": "" },
+    { "query": "When did service workers become available in browsers?", "topicId": "service-worker", "answerable": false, "evidence": "" },
+    { "query": "How many bytes does a float32 vector of 25 elements occupy?", "topicId": "linear-memory", "answerable": true, "evidence": "A float32 vector of 25 elements occupies 100 bytes." },
+    { "query": "When should a page check crossOriginIsolated before enabling threaded WASM?", "topicId": "cross-origin-isolation", "answerable": true, "evidence": "then check crossOriginIsolated before enabling threaded WASM." },
+    { "query": "Where do service workers normally need to run?", "topicId": "service-worker", "answerable": true, "evidence": "Service workers normally require a secure context" },
+    { "query": "When does the server send a 304 Not Modified response?", "topicId": "http-caching", "answerable": true, "evidence": "ETag and If-None-Match can produce 304 Not Modified responses when the stored representation is still current." },
+    { "query": "Who created the IndexedDB specification?", "topicId": "indexeddb", "answerable": false, "evidence": "" },
+    { "query": "Where does a web worker run its JavaScript?", "topicId": "web-worker", "answerable": true, "evidence": "A Web Worker runs JavaScript in a separate execution context" },
+    { "query": "When was the AbortController API added to browsers?", "topicId": "abortcontroller", "answerable": false, "evidence": "" },
+    { "query": "How many samples should a p95 latency report include?", "topicId": "performance-measurement", "answerable": false, "evidence": "" }
+  ],
+  "multiPart": [
+    { "query": "What's a web worker, and what do transferable objects do with it?", "topicIds": ["web-worker", "transferable-objects"] },
+    { "query": "How do promises and the event loop interact?", "topicIds": ["promises-async-functions", "event-loop"] },
+    { "query": "Explain service workers and cache strategies, also.", "topicIds": ["service-worker", "cache-strategies"] },
+    { "query": "Is IndexedDB different from HTTP caching? Also, what is an AbortController?", "topicIds": ["indexeddb", "http-caching", "abortcontroller"] },
+    { "query": "Does content security policy affect web workers, and how about cross-origin isolation?", "topicIds": ["content-security-policy", "web-worker", "cross-origin-isolation"] },
+    { "query": "Explain WebAssembly linear memory, as well as performance measurement for WASM.", "topicIds": ["webassembly", "linear-memory", "performance-measurement"] },
+    { "query": "How do accessible forms and responsive layout interact on a phone?", "topicIds": ["accessible-form", "responsive-layout"] },
+    { "query": "Compare cache first with stale while revalidate, and explain the event loop.", "topicIds": ["cache-strategies", "event-loop"] }
+  ],
+  "conversations": [
+    { "turns": [
+      { "user": "hey", "expect": { "social": true } },
+      { "user": "what is a web worker?", "expect": { "topicId": "web-worker" } },
+      { "user": "how do I send big data to it without copying?", "expect": { "topicId": "transferable-objects" } },
+      { "user": "what does the sender see after that?", "expect": { "topicId": "transferable-objects" } },
+      { "user": "what about shared memory with SharedArrayBuffer?", "expect": { "topicId": "cross-origin-isolation" } },
+      { "user": "thanks a lot", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "service workers", "expect": { "topicId": "service-worker" } },
+      { "user": "can it work offline?", "expect": { "topicId": "service-worker" } },
+      { "user": "what caching rule should I use for images?", "expect": { "topicId": "cache-strategies" } },
+      { "user": "and for HTML pages?", "expect": { "topicId": "cache-strategies" } },
+      { "user": "what about Shadow DOM?", "expect": { "unknown": true } },
+      { "user": "bye", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "promises", "expect": { "topicId": "promises-async-functions" } },
+      { "user": "what's the difference with async await?", "expect": { "topicId": "promises-async-functions" } },
+      { "user": "why does my page freeze during a loop?", "expect": { "topicId": "event-loop" } },
+      { "user": "how do I cancel one of those requests?", "expect": { "topicId": "abortcontroller" } },
+      { "user": "how about WebSockets for live chat?", "expect": { "unknown": true } },
+      { "user": "ok thanks", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "what is webassembly?", "expect": { "topicId": "webassembly" } },
+      { "user": "how does its memory work?", "expect": { "topicId": "linear-memory" } },
+      { "user": "give an example with a float32 vector", "expect": { "topicId": "linear-memory" } },
+      { "user": "does it have access to the DOM?", "expect": { "topicId": "webassembly" } },
+      { "user": "how is that different from a lazy loading strategy?", "expect": { "unknown": true } },
+      { "user": "great, thanks", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "hello", "expect": { "social": true } },
+      { "user": "what is content security policy", "expect": { "topicId": "content-security-policy" } },
+      { "user": "what about connect-src?", "expect": { "topicId": "content-security-policy" } },
+      { "user": "and cross-origin isolation, is it related?", "expect": { "topicId": "cross-origin-isolation" } },
+      { "user": "how does garbage collection affect page performance?", "expect": { "unknown": true } },
+      { "user": "ok bye", "expect": { "social": true } }
+    ] },
+    { "turns": [
+      { "user": "good evening", "expect": { "social": true } },
+      { "user": "I need an accessible form for my signup page", "expect": { "topicId": "accessible-form" } },
+      { "user": "how do I announce errors to screen readers?", "expect": { "topicId": "accessible-form" } },
+      { "user": "what about responsive layout for it?", "expect": { "topicId": "responsive-layout" } },
+      { "user": "and the structured clone algorithm?", "expect": { "unknown": true } },
+      { "user": "that's all, thanks", "expect": { "social": true } }
+    ] }
+  ]
+}

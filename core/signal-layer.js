@@ -45,6 +45,11 @@ export class SignalLayer {
 
   isBM25Ready() { return this._bm25Ready; }
 
+  /** Field-weighted BM25 ranking for one query: [{ i, s }], best first. */
+  sparseRank(query, k = 15) {
+    return this._bm25Ready && query ? this._bm25Scorer.scoreTopK(query, k) : [];
+  }
+
   async process(query, qEmb, entryEmb, intentEmb, KB, config, session = null) {
     // ── Input validation ──────────────────────────────────────────────
     if (!query || typeof query !== 'string') {

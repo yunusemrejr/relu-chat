@@ -1,0 +1,105 @@
+{
+  "bot": "game-theory-chat",
+  "unknownConcepts": [
+    { "query": "colonel blotto, who wins when both sides split their troops across battlefields", "concept": "Colonel Blotto game", "mentionedIn": [] },
+    { "query": "hotelling model where two ice cream sellers pick spots on a beach", "concept": "Hotelling location model", "mentionedIn": [] },
+    { "query": "all-pay auction, everybody pays even the losers?? is that right", "concept": "All-pay auction", "mentionedIn": [] },
+    { "query": "tullock contest, the lottery style rent seeking thing", "concept": "Tullock contest", "mentionedIn": [] },
+    { "query": "dollar auction, why do people keep bidding past the value of the dollar", "concept": "Dollar auction", "mentionedIn": [] },
+    { "query": "moran process, how does a mutant take over a finite population", "concept": "Moran process", "mentionedIn": [] },
+    { "query": "kalai-smorodinsky solution for bargaining", "concept": "Kalai-Smorodinsky solution", "mentionedIn": [] },
+    { "query": "winners curse in common value auctions, why do the winners overpay", "concept": "Winner's curse", "mentionedIn": [] },
+    { "query": "hold up problem, why do people underinvest after the contract is signed", "concept": "Hold-up problem", "mentionedIn": [] },
+    { "query": "sprague grundy, grundy numbers for nim heaps", "concept": "Sprague-Grundy theorem", "mentionedIn": ["zermelo"] },
+    { "query": "kuhn's theorem, mixed vs behavioral strategies in trees, how's that", "concept": "Kuhn's theorem", "mentionedIn": ["extensive_form"] },
+    { "query": "shapley shubik power index, how pivotal is a voter in a weighted vote", "concept": "Shapley-Shubik power index", "mentionedIn": ["banzhaf", "coalition"] }
+  ],
+  "offTopic": [
+    "what should i make for dinner tonight, have chicken and rice",
+    "write me a poem about my dog pls",
+    "how do i change a flat tire",
+    "who won the euro 2024 final",
+    "can u help me fix this python typeerror: 'NoneType' object is not subscriptable",
+    "what's the best stretch for lower back pain"
+  ],
+  "crossBot": [
+    { "query": "whats the difference between precision and recall again", "bot": "data-science-chat", "topicId": "precision_recall" },
+    { "query": "how does q learning update its q values after a step", "bot": "reinforcement-learning-chat", "topicId": "q-learning" },
+    { "query": "wait whats an eigenvector, like geometrically", "bot": "linear-algebra-chat", "topicId": "eigenvalues-eigenvectors" },
+    { "query": "who was ibn sina and what did he write", "bot": "golden-age-inquiry", "topicId": "ibn_sina" },
+    { "query": "how does a service worker keep a site working offline", "bot": "web-platform-chat", "topicId": "service-worker" },
+    { "query": "bagging vs boosting, which one reduces variance", "bot": "data-science-chat", "topicId": "ensemble" }
+  ],
+  "known": [
+    { "query": "nash eq?", "topicId": "nash_eq" },
+    { "query": "so if both players just defect in the pd thats the equilibrium even tho cooperating is better for both??", "topicId": "prisoners_dilemma" },
+    { "query": "a move thats best no matter what the other person picks, whats that called", "topicId": "dom_strat" },
+    { "query": "randomizing your moves with some probabilities, how do u write that down", "topicId": "mixed_strat" },
+    { "query": "zero sum means one wins exactly what the other loses right", "topicId": "zero_sum" },
+    { "query": "how do u split the payoff fairly among a group, the shapley thing", "topicId": "shapley" },
+    { "query": "why can cooperation last forever if everyone is patient enough", "topicId": "folk" },
+    { "query": "tit for tat, the one that starts nice then copies u", "topicId": "tft" },
+    { "query": "solving a game tree from the end backwards, how does that work", "topicId": "backward_induction" },
+    { "query": "matching pennies, is the mixed eq just 50/50", "topicId": "matching_pennies" },
+    { "query": "knocking out dominated moves again and again until nothing is left, whats that process called", "topicId": "ied" },
+    { "query": "price of anarchy, how bad can selfish equilibria get vs the social optimum", "topicId": "poa" },
+    { "query": "two drivers heading at each other, whoever swerves loses face, what game is that", "topicId": "chicken" },
+    { "query": "hawk dove for animal fights, how does the value of the prize change it", "topicId": "hawk_dove" },
+    { "query": "how do i find nash eq by hand with a best response table", "topicId": "best_response_worked" }
+  ],
+  "whQuestions": [
+    { "query": "who proved nash equilibria exist in every finite game and when", "topicId": "nash_eq", "answerable": true, "evidence": "Nash (1950) proved existence in every finite game" },
+    { "query": "who came up with generous tit for tat, was it nowak", "topicId": "tft", "answerable": true, "evidence": "Generous TFT (Nowak-Sigmund) repairs this" },
+    { "query": "who proved the minimax theorem and what year", "topicId": "minimax", "answerable": true, "evidence": "Von Neumann (1928)" },
+    { "query": "what year was the cuban missile crisis in the chicken example", "topicId": "chicken", "answerable": true, "evidence": "The 1962 Cuban Missile Crisis" },
+    { "query": "how many entries were in axelrods tournament", "topicId": "tft", "answerable": false, "evidence": "" },
+    { "query": "how many bidders were in the stamp auctions vickrey talked about", "topicId": "vickrey", "answerable": false, "evidence": "" }
+  ],
+  "multiPart": [
+    { "query": "nash eq and also the pd, how do they connect", "topicIds": ["nash_eq", "prisoners_dilemma"] },
+    { "query": "dominant strategies, and also iterated elimination, are those the same idea or nah", "topicIds": ["dom_strat", "ied"] },
+    { "query": "stag hunt vs battle of the sexes, both coordination games right? how do they differ", "topicIds": ["stag_hunt", "battle_of_sexes"] },
+    { "query": "shapley value plus the core, which one is the fair one? is the core always nonempty", "topicIds": ["shapley", "core"] },
+    { "query": "minimax theorem, and zero sum games too, does one basically imply the other", "topicIds": ["minimax", "zero_sum"] },
+    { "query": "pure vs mixed strategy, and the best response table too, how does that combine for a 2x2", "topicIds": ["pure_strat", "best_response_worked"] }
+  ],
+  "conversations": [
+    {
+      "turns": [
+        { "user": "hey! quick q, whats a nash eq", "expect": { "topicId": "nash_eq" } },
+        { "user": "wait so is that also what happens in the pd?", "expect": { "topicId": "prisoners_dilemma" } },
+        { "user": "ok but what about stag hunt, same deal there?", "expect": { "topicId": "stag_hunt" } },
+        { "user": "and the sunspot equilibrium thing, is that a version of this?", "expect": { "unknown": true } },
+        { "user": "thanks, that helped", "expect": { "social": true } }
+      ]
+    },
+    {
+      "turns": [
+        { "user": "yo whats tit for tat", "expect": { "topicId": "tft" } },
+        { "user": "does it always win tho or just in axelrods one", "expect": { "topicId": "tft" } },
+        { "user": "and the folk theorem, how's that connected to it", "expect": { "topicId": "folk" } },
+        { "user": "what about the trembling hand stuff, does that fit too", "expect": { "topicId": "trembling" } },
+        { "user": "cool, thx bye", "expect": { "social": true } }
+      ]
+    },
+    {
+      "turns": [
+        { "user": "hi there", "expect": { "social": true } },
+        { "user": "so what's a cournot competition", "expect": { "topicId": "cournot" } },
+        { "user": "and the bertrand one?", "expect": { "topicId": "bertrand" } },
+        { "user": "and the stackelberg leader version, is the leader better off", "expect": { "topicId": "stackelberg" } },
+        { "user": "and the lindahl equilibrium for public goods, is that a thing here?", "expect": { "unknown": true } },
+        { "user": "ok cheers", "expect": { "social": true } }
+      ]
+    },
+    {
+      "turns": [
+        { "user": "explain the vickrey auction plz", "expect": { "topicId": "vickrey" } },
+        { "user": "is it optimal to just bid what it's worth to you?", "expect": { "topicId": "vickrey" } },
+        { "user": "and the revenue equivalence thing, does it hold for it too", "expect": { "topicId": "auction_theory" } },
+        { "user": "and how does mechanism design connect, like who designs the rules", "expect": { "topicId": "mech_design" } },
+        { "user": "thanks, you're a lifesaver", "expect": { "social": true } }
+      ]
+    }
+  ]
+}
