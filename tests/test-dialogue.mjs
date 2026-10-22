@@ -66,7 +66,7 @@ test('unknown concepts get an honest answer that points to what is known', async
   assert.equal(r.topics.length, 0);
   r = await la.ask('what is a nash equilibrium?');
   assert.match(r.text, /Game Theory Chat/);
-  assert.ok(r.links.some(l => l.url.startsWith('/chat/game-theory-chat/?q=')));
+  assert.ok(r.links.some(l => l.url === '/chat/game-theory-chat/?q=' + encodeURIComponent('Explain Nash Equilibrium')), 'links carry the topic name, not the typed question');
   r = await la.ask('what is the capital of France?');
   assert.equal(r.topics.length, 0);
   assert.ok(!/Vector —/.test(r.text));

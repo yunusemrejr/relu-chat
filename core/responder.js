@@ -318,7 +318,8 @@ export class Responder {
         const summary = topic.summary ? ` In short: ${topic.summary}` : '';
         return {
           text: `${phrase ? bold(phrase) : 'That'} isn't covered in my notes on ${this.subject}, but ${bold(bot.name)} covers it.${summary}`,
-          links: [{ title: `Ask ${bot.name}`, url: `${bot.url}?q=${encodeURIComponent(clause.text)}` }, ...(topic.learn ? [{ title: `${topic.name} guide`, url: topic.learn }] : [])],
+          // The link carries the public topic name, never the user's own words: questions stay on this device.
+          links: [{ title: `Ask ${bot.name}`, url: `${bot.url}?q=${encodeURIComponent(`Explain ${topic.name}`)}` }, ...(topic.learn ? [{ title: `${topic.name} guide`, url: topic.learn }] : [])],
         };
       }
       case 'unknown':
@@ -453,7 +454,7 @@ export class Responder {
       const what = phrase ? bold(phrase) : 'that';
       const elsewhere = this.grounder.foreign.length ? this.grounder.routeElsewhere(clause, uncovered) : null;
       const pointer = elsewhere ? ` ${bold(elsewhere.bot.name)} covers ${bold(escapeHTML(elsewhere.topic.name))}.` : '';
-      const links = elsewhere ? [{ title: `Ask ${elsewhere.bot.name}`, url: `${elsewhere.bot.url}?q=${encodeURIComponent(elsewhere.topic.name)}` }] : [];
+      const links = elsewhere ? [{ title: `Ask ${elsewhere.bot.name}`, url: `${elsewhere.bot.url}?q=${encodeURIComponent(`Explain ${elsewhere.topic.name}`)}` }] : [];
       if (hit) {
         this._markShown([hit.unit]);
         return { text: `I don't have a separate topic on ${what}, but my notes on ${name(t)} touch on it:\n\n${hit.unit.sentences.length <= 2 ? hit.unit.text : hit.sentence}${pointer ? '\n\n' + pointer.trim() : ''}`, presented: [t], links };
