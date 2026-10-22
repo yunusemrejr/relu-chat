@@ -81,6 +81,8 @@ export async function createChatbot(config) {
   const form = document.getElementById('form');
   let extractor = null, entryEmb = [], intentEmb = {}, domainPrototypeEmbs = [];
   let ready = false, busy = false, upgradePromise = null, pendingUpgrade = null;
+  // Resolves once cross-assistant routing data is loaded (or failed to load).
+  let directoryReady = Promise.resolve();
   // Session memory: replaces single `lastTopic` with full turn-based tracking
   const session = new SessionMemory(CONFIG?.SESSION?.maxHistory || 30);
   const fragEmbCache = new LRUCache(CONFIG?.CACHE?.MAX_SIZE || 500);
@@ -202,8 +204,8 @@ export async function createChatbot(config) {
     setStatus('Ready · keyword matching', true);
     document.getElementById('enhance')?.addEventListener('click', enhanceMatching);
     loadPolicyRuntime({ botProfile }).catch(error => console.warn('[chat] Using built-in policy:', error.message));
-    // Other assistants' topics, so their questions can be routed there. Not needed for the first answer.
-    fetch('/data/topic-directory.json').then(r => (r.ok ? r.json() : null)).then(d => d && responder.setDirectory(d)).catch(() => {});
+    // Other assistants' topics, so their questions can be routed there.
+    directoryReady = fetch('/data/topic-directory.json').then(r => (r.ok ? r.json() : null)).then(d => { if (d) responder.setDirectory(d); }).catch(() => {});
     if (onReady) onReady();
   }
 
@@ -248,6 +250,8 @@ export async function createChatbot(config) {
     const originalQuery = query;
     try {
       try {
+        // A question asked right after start-up (or via a ?q= link) still gets routing, within a short wait.
+        await Promise.race([directoryReady, new Promise(resolve => setTimeout(resolve, 1500))]);
         const reply = await responder.respond(originalQuery, env);
         typingEl.remove();
         const answerElement = pushMessage('bot', md(reply.text), reply.chips.map(name => ({ text: name, type: '' })));
