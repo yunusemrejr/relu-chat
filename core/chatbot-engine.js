@@ -158,7 +158,13 @@ export async function createChatbot(config) {
         env.useBrowserCache = true;
         const nextExtractor = await pipeline('feature-extraction', CONFIG.EMBEDDING.model, {
           quantized: CONFIG.EMBEDDING.quantized,
-          progress_callback: p => { if (p.status === 'progress' && p.total) bar.style.width = `${p.loaded / p.total * 100}%`; }
+          // The model file dominates the first download; show its real progress.
+          progress_callback: p => {
+            if (p.status !== 'progress' || !p.total || !/\.onnx$/.test(p.file || '')) return;
+            const pct = Math.min(100, Math.round(p.loaded / p.total * 100));
+            bar.style.width = `${pct}%`;
+            setStatus(`Ready · neural model ${pct}%`, true);
+          }
         });
         const encode = async text => Array.from((await nextExtractor(text, { pooling: 'mean', normalize: true })).data);
         const key = await embeddingKey(KB, entryText, INTENTS, CONFIG.EMBEDDING.model);
