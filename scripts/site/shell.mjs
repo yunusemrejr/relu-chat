@@ -48,6 +48,8 @@ export function head() {
     '<link rel="preload" href="/assets/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin>',
     `<link rel="stylesheet" href="${versioned('/assets/fonts/fonts.css')}">`,
     `<link rel="stylesheet" href="${versioned('/assets/css/illustrations.css')}">`,
+    '<script async src="https://www.googletagmanager.com/gtag/js?id=G-NXPH48FQ6V" data-cfasync="false"></script>',
+    `<script src="${versioned('/assets/js/ga-init.js')}" defer data-cfasync="false"></script>`,
     `<script src="${versioned('/assets/js/shell.js')}" defer data-cfasync="false"></script>`,
     `<script src="${versioned('/assets/js/fx.js')}" defer data-cfasync="false"></script>`,
     `<script src="${versioned('/assets/js/figures.js')}" defer data-cfasync="false"></script>`,

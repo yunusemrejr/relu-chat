@@ -242,7 +242,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/indexeddb-client-storage/</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-23</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/indexeddb-client-storage.png</image:loc>
       <image:caption>IndexedDB for On-Device AI: Embeddings and Session State</image:caption>
@@ -434,7 +434,7 @@
   </url>
   <url>
     <loc>https://relu.chat/blog/privacy-checklist-browser-ai/</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-23</lastmod>
     <image:image>
       <image:loc>https://relu.chat/assets/blog/privacy-checklist-browser-ai.png</image:loc>
       <image:caption>Privacy Checklist for Browser-Based AI</image:caption>

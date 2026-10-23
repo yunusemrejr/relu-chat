@@ -89,7 +89,7 @@ Options -Indexes
     Header always set Cross-Origin-Opener-Policy "same-origin"
 
     # CSP — Gumroad widget proxy hosts + thumbnail CDN allowed; remote models disabled (env.allowRemoteModels=false).
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://public-files.gumroad.com; font-src 'self' data:; connect-src 'self' https://static.cloudflareinsights.com https://api.allorigins.win https://corsproxy.io https://api.codetabs.com https://r.jina.ai; worker-src 'self' blob:; frame-ancestors 'self'"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://public-files.gumroad.com https://www.google-analytics.com https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://static.cloudflareinsights.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.allorigins.win https://corsproxy.io https://api.codetabs.com https://r.jina.ai; worker-src 'self' blob:; frame-ancestors 'self'"
 
     # Disable Cloudflare Rocket Loader and Auto Minify (they break ES module scripts)
     Header always set CF-Rocket-Loader "Off"

@@ -773,7 +773,7 @@ function generateLLMsTxt(posts) {
 
   return `# ReLU.chat
 
-> Free, browser-based, privacy-first open-source chatbots that run entirely in your browser. No servers, no LLMs, no tracking.
+> Free, browser-based, privacy-first open-source chatbots that run entirely in your browser. No servers, no LLMs, no tracking of your conversations.
 
 ## Overview
 

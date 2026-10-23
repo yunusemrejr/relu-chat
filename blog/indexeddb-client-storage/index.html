@@ -135,6 +135,8 @@
 <link rel="preload" href="/assets/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts/fonts.css?v=455d1a60">
 <link rel="stylesheet" href="/assets/css/illustrations.css?v=feb68611">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NXPH48FQ6V" data-cfasync="false"></script>
+<script src="/assets/js/ga-init.js?v=f418bfc3" defer data-cfasync="false"></script>
 <script src="/assets/js/shell.js?v=802b8197" defer data-cfasync="false"></script>
 <script src="/assets/js/fx.js?v=1859fa55" defer data-cfasync="false"></script>
 <script src="/assets/js/figures.js?v=63f4922a" defer data-cfasync="false"></script>
@@ -254,7 +256,7 @@ async function loadEmbedding(id) {
 
 <p>Conversations are stateful, and on-device memory is limited by design. ReLU.chat keeps up to 30 turns of session memory with importance-based eviction, always protecting the most recent 5 turns. Older responses are compressed into 120-character summaries after 5 turns, a running summary vector is maintained with EMA decay at alpha 0.75, and entity importance decays with a half-life of 5 turns. That is a lot of structured state — and IndexedDB is the natural place to persist it.</p>
 
-<p>Persisting session state has a user-visible payoff: reload the page, close the tab, or let the OS evict the background tab, and the conversation resumes instead of resetting. And because everything is written to the origin's local database rather than sent anywhere, the privacy property holds end to end: no transcript, summary, or embedding ever leaves the device. ReLU.chat's privacy-first model — no servers, no LLMs, no tracking — depends on exactly this kind of local persistence.</p>
+<p>Persisting session state has a user-visible payoff: reload the page, close the tab, or let the OS evict the background tab, and the conversation resumes instead of resetting. And because everything is written to the origin's local database rather than sent anywhere, the privacy property holds end to end: no transcript, summary, or embedding ever leaves the device. ReLU.chat's privacy-first model — no servers, no LLMs, no tracking of your conversations — depends on exactly this kind of local persistence.</p>
 
 <h2 id="section-transactions-quotas-and-alternatives">Transactions, Quotas, and Alternatives</h2>
 
