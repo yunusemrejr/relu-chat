@@ -7,13 +7,13 @@ manifest=json.loads(args.manifest.read_text());errors=[];checks=[]
 files=manifest['files']
 connections=threading.local()
 def fetch(path):
- request=urllib.request.Request('https://relu.chat'+path,headers={'User-Agent':'ReLU-release-verification/2026-09-09','Cache-Control':'no-cache'})
+ request=urllib.request.Request('https://reluchat.yunusemrevurgun.com'+path,headers={'User-Agent':'ReLU-release-verification/2026-09-09','Cache-Control':'no-cache'})
  # Reuse one TLS connection per worker. Retry one dropped connection; each
  # attempt has a 12-second socket timeout so stalled requests remain bounded.
  for attempt in range(2):
   connection=getattr(connections,'current',None)
   if connection is None:
-   connection=connections.current=http.client.HTTPSConnection('relu.chat',timeout=12)
+   connection=connections.current=http.client.HTTPSConnection('reluchat.yunusemrevurgun.com',timeout=12)
   try:
    connection.request('GET',path,headers=dict(request.header_items()))
    response=connection.getresponse();data=response.read();headers=dict(response.getheaders());status=response.status
@@ -57,11 +57,11 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
 urls=[n.text for n in ET.parse(root/'sitemap.xml').findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
 indexed=[]
 for url in urls:
- path=url.removeprefix('https://relu.chat')
+ path=url.removeprefix('https://reluchat.yunusemrevurgun.com')
  if not any(c['path']==path and c.get('status')==200 for c in checks):
   try:status,_,_,_=fetch(path);indexed.append({'path':path,'status':status})
   except Exception as exc:errors.append({'path':path,'error':str(exc)})
-for path,destination in [('/index.html','https://relu.chat/'),('/chat/linear-algebra-chat/index.html','https://relu.chat/chat/linear-algebra-chat/')]:
+for path,destination in [('/index.html','https://reluchat.yunusemrevurgun.com/'),('/chat/linear-algebra-chat/index.html','https://reluchat.yunusemrevurgun.com/chat/linear-algebra-chat/')]:
  try:
   status,_,_,url=fetch(path)
   if status!=200 or url!=destination:errors.append({'path':path,'error':'Canonical redirect failed','url':url})

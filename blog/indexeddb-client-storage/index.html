@@ -6,13 +6,13 @@
 <title>IndexedDB for On-Device AI: Embeddings and Session Storage</title>
 <meta name="description" content="Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://relu.chat/blog/indexeddb-client-storage/">
+<link rel="canonical" href="https://reluchat.yunusemrevurgun.com/blog/indexeddb-client-storage/">
 
 <meta property="og:title" content="IndexedDB for On-Device AI: Embeddings and Session State">
 <meta property="og:description" content="Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://relu.chat/blog/indexeddb-client-storage/">
-<meta property="og:image" content="https://relu.chat/assets/blog/indexeddb-client-storage.png">
+<meta property="og:url" content="https://reluchat.yunusemrevurgun.com/blog/indexeddb-client-storage/">
+<meta property="og:image" content="https://reluchat.yunusemrevurgun.com/assets/blog/indexeddb-client-storage.png">
 <meta property="og:site_name" content="ReLU.chat">
 <meta property="article:published_time" content="2026-08-06T13:00:00.000Z">
 <meta property="article:modified_time" content="2026-08-06T13:00:00.000Z">
@@ -26,7 +26,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="IndexedDB for On-Device AI: Embeddings and Session State">
 <meta name="twitter:description" content="Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.">
-<meta name="twitter:image" content="https://relu.chat/assets/blog/indexeddb-client-storage.png">
+<meta name="twitter:image" content="https://reluchat.yunusemrevurgun.com/assets/blog/indexeddb-client-storage.png">
 
 <link rel="stylesheet" href="/assets/shared-design.css?v=d5592e7f">
 <link rel="stylesheet" href="/assets/css/article.css?v=b9c8510f">
@@ -38,30 +38,30 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://relu.chat/#website",
-      "url": "https://relu.chat",
+      "@id": "https://reluchat.yunusemrevurgun.com/#website",
+      "url": "https://reluchat.yunusemrevurgun.com",
       "name": "ReLU.chat",
       "description": "Free, browser-based, privacy-first open-source chatbots"
     },
     {
       "@type": "WebPage",
-      "@id": "https://relu.chat/blog/indexeddb-client-storage/#webpage",
-      "url": "https://relu.chat/blog/indexeddb-client-storage/",
+      "@id": "https://reluchat.yunusemrevurgun.com/blog/indexeddb-client-storage/#webpage",
+      "url": "https://reluchat.yunusemrevurgun.com/blog/indexeddb-client-storage/",
       "name": "IndexedDB for On-Device AI: Embeddings and Session State",
       "description": "Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.",
       "inLanguage": "en",
       "isPartOf": {
-        "@id": "https://relu.chat/#website"
+        "@id": "https://reluchat.yunusemrevurgun.com/#website"
       },
       "datePublished": "2026-08-06T13:00:00.000Z",
       "dateModified":"2026-09-09T00:00:00.000Z",
       "breadcrumb": {
-        "@id": "https://relu.chat/blog/indexeddb-client-storage/#breadcrumb"
+        "@id": "https://reluchat.yunusemrevurgun.com/blog/indexeddb-client-storage/#breadcrumb"
       }
     },
     {
       "@type": "Article",
-      "@id": "https://relu.chat/blog/indexeddb-client-storage/#article",
+      "@id": "https://reluchat.yunusemrevurgun.com/blog/indexeddb-client-storage/#article",
       "headline": "IndexedDB for On-Device AI: Storing Embeddings and Session State Locally",
       "description": "Store embeddings as binary and session state as records with IndexedDB: schema design, vector search, transactions, and local-first privacy.",
       "datePublished": "2026-08-06T13:00:00.000Z",
@@ -82,39 +82,39 @@
       "publisher": {
         "@type": "Organization",
         "name": "ReLU.chat",
-        "url": "https://relu.chat",
+        "url": "https://reluchat.yunusemrevurgun.com",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://relu.chat/assets/logo.png"
+          "url": "https://reluchat.yunusemrevurgun.com/assets/logo.png"
         }
       },
       "mainEntityOfPage": {
-        "@id": "https://relu.chat/blog/indexeddb-client-storage/#webpage"
+        "@id": "https://reluchat.yunusemrevurgun.com/blog/indexeddb-client-storage/#webpage"
       },
-      "image": "https://relu.chat/assets/blog/indexeddb-client-storage.png",
+      "image": "https://reluchat.yunusemrevurgun.com/assets/blog/indexeddb-client-storage.png",
       "keywords": "indexeddb, storage, embeddings, local-first, privacy"
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://relu.chat/blog/indexeddb-client-storage/#breadcrumb",
+      "@id": "https://reluchat.yunusemrevurgun.com/blog/indexeddb-client-storage/#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://relu.chat/"
+          "item": "https://reluchat.yunusemrevurgun.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Blog",
-          "item": "https://relu.chat/blog/"
+          "item": "https://reluchat.yunusemrevurgun.com/blog/"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "IndexedDB for On-Device AI: Storing Embeddings and Session State Locally",
-          "item": "https://relu.chat/blog/indexeddb-client-storage/"
+          "item": "https://reluchat.yunusemrevurgun.com/blog/indexeddb-client-storage/"
         }
       ]
     }
@@ -285,8 +285,8 @@ async function loadEmbedding(id) {
 <div class="article-footer">
     <a href="/blog/" class="back-link">&larr; Back to Blog</a>
     <div class="share-links">
-      <a href="https://twitter.com/intent/tweet?text=IndexedDB%20for%20On-Device%20AI%3A%20Storing%20Embeddings%20and%20Session%20State%20Locally&url=https%3A%2F%2Frelu.chat%2Fblog%2Findexeddb-client-storage%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Findexeddb-client-storage%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+      <a href="https://twitter.com/intent/tweet?text=IndexedDB%20for%20On-Device%20AI%3A%20Storing%20Embeddings%20and%20Session%20State%20Locally&url=https%3A%2F%2Freluchat.yunusemrevurgun.com%2Fblog%2Findexeddb-client-storage%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Freluchat.yunusemrevurgun.com%2Fblog%2Findexeddb-client-storage%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
     </div>
   </div>
 </article>

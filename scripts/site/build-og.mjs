@@ -57,7 +57,7 @@ function shot(out, job) {
 mkdirSync(join(ROOT, 'assets/og'), { recursive: true });
 const jobs = [
   { file: 'default', subject: 'brand', eyebrow: 'Free · no account', title: 'Ask the hard question. Get the worked answer.', sub: 'Learning assistants that run in your browser', seed: 'home' },
-  { file: 'learn', subject: 'brand', eyebrow: 'Learn', title: 'Every concept, explained with an example', sub: 'Definitions, intuition and the math · relu.chat/learn', seed: 'learn' },
+  { file: 'learn', subject: 'brand', eyebrow: 'Learn', title: 'Every concept, explained with an example', sub: 'Definitions, intuition and the math · reluchat.yunusemrevurgun.com/learn', seed: 'learn' },
   ...Object.values(BOTS).map((b) => ({ file: b.slug, subject: b.slug, eyebrow: 'Learn', title: b.subject, sub: b.lead.length > 90 ? b.lead.slice(0, 87).replace(/[,\s]+\S*$/, '') + '…' : b.lead, seed: b.slug })),
 ];
 for (const j of jobs) {

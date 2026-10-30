@@ -6,12 +6,12 @@ Six free learning assistants that retrieve and explain curated knowledge in your
 
 | Assistant | Topics |
 |---|---:|
-| [Game Theory](https://relu.chat/chat/game-theory-chat/) | 80 |
-| [Golden Age Inquiry](https://relu.chat/chat/golden-age-inquiry/) | 50 |
-| [Data Science](https://relu.chat/chat/data-science-chat/) | 41 |
-| [Reinforcement Learning](https://relu.chat/chat/reinforcement-learning-chat/) | 16 |
-| [Linear Algebra](https://relu.chat/chat/linear-algebra-chat/) | 16 |
-| [Web Platform](https://relu.chat/chat/web-platform-chat/) | 16 |
+| [Game Theory](https://reluchat.yunusemrevurgun.com/chat/game-theory-chat/) | 80 |
+| [Golden Age Inquiry](https://reluchat.yunusemrevurgun.com/chat/golden-age-inquiry/) | 50 |
+| [Data Science](https://reluchat.yunusemrevurgun.com/chat/data-science-chat/) | 41 |
+| [Reinforcement Learning](https://reluchat.yunusemrevurgun.com/chat/reinforcement-learning-chat/) | 16 |
+| [Linear Algebra](https://reluchat.yunusemrevurgun.com/chat/linear-algebra-chat/) | 16 |
+| [Web Platform](https://reluchat.yunusemrevurgun.com/chat/web-platform-chat/) | 16 |
 
 There are also six interactive ML tools, 82 learning guides and a crawlable page for every assistant topic under `/learn/`. The assistants can misunderstand questions. They assemble curated fragments, do not execute code, and cannot solve arbitrary exercises.
 
@@ -102,6 +102,12 @@ python3 dev/scripts/verify-production.py --manifest dev/exports/releases/current
 ```
 
 On a deployment host, install `dev/scripts/post-receive` as the bare repository's executable `hooks/post-receive`. Configure `relu.webRoot` and `relu.backupRoot` in that repository's Git config with absolute, separate directories. The hook deploys `main`, serializes updates with `flock`, and records the exact commit in the private backup root's `current-release.json`. Push the verified commit to GitHub, wait for release checks, and then push the same commit to the deployment remote. Compare both remote refs and the deployment receipt before considering a release complete.
+
+### Hosting
+
+The site lives at `https://reluchat.yunusemrevurgun.com/` (moved from `relu.chat` on 2026-10-31). Production is Namecheap shared hosting behind Cloudflare: the `namecheap` remote is `/home/eartctvi/repositories/reluchat.yunusemrevurgun.com.git`, which deploys to `/home/eartctvi/reluchat.yunusemrevurgun.com` with backups in `/home/eartctvi/reluchat-release-backups`. DNS is a proxied `reluchat` A record in the `yunusemrevurgun.com` Cloudflare zone.
+
+`relu.chat` and `www.relu.chat` only redirect (301, path and query kept) through a Cloudflare redirect rule in the `relu.chat` zone. `/sw.js` is excluded so returning visitors receive a worker that clears the old origin's caches, unregisters itself and reloads the page at the new address; it is served from the old document root `/home/eartctvi/relu.chat`, whose `.htaccess` also redirects everything else. Nothing on the new site loads from or links to `relu.chat`, so the domain can lapse (it expires 2027-04-16) without breaking the site.
 
 The deployer's explicit `rollback` mode restores a selected backup's prior files. Use the same web/backup roots and check for later unrelated changes before restoring. It leaves newly added files in place, unlinked by restored pages.
 

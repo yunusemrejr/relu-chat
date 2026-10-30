@@ -123,7 +123,7 @@ for (const [rel, html] of [...out.entries()].sort(([a], [b]) => a.localeCompare(
   urls.push({ loc: SITE + u, lastmod: lastmodFor(u, html, fixed), rel, html, depth: u.split('/').length });
 }
 // order: home first, then top-level sections, then the rest
-const weight = (u) => (u.loc === SITE + '/' ? 0 : /^https:\/\/relu\.chat\/(chat|learn|tools|blog)\/$|how-it-works/.test(u.loc) ? 1 : 2);
+const weight = (u) => (u.loc === SITE + '/' ? 0 : /^https:\/\/reluchat\.yunusemrevurgun\.com\/(chat|learn|tools|blog)\/$|how-it-works/.test(u.loc) ? 1 : 2);
 urls.sort((a, b) => weight(a) - weight(b) || a.loc.localeCompare(b.loc));
 const imageFor = (u) => {
   if (!u.rel.startsWith('blog/') || u.rel === 'blog/index.html') return '';

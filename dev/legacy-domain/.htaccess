@@ -1,0 +1,25 @@
+# relu.chat moved to https://reluchat.yunusemrevurgun.com/ on 2026-10-31.
+# Installed as /home/eartctvi/relu.chat/.htaccess (the old document root) next
+# to dev/legacy-domain/sw.js. A Cloudflare redirect rule in the relu.chat zone
+# does the same at the edge; this file is the origin fallback.
+Options -Indexes
+RewriteEngine On
+
+# Browsers update an installed service worker from /sw.js and refuse a
+# redirect there, so the retiring worker is served directly.
+RewriteRule ^sw\.js$ - [L]
+# Certificate validation files stay reachable while the domain is held.
+RewriteRule ^\.well-known/(acme-challenge|pki-validation)/ - [L]
+
+# Everything else: same path and query on the new address.
+RewriteRule ^(.*)$ https://reluchat.yunusemrevurgun.com/$1 [R=301,L]
+
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+</IfModule>
+<IfModule mod_headers.c>
+    <Files "sw.js">
+        Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        Header always set X-Robots-Tag "noindex"
+    </Files>
+</IfModule>

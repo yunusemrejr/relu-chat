@@ -1,5 +1,5 @@
 # ReLU.chat — Apache/LiteSpeed Configuration
-# Last updated: 2026-09-09
+# Canonical host: reluchat.yunusemrevurgun.com (moved from relu.chat on 2026-10-31)
 
 # ============================================================
 # 1. Disable directory listing (no file exposure)
@@ -14,15 +14,17 @@ ErrorDocument 403 /errors/403.html
 ErrorDocument 500 /errors/500.html
 
 # ============================================================
-# 3. www → non-www redirect
+# 3. HTTPS and the single canonical host
 # ============================================================
 RewriteEngine On
 
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-RewriteCond %{HTTP_HOST} ^www\.relu\.chat$ [NC]
-RewriteRule ^(.*)$ https://relu.chat/$1 [L,R=301]
+# Any other hostname that reaches this document root goes to the canonical host.
+RewriteCond %{HTTP_HOST} !^$
+RewriteCond %{HTTP_HOST} !^reluchat\.yunusemrevurgun\.com$ [NC]
+RewriteRule ^(.*)$ https://reluchat.yunusemrevurgun.com/$1 [L,R=301]
 
 # Canonical: /index.html -> / (single canonical form for the homepage)
 RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]

@@ -7,7 +7,7 @@ info:
     product functionality runs in the visitor's browser.
   version: 1.0.0
 servers:
-  - url: https://relu.chat
+  - url: https://reluchat.yunusemrevurgun.com
 paths:
   /llms.txt:
     get:

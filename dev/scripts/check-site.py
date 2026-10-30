@@ -41,7 +41,7 @@ for url in urls:
  for link in parsed.links:
   u=urlsplit(link)
   if u.scheme and u.scheme not in ['http','https']:continue
-  if u.netloc and u.netloc!='relu.chat':continue
+  if u.netloc and u.netloc!='reluchat.yunusemrevurgun.com':continue
   if not u.path:
    if u.fragment and unquote(u.fragment)not in parsed.ids:errors.append(f'{rel}: missing anchor {link}')
    continue

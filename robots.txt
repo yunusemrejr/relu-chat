@@ -45,4 +45,4 @@ Allow: /
 Disallow: /assets/
 Disallow: /*.pdf$
 
-Sitemap: https://relu.chat/sitemap.xml
+Sitemap: https://reluchat.yunusemrevurgun.com/sitemap.xml

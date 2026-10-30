@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>ReLU.chat Blog</title>
-  <link>https://relu.chat/blog/</link>
+  <link>https://reluchat.yunusemrevurgun.com/blog/</link>
   <description>Technical articles about on-device AI, browser-based chatbots, NLP, and privacy-first machine learning.</description>
   <language>en</language>
   <lastBuildDate>Sun, 18 Oct 2026 10:00:00 GMT</lastBuildDate>
-  <atom:link href="https://relu.chat/blog/feed.xml" rel="self" type="application/rss+xml"/>
+  <atom:link href="https://reluchat.yunusemrevurgun.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <image>
-    <url>https://relu.chat/assets/logo.png</url>
+    <url>https://reluchat.yunusemrevurgun.com/assets/logo.png</url>
     <title>ReLU.chat</title>
-    <link>https://relu.chat</link>
+    <link>https://reluchat.yunusemrevurgun.com</link>
   </image>
   <item>
     <title>Principal Component Analysis (PCA) Explained — ReLU.chat</title>
-    <link>https://relu.chat/blog/principal-component-analysis-explained/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/principal-component-analysis-explained/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/principal-component-analysis-explained/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/principal-component-analysis-explained/</guid>
     <pubDate>Sun, 18 Oct 2026 10:00:00 GMT</pubDate>
     <description>PCA explained: how principal components find the directions of greatest variance, how to compute them from a covariance matrix, and when to standardize.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -27,8 +27,8 @@
   </item>
   <item>
     <title>Eigenvalues and Eigenvectors Explained — ReLU.chat</title>
-    <link>https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/eigenvalues-and-eigenvectors-explained/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/eigenvalues-and-eigenvectors-explained/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/eigenvalues-and-eigenvectors-explained/</guid>
     <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
     <description>Eigenvalues and eigenvectors explained with a 2x2 matrix worked by hand: the Av = λv idea, how to find both, and where they appear in data science.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -40,8 +40,8 @@
   </item>
   <item>
     <title>Greedy vs Beam Search Decoding Compared — ReLU.chat</title>
-    <link>https://relu.chat/blog/greedy-vs-beam-search-decoding/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/greedy-vs-beam-search-decoding/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/greedy-vs-beam-search-decoding/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/greedy-vs-beam-search-decoding/</guid>
     <pubDate>Sun, 04 Oct 2026 10:00:00 GMT</pubDate>
     <description>Greedy vs beam search decoding: mechanics, cost-quality tradeoffs, sampling alternatives, and how to choose, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -52,8 +52,8 @@
   </item>
   <item>
     <title>Dropout &amp; Regularization for Tiny MLPs — ReLU.chat</title>
-    <link>https://relu.chat/blog/dropout-regularization-tiny-mlp/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/dropout-regularization-tiny-mlp/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/dropout-regularization-tiny-mlp/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/dropout-regularization-tiny-mlp/</guid>
     <pubDate>Sat, 03 Oct 2026 10:00:00 GMT</pubDate>
     <description>Regularize tiny MLPs: dropout mechanics, weight decay, early stopping, and input noise, with a measured recipe and code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -64,8 +64,8 @@
   </item>
   <item>
     <title>Learning Rate Schedules for Small Networks — ReLU.chat</title>
-    <link>https://relu.chat/blog/learning-rate-schedules-small-networks/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/learning-rate-schedules-small-networks/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/learning-rate-schedules-small-networks/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/learning-rate-schedules-small-networks/</guid>
     <pubDate>Fri, 02 Oct 2026 10:00:00 GMT</pubDate>
     <description>Learning rate schedules for small networks: step, cosine, warmup, base-rate selection, and tiny CPU budgets, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -76,8 +76,8 @@
   </item>
   <item>
     <title>Softmax and Temperature Explained — ReLU.chat</title>
-    <link>https://relu.chat/blog/softmax-temperature-explained/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/softmax-temperature-explained/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/softmax-temperature-explained/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/softmax-temperature-explained/</guid>
     <pubDate>Thu, 01 Oct 2026 10:00:00 GMT</pubDate>
     <description>Softmax and temperature explained: probability conversion, sampling control, calibration, and small-policy uses, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -88,8 +88,8 @@
   </item>
   <item>
     <title>Feature Normalization for ML Beginners — ReLU.chat</title>
-    <link>https://relu.chat/blog/feature-normalization-ml-beginners/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/feature-normalization-ml-beginners/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/feature-normalization-ml-beginners/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/feature-normalization-ml-beginners/</guid>
     <pubDate>Wed, 30 Sep 2026 10:00:00 GMT</pubDate>
     <description>Feature normalization for ML beginners: standardization, min-max scaling, text norms, and folding scaling into models, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -100,8 +100,8 @@
   </item>
   <item>
     <title>Perplexity Explained: Measuring Language Models — ReLU.chat</title>
-    <link>https://relu.chat/blog/perplexity-language-models-explained/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/perplexity-language-models-explained/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/perplexity-language-models-explained/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/perplexity-language-models-explained/</guid>
     <pubDate>Tue, 29 Sep 2026 10:00:00 GMT</pubDate>
     <description>Perplexity explained: what the number means, its limits, cross-model comparison, and use for small on-device models, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -112,8 +112,8 @@
   </item>
   <item>
     <title>BLEU and ROUGE Text Metrics Explained — ReLU.chat</title>
-    <link>https://relu.chat/blog/bleu-rouge-text-metrics-explained/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/bleu-rouge-text-metrics-explained/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/bleu-rouge-text-metrics-explained/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/bleu-rouge-text-metrics-explained/</guid>
     <pubDate>Mon, 28 Sep 2026 10:00:00 GMT</pubDate>
     <description>BLEU and ROUGE explained: n-gram precision vs recall, interpreting scores, blind spots, and chatbot workflows, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -124,8 +124,8 @@
   </item>
   <item>
     <title>Cross-Validation for Small ML Datasets — ReLU.chat</title>
-    <link>https://relu.chat/blog/cross-validation-small-ml-datasets/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/cross-validation-small-ml-datasets/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/cross-validation-small-ml-datasets/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/cross-validation-small-ml-datasets/</guid>
     <pubDate>Sun, 27 Sep 2026 10:00:00 GMT</pubDate>
     <description>Cross-validation for small ML datasets: k-fold mechanics, stratification, grouped folds, and choosing k, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -136,8 +136,8 @@
   </item>
   <item>
     <title>Confusion Matrices for Intent Classification — ReLU.chat</title>
-    <link>https://relu.chat/blog/confusion-matrix-intent-classification/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/confusion-matrix-intent-classification/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/confusion-matrix-intent-classification/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/confusion-matrix-intent-classification/</guid>
     <pubDate>Sat, 26 Sep 2026 10:00:00 GMT</pubDate>
     <description>Use confusion matrices to debug intent classifiers: reading patterns, per-class metrics, and fixes, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -148,8 +148,8 @@
   </item>
   <item>
     <title>Offline Test Sets for Chatbots: A Guide — ReLU.chat</title>
-    <link>https://relu.chat/blog/chatbot-evaluation-offline-test-sets/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/chatbot-evaluation-offline-test-sets/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/chatbot-evaluation-offline-test-sets/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/chatbot-evaluation-offline-test-sets/</guid>
     <pubDate>Fri, 25 Sep 2026 10:00:00 GMT</pubDate>
     <description>Build offline chatbot test sets: query collection, automatic grading, leakage prevention, and CI integration, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -160,8 +160,8 @@
   </item>
   <item>
     <title>Improving FAQ Chatbot Accuracy Step by Step — ReLU.chat</title>
-    <link>https://relu.chat/blog/faq-chatbot-accuracy-improvement/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/faq-chatbot-accuracy-improvement/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/faq-chatbot-accuracy-improvement/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/faq-chatbot-accuracy-improvement/</guid>
     <pubDate>Thu, 24 Sep 2026 10:00:00 GMT</pubDate>
     <description>Improve FAQ chatbot accuracy: better entries, paraphrases, retrieval tuning, honest fallbacks, and log-driven iteration.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -172,8 +172,8 @@
   </item>
   <item>
     <title>Extractive Summarization for Long Answers — ReLU.chat</title>
-    <link>https://relu.chat/blog/summarization-extractive-browser/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/summarization-extractive-browser/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/summarization-extractive-browser/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/summarization-extractive-browser/</guid>
     <pubDate>Wed, 23 Sep 2026 10:00:00 GMT</pubDate>
     <description>Extractive summarization for chatbots: sentence scoring, redundancy removal, and faithful long-answer compression, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -184,8 +184,8 @@
   </item>
   <item>
     <title>Keyword Extraction: RAKE and TextRank Basics — ReLU.chat</title>
-    <link>https://relu.chat/blog/keyword-extraction-rake-textrank-basics/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/keyword-extraction-rake-textrank-basics/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/keyword-extraction-rake-textrank-basics/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/keyword-extraction-rake-textrank-basics/</guid>
     <pubDate>Tue, 22 Sep 2026 10:00:00 GMT</pubDate>
     <description>Extract keywords with RAKE and TextRank: how each algorithm works, which to choose, and browser use cases, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -196,8 +196,8 @@
   </item>
   <item>
     <title>Sentiment Analysis in the Browser, No Server — ReLU.chat</title>
-    <link>https://relu.chat/blog/sentiment-analysis-browser-no-server/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/sentiment-analysis-browser-no-server/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/sentiment-analysis-browser-no-server/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/sentiment-analysis-browser-no-server/</guid>
     <pubDate>Mon, 21 Sep 2026 10:00:00 GMT</pubDate>
     <description>Browser sentiment analysis without servers: lexicon scoring, negation, tiny classifiers, and conversation uses, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -208,8 +208,8 @@
   </item>
   <item>
     <title>Language Detection in the Browser, No Model — ReLU.chat</title>
-    <link>https://relu.chat/blog/language-detection-browser-chat/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/language-detection-browser-chat/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/language-detection-browser-chat/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/language-detection-browser-chat/</guid>
     <pubDate>Sun, 20 Sep 2026 10:00:00 GMT</pubDate>
     <description>Client-side language detection with character n-grams: profiles, short-text handling, mixed input, and pipeline placement with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -220,8 +220,8 @@
   </item>
   <item>
     <title>Typo Tolerance for Chatbots: Edit Distance — ReLU.chat</title>
-    <link>https://relu.chat/blog/spell-correction-typo-tolerance-chatbots/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/spell-correction-typo-tolerance-chatbots/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/spell-correction-typo-tolerance-chatbots/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/spell-correction-typo-tolerance-chatbots/</guid>
     <pubDate>Sat, 19 Sep 2026 10:00:00 GMT</pubDate>
     <description>Add typo tolerance to chatbots with edit distance: correction vocabularies, pipeline placement, and when not to correct, with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -232,8 +232,8 @@
   </item>
   <item>
     <title>Autocomplete with Tries: Prefix Search in JS — ReLU.chat</title>
-    <link>https://relu.chat/blog/autocomplete-prefix-search-trie/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/autocomplete-prefix-search-trie/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/autocomplete-prefix-search-trie/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/autocomplete-prefix-search-trie/</guid>
     <pubDate>Fri, 18 Sep 2026 10:00:00 GMT</pubDate>
     <description>Build browser autocomplete with a trie: prefix indexing, suggestion ranking, typo handling, and performance notes with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -244,8 +244,8 @@
   </item>
   <item>
     <title>Inverted Indexes: How Browser Search Stays Fast — ReLU.chat</title>
-    <link>https://relu.chat/blog/inverted-index-browser-search/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/inverted-index-browser-search/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/inverted-index-browser-search/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/inverted-index-browser-search/</guid>
     <pubDate>Thu, 17 Sep 2026 10:00:00 GMT</pubDate>
     <description>How inverted indexes make browser search instant: posting lists, index building, and query processing with JavaScript examples.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -256,8 +256,8 @@
   </item>
   <item>
     <title>Stop Words &amp; Stemming for Small Search Indexes — ReLU.chat</title>
-    <link>https://relu.chat/blog/stop-words-stemming-small-retrieval/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/stop-words-stemming-small-retrieval/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/stop-words-stemming-small-retrieval/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/stop-words-stemming-small-retrieval/</guid>
     <pubDate>Wed, 16 Sep 2026 10:00:00 GMT</pubDate>
     <description>Stop words and stemming normalize text for small search indexes. Learn the tradeoffs and a minimal browser pipeline with code.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>
@@ -268,8 +268,8 @@
   </item>
   <item>
     <title>TF-IDF Explained: Keyword Ranking for Search — ReLU.chat</title>
-    <link>https://relu.chat/blog/tf-idf-explained-search-beginners/</link>
-    <guid isPermaLink="true">https://relu.chat/blog/tf-idf-explained-search-beginners/</guid>
+    <link>https://reluchat.yunusemrevurgun.com/blog/tf-idf-explained-search-beginners/</link>
+    <guid isPermaLink="true">https://reluchat.yunusemrevurgun.com/blog/tf-idf-explained-search-beginners/</guid>
     <pubDate>Tue, 15 Sep 2026 10:00:00 GMT</pubDate>
     <description>Learn how TF-IDF scores documents for search: term frequency, inverse document frequency, and a worked example you can run in the browser.</description>
     <author>Yunus Emre Vurgun (https://yunusemrevurgun.com)</author>

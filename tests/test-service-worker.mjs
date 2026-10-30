@@ -5,10 +5,10 @@ import vm from 'node:vm';
 import {validEmbeddings} from '../core/embedding-store.js';
 function worker({offline=false,quota=false,unavailable=false}={}) {
  const handlers={},stores=new Map(),calls=[];
- const key=r=>typeof r==='string'?new URL(r,'https://relu.chat').href:r.url;
+ const key=r=>typeof r==='string'?new URL(r,'https://reluchat.yunusemrevurgun.com').href:r.url;
  const caches={async open(name){if(unavailable)throw new Error('unavailable');if(!stores.has(name))stores.set(name,new Map());const data=stores.get(name);return{async match(r){return data.get(key(r))?.clone();},async put(r,response){if(quota)throw new Error('quota');data.set(key(r),response.clone());}};},async keys(){return [...stores.keys()];},async delete(name){return stores.delete(name);}};
- vm.runInNewContext(readFileSync(new URL('../sw.js',import.meta.url),'utf8'),{URL,Response,AbortController,setTimeout,clearTimeout,caches,self:{location:{origin:'https://relu.chat'},addEventListener:(event,fn)=>handlers[event]=fn,skipWaiting:async()=>{},clients:{claim:async()=>{}}},fetch:async request=>{calls.push(key(request));if(offline)throw new Error('offline');return new Response('network '+key(request));}});
- const request=(path,extra={})=>({url:new URL(path,'https://relu.chat').href,method:'GET',mode:'cors',headers:new Headers(),...extra});
+ vm.runInNewContext(readFileSync(new URL('../sw.js',import.meta.url),'utf8'),{URL,Response,AbortController,setTimeout,clearTimeout,caches,self:{location:{origin:'https://reluchat.yunusemrevurgun.com'},addEventListener:(event,fn)=>handlers[event]=fn,skipWaiting:async()=>{},clients:{claim:async()=>{}}},fetch:async request=>{calls.push(key(request));if(offline)throw new Error('offline');return new Response('network '+key(request));}});
+ const request=(path,extra={})=>({url:new URL(path,'https://reluchat.yunusemrevurgun.com').href,method:'GET',mode:'cors',headers:new Headers(),...extra});
  const dispatch=(path,extra)=>{let result;handlers.fetch({request:request(path,extra),respondWith:p=>result=p});return result;};
  const run=event=>{let done;handlers[event]({waitUntil:p=>done=p});return done;};
  return{stores,calls,caches,dispatch,run};

@@ -1,6 +1,6 @@
 // Single source of truth for site-wide constants used by the build scripts.
 // Nothing here is duplicated by hand in HTML: pages are regenerated from it.
-export const SITE = 'https://relu.chat';
+export const SITE = 'https://reluchat.yunusemrevurgun.com';
 export const AUTHOR = {
   '@type': 'Person',
   name: 'Yunus Emre Vurgun',

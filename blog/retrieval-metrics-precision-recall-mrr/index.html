@@ -6,13 +6,13 @@
 <title>Measuring Retrieval Quality: Precision, Recall, MRR and NDCG</title>
 <meta name="description" content="How to evaluate a knowledge-base retriever with precision, recall, MRR, and NDCG: definitions, worked examples, and a tuning loop for dense/sparse ensembles.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/">
+<link rel="canonical" href="https://reluchat.yunusemrevurgun.com/blog/retrieval-metrics-precision-recall-mrr/">
 
 <meta property="og:title" content="Measuring Retrieval Quality: Precision, Recall, MRR and NDCG">
 <meta property="og:description" content="How to evaluate a knowledge-base retriever with precision, recall, MRR, and NDCG: definitions, worked examples, and a tuning loop for dense/sparse ensembles.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/">
-<meta property="og:image" content="https://relu.chat/assets/blog/retrieval-metrics-precision-recall-mrr.png">
+<meta property="og:url" content="https://reluchat.yunusemrevurgun.com/blog/retrieval-metrics-precision-recall-mrr/">
+<meta property="og:image" content="https://reluchat.yunusemrevurgun.com/assets/blog/retrieval-metrics-precision-recall-mrr.png">
 <meta property="og:site_name" content="ReLU.chat">
 <meta property="article:published_time" content="2026-08-06T17:30:00.000Z">
 <meta property="article:modified_time" content="2026-08-06T17:30:00.000Z">
@@ -25,7 +25,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Measuring Retrieval Quality: Precision, Recall, MRR and NDCG">
 <meta name="twitter:description" content="How to evaluate a knowledge-base retriever with precision, recall, MRR, and NDCG: definitions, worked examples, and a tuning loop for dense/sparse ensembles.">
-<meta name="twitter:image" content="https://relu.chat/assets/blog/retrieval-metrics-precision-recall-mrr.png">
+<meta name="twitter:image" content="https://reluchat.yunusemrevurgun.com/assets/blog/retrieval-metrics-precision-recall-mrr.png">
 
 <link rel="stylesheet" href="/assets/shared-design.css?v=d5592e7f">
 <link rel="stylesheet" href="/assets/css/article.css?v=b9c8510f">
@@ -37,30 +37,30 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://relu.chat/#website",
-      "url": "https://relu.chat",
+      "@id": "https://reluchat.yunusemrevurgun.com/#website",
+      "url": "https://reluchat.yunusemrevurgun.com",
       "name": "ReLU.chat",
       "description": "Free, browser-based, privacy-first open-source chatbots"
     },
     {
       "@type": "WebPage",
-      "@id": "https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/#webpage",
-      "url": "https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/",
+      "@id": "https://reluchat.yunusemrevurgun.com/blog/retrieval-metrics-precision-recall-mrr/#webpage",
+      "url": "https://reluchat.yunusemrevurgun.com/blog/retrieval-metrics-precision-recall-mrr/",
       "name": "Measuring Retrieval Quality: Precision, Recall, MRR and NDCG",
       "description": "How to evaluate a knowledge-base retriever with precision, recall, MRR, and NDCG: definitions, worked examples, and a tuning loop for dense/sparse ensembles.",
       "inLanguage": "en",
       "isPartOf": {
-        "@id": "https://relu.chat/#website"
+        "@id": "https://reluchat.yunusemrevurgun.com/#website"
       },
       "datePublished": "2026-08-06T17:30:00.000Z",
       "dateModified": "2026-08-06T17:30:00.000Z",
       "breadcrumb": {
-        "@id": "https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/#breadcrumb"
+        "@id": "https://reluchat.yunusemrevurgun.com/blog/retrieval-metrics-precision-recall-mrr/#breadcrumb"
       }
     },
     {
       "@type": "Article",
-      "@id": "https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/#article",
+      "@id": "https://reluchat.yunusemrevurgun.com/blog/retrieval-metrics-precision-recall-mrr/#article",
       "headline": "Measuring Retrieval Quality: Precision, Recall, MRR and NDCG",
       "description": "How to evaluate a knowledge-base retriever with precision, recall, MRR, and NDCG: definitions, worked examples, and a tuning loop for dense/sparse ensembles.",
       "datePublished": "2026-08-06T17:30:00.000Z",
@@ -81,39 +81,39 @@
       "publisher": {
         "@type": "Organization",
         "name": "ReLU.chat",
-        "url": "https://relu.chat",
+        "url": "https://reluchat.yunusemrevurgun.com",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://relu.chat/assets/logo.png"
+          "url": "https://reluchat.yunusemrevurgun.com/assets/logo.png"
         }
       },
       "mainEntityOfPage": {
-        "@id": "https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/#webpage"
+        "@id": "https://reluchat.yunusemrevurgun.com/blog/retrieval-metrics-precision-recall-mrr/#webpage"
       },
-      "image": "https://relu.chat/assets/blog/retrieval-metrics-precision-recall-mrr.png",
+      "image": "https://reluchat.yunusemrevurgun.com/assets/blog/retrieval-metrics-precision-recall-mrr.png",
       "keywords": "retrieval, ndcg, mrr, evaluation"
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/#breadcrumb",
+      "@id": "https://reluchat.yunusemrevurgun.com/blog/retrieval-metrics-precision-recall-mrr/#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://relu.chat/"
+          "item": "https://reluchat.yunusemrevurgun.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Blog",
-          "item": "https://relu.chat/blog/"
+          "item": "https://reluchat.yunusemrevurgun.com/blog/"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "Measuring Retrieval Quality: Precision, Recall, MRR and NDCG",
-          "item": "https://relu.chat/blog/retrieval-metrics-precision-recall-mrr/"
+          "item": "https://reluchat.yunusemrevurgun.com/blog/retrieval-metrics-precision-recall-mrr/"
         }
       ]
     }
@@ -270,8 +270,8 @@ NDCG@4 = 5.26 / 5.63 = 0.934
 <div class="article-footer">
     <a href="/blog/" class="back-link">&larr; Back to Blog</a>
     <div class="share-links">
-      <a href="https://twitter.com/intent/tweet?text=Measuring%20Retrieval%20Quality%3A%20Precision%2C%20Recall%2C%20MRR%20and%20NDCG&url=https%3A%2F%2Frelu.chat%2Fblog%2Fretrieval-metrics-precision-recall-mrr%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frelu.chat%2Fblog%2Fretrieval-metrics-precision-recall-mrr%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
+      <a href="https://twitter.com/intent/tweet?text=Measuring%20Retrieval%20Quality%3A%20Precision%2C%20Recall%2C%20MRR%20and%20NDCG&url=https%3A%2F%2Freluchat.yunusemrevurgun.com%2Fblog%2Fretrieval-metrics-precision-recall-mrr%2F" target="_blank" rel="noopener" class="share-link" title="Share on X">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Freluchat.yunusemrevurgun.com%2Fblog%2Fretrieval-metrics-precision-recall-mrr%2F" target="_blank" rel="noopener" class="share-link" title="Share on LinkedIn">in</a>
     </div>
   </div>
 </article>

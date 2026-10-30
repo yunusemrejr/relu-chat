@@ -11,7 +11,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-SITE_DOMAIN="relu.chat"
+SITE_DOMAIN="reluchat.yunusemrevurgun.com"
 SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
 SITE_ROOT="$(dirname "$(dirname "$(dirname "$SCRIPT_PATH")")")"
 ENV_FILE="${SITE_ROOT}/dev/.env"

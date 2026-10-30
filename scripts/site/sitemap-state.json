@@ -8,340 +8,340 @@
   "lastmod": "2026-10-18"
  },
  "/blog/accessibility-ai-chatbots-wcag/": {
-  "hash": "dd18518eed53",
-  "lastmod": "2026-10-18"
+  "hash": "ab2eec594ecc",
+  "lastmod": "2026-10-30"
  },
  "/blog/autocomplete-prefix-search-trie/": {
-  "hash": "6d99af63cf17",
-  "lastmod": "2026-10-18"
+  "hash": "1746723ec54c",
+  "lastmod": "2026-10-30"
  },
  "/blog/bias-in-retrieval-chatbots/": {
-  "hash": "7658cd829f22",
-  "lastmod": "2026-10-18"
+  "hash": "72523f68b77d",
+  "lastmod": "2026-10-30"
  },
  "/blog/bleu-rouge-text-metrics-explained/": {
-  "hash": "212c695b618e",
-  "lastmod": "2026-10-18"
+  "hash": "76661455c963",
+  "lastmod": "2026-10-30"
  },
  "/blog/bm25-browser-field-weighted-retrieval/": {
-  "hash": "acb180b07d8a",
-  "lastmod": "2026-10-18"
+  "hash": "d7d0363030f2",
+  "lastmod": "2026-10-30"
  },
  "/blog/bm25-math-worked-example/": {
-  "hash": "e71267ef42bd",
-  "lastmod": "2026-10-18"
+  "hash": "29614d941b79",
+  "lastmod": "2026-10-30"
  },
  "/blog/bm25-vs-dense-retrieval/": {
-  "hash": "de67015aca8e",
-  "lastmod": "2026-10-18"
+  "hash": "29ad7b182738",
+  "lastmod": "2026-10-30"
  },
  "/blog/browser-vector-math-optimization/": {
-  "hash": "edd729a19cb0",
-  "lastmod": "2026-10-18"
+  "hash": "1686e769e250",
+  "lastmod": "2026-10-30"
  },
  "/blog/chatbot-evaluation-offline-test-sets/": {
-  "hash": "3e42f624b2b5",
-  "lastmod": "2026-10-18"
+  "hash": "d24a150712ff",
+  "lastmod": "2026-10-30"
  },
  "/blog/chunking-strategies-knowledge-base/": {
-  "hash": "8d533afacfb2",
-  "lastmod": "2026-10-18"
+  "hash": "46a90ae92e11",
+  "lastmod": "2026-10-30"
  },
  "/blog/confusion-matrix-intent-classification/": {
-  "hash": "2ffa88dddccd",
-  "lastmod": "2026-10-18"
+  "hash": "46f87d308704",
+  "lastmod": "2026-10-30"
  },
  "/blog/conversation-state-machines/": {
-  "hash": "de4d08f7bad5",
-  "lastmod": "2026-10-18"
+  "hash": "136ca8c17534",
+  "lastmod": "2026-10-30"
  },
  "/blog/cosine-similarity-vector-search/": {
-  "hash": "e3a808311fe7",
-  "lastmod": "2026-10-18"
+  "hash": "6e91ee9fd288",
+  "lastmod": "2026-10-30"
  },
  "/blog/cross-validation-small-ml-datasets/": {
-  "hash": "e4634af0b14e",
-  "lastmod": "2026-10-18"
+  "hash": "e2b2d36b75d1",
+  "lastmod": "2026-10-30"
  },
  "/blog/debugging-browser-ml/": {
-  "hash": "7ab4f36d3449",
-  "lastmod": "2026-10-18"
+  "hash": "6ea0bb431f2c",
+  "lastmod": "2026-10-30"
  },
  "/blog/dense-sparse-ensemble-ranking/": {
-  "hash": "1062bc4bb71f",
-  "lastmod": "2026-10-18"
+  "hash": "e9243e9d587f",
+  "lastmod": "2026-10-30"
  },
  "/blog/dot-product-cosine-worked-example/": {
-  "hash": "483962fb0fbc",
-  "lastmod": "2026-10-18"
+  "hash": "678e5d6f69a8",
+  "lastmod": "2026-10-30"
  },
  "/blog/dropout-regularization-tiny-mlp/": {
-  "hash": "edffe28f0b68",
-  "lastmod": "2026-10-18"
+  "hash": "a9fb847c9b06",
+  "lastmod": "2026-10-30"
  },
  "/blog/eigenvalues-and-eigenvectors-explained/": {
-  "hash": "f3febe3ceeef",
-  "lastmod": "2026-10-18"
+  "hash": "33278b37cef4",
+  "lastmod": "2026-10-30"
  },
  "/blog/faq-chatbot-accuracy-improvement/": {
-  "hash": "e0042e5f2682",
-  "lastmod": "2026-10-18"
+  "hash": "0ab61155e49c",
+  "lastmod": "2026-10-30"
  },
  "/blog/feature-normalization-ml-beginners/": {
-  "hash": "26f3c38ab17b",
-  "lastmod": "2026-10-18"
+  "hash": "62e672b1b67b",
+  "lastmod": "2026-10-30"
  },
  "/blog/float32-vs-float64-precision/": {
-  "hash": "3f9e163c9a69",
-  "lastmod": "2026-10-18"
+  "hash": "65071b4470b6",
+  "lastmod": "2026-10-30"
  },
  "/blog/follow-up-detection-20-patterns/": {
-  "hash": "cb28b9238262",
-  "lastmod": "2026-10-18"
+  "hash": "f057851bfb9e",
+  "lastmod": "2026-10-30"
  },
  "/blog/greedy-vs-beam-search-decoding/": {
-  "hash": "7cc007ae5b47",
-  "lastmod": "2026-10-18"
+  "hash": "363bb3170373",
+  "lastmod": "2026-10-30"
  },
  "/blog/grouped-validation-leakage/": {
-  "hash": "ecded252fc8e",
-  "lastmod": "2026-10-18"
+  "hash": "c55da40aac0d",
+  "lastmod": "2026-10-30"
  },
  "/blog/heuristic-fallback-cold-start/": {
-  "hash": "dd60318da923",
-  "lastmod": "2026-10-18"
+  "hash": "3d0bd51e0514",
+  "lastmod": "2026-10-30"
  },
  "/blog/how-browser-based-chatbots-work/": {
-  "hash": "bbedd8a3e2af",
-  "lastmod": "2026-10-18"
+  "hash": "38e1ef2ca637",
+  "lastmod": "2026-10-30"
  },
  "/blog/indexeddb-client-storage/": {
-  "hash": "235b3168b1e8",
-  "lastmod": "2026-10-23"
+  "hash": "25fcafca556b",
+  "lastmod": "2026-10-30"
  },
  "/blog/int8-quantization-browser-mlp/": {
-  "hash": "4d736d93f652",
-  "lastmod": "2026-10-18"
+  "hash": "9638ccab7c07",
+  "lastmod": "2026-10-30"
  },
  "/blog/int8-quantization-explained/": {
-  "hash": "0a0595f8af46",
-  "lastmod": "2026-10-18"
+  "hash": "e29b4bb0330c",
+  "lastmod": "2026-10-30"
  },
  "/blog/inverted-index-browser-search/": {
-  "hash": "1063db0c1ec4",
-  "lastmod": "2026-10-18"
+  "hash": "a17aa27e3cee",
+  "lastmod": "2026-10-30"
  },
  "/blog/katex-vs-mathjax-math-rendering/": {
-  "hash": "f367bf109993",
-  "lastmod": "2026-10-18"
+  "hash": "dc6f5b1d8e32",
+  "lastmod": "2026-10-30"
  },
  "/blog/keyword-extraction-rake-textrank-basics/": {
-  "hash": "5b27cb1d68ed",
-  "lastmod": "2026-10-18"
+  "hash": "c4d292fee019",
+  "lastmod": "2026-10-30"
  },
  "/blog/knowledge-base-fragments-fields-metadata/": {
-  "hash": "b3788e32725c",
-  "lastmod": "2026-10-18"
+  "hash": "f676819cfc0c",
+  "lastmod": "2026-10-30"
  },
  "/blog/knowledge-fragment-composition/": {
-  "hash": "5c50fc1215d5",
-  "lastmod": "2026-10-18"
+  "hash": "1742a428ea66",
+  "lastmod": "2026-10-30"
  },
  "/blog/language-detection-browser-chat/": {
-  "hash": "46ac30b27107",
-  "lastmod": "2026-10-18"
+  "hash": "63a406c2b29e",
+  "lastmod": "2026-10-30"
  },
  "/blog/latency-budgets-conversational-ui/": {
-  "hash": "0bb1ea422e5f",
-  "lastmod": "2026-10-18"
+  "hash": "e87397464abf",
+  "lastmod": "2026-10-30"
  },
  "/blog/learning-rate-schedules-small-networks/": {
-  "hash": "8d7b932ffa49",
-  "lastmod": "2026-10-18"
+  "hash": "4c5665992216",
+  "lastmod": "2026-10-30"
  },
  "/blog/least-squares-without-inverse/": {
-  "hash": "f522767f508d",
-  "lastmod": "2026-10-18"
+  "hash": "550ae04d2b6e",
+  "lastmod": "2026-10-30"
  },
  "/blog/linguistic-connectors-naturalness/": {
-  "hash": "46dd3dfa804e",
-  "lastmod": "2026-10-18"
+  "hash": "b143647f6b81",
+  "lastmod": "2026-10-30"
  },
  "/blog/local-chat-privacy-network/": {
-  "hash": "54bfc68594db",
-  "lastmod": "2026-10-18"
+  "hash": "c8d7ed05cbfc",
+  "lastmod": "2026-10-30"
  },
  "/blog/memory-leaks-long-chat-sessions/": {
-  "hash": "b6ddc253663d",
-  "lastmod": "2026-10-18"
+  "hash": "82bee28350b4",
+  "lastmod": "2026-10-30"
  },
  "/blog/model-size-vs-quality/": {
-  "hash": "0c5c8186df11",
-  "lastmod": "2026-10-18"
+  "hash": "e4bdbcc7804f",
+  "lastmod": "2026-10-30"
  },
  "/blog/named-entity-recognition-no-llm/": {
-  "hash": "d5f2d77f0d25",
-  "lastmod": "2026-10-18"
+  "hash": "136e6f077618",
+  "lastmod": "2026-10-30"
  },
  "/blog/nash-equilibrium-best-response-table/": {
-  "hash": "1340dff096e2",
-  "lastmod": "2026-10-18"
+  "hash": "b001bf628051",
+  "lastmod": "2026-10-30"
  },
  "/blog/offline-first-chat-architecture/": {
-  "hash": "4c0c15f2c075",
-  "lastmod": "2026-10-18"
+  "hash": "f942a5b7ed1a",
+  "lastmod": "2026-10-30"
  },
  "/blog/onnx-runtime-web-quantization/": {
-  "hash": "1796e18cbfe9",
-  "lastmod": "2026-10-18"
+  "hash": "c118dfe8ce2f",
+  "lastmod": "2026-10-30"
  },
  "/blog/perplexity-language-models-explained/": {
-  "hash": "a4426e2b7ae3",
-  "lastmod": "2026-10-18"
+  "hash": "9863240167ed",
+  "lastmod": "2026-10-30"
  },
  "/blog/ppo-reward-design-policy-network/": {
-  "hash": "3cdd6479916e",
-  "lastmod": "2026-10-18"
+  "hash": "8770ea6e88e8",
+  "lastmod": "2026-10-30"
  },
  "/blog/precision-recall-small-example/": {
-  "hash": "3147b9179ecf",
-  "lastmod": "2026-10-18"
+  "hash": "3983c43baa28",
+  "lastmod": "2026-10-30"
  },
  "/blog/principal-component-analysis-explained/": {
-  "hash": "02050731b67b",
-  "lastmod": "2026-10-18"
+  "hash": "2105e7de5899",
+  "lastmod": "2026-10-30"
  },
  "/blog/privacy-checklist-browser-ai/": {
-  "hash": "7ba4550e2a1c",
-  "lastmod": "2026-10-23"
+  "hash": "cd641a7c0103",
+  "lastmod": "2026-10-30"
  },
  "/blog/privacy-first-ai-browsers/": {
-  "hash": "82c91c1bce16",
-  "lastmod": "2026-10-18"
+  "hash": "a36416fa2129",
+  "lastmod": "2026-10-30"
  },
  "/blog/progressive-loading-bow-mlp-transformer/": {
-  "hash": "ece483a6ff64",
-  "lastmod": "2026-10-18"
+  "hash": "bed897a33a06",
+  "lastmod": "2026-10-30"
  },
  "/blog/progressive-streaming-rendering-chatbots/": {
-  "hash": "90dc98a5661a",
-  "lastmod": "2026-10-18"
+  "hash": "7c78875b10a6",
+  "lastmod": "2026-10-30"
  },
  "/blog/prototype-intent-classification/": {
-  "hash": "ca0a434d3f50",
-  "lastmod": "2026-10-18"
+  "hash": "f9adc9c790a7",
+  "lastmod": "2026-10-30"
  },
  "/blog/q-learning-sarsa-worked-example/": {
-  "hash": "7bee170a6602",
-  "lastmod": "2026-10-18"
+  "hash": "99cc3a53cadf",
+  "lastmod": "2026-10-30"
  },
  "/blog/query-expansion-without-llm/": {
-  "hash": "02e9eda9d969",
-  "lastmod": "2026-10-18"
+  "hash": "792eb8a8ac3f",
+  "lastmod": "2026-10-30"
  },
  "/blog/rank-svd-conditioning/": {
-  "hash": "6514f6cd237b",
-  "lastmod": "2026-10-18"
+  "hash": "b7d03e49ae3d",
+  "lastmod": "2026-10-30"
  },
  "/blog/reading-islamic-science-sources/": {
-  "hash": "cb51363af8d5",
-  "lastmod": "2026-10-18"
+  "hash": "39f78372268a",
+  "lastmod": "2026-10-30"
  },
  "/blog/reinforcement-learning-for-chatbots/": {
-  "hash": "109de3d03d60",
-  "lastmod": "2026-10-18"
+  "hash": "8f5dc07a1272",
+  "lastmod": "2026-10-30"
  },
  "/blog/retrieval-metrics-precision-recall-mrr/": {
-  "hash": "aa4ec4450ca5",
-  "lastmod": "2026-10-18"
+  "hash": "56dd3105566e",
+  "lastmod": "2026-10-30"
  },
  "/blog/reward-design-small-chatbot/": {
-  "hash": "16fd1eb90da8",
-  "lastmod": "2026-10-18"
+  "hash": "d33398a731d5",
+  "lastmod": "2026-10-30"
  },
  "/blog/rl-termination-truncation/": {
-  "hash": "3ce894e7bb8f",
-  "lastmod": "2026-10-18"
+  "hash": "c33cb4c54600",
+  "lastmod": "2026-10-30"
  },
  "/blog/sentence-embeddings-384-dim-minilm/": {
-  "hash": "9d2dc5ee3c9c",
-  "lastmod": "2026-10-18"
+  "hash": "8bdf49b025f0",
+  "lastmod": "2026-10-30"
  },
  "/blog/sentence-vs-word-embeddings/": {
-  "hash": "7ef60cd4d24e",
-  "lastmod": "2026-10-18"
+  "hash": "29c401d13189",
+  "lastmod": "2026-10-30"
  },
  "/blog/sentiment-analysis-browser-no-server/": {
-  "hash": "c87f02e0223a",
-  "lastmod": "2026-10-18"
+  "hash": "9cee24539062",
+  "lastmod": "2026-10-30"
  },
  "/blog/service-worker-caching-strategies/": {
-  "hash": "b77627d3aee6",
-  "lastmod": "2026-10-18"
+  "hash": "642d94a3df46",
+  "lastmod": "2026-10-30"
  },
  "/blog/service-worker-model-pre-caching/": {
-  "hash": "53a6d656b9f8",
-  "lastmod": "2026-10-18"
+  "hash": "aa08e59b854f",
+  "lastmod": "2026-10-30"
  },
  "/blog/service-worker-model-updates/": {
-  "hash": "7908600bfaa0",
-  "lastmod": "2026-10-18"
+  "hash": "0d3ecf7b06b5",
+  "lastmod": "2026-10-30"
  },
  "/blog/service-workers-offline-ai/": {
-  "hash": "f102105a2613",
-  "lastmod": "2026-10-18"
+  "hash": "4c8c99502d29",
+  "lastmod": "2026-10-30"
  },
  "/blog/session-memory-architecture-30-turns/": {
-  "hash": "058ab73df1b4",
-  "lastmod": "2026-10-18"
+  "hash": "5ea6f16db467",
+  "lastmod": "2026-10-30"
  },
  "/blog/softmax-temperature-explained/": {
-  "hash": "23921afe01d4",
-  "lastmod": "2026-10-18"
+  "hash": "64bb2c4999d7",
+  "lastmod": "2026-10-30"
  },
  "/blog/spell-correction-typo-tolerance-chatbots/": {
-  "hash": "82bc070c8d82",
-  "lastmod": "2026-10-18"
+  "hash": "e9c2e40b0322",
+  "lastmod": "2026-10-30"
  },
  "/blog/stop-words-stemming-small-retrieval/": {
-  "hash": "2a87c139da80",
-  "lastmod": "2026-10-18"
+  "hash": "97fce1c81d45",
+  "lastmod": "2026-10-30"
  },
  "/blog/summarization-extractive-browser/": {
-  "hash": "65325dbb8c6e",
-  "lastmod": "2026-10-18"
+  "hash": "458d127dbe79",
+  "lastmod": "2026-10-30"
  },
  "/blog/tf-idf-explained-search-beginners/": {
-  "hash": "59e629616f23",
-  "lastmod": "2026-10-18"
+  "hash": "dd9e2cb4c0e8",
+  "lastmod": "2026-10-30"
  },
  "/blog/tiny-policy-training-cpu/": {
-  "hash": "68f3594db271",
-  "lastmod": "2026-10-18"
+  "hash": "236f9a59e14c",
+  "lastmod": "2026-10-30"
  },
  "/blog/tokenization-subword-bpe-on-device/": {
-  "hash": "56acc1a8a936",
-  "lastmod": "2026-10-18"
+  "hash": "26c1a4d690e7",
+  "lastmod": "2026-10-30"
  },
  "/blog/topic-correction-when-users-redirect/": {
-  "hash": "0dd6a5414a6a",
-  "lastmod": "2026-10-18"
+  "hash": "ede04e552f3e",
+  "lastmod": "2026-10-30"
  },
  "/blog/wasm-javascript-policy-parity/": {
-  "hash": "5afd7378d33d",
-  "lastmod": "2026-10-18"
+  "hash": "66ff0fe311b5",
+  "lastmod": "2026-10-30"
  },
  "/blog/web-workers-ui-thread/": {
-  "hash": "7f9a409e2c71",
-  "lastmod": "2026-10-18"
+  "hash": "ce5947d58bd3",
+  "lastmod": "2026-10-30"
  },
  "/blog/webassembly-browser-ml/": {
-  "hash": "61f1637a3973",
-  "lastmod": "2026-10-18"
+  "hash": "ec6dadf9f563",
+  "lastmod": "2026-10-30"
  },
  "/blog/webgpu-future-browser-inference/": {
-  "hash": "b55093c7d538",
-  "lastmod": "2026-10-18"
+  "hash": "99433a0e4735",
+  "lastmod": "2026-10-30"
  },
  "/chat/": {
   "hash": "eef26e496778",

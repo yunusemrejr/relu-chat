@@ -12,7 +12,7 @@ const POSTS_DIR = path.join(ROOT, 'content/blog/posts');
 const BLOG_OUT = path.join(ROOT, 'blog');
 const BLOG_ASSETS_DIR = path.join(ROOT, 'assets/blog');
 const SCHEMA_PATH = path.join(__dirname, 'schema.json');
-const SITE_URL = 'https://relu.chat';
+const SITE_URL = 'https://reluchat.yunusemrevurgun.com';
 
 // Injected before </body> on every generated page (shared with hand-maintained pages).
 const GUMROAD_WIDGET = ''; // Contextual product links remain; no interruptive catalogue widget.
@@ -766,9 +766,9 @@ Sitemap: ${SITE_URL}/sitemap.xml
 }
 function generateLLMsTxt(posts) {
   const chatLines = [
-    ['Game Theory Chat', 'https://relu.chat/chat/game-theory-chat/', "On-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma and 55+ topics with LaTeX math."],
-    ['Golden Age Inquiry', 'https://relu.chat/chat/golden-age-inquiry/', 'On-device assistant for the science and philosophy of the Islamic Golden Age (8th-14th centuries): algebra, optics, astronomy, medicine.'],
-    ['Data Science Chat', 'https://relu.chat/chat/data-science-chat/', 'On-device assistant for data science and ML: pandas, NumPy, statistics, classification, regression, clustering.'],
+    ['Game Theory Chat', 'https://reluchat.yunusemrevurgun.com/chat/game-theory-chat/', "On-device assistant for game theory: Nash equilibrium, Shapley value, auctions, prisoner's dilemma and 55+ topics with LaTeX math."],
+    ['Golden Age Inquiry', 'https://reluchat.yunusemrevurgun.com/chat/golden-age-inquiry/', 'On-device assistant for the science and philosophy of the Islamic Golden Age (8th-14th centuries): algebra, optics, astronomy, medicine.'],
+    ['Data Science Chat', 'https://reluchat.yunusemrevurgun.com/chat/data-science-chat/', 'On-device assistant for data science and ML: pandas, NumPy, statistics, classification, regression, clustering.'],
   ].map(([t, u, d]) => `- [${t}](${u}) — ${d}`).join('\n');
 
   return `# ReLU.chat
@@ -781,9 +781,9 @@ ReLU.chat is an open-source platform for interactive on-device chatbots. All NLP
 
 ## Key Pages
 
-- [Home](https://relu.chat/) — Landing page with feature overview
-- [How It Works](https://relu.chat/how-it-works.html) — Full technical architecture
-- [Blog](https://relu.chat/blog/) — Technical articles on on-device AI and NLP (${posts.length} posts)
+- [Home](https://reluchat.yunusemrevurgun.com/) — Landing page with feature overview
+- [How It Works](https://reluchat.yunusemrevurgun.com/how-it-works.html) — Full technical architecture
+- [Blog](https://reluchat.yunusemrevurgun.com/blog/) — Technical articles on on-device AI and NLP (${posts.length} posts)
 
 ## Chatbots (try them in your browser)
 
@@ -812,7 +812,7 @@ function generateLLMsFullTxt(posts) {
   const blogList = sortedPosts.map(p => {
     const d = new Date(p.published_at).toISOString().split('T')[0];
     const excerpt = (p.excerpt || p.meta_description || '').replace(/\n/g, ' ').trim();
-    return `- ${d} — [${p.title}](https://relu.chat/blog/${p.slug}/) — ${excerpt}`;
+    return `- ${d} — [${p.title}](https://reluchat.yunusemrevurgun.com/blog/${p.slug}/) — ${excerpt}`;
   }).join('\n');
 
   const bots = JSON.parse(fs.readFileSync(path.join(__dirname, '../../data/manifest.json'), 'utf8')).bots;
@@ -822,7 +822,7 @@ function generateLLMsFullTxt(posts) {
 
 ## Chatbots
 
-${bots.map(b => `- [${b.name}](https://relu.chat${b.url}) — ${b.description} ${b.topic_count} topics.`).join('\n')}
+${bots.map(b => `- [${b.name}](https://reluchat.yunusemrevurgun.com${b.url}) — ${b.description} ${b.topic_count} topics.`).join('\n')}
 
 ## How the current release works
 
@@ -839,9 +839,9 @@ The September 9, 2026 CPU training run took 3.10 seconds. On 438 authored held-o
 
 The fixed-memory WASM module uses 128 KiB and matches JavaScript outputs on 40 exported fixtures. Both paths took around 14 microseconds in the recorded policy microbenchmark; no WASM speed advantage is claimed. Optimized BM25 preserved original scores and rankings on 30 benchmark queries, with median scoring time falling from 16.67 ms to 0.073 ms on the measured laptop. End-to-end browser latency varies.
 
-- [Architecture and limits](https://relu.chat/how-it-works.html)
-- [Reproducible evaluation results](https://relu.chat/data/policy-evaluation.json)
-- [Six interactive ML tools](https://relu.chat/tools/)
+- [Architecture and limits](https://reluchat.yunusemrevurgun.com/how-it-works.html)
+- [Reproducible evaluation results](https://reluchat.yunusemrevurgun.com/data/policy-evaluation.json)
+- [Six interactive ML tools](https://reluchat.yunusemrevurgun.com/tools/)
 - [Source repository](https://github.com/yunusemrejr/relu-chat)
 
 ## Privacy and network use
@@ -854,7 +854,7 @@ Chat questions are not sent to a language-generation API. The host receives norm
 
 ## Learning guides
 
-${sortedPosts.length} original technical articles at https://relu.chat/blog/ (RSS: https://relu.chat/blog/feed.xml):
+${sortedPosts.length} original technical articles at https://reluchat.yunusemrevurgun.com/blog/ (RSS: https://reluchat.yunusemrevurgun.com/blog/feed.xml):
 
 ${blogList || '- (no posts yet)'}
 

@@ -23,11 +23,11 @@ const SITEMAP_FILE = __DIR__ . '/../sitemap.xml';
 const MARKER_FILE  = __DIR__ . '/../data/indexnow-marker.json';
 const INDEXNOW_URL = 'https://api.indexnow.org/indexnow';
 const INDEXNOW_KEY = '8dbf00ebf5052a221fc2e9b70e1169eb';
-const HOST         = 'relu.chat';
+const HOST         = 'reluchat.yunusemrevurgun.com';
 
 function finish(): void
 {
-    echo '/* relu.chat ping ok */';
+    echo '/* ReLU.chat ping ok */';
     exit;
 }
 

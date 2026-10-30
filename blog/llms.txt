@@ -3,17 +3,17 @@
 > Six free learning assistants. Questions are processed locally in the browser; page and optional model downloads use the network.
 
 ## Chatbots
-- [Game Theory Chat](https://relu.chat/chat/game-theory-chat/): On-device NLU assistant for game theory concepts 80 topics.
-- [Golden Age Inquiry](https://relu.chat/chat/golden-age-inquiry/): Explore Islamic Golden Age science and philosophy 50 topics.
-- [Data Science Chat](https://relu.chat/chat/data-science-chat/): On-device NLU assistant for data science and ML concepts 41 topics.
-- [Reinforcement Learning Chat](https://relu.chat/chat/reinforcement-learning-chat/): Learn how agents choose actions: rewards, value functions, bandits, Q-learning, and policy gradients. 16 topics.
-- [Linear Algebra Chat](https://relu.chat/chat/linear-algebra-chat/): Build intuition for vectors, matrices, eigenvalues, projections, and the linear algebra behind machine learning. 16 topics.
-- [Web Platform Chat](https://relu.chat/chat/web-platform-chat/): Understand browser JavaScript, HTTP caching, WebAssembly, workers, accessibility, and local data storage. 16 topics.
+- [Game Theory Chat](https://reluchat.yunusemrevurgun.com/chat/game-theory-chat/): On-device NLU assistant for game theory concepts 80 topics.
+- [Golden Age Inquiry](https://reluchat.yunusemrevurgun.com/chat/golden-age-inquiry/): Explore Islamic Golden Age science and philosophy 50 topics.
+- [Data Science Chat](https://reluchat.yunusemrevurgun.com/chat/data-science-chat/): On-device NLU assistant for data science and ML concepts 41 topics.
+- [Reinforcement Learning Chat](https://reluchat.yunusemrevurgun.com/chat/reinforcement-learning-chat/): Learn how agents choose actions: rewards, value functions, bandits, Q-learning, and policy gradients. 16 topics.
+- [Linear Algebra Chat](https://reluchat.yunusemrevurgun.com/chat/linear-algebra-chat/): Build intuition for vectors, matrices, eigenvalues, projections, and the linear algebra behind machine learning. 16 topics.
+- [Web Platform Chat](https://reluchat.yunusemrevurgun.com/chat/web-platform-chat/): Understand browser JavaScript, HTTP caching, WebAssembly, workers, accessibility, and local data storage. 16 topics.
 
 ## Learn and inspect
-- [Learning guides](https://relu.chat/blog/)
-- [Interactive ML tools](https://relu.chat/tools/)
-- [Architecture and limits](https://relu.chat/how-it-works.html)
-- [Policy evaluation](https://relu.chat/data/policy-evaluation.json)
+- [Learning guides](https://reluchat.yunusemrevurgun.com/blog/)
+- [Interactive ML tools](https://reluchat.yunusemrevurgun.com/tools/)
+- [Architecture and limits](https://reluchat.yunusemrevurgun.com/how-it-works.html)
+- [Policy evaluation](https://reluchat.yunusemrevurgun.com/data/policy-evaluation.json)
 
 These are curated retrieval assistants, not general-purpose language models. They can misunderstand questions and do not execute code or solve arbitrary exercises. Offline use requires previously loaded assets.

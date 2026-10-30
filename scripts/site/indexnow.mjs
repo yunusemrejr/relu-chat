@@ -7,7 +7,7 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
-const HOST = 'relu.chat';
+const HOST = 'reluchat.yunusemrevurgun.com';
 const KEY = '8dbf00ebf5052a221fc2e9b70e1169eb'; // public by design; verified via /<key>.txt
 const parse = (xml) => new Map([...xml.matchAll(/<loc>([^<]+)<\/loc>\s*(?:<lastmod>([^<]+)<\/lastmod>)?/g)].map((m) => [m[1], m[2] || '']));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
